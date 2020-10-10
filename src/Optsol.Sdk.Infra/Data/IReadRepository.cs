@@ -9,6 +9,6 @@ namespace Optsol.Sdk.Infra.Data
         where TEntity: class, IAggregateRoot<TKey>
     {
         Task<TEntity> GetById(TKey id);
-        Task<IAsyncEnumerable<TEntity>> GetAllAsync();
+        IAsyncEnumerable<TEntity> GetAllAsync();
     }
 }

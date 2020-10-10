@@ -6,9 +6,13 @@ namespace Optsol.Sdk.Domain
     {
         public AggregateRoot()
         {
-            this.Id = Guid.NewGuid();
-            this.CreateDate = DateTime.Now;
+            Id = Guid.NewGuid();
+            CreateDate = DateTime.Now;
         }
 
+        public override string ToString()
+        {
+            return Id.ToString();
+        }
     }
 }

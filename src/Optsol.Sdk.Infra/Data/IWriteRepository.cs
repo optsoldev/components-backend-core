@@ -9,8 +9,8 @@ namespace Optsol.Sdk.Infra.Data
     {
         Task InsertAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
-        Task Delete(TEntity entity);
-        Task Delete(TKey id);
+        Task DeleteAsync(TEntity entity);
+        Task DeleteAsync(TKey id);
         Task<int> SaveChanges();
     }
 }
