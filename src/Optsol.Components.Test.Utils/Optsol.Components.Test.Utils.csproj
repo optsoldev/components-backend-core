@@ -7,6 +7,6 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Optsol.Sdk.Infra\Optsol.Sdk.Infra.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
   </ItemGroup>
 </Project>

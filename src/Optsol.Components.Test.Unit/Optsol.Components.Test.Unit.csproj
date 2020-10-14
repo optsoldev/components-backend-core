@@ -13,9 +13,9 @@
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Optsol.Sdk.Infra\Optsol.Sdk.Infra.csproj" />
-    <ProjectReference Include="..\Optsol.Sdk.Domain\Optsol.Sdk.Domain.csproj" />
-    <ProjectReference Include="..\Optsol.Sdk.Shared\Optsol.Sdk.Shared.csproj" />
-    <ProjectReference Include="..\Optsol.Sdk.Test.Utils\Optsol.Sdk.Test.Utils.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Test.Utils\Optsol.Components.Test.Utils.csproj" />
   </ItemGroup>
 </Project>
