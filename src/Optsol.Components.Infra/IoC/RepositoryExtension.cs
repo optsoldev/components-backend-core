@@ -1,10 +1,7 @@
 
 using System.Reflection;
 using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.IoC;
 using Optsol.Components.Infra.UoW;
 using System.Linq;
