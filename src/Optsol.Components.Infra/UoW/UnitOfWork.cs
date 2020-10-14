@@ -1,4 +1,3 @@
-using System.Data.Common;
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,7 @@ namespace Optsol.Components.Infra.UoW
     {
         private bool disposed = false;
         private ILogger _logger;
-        // public TContext Context { get; protected set; }
+        
         public DbContext Context { get; protected set; }
 
         public UnitOfWork(DbContext context, ILogger<UnitOfWork> logger)

@@ -1,3 +1,4 @@
+using Xunit;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -5,7 +6,6 @@ using Optsol.Components.Infra.IoC;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Utils.Data;
-using Xunit;
 
 namespace Optsol.Components.Test.Integration.IoC
 {
