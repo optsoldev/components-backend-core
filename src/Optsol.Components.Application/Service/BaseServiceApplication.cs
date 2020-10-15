@@ -61,18 +61,18 @@ namespace Optsol.Components.Application.Service
             
             var entity = _mapper.Map<TEntity>(viewModel);
 
-            _logger?.LogInformation($"Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
             await _writeRepository.InsertAsync(entity);
         }
 
         public async Task UpdateAsync<TViewModel>(TViewModel viewModel)
         {
-            _logger?.LogInformation($"UpdateAsync: { nameof(UpdateAsync) }({{ viewModel:{ viewModel.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ viewModel.ToJson() } }})");
             
             var entity = _mapper.Map<TEntity>(viewModel);
 
-            _logger?.LogInformation($"Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
             await _writeRepository.UpdateAsync(entity);
         }

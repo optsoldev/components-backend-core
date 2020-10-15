@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Optsol.Components.Domain;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Test.Shared.Logger;
+using Optsol.Components.Shared.Extensions;
+using System.Linq;
 
 namespace Optsol.Components.Test.Unit.Infra.Data
 {
@@ -13,7 +15,7 @@ namespace Optsol.Components.Test.Unit.Infra.Data
     {
 
         [Fact]
-        public void DeveRegistrarLogsNorepository()
+        public void DeveRegistrarLogsNoRepositorio()
         {
             //Given
             var entity = new AggregateRoot();
@@ -37,21 +39,21 @@ namespace Optsol.Components.Test.Unit.Infra.Data
             repository.SaveChanges();
 
             //Then
-            var msgContrutor = $"Inicializando Repository<{ entity.GetType().Name }, { typeof(Guid).Name }>";
-            var msgGetById = $"Método: { nameof(repository.GetById) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgGetAllAsync = $"Método: { nameof(repository.GetAllAsync) }() Retorno: IAsyncEnumerable<{ entity.GetType().Name }>";
-            var msgInsertAsync = $"Método: { nameof(repository.GetById) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgUpdateAsync = $"Método: { nameof(repository.UpdateAsync) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgDeleteAsync = $"Método: { nameof(repository.DeleteAsync) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgSaveChanges = $"Método: { nameof(repository.SaveChanges) }()";
+            var msgContructor = "Inicializando Repository<AggregateRoot, Guid>";
+            var msgGetById = $"Método: GetById({{ id:{ entity.Id } }}) Retorno: type AggregateRoot";
+            var msgGetAllAsync = "Método: GetAllAsync() Retorno: IAsyncEnumerable<AggregateRoot>";
+            var msgInsertAsync = $"Método: InsertAsync({{ entity:{ entity.ToJson() } }})";
+            var msgUpdateAsync = $"Método: UpdateAsync({{ entity:{ entity.ToJson() } }})";
+            var msgDeleteAsync = $"Método: DeleteAsync({{ entity:{ entity.ToJson() } }})";
+            var msgSaveChanges = "Método: SaveChanges()";
 
             logger.Logs.Should().HaveCount(8);
-            logger.Logs.FindAll(f => f.Contains(nameof(repository.GetById))).Should().HaveCount(1);
-            logger.Logs.FindAll(f => f.Contains(msgInsertAsync)).Should().HaveCount(1);
-            logger.Logs.FindAll(f => f.Contains(nameof(repository.InsertAsync))).Should().HaveCount(1);
-            logger.Logs.FindAll(f => f.Contains(nameof(repository.UpdateAsync))).Should().HaveCount(1);
-            logger.Logs.FindAll(f => f.Contains(nameof(repository.DeleteAsync))).Should().HaveCount(2);
-            logger.Logs.FindAll(f => f.Contains(nameof(repository.SaveChanges))).Should().HaveCount(1);            
+            logger.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetById)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
+            logger.Logs.Where(a => a.Equals(msgDeleteAsync)).Should().HaveCount(2);
+            logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();            
 
             
         }       
