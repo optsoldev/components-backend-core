@@ -27,8 +27,6 @@ namespace Optsol.Components.Infra.Data
             this.Set = context.Set<TEntity>();
         }
 
-        #region IReadRepository
-
         public Task<TEntity> GetById(TKey id)
         {
             _logger?.LogInformation($"Método: { nameof(GetById) }({{ id:{ id } }}) Retorno: type { typeof(TEntity).Name }");
@@ -42,11 +40,6 @@ namespace Optsol.Components.Infra.Data
 
             return Set.AsAsyncEnumerable();
         }
-
-
-        #endregion
-
-        #region IWriteRepository
 
         public Task InsertAsync(TEntity entity)
         {
@@ -92,7 +85,5 @@ namespace Optsol.Components.Infra.Data
 
             return Context.SaveChangesAsync();
         }
-
-        #endregion
     }
 }

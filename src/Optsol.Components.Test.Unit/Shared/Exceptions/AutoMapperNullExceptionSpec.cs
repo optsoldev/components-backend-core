@@ -4,19 +4,19 @@ using Xunit;
 
 namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
-    public class ConnectionStringNullExceptionSpec
+    public class AutoMapperNullExceptionSpec
     {
         [Fact]
         public void DeveInicializarComMensagemDeErro()
         {
             //Given
-            ConnectionStringNullException exception;;  
+            AutoMapperNullException exception;;  
 
             //When
-            exception = new ConnectionStringNullException();
+            exception = new AutoMapperNullException();
 
             //Then
-            var msg = "A string de conexão não foi encontrada";
+            var msg = "O parametro mapper não foi resolvido pela IoC";
             exception.Message.Should().Be(msg);
         }
     }

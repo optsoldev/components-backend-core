@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Optsol.Components.Shared.Exceptions;
 
-namespace Optsol.Components.Infra.IoC
+namespace Microsoft.Extensions.DependencyInjection
 {
     public class ContextOptionsBuilder
     {

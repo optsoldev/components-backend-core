@@ -13,7 +13,7 @@ namespace Optsol.Components.Test.Unit.Infra.Data
     {
 
         [Fact]
-        public void DeveRegistrarLogsNoRepositorio()
+        public void DeveRegistrarLogsNorepository()
         {
             //Given
             var entity = new AggregateRoot();
@@ -25,33 +25,33 @@ namespace Optsol.Components.Test.Unit.Infra.Data
             dbContextMock.Setup(context => context.Set<AggregateRoot>()).Returns(setMock.Object);
             
             var logger = new XunitLogger<Repository<AggregateRoot, Guid>>();
-            var repositorio = new Repository<AggregateRoot, Guid>(dbContextMock.Object, logger);
+            var repository = new Repository<AggregateRoot, Guid>(dbContextMock.Object, logger);
             
             //When
-            repositorio.GetById(entity.Id);
-            repositorio.GetAllAsync();
-            repositorio.InsertAsync(entity);
-            repositorio.UpdateAsync(entity);
-            repositorio.DeleteAsync(entity.Id).ConfigureAwait(false);
-            repositorio.DeleteAsync(entity).ConfigureAwait(false);
-            repositorio.SaveChanges();
+            repository.GetById(entity.Id);
+            repository.GetAllAsync();
+            repository.InsertAsync(entity);
+            repository.UpdateAsync(entity);
+            repository.DeleteAsync(entity.Id).ConfigureAwait(false);
+            repository.DeleteAsync(entity).ConfigureAwait(false);
+            repository.SaveChanges();
 
             //Then
             var msgContrutor = $"Inicializando Repository<{ entity.GetType().Name }, { typeof(Guid).Name }>";
-            var msgGetById = $"Método: { nameof(repositorio.GetById) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgGetAllAsync = $"Método: { nameof(repositorio.GetAllAsync) }() Retorno: IAsyncEnumerable<{ entity.GetType().Name }>";
-            var msgInsertAsync = $"Método: { nameof(repositorio.GetById) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgUpdateAsync = $"Método: { nameof(repositorio.UpdateAsync) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgDeleteAsync = $"Método: { nameof(repositorio.DeleteAsync) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
-            var msgSaveChanges = $"Método: { nameof(repositorio.SaveChanges) }()";
+            var msgGetById = $"Método: { nameof(repository.GetById) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
+            var msgGetAllAsync = $"Método: { nameof(repository.GetAllAsync) }() Retorno: IAsyncEnumerable<{ entity.GetType().Name }>";
+            var msgInsertAsync = $"Método: { nameof(repository.GetById) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
+            var msgUpdateAsync = $"Método: { nameof(repository.UpdateAsync) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
+            var msgDeleteAsync = $"Método: { nameof(repository.DeleteAsync) }({{ id:{ entity.Id } }}) Retorno: type { entity.GetType().Name }";
+            var msgSaveChanges = $"Método: { nameof(repository.SaveChanges) }()";
 
             logger.Logs.Should().HaveCount(8);
-            logger.Logs.FindAll(f => f.Contains(nameof(repositorio.GetById))).Should().HaveCount(1);
+            logger.Logs.FindAll(f => f.Contains(nameof(repository.GetById))).Should().HaveCount(1);
             logger.Logs.FindAll(f => f.Contains(msgInsertAsync)).Should().HaveCount(1);
-            logger.Logs.FindAll(f => f.Contains(nameof(repositorio.InsertAsync))).Should().HaveCount(1);
-            logger.Logs.FindAll(f => f.Contains(nameof(repositorio.UpdateAsync))).Should().HaveCount(1);
-            logger.Logs.FindAll(f => f.Contains(nameof(repositorio.DeleteAsync))).Should().HaveCount(2);
-            logger.Logs.FindAll(f => f.Contains(nameof(repositorio.SaveChanges))).Should().HaveCount(1);            
+            logger.Logs.FindAll(f => f.Contains(nameof(repository.InsertAsync))).Should().HaveCount(1);
+            logger.Logs.FindAll(f => f.Contains(nameof(repository.UpdateAsync))).Should().HaveCount(1);
+            logger.Logs.FindAll(f => f.Contains(nameof(repository.DeleteAsync))).Should().HaveCount(2);
+            logger.Logs.FindAll(f => f.Contains(nameof(repository.SaveChanges))).Should().HaveCount(1);            
 
             
         }       

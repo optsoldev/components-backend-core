@@ -1,22 +1,23 @@
+using System;
 using FluentAssertions;
 using Optsol.Components.Shared.Exceptions;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
-    public class ConnectionStringNullExceptionSpec
+    public class UnitOfWorkNullExceptionSpec
     {
         [Fact]
         public void DeveInicializarComMensagemDeErro()
         {
             //Given
-            ConnectionStringNullException exception;;  
+            UnitOfWorkNullException exception;;  
 
             //When
-            exception = new ConnectionStringNullException();
+            exception = new UnitOfWorkNullException();
 
             //Then
-            var msg = "A string de conexão não foi encontrada";
+            var msg = "O parametro unitOfWork não foi resolvido pela IoC";
             exception.Message.Should().Be(msg);
         }
     }

@@ -1,20 +1,21 @@
-using Xunit;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Optsol.Components.Infra.IoC;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Shared.Data;
+using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
+using Xunit;
 
-namespace Optsol.Components.Test.Integration.IoC
+namespace Optsol.Components.Test.Integration.Application
 {
-    public class RepositoryExtensionsSpec
+    public class BaseServiceApplicationSpec
     {
-        public class RepositoryExtensionSpec
-    {
+
         [Fact]
-        public async Task DeveTestarConfiguracaoDoRepositorio()
+        public async Task DeveTestarAConfiguracaoDoServico()
         {
             //Given
             var services = new ServiceCollection();
@@ -24,21 +25,21 @@ namespace Optsol.Components.Test.Integration.IoC
 
             //When
             services.AddLogging();
+            services.AddAutoMapper(typeof(TestViewModel));
             services.AddRepository<TestContext>(new ContextOptionsBuilder());
             services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
-
+            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            
             var provider = services.BuildServiceProvider();
-            IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
-            ITestReadRepository readRepository = provider.GetRequiredService<ITestReadRepository>();
             ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
-
+            IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
+                        
             //Then
             await writeRepository.InsertAsync(entity);
-            var entityGet = await readRepository.GetById(entity.Id);
-            entityGet.Id.Should().Be(entity.Id);
-            entityGet.ToString().Should().Be(entity.ToString());
-
+            var entityGet = await serviceApplication.GetAllAsync<TestViewModel>();
+            entityGet.Should().HaveCount(1);
+            entityGet.First().Nome.Should().Be(entity.Nome.ToString());
+            entityGet.First().Contato.Should().Be(entity.Email.ToString());
         }
-    }
     }
 }

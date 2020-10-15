@@ -4,19 +4,19 @@ using Xunit;
 
 namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
-    public class ConnectionStringNullExceptionSpec
+    public class AsyncEnumerableNullExceptionSpec
     {
         [Fact]
         public void DeveInicializarComMensagemDeErro()
         {
             //Given
-            ConnectionStringNullException exception;;  
+            AsyncEnumerableNullException exception;;  
 
             //When
-            exception = new ConnectionStringNullException();
+            exception = new AsyncEnumerableNullException();
 
             //Then
-            var msg = "A string de conexão não foi encontrada";
+            var msg = "O argumento IAsyncEnumerable está nulo";
             exception.Message.Should().Be(msg);
         }
     }
