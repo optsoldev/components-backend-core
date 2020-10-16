@@ -22,18 +22,17 @@ namespace Optsol.Components.Test.Unit.Application
         {
             //Given
             var entity = new AggregateRoot();
-            var viewModel = new TestViewModel();
-            viewModel.Nome = "Weslley Carneiro";
-            viewModel.Contato = "weslley.carneiro@optsol.com.br";
+            var model = new TestViewModel();
+            model.Nome = "Weslley Carneiro";
+            model.Contato = "weslley.carneiro@optsol.com.br";
             
             Mock<IMapper> mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<AggregateRoot>())).Returns(viewModel);
+            mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<AggregateRoot>())).Returns(model);
             mapperMock.Setup(mapper => mapper.Map<AggregateRoot>(It.IsAny<TestViewModel>())).Returns(entity);
             
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
             Mock<IReadRepository<AggregateRoot, Guid>> readRepository = new Mock<IReadRepository<AggregateRoot, Guid>>();
             Mock<IWriteRepository<AggregateRoot, Guid>> writeRepository = new Mock<IWriteRepository<AggregateRoot, Guid>>();
-
 
             var logger = new XunitLogger<BaseServiceApplication<AggregateRoot, Guid>>();
             var service = new BaseServiceApplication<AggregateRoot, Guid>(
@@ -46,17 +45,17 @@ namespace Optsol.Components.Test.Unit.Application
             //When
             service.GetByIdAsync<TestViewModel>(entity.Id).ConfigureAwait(false);
             service.GetAllAsync<TestViewModel>().ConfigureAwait(false);
-            service.InsertAsync(viewModel).ConfigureAwait(false);
-            service.UpdateAsync(viewModel).ConfigureAwait(false);
+            service.InsertAsync(model).ConfigureAwait(false);
+            service.UpdateAsync(model).ConfigureAwait(false);
             service.DeleteAsync(entity.Id).ConfigureAwait(false);
 
             //Then
             var msgConstructor = "Inicializando Application Service<AggregateRoot, Guid>";
             var msgGetByIdAsync = $"Método: GetByIdAsync({{ id:{ entity.Id } }}) Retorno: type TestViewModel";
             var msgGetAllAsync = "Método: GetAllAsync() Retorno: IEnumerable<TestViewModel>";
-            var msgInsertAsync = $"Método: InsertAsync({{ viewModel:{ viewModel.ToJson() } }})";
+            var msgInsertAsync = $"Método: InsertAsync({{ viewModel:{ model.ToJson() } }})";
             var msgInsertAsyncMapper = $"Método: InsertAsync Mapper: TestViewModel To: AggregateRoot Result: { entity.ToJson() }";
-            var msgUpdateAsync = $"Método: UpdateAsync({{ viewModel:{ viewModel.ToJson() } }})";
+            var msgUpdateAsync = $"Método: UpdateAsync({{ viewModel:{ model.ToJson() } }})";
             var msgUpdateAsyncMapper = $"Método: UpdateAsync Mapper: TestViewModel To: AggregateRoot Result: { entity.ToJson() }";
             var msgDeleteAsync = $"Método: DeleteAsync({{ id:{ entity.Id } }})";
 

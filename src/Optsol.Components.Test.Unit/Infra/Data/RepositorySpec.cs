@@ -48,14 +48,12 @@ namespace Optsol.Components.Test.Unit.Infra.Data
             var msgSaveChanges = "Método: SaveChanges()";
 
             logger.Logs.Should().HaveCount(8);
-            logger.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgGetById)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();     
             logger.Logs.Where(a => a.Equals(msgDeleteAsync)).Should().HaveCount(2);
-            logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();            
-
-            
         }       
     }
 }

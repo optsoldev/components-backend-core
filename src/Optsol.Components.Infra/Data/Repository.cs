@@ -10,7 +10,7 @@ using Optsol.Components.Shared.Extensions;
 namespace Optsol.Components.Infra.Data
 {
     public class Repository<TEntity, TKey> : 
-        IRepository<TEntity, TKey>
+        IRepository<TEntity, TKey>, IDisposable
         where TEntity: class, IAggregateRoot<TKey>
     {
         public DbContext Context { get; protected set; }
@@ -84,6 +84,12 @@ namespace Optsol.Components.Infra.Data
             _logger?.LogInformation($"Método: { nameof(SaveChanges) }()");
 
             return Context.SaveChangesAsync();
+        }
+
+        public void Dispose()
+        {
+            Context.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }
