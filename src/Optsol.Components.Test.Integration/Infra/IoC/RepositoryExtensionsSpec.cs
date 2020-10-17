@@ -14,7 +14,7 @@ namespace Optsol.Components.Test.Integration.IoC
     {
         public class RepositoryExtensionSpec
         {
-            [Fact] //teste
+            [Fact]
             public async Task DeveTestarConfiguracaoDoRepositorio()
             {
                 //Given
