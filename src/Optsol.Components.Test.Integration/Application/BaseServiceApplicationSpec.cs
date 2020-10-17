@@ -143,7 +143,7 @@ namespace Optsol.Components.Test.Integration.Application
 
         }
 
-         [Fact]
+        [Fact]
         public async Task DeveAtualizarRegistroPeloServico()
         {
             //Given
@@ -214,6 +214,66 @@ namespace Optsol.Components.Test.Integration.Application
             ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(0);
 
             entity.Should().HaveCount(0);
+        }
+
+        [Fact]
+        public async Task NaoDeveInserirRegistroPeloServico()
+        {
+            //Given
+            InsertTestViewModel model = new InsertTestViewModel();
+            model.Nome = "";
+            model.Contato = "weslley.carneiro";
+
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddAutoMapper(typeof(TestViewModel));
+            services.AddRepository<TestContext>(new ContextOptionsBuilder());
+            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+
+            var provider = services.BuildServiceProvider();
+            IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
+
+            //When
+            await serviceApplication.InsertAsync(model);
+
+            //Then
+            var entity = await serviceApplication.GetAllAsync<TestViewModel>();
+            ((ServiceApplication)serviceApplication).Invalid.Should().BeTrue();
+            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public async Task NaoDeveAtualizarRegistroPeloServico()
+        {
+            //Given
+            InsertTestViewModel model = new InsertTestViewModel();
+            model.Nome = "Weslley Carneiro";
+            model.Contato = "weslley.carneiro@optsol.com.br";
+
+            var services = new ServiceCollection();
+            services.AddLogging();
+            services.AddAutoMapper(typeof(TestViewModel));
+            services.AddRepository<TestContext>(new ContextOptionsBuilder());
+            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+
+            var provider = services.BuildServiceProvider();
+            IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
+            
+            await serviceApplication.InsertAsync(model);
+
+            var modelResult = (await serviceApplication.GetAllAsync<TestViewModel>()).Single();
+            var updateModel = new UpdateTestViewModel();
+            updateModel.Id = modelResult.Id;
+            updateModel.Nome = "";
+            updateModel.Contato = "weslley.carneiro";
+
+            //When
+            await serviceApplication.UpdateAsync<UpdateTestViewModel>(updateModel);
+
+            //Then
+            var entity = await serviceApplication.GetAllAsync<TestViewModel>();
+            ((ServiceApplication)serviceApplication).Invalid.Should().BeTrue();
+            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(3);
         }
     }
 }
