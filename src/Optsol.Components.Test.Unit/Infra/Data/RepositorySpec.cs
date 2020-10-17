@@ -8,6 +8,11 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Shared.Extensions;
 using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Optsol.Components.Test.Unit.Infra.Data
 {
@@ -25,12 +30,11 @@ namespace Optsol.Components.Test.Unit.Infra.Data
             
             Mock<DbContext> dbContextMock = new Mock<DbContext>();
             dbContextMock.Setup(context => context.Set<AggregateRoot>()).Returns(setMock.Object);
-            
             var logger = new XunitLogger<Repository<AggregateRoot, Guid>>();
             var repository = new Repository<AggregateRoot, Guid>(dbContextMock.Object, logger);
             
             //When
-            repository.GetById(entity.Id);
+            repository.GetByIdAsync(entity.Id);
             repository.GetAllAsync();
             repository.InsertAsync(entity);
             repository.UpdateAsync(entity);
@@ -40,7 +44,7 @@ namespace Optsol.Components.Test.Unit.Infra.Data
 
             //Then
             var msgContructor = "Inicializando Repository<AggregateRoot, Guid>";
-            var msgGetById = $"Método: GetById({{ id:{ entity.Id } }}) Retorno: type AggregateRoot";
+            var msgGetById = $"Método: GetByIdAsync({{ id:{ entity.Id } }}) Retorno: type AggregateRoot";
             var msgGetAllAsync = "Método: GetAllAsync() Retorno: IAsyncEnumerable<AggregateRoot>";
             var msgInsertAsync = $"Método: InsertAsync({{ entity:{ entity.ToJson() } }})";
             var msgUpdateAsync = $"Método: UpdateAsync({{ entity:{ entity.ToJson() } }})";
@@ -52,6 +56,7 @@ namespace Optsol.Components.Test.Unit.Infra.Data
             logger.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();     
             logger.Logs.Where(a => a.Equals(msgDeleteAsync)).Should().HaveCount(2);
         }       

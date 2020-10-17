@@ -6,5 +6,6 @@ namespace Optsol.Components.Domain
     {
         TKey Id { get; }
         DateTime CreateDate { get; }
+        void Validate();
     }
 }

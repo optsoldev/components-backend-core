@@ -45,7 +45,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public Action<DbContextOptionsBuilder> BuilderInMemory()
         {
-            return options => options.UseInMemoryDatabase("ComponentsOptsolInMemoryDatabase");
+            return options => options.UseInMemoryDatabase($"ComponentsOptsolInMemoryDatabase{Guid.NewGuid()}")
+                                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                                     .EnableSensitiveDataLogging();
         }
 
         public Action<DbContextOptionsBuilder> BuilderConnectionString()

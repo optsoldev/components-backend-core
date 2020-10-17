@@ -11,34 +11,34 @@ namespace Optsol.Components.Test.Integration.IoC
     public class RepositoryExtensionsSpec
     {
         public class RepositoryExtensionSpec
-    {
-        [Fact]
-        public async Task DeveTestarConfiguracaoDoRepositorio()
         {
-            //Given
-            var services = new ServiceCollection();
-            var entity = new TestEntity(
-                new NomeValueObject("Weslley", "Carneiro")
-                , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+            [Fact]
+            public async Task DeveTestarConfiguracaoDoRepositorio()
+            {
+                //Given
+                var services = new ServiceCollection();
+                var entity = new TestEntity(
+                    new NomeValueObject("Weslley", "Carneiro")
+                    , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
-            //When
-            services.AddLogging();
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+                //When
+                services.AddLogging();
+                services.AddRepository<TestContext>(new ContextOptionsBuilder());
+                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
 
-            var provider = services.BuildServiceProvider();
-            IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
-            ITestReadRepository readRepository = provider.GetRequiredService<ITestReadRepository>();
-            ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
+                var provider = services.BuildServiceProvider();
+                IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
+                ITestReadRepository readRepository = provider.GetRequiredService<ITestReadRepository>();
+                ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
 
-            //Then
-            await writeRepository.InsertAsync(entity);
-            await unitOfWork.CommitAsync();
-            var entityGet = await readRepository.GetById(entity.Id);
-            entityGet.Id.Should().Be(entity.Id);
-            entityGet.ToString().Should().Be(entity.ToString());
-
+                //Then
+                await writeRepository.InsertAsync(entity);
+                await unitOfWork.CommitAsync();
+                
+                var entityGet = await readRepository.GetByIdAsync(entity.Id);
+                entityGet.Id.Should().Be(entity.Id);
+                entityGet.ToString().Should().Be(entity.ToString());
+            }
         }
-    }
     }
 }

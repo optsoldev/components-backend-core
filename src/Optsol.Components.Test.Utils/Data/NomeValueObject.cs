@@ -13,6 +13,16 @@ namespace Optsol.Components.Test.Shared.Data
             Nome = nome;
             SobreNome = sobreNome;   
 
+            Validate();
+        }
+
+        public override string ToString()
+        {
+            return $"{ Nome } { SobreNome }";
+        }
+
+        public override void Validate()
+        {
             AddNotifications(new Contract()
                 .Requires()
                 .HasMinLen(Nome, 3, "NomeValueObject.Nome", "O nome deve ter no mínino 3 caracteres")
@@ -20,11 +30,6 @@ namespace Optsol.Components.Test.Shared.Data
                 .HasMaxLen(Nome, 35, "NomeValueObject.Nome", "O nome deve ter no máximo 35 caracteres")
                 .HasMaxLen(SobreNome, 35, "NomeValueObject.SobreNome", "O sobrenome deve ter no máximo 35 caracteres")
                 );
-        }
-
-        public override string ToString()
-        {
-            return $"{ Nome } { SobreNome }";
         }
     }
 }

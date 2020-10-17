@@ -24,10 +24,7 @@ namespace Optsol.Components.Infra.UoW
         {
             _logger?.LogInformation($"Método: { nameof(CommitAsync) }() Retorno: bool");
 
-            return Task.Factory.StartNew(() =>
-            {
-                return Context.SaveChanges() > 0;
-            });
+            return Task.FromResult(Context.SaveChanges() > 0);
         }
 
         private void Dispose(bool disposing)

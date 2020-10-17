@@ -1,3 +1,5 @@
+using System;
+using Flunt.Validations;
 using Optsol.Components.Domain;
 
 namespace Optsol.Components.Test.Shared.Data
@@ -11,15 +13,38 @@ namespace Optsol.Components.Test.Shared.Data
         public TestEntity()
         {
         }
-        
+
+
+        public TestEntity(Guid id, NomeValueObject nome, EmailValueObject email)
+            : this(nome, email)
+        {
+            Id  = id;
+        }
+
         public TestEntity(NomeValueObject nome, EmailValueObject email)
         {
             Nome = nome;
             Email = email;
 
-            AddNotifications(nome, email);
+            Validate();
 
             Ativo = false;
+        }
+
+        public override void Validate()
+        {
+            base.Validate();
+
+            AddNotifications(new Contract()
+                .Requires()
+                .IsNotNull(Nome, "Nome", "O Nome não pode ser nulo")
+                .IsNotNull(Email, "Email", "O Email não pode ser nulo"));
+
+            if(Invalid)
+                return;
+
+            AddNotifications(Nome, Email);
+            
         }
     }
 }

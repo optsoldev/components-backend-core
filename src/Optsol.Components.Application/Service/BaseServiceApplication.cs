@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Runtime.CompilerServices;
+using System.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using AutoMapper;
@@ -47,7 +48,7 @@ namespace Optsol.Components.Application.Service
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TViewModel).Name }");
             
-            return _mapper.Map<TViewModel>((await _readRepository.GetById(id)));
+            return _mapper.Map<TViewModel>((await _readRepository.GetByIdAsync(id)));
         }
 
         public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
@@ -67,6 +68,7 @@ namespace Optsol.Components.Application.Service
             if(viewModel.Invalid)
             {
                 AddNotifications(viewModel);
+                LogNotifications(nameof(InsertAsync));
                 return;
             }
 
@@ -75,20 +77,38 @@ namespace Optsol.Components.Application.Service
             var entity = _mapper.Map<TEntity>(viewModel);
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
-
+            
+            entity.Validate();
             AddNotifications((entity as Entity<TKey>));
+            LogNotifications(nameof(InsertAsync));
+            
+            await _writeRepository.InsertAsync(entity);
 
             await CommitAsync();
         }
 
+        
         public async Task UpdateAsync<TViewModel>(TViewModel viewModel)
             where TViewModel: BaseViewModel
         {
+            viewModel.Validate();
+            if(viewModel.Invalid)
+            {
+                AddNotifications(viewModel);
+                LogNotifications(nameof(UpdateAsync));
+                return;
+            }
+
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ viewModel.ToJson() } }})");
             
             var entity = _mapper.Map<TEntity>(viewModel);
-
+            var edit = await _readRepository.GetByIdAsync(entity.Id);
+                         
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+
+            entity.Validate();
+            AddNotifications((entity as Entity<TKey>));
+            LogNotifications(nameof(entity));
 
             await _writeRepository.UpdateAsync(entity);
 
@@ -118,5 +138,12 @@ namespace Optsol.Components.Application.Service
             _writeRepository.Dispose();
             _readRepository.Dispose();
         }
+
+        private void LogNotifications(string method)
+        {
+            if(Invalid)
+                _logger?.LogInformation($"Método: { method } Valid: { Valid } Notifications: { Notifications.ToJson() }");
+        }
+
     }
 }

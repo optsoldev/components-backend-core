@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Runtime.InteropServices.ComTypes;
 using System;
 using AutoMapper;
@@ -25,15 +26,17 @@ namespace Optsol.Components.Test.Unit.Application
             var model = new TestViewModel();
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
-            
+          
             Mock<IMapper> mapperMock = new Mock<IMapper>();
             mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<AggregateRoot>())).Returns(model);
             mapperMock.Setup(mapper => mapper.Map<AggregateRoot>(It.IsAny<TestViewModel>())).Returns(entity);
             
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(true);
+
             Mock<IReadRepository<AggregateRoot, Guid>> readRepository = new Mock<IReadRepository<AggregateRoot, Guid>>();
             Mock<IWriteRepository<AggregateRoot, Guid>> writeRepository = new Mock<IWriteRepository<AggregateRoot, Guid>>();
-
+            
             var logger = new XunitLogger<BaseServiceApplication<AggregateRoot, Guid>>();
             var service = new BaseServiceApplication<AggregateRoot, Guid>(
                 mapperMock.Object,

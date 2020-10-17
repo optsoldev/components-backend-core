@@ -1,3 +1,4 @@
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,9 +28,9 @@ namespace Optsol.Components.Infra.Data
             this.Set = context.Set<TEntity>();
         }
 
-        public Task<TEntity> GetById(TKey id)
+        public Task<TEntity> GetByIdAsync(TKey id)
         {
-            _logger?.LogInformation($"Método: { nameof(GetById) }({{ id:{ id } }}) Retorno: type { typeof(TEntity).Name }");
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TEntity).Name }");
 
             return Set.FindAsync(id).AsTask();
         }
@@ -44,18 +45,23 @@ namespace Optsol.Components.Infra.Data
         public Task InsertAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ entity:{ entity.ToJson() } }})");
-
+                
             return Set.AddAsync(entity).AsTask();
         }
 
         public Task UpdateAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
-
-            return Task.Factory.StartNew(() => 
+            
+            var local = Context.Set<TEntity>().Local?.Where(w => w.Id.Equals(entity.Id)).FirstOrDefault();
+            if(local != null)
             {
-                Set.Update(entity);
-            });
+                Context.Entry(local).State = EntityState.Detached;
+            }
+
+            Set.Update(entity);
+            
+            return Task.CompletedTask;
         }
 
         public async Task DeleteAsync(TKey id)

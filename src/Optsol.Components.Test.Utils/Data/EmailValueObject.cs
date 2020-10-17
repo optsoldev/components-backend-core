@@ -10,16 +10,21 @@ namespace Optsol.Components.Test.Shared.Data
         public EmailValueObject(string email)
         {
             Email = email;
-
-            AddNotifications(new Contract()
-                .Requires()
-                .IsEmail(Email, "EmailValueObject.Email", "E-mail inválido")
-            );
+            
+            Validate();
         }
 
         public override string ToString()
         {
             return Email;
+        }
+
+        public override void Validate()
+        {
+             AddNotifications(new Contract()
+                .Requires()
+                .IsEmail(Email, "EmailValueObject.Email", "E-mail inválido")
+            );
         }
     }
 }
