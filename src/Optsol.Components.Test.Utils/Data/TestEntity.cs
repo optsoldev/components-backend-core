@@ -31,6 +31,11 @@ namespace Optsol.Components.Test.Shared.Data
             Ativo = false;
         }
 
+        public void InserirNome(NomeValueObject nomeValueObject)
+        {
+            Nome = nomeValueObject;
+        }
+
         public override void Validate()
         {
             base.Validate();
@@ -46,5 +51,7 @@ namespace Optsol.Components.Test.Shared.Data
             AddNotifications(Nome, Email);
             
         }
+
+        
     }
 }

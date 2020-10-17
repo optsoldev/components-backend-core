@@ -1,5 +1,3 @@
-using System.Net.Http.Headers;
-using System.Reflection.Metadata;
 using Xunit;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -60,8 +58,6 @@ namespace Optsol.Components.Test.Integration.IoC
                     new NomeValueObject("Weslley", "Carneiro")
                     , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
-
-                //When
                 services.AddLogging();
                 services.AddRepository<TestContext>(new ContextOptionsBuilder());
                 services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
@@ -75,6 +71,7 @@ namespace Optsol.Components.Test.Integration.IoC
                 await writeRepository.InsertAsync(entity2);
                 await unitOfWork.CommitAsync();
 
+                //When
                 var entityResult = await readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
 
                 //Then
@@ -93,8 +90,6 @@ namespace Optsol.Components.Test.Integration.IoC
                     new NomeValueObject("Weslley", "Carneiro")
                     , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
-
-                //When
                 services.AddLogging();
                 services.AddRepository<TestContext>(new ContextOptionsBuilder());
                 services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
@@ -106,12 +101,111 @@ namespace Optsol.Components.Test.Integration.IoC
                 await writeRepository.InsertAsync(entity);
                 await unitOfWork.CommitAsync();
 
+                //When
                 var entityResult = await readRepository.GetByIdAsync(entity.Id);
 
                 //Then
                 entityResult.Should().NotBeNull();
                 entityResult.Nome.ToString().Should().Be(entity.Nome.ToString());
                 entityResult.Email.ToString().Should().Be(entity.Email.ToString());
+            }
+
+            [Fact]
+            public async Task DeveInserirRegistroPeloRepositorio()
+            {
+                //Given
+                var services = new ServiceCollection();
+                var entity = new TestEntity(
+                    new NomeValueObject("Weslley", "Carneiro")
+                    , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+
+                services.AddLogging();
+                services.AddRepository<TestContext>(new ContextOptionsBuilder());
+                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+
+                var provider = services.BuildServiceProvider();
+                IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
+                ITestReadRepository readRepository = provider.GetRequiredService<ITestReadRepository>();
+                ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
+
+                //When
+                await writeRepository.InsertAsync(entity);
+                await unitOfWork.CommitAsync();
+
+                //Then
+                var entityResult = await readRepository.GetByIdAsync(entity.Id);
+                entityResult.Invalid.Should().BeFalse();
+                entityResult.Notifications.Should().HaveCount(0);
+                entityResult.Should().NotBeNull();
+                entityResult.Nome.ToString().Should().Be(entity.Nome.ToString());
+                entityResult.Email.ToString().Should().Be(entity.Email.ToString());
+                entityResult.Ativo.Should().BeFalse();
+            }
+
+            [Fact]
+            public async Task DeveAtualizarRegistroPeloRepositorio()
+            {
+                //Given
+                var services = new ServiceCollection();
+                var entity = new TestEntity(
+                    new NomeValueObject("Weslley", "Carneiro")
+                    , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+
+                services.AddLogging();
+                services.AddRepository<TestContext>(new ContextOptionsBuilder());
+                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+
+                var provider = services.BuildServiceProvider();
+                IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
+                ITestReadRepository readRepository = provider.GetRequiredService<ITestReadRepository>();
+                ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
+                await writeRepository.InsertAsync(entity);
+                await unitOfWork.CommitAsync();
+
+                //When
+                var updateResult = await readRepository.GetByIdAsync(entity.Id);
+                var updateEntity = new TestEntity(updateResult.Id, new NomeValueObject("Weslley", "Atualizado"), updateResult.Email);
+                                
+                await writeRepository.UpdateAsync(updateEntity);
+                await unitOfWork.CommitAsync();
+                
+                //Then
+                var entityResult = await readRepository.GetByIdAsync(entity.Id);
+                entityResult.Invalid.Should().BeFalse();
+                entityResult.Notifications.Should().HaveCount(0);
+                entityResult.Should().NotBeNull();
+                entityResult.Nome.ToString().Should().Be(updateEntity.Nome.ToString());
+                entityResult.Email.ToString().Should().Be(updateEntity.Email.ToString());
+                entityResult.Ativo.Should().BeFalse();
+            }
+
+            [Fact]
+            public async Task DeveRemoverRegistroPeloIdPeloRepositorio()
+            {
+                //Given
+                var services = new ServiceCollection();
+                var entity = new TestEntity(
+                    new NomeValueObject("Weslley", "Carneiro")
+                    , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+
+                services.AddLogging();
+                services.AddRepository<TestContext>(new ContextOptionsBuilder());
+                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+
+                var provider = services.BuildServiceProvider();
+                IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
+                ITestReadRepository readRepository = provider.GetRequiredService<ITestReadRepository>();
+                ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
+                await writeRepository.InsertAsync(entity);
+                await unitOfWork.CommitAsync();
+
+                //When
+                await writeRepository.DeleteAsync(entity.Id);
+                await unitOfWork.CommitAsync();
+
+                //Then
+                var entityResult = await readRepository.GetByIdAsync(entity.Id);
+                entityResult.Should().BeNull();
             }
         }
     }
