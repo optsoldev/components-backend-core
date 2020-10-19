@@ -26,10 +26,10 @@ namespace Optsol.Components.Test.Integration.Application
 
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
-            
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+
             var provider = services.BuildServiceProvider();
             ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
             IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>();
@@ -38,12 +38,12 @@ namespace Optsol.Components.Test.Integration.Application
             //When
             await writeRepository.InsertAsync(entity);
             await unitOfWork.CommitAsync();
-            var entityGet = await serviceApplication.GetAllAsync<TestViewModel>();
+            var modelResult = await serviceApplication.GetAllAsync<TestViewModel>();
 
             //Then            
-            entityGet.Should().HaveCount(1);
-            entityGet.First().Nome.Should().Be(entity.Nome.ToString());
-            entityGet.First().Contato.Should().Be(entity.Email.ToString());
+            modelResult.DataList.Should().HaveCount(1);
+            modelResult.DataList.First().Nome.Should().Be(entity.Nome.ToString());
+            modelResult.DataList.First().Contato.Should().Be(entity.Email.ToString());
         }
 
         [Fact]
@@ -57,8 +57,8 @@ namespace Optsol.Components.Test.Integration.Application
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
@@ -71,12 +71,12 @@ namespace Optsol.Components.Test.Integration.Application
             var modelResult = await serviceApplication.GetAllAsync<TestViewModel>();
 
             //Then
-            ((ServiceApplication)serviceApplication).Invalid.Should().BeFalse();
-            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(0);
+            modelResult.Invalid.Should().BeFalse();
+            modelResult.Notifications.Should().HaveCount(0);
 
-            modelResult.Should().HaveCount(3);
-            modelResult.Where(w => w.Nome.Equals(model.Nome)).Should().HaveCount(3);
-            modelResult.Where(w => w.Contato.Equals(model.Contato)).Should().HaveCount(3);
+            modelResult.DataList.Should().HaveCount(3);
+            modelResult.DataList.Where(w => w.Nome.Equals(model.Nome)).Should().HaveCount(3);
+            modelResult.DataList.Where(w => w.Contato.Equals(model.Contato)).Should().HaveCount(3);
         } 
 
          [Fact]
@@ -90,8 +90,8 @@ namespace Optsol.Components.Test.Integration.Application
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
@@ -99,15 +99,15 @@ namespace Optsol.Components.Test.Integration.Application
             //When
             await serviceApplication.InsertAsync(model);
             var list = await serviceApplication.GetAllAsync<TestViewModel>();
-            var modelResult = await serviceApplication.GetByIdAsync<TestViewModel>(list.Single().Id);
+            var modelResult = await serviceApplication.GetByIdAsync<TestViewModel>(list.DataList.Single().Id);
 
             //Then
-            ((ServiceApplication)serviceApplication).Invalid.Should().BeFalse();
-            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(0);
+            modelResult.Invalid.Should().BeFalse();
+            modelResult.Notifications.Should().HaveCount(0);
 
             modelResult.Should().NotBeNull();
-            modelResult.Nome.Should().Be(model.Nome);
-            modelResult.Contato.Should().Be(model.Contato);
+            modelResult.Data.Nome.Should().Be(model.Nome);
+            modelResult.Data.Contato.Should().Be(model.Contato);
         } 
 
         [Fact]
@@ -121,25 +121,25 @@ namespace Optsol.Components.Test.Integration.Application
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
 
             //When
-            await serviceApplication.InsertAsync(model);
+            var modelResult = await serviceApplication.InsertAsync(model);
 
             //Then
             var entity = await serviceApplication.GetAllAsync<TestViewModel>();
-            ((ServiceApplication)serviceApplication).Invalid.Should().BeFalse();
-            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(0);
+            modelResult.Invalid.Should().BeFalse();
+            modelResult.Notifications.Should().HaveCount(0);
 
-            entity.Should().HaveCount(1);
-            entity.Single().Id.Should().NotBeEmpty();
-            entity.Single().Nome.Should().Be(model.Nome);
-            entity.Single().Contato.Should().Be(model.Contato);
-            entity.Single().Ativo.Should().Be("Inativo");
+            entity.DataList.Should().HaveCount(1);
+            entity.DataList.Single().Id.Should().NotBeEmpty();
+            entity.DataList.Single().Nome.Should().Be(model.Nome);
+            entity.DataList.Single().Contato.Should().Be(model.Contato);
+            entity.DataList.Single().Ativo.Should().Be("Inativo");
 
         }
 
@@ -154,33 +154,33 @@ namespace Optsol.Components.Test.Integration.Application
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
             
             await serviceApplication.InsertAsync(model);
 
-            var modelResult = (await serviceApplication.GetAllAsync<TestViewModel>()).Single();
+            var data = (await serviceApplication.GetAllAsync<TestViewModel>()).DataList.Single();
             var updateModel = new UpdateTestViewModel();
-            updateModel.Id = modelResult.Id;
+            updateModel.Id = data.Id;
             updateModel.Nome = $"Weslley Alterado";
             updateModel.Contato = model.Contato;
 
             //When
-            await serviceApplication.UpdateAsync<UpdateTestViewModel>(updateModel);
+            var modelResult = await serviceApplication.UpdateAsync<UpdateTestViewModel>(updateModel);
 
             //Then
             var entity = await serviceApplication.GetAllAsync<TestViewModel>();
-            ((ServiceApplication)serviceApplication).Invalid.Should().BeFalse();
-            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(0);
+            modelResult.Invalid.Should().BeFalse();
+            modelResult.Notifications.Should().HaveCount(0);
 
-            entity.Should().HaveCount(1);
-            entity.Single().Id.Should().NotBeEmpty();
-            entity.Single().Nome.Should().Be(updateModel.Nome);
-            entity.Single().Contato.Should().Be(updateModel.Contato);
-            entity.Single().Ativo.Should().Be("Inativo");
+            entity.DataList.Should().HaveCount(1);
+            entity.DataList.Single().Id.Should().NotBeEmpty();
+            entity.DataList.Single().Nome.Should().Be(updateModel.Nome);
+            entity.DataList.Single().Contato.Should().Be(updateModel.Contato);
+            entity.DataList.Single().Ativo.Should().Be("Inativo");
 
         }
 
@@ -195,25 +195,25 @@ namespace Optsol.Components.Test.Integration.Application
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
             
             await serviceApplication.InsertAsync(model);
 
-            var modelResult = (await serviceApplication.GetAllAsync<TestViewModel>()).Single();
+            var data = (await serviceApplication.GetAllAsync<TestViewModel>()).DataList.Single();
             
             //When
-            await serviceApplication.DeleteAsync(modelResult.Id);
+            var modelResult = await serviceApplication.DeleteAsync(data.Id);
 
             //Then
             var entity = await serviceApplication.GetAllAsync<TestViewModel>();
-            ((ServiceApplication)serviceApplication).Invalid.Should().BeFalse();
-            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(0);
+            modelResult.Invalid.Should().BeFalse();
+            modelResult.Notifications.Should().HaveCount(0);
 
-            entity.Should().HaveCount(0);
+            entity.DataList.Should().HaveCount(0);
         }
 
         [Fact]
@@ -227,19 +227,19 @@ namespace Optsol.Components.Test.Integration.Application
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
 
             //When
-            await serviceApplication.InsertAsync(model);
+            var modelResult = await serviceApplication.InsertAsync(model);
 
             //Then
             var entity = await serviceApplication.GetAllAsync<TestViewModel>();
-            ((ServiceApplication)serviceApplication).Invalid.Should().BeTrue();
-            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(3);
+            modelResult.Invalid.Should().BeTrue();
+            modelResult.Notifications.Should().HaveCount(3);
         }
 
         [Fact]
@@ -253,27 +253,28 @@ namespace Optsol.Components.Test.Integration.Application
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IServiceApplication serviceApplication = provider.GetRequiredService<IServiceApplication>();
             
             await serviceApplication.InsertAsync(model);
 
-            var modelResult = (await serviceApplication.GetAllAsync<TestViewModel>()).Single();
+            var data = (await serviceApplication.GetAllAsync<TestViewModel>()).DataList.Single();
             var updateModel = new UpdateTestViewModel();
-            updateModel.Id = modelResult.Id;
+            updateModel.Id = data.Id;
             updateModel.Nome = "";
             updateModel.Contato = "weslley.carneiro";
 
             //When
-            await serviceApplication.UpdateAsync<UpdateTestViewModel>(updateModel);
+            var modelResult = await serviceApplication.UpdateAsync(updateModel);
 
             //Then
             var entity = await serviceApplication.GetAllAsync<TestViewModel>();
-            ((ServiceApplication)serviceApplication).Invalid.Should().BeTrue();
-            ((ServiceApplication)serviceApplication).Notifications.Should().HaveCount(3);
+            modelResult.Invalid.Should().BeTrue();
+            modelResult.Valid.Should().BeFalse();
+            modelResult.Notifications.Should().HaveCount(3);
         }
     }
 }

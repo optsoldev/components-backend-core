@@ -13,6 +13,7 @@ using Optsol.Components.Test.Utils.Application;
 using Xunit;
 using Optsol.Components.Shared.Extensions;
 using System.Linq;
+using Optsol.Components.Application.Result;
 
 namespace Optsol.Components.Test.Unit.Application
 {
@@ -34,6 +35,8 @@ namespace Optsol.Components.Test.Unit.Application
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(true);
 
+            Mock<IServiceResultFactory> serviceResultFactoryMock = new Mock<IServiceResultFactory>();
+
             Mock<IReadRepository<AggregateRoot, Guid>> readRepository = new Mock<IReadRepository<AggregateRoot, Guid>>();
             Mock<IWriteRepository<AggregateRoot, Guid>> writeRepository = new Mock<IWriteRepository<AggregateRoot, Guid>>();
             
@@ -41,6 +44,7 @@ namespace Optsol.Components.Test.Unit.Application
             var service = new BaseServiceApplication<AggregateRoot, Guid>(
                 mapperMock.Object,
                 logger,
+                serviceResultFactoryMock.Object,
                 unitOfWork.Object,
                 readRepository.Object,
                 writeRepository.Object);

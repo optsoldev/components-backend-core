@@ -1,4 +1,3 @@
-using System;
 using FluentAssertions;
 using Optsol.Components.Shared.Exceptions;
 using Xunit;

@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using Optsol.Components.Infra.UoW;
+using Optsol.Components.Application.Result;
 
 namespace Optsol.Components.Test.Integration.Service
 {
@@ -28,26 +29,37 @@ namespace Optsol.Components.Test.Integration.Service
             //Given
             var services = new ServiceCollection();
             var entity = new TestEntity(
-                new NomeValueObject("Weslley", "Carneiro"),
+                new NomeValueObject("Weslley_1", "Carneiro"),
+                new EmailValueObject("weslley.carneiro@optsol.com.br")
+            );
+            var entity2 = new TestEntity(
+                new NomeValueObject("Weslley_2", "Carneiro"),
+                new EmailValueObject("weslley.carneiro@optsol.com.br")
+            );
+            var entity3 = new TestEntity(
+                new NomeValueObject("Weslley_3", "Carneiro"),
                 new EmailValueObject("weslley.carneiro@optsol.com.br")
             );
 
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddRepository<TestContext>(new ContextOptionsBuilder());
-            services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
-            services.RegisterApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, Guid> controllerBase = new ApiControllerBase<TestEntity, Guid>(
                 provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, Guid>>>(), 
                 provider.GetRequiredService<IServiceApplication>());
 
+            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
             var repository = provider.GetRequiredService<ITestWriteRepository>();
-            await repository.InsertAsync(entity);
             
-            var uow = provider.GetRequiredService<IUnitOfWork>();
-            await uow.CommitAsync();
+            await repository.InsertAsync(entity);
+            await repository.InsertAsync(entity2);
+            await repository.InsertAsync(entity3);
+
+            await unitOfWork.CommitAsync();
 
             //When
             var actionResult = await controllerBase.GetAllAsync<TestViewModel>();
@@ -55,11 +67,11 @@ namespace Optsol.Components.Test.Integration.Service
             //Then
             ((OkObjectResult)actionResult).StatusCode.Should().NotBeNull();
             ((OkObjectResult)actionResult).StatusCode.Should().Be((int)HttpStatusCode.OK);
-            var resultObj = JsonConvert.DeserializeObject<List<TestViewModel>>(((OkObjectResult)actionResult).Value.ToJson());
-            resultObj.Should().HaveCount(1);
-            resultObj.Any(a => a.Id == entity.Id).Should().BeTrue();
-            resultObj.Any(a => a.Contato == entity.Email.ToString()).Should().BeTrue();
-            resultObj.Any(a => a.Nome == entity.Nome.ToString()).Should().BeTrue();
+            var resultObj = JsonConvert.DeserializeObject<ServiceResultList<TestViewModel>>(((OkObjectResult)actionResult).Value.ToJson());
+            resultObj.DataList.Should().HaveCount(3);
+            resultObj.DataList.Any(a => a.Id == entity.Id).Should().BeTrue();
+            resultObj.DataList.Any(a => a.Contato == entity2.Email.ToString()).Should().BeTrue();
+            resultObj.DataList.Any(a => a.Nome == entity3.Nome.ToString()).Should().BeTrue();
         }
     }
 }

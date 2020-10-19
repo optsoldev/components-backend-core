@@ -25,8 +25,8 @@ namespace Optsol.Components.Test.Integration.IoC
 
                 //When
                 services.AddLogging();
-                services.AddRepository<TestContext>(new ContextOptionsBuilder());
-                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddContext<TestContext>(new ContextOptionsBuilder());
+                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -59,8 +59,8 @@ namespace Optsol.Components.Test.Integration.IoC
                     , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
                 services.AddLogging();
-                services.AddRepository<TestContext>(new ContextOptionsBuilder());
-                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddContext<TestContext>(new ContextOptionsBuilder());
+                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -91,8 +91,8 @@ namespace Optsol.Components.Test.Integration.IoC
                     , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
                 services.AddLogging();
-                services.AddRepository<TestContext>(new ContextOptionsBuilder());
-                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddContext<TestContext>(new ContextOptionsBuilder());
+                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -120,8 +120,8 @@ namespace Optsol.Components.Test.Integration.IoC
                     , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
                 services.AddLogging();
-                services.AddRepository<TestContext>(new ContextOptionsBuilder());
-                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddContext<TestContext>(new ContextOptionsBuilder());
+                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -152,8 +152,8 @@ namespace Optsol.Components.Test.Integration.IoC
                     , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
                 services.AddLogging();
-                services.AddRepository<TestContext>(new ContextOptionsBuilder());
-                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddContext<TestContext>(new ContextOptionsBuilder());
+                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -189,8 +189,8 @@ namespace Optsol.Components.Test.Integration.IoC
                     , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
                 services.AddLogging();
-                services.AddRepository<TestContext>(new ContextOptionsBuilder());
-                services.RegisterRepositories<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddContext<TestContext>(new ContextOptionsBuilder());
+                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 

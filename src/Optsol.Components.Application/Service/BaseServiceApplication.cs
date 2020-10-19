@@ -1,7 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Net.Http.Headers;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using AutoMapper;
 using Optsol.Components.Domain;
 using Optsol.Components.Infra.Data;
@@ -11,14 +8,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Infra.UoW;
-using Flunt.Notifications;
-using System.Diagnostics.Contracts;
 using Optsol.Components.Application.ViewModel;
+using Optsol.Components.Application.Result;
 
 namespace Optsol.Components.Application.Service
 {
     public class BaseServiceApplication<TEntity, TKey> 
-        : Notifiable, IBaseServiceApplication<TEntity, TKey>, IDisposable
+        : IBaseServiceApplication<TEntity, TKey>, IDisposable
         where TEntity: class, IAggregateRoot<TKey>
     {
         protected readonly IMapper _mapper;
@@ -26,50 +22,57 @@ namespace Optsol.Components.Application.Service
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, TKey> _readRepository;
         protected readonly IWriteRepository<TEntity, TKey> _writeRepository;
+        protected readonly IServiceResultFactory _serviceResultFactory;
 
         public BaseServiceApplication(
             IMapper mapper,
             ILogger<BaseServiceApplication<TEntity, TKey>> logger,
+            IServiceResultFactory serviceResultFactory,
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, TKey> readRepository, 
             IWriteRepository<TEntity, TKey> writeRepository)
         {
             _logger = logger;
             _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");
-
+            
+            _serviceResultFactory = serviceResultFactory ?? throw new ServiceResultNullException();
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
             _mapper = mapper ?? throw new AutoMapperNullException();
             _readRepository = readRepository;
             _writeRepository = writeRepository;
         }
 
-        public async Task<TViewModel> GetByIdAsync<TViewModel>(TKey id)
+        public virtual async Task<ServiceResut<TViewModel>> GetByIdAsync<TViewModel>(TKey id)
             where TViewModel: BaseViewModel
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TViewModel).Name }");
             
-            return _mapper.Map<TViewModel>((await _readRepository.GetByIdAsync(id)));
+            var entity = await _readRepository.GetByIdAsync(id);
+            
+            return _serviceResultFactory.Create(_mapper.Map<TViewModel>(entity));
         }
 
-        public async Task<IEnumerable<TViewModel>> GetAllAsync<TViewModel>()
+        public virtual async Task<ServiceResultList<TViewModel>> GetAllAsync<TViewModel>()
             where TViewModel: BaseViewModel
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TViewModel).Name }>");
             
-            return (await _readRepository.GetAllAsync()
-                .AsyncEnumerableToEnumerable())
-                .Select(entity => _mapper.Map<TViewModel>(entity));
+            var entities = await _readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
+
+            return _serviceResultFactory.Create(entities.Select(entity => _mapper.Map<TViewModel>(entity)));
         }
 
-        public async Task InsertAsync<TViewModel>(TViewModel viewModel)
+        public virtual async Task<ServiceResult> InsertAsync<TViewModel>(TViewModel viewModel)
             where TViewModel: BaseViewModel
         {
+            var serviceResult =_serviceResultFactory.Create();
+
             viewModel.Validate();
             if(viewModel.Invalid)
             {
-                AddNotifications(viewModel);
-                LogNotifications(nameof(InsertAsync));
-                return;
+                serviceResult.AddNotifications(viewModel);
+                LogNotifications(nameof(InsertAsync), serviceResult);
+                return serviceResult;
             }
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ viewModel.ToJson() } }})");
@@ -79,24 +82,28 @@ namespace Optsol.Components.Application.Service
             _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
             
             entity.Validate();
-            AddNotifications((entity as Entity<TKey>));
-            LogNotifications(nameof(InsertAsync));
+            serviceResult.AddNotifications((entity as Entity<TKey>));
+            LogNotifications(nameof(InsertAsync), serviceResult);
             
             await _writeRepository.InsertAsync(entity);
 
-            await CommitAsync();
+            await CommitAsync(serviceResult);
+
+            return serviceResult;
         }
 
         
-        public async Task UpdateAsync<TViewModel>(TViewModel viewModel)
+        public virtual async Task<ServiceResult> UpdateAsync<TViewModel>(TViewModel viewModel)
             where TViewModel: BaseViewModel
         {
+            var serviceResult =_serviceResultFactory.Create();
+
             viewModel.Validate();
             if(viewModel.Invalid)
             {
-                AddNotifications(viewModel);
-                LogNotifications(nameof(UpdateAsync));
-                return;
+                serviceResult.AddNotifications(viewModel);
+                LogNotifications(nameof(UpdateAsync), serviceResult);
+                return serviceResult;
             }
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ viewModel.ToJson() } }})");
@@ -107,29 +114,35 @@ namespace Optsol.Components.Application.Service
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
             entity.Validate();
-            AddNotifications((entity as Entity<TKey>));
-            LogNotifications(nameof(entity));
+            serviceResult.AddNotifications((entity as Entity<TKey>));
+            LogNotifications(nameof(entity), serviceResult);
 
             await _writeRepository.UpdateAsync(entity);
 
-            await CommitAsync();
+            await CommitAsync(serviceResult);
+
+            return serviceResult;
         }
 
-        public async Task DeleteAsync(TKey id)
+        public virtual async Task<ServiceResult> DeleteAsync(TKey id)
         {
+            var serviceResult =_serviceResultFactory.Create();
+
             _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ id:{ id.ToString() } }})");
 
             await _writeRepository.DeleteAsync(id);
 
-            await CommitAsync();
+            await CommitAsync(serviceResult);
+
+            return serviceResult;
         }
 
-        public async Task<Boolean> CommitAsync()
+        public virtual async Task<Boolean> CommitAsync(ServiceResult serviceResult)
         {
-            if(Invalid) return false;
+            if(serviceResult.Invalid) return false;
             if((await _unitOfWork.CommitAsync())) return true;
 
-            AddNotification("Commit", "Houve um problema ao salvar os dados!");
+            serviceResult.AddNotification("Commit", "Houve um problema ao salvar os dados!");
             return false;
         }
 
@@ -139,10 +152,10 @@ namespace Optsol.Components.Application.Service
             _readRepository.Dispose();
         }
 
-        private void LogNotifications(string method)
+        private void LogNotifications(string method, ServiceResult serviceResult)
         {
-            if(Invalid)
-                _logger?.LogInformation($"Método: { method } Valid: { Valid } Notifications: { Notifications.ToJson() }");
+            if(serviceResult.Invalid)
+                _logger?.LogInformation($"Método: { method } Valid: { serviceResult.Valid } Notifications: { serviceResult.Notifications.ToJson() }");
         }
 
     }

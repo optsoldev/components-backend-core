@@ -23,15 +23,17 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IServiceCollection Register<TType>(this IServiceCollection services, string[] namespaces, Func<Type, Type, IServiceCollection> addService)
         {
-            var serviceTypes = Assembly.GetAssembly(typeof(TType))
-                                                               .GetTypes()
-                                                               .Where(t => (t.IsInterface || t.IsAbstract) && (!namespaces.Any() || namespaces.Any(@namespace => t.Namespace.Contains(@namespace))));
+            var serviceTypes = Assembly
+                .GetAssembly(typeof(TType))
+                .GetTypes()
+                .Where(t => (t.IsInterface || t.IsAbstract) && (!namespaces.Any() || namespaces.Any(@namespace => t.Namespace.Contains(@namespace))));
 
             foreach (var serviceType in serviceTypes)
             {
-                var implementationTypes = Assembly.GetAssembly(typeof(TType))
-                                                  .GetTypes()
-                                                  .Where(t => t.IsClass && !t.IsAbstract && (t.IsSubclassOf(serviceType) || t.GetInterfaces().Contains(serviceType)));
+                var implementationTypes = Assembly
+                    .GetAssembly(typeof(TType))
+                    .GetTypes()
+                    .Where(t => t.IsClass && !t.IsAbstract && (t.IsSubclassOf(serviceType) || t.GetInterfaces().Contains(serviceType)));
 
                 foreach (var implementationType in implementationTypes)
                 {
