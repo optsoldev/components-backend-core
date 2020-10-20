@@ -42,7 +42,7 @@ namespace Optsol.Components.Application.Service
             _writeRepository = writeRepository;
         }
 
-        public virtual async Task<ServiceResut<TViewModel>> GetByIdAsync<TViewModel>(TKey id)
+        public virtual async Task<ServiceResult<TViewModel>> GetByIdAsync<TViewModel>(TKey id)
             where TViewModel: BaseViewModel
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TViewModel).Name }");

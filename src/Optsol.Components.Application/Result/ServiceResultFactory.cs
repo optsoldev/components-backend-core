@@ -5,10 +5,10 @@ namespace Optsol.Components.Application.Result
 {
     public class ServiceResultFactory : IServiceResultFactory
     {
-        public ServiceResut<TViewModel> Create<TViewModel>(TViewModel viewModel)
+        public ServiceResult<TViewModel> Create<TViewModel>(TViewModel viewModel)
             where TViewModel : BaseViewModel
         {
-            return new ServiceResut<TViewModel>(viewModel);
+            return new ServiceResult<TViewModel>(viewModel);
         }
 
         public ServiceResultList<TViewModel> Create<TViewModel>(IEnumerable<TViewModel> viewModels)

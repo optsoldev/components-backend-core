@@ -9,7 +9,7 @@ namespace Optsol.Components.Application.Service
     public interface IBaseServiceApplication<TEntity, TKey>: IDisposable
         where TEntity: IAggregateRoot<TKey>
     {        
-        Task<ServiceResut<TViewModel>> GetByIdAsync<TViewModel>(TKey id) where TViewModel: BaseViewModel;
+        Task<ServiceResult<TViewModel>> GetByIdAsync<TViewModel>(TKey id) where TViewModel: BaseViewModel;
         Task<ServiceResultList<TViewModel>> GetAllAsync<TViewModel>() where TViewModel: BaseViewModel;
         Task<ServiceResult> InsertAsync<TViewModel>(TViewModel viewModel) where TViewModel: BaseViewModel;  
         Task<ServiceResult> UpdateAsync<TViewModel>(TViewModel viewModel) where TViewModel: BaseViewModel;

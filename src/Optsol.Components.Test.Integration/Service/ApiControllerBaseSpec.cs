@@ -67,11 +67,64 @@ namespace Optsol.Components.Test.Integration.Service
             //Then
             ((OkObjectResult)actionResult).StatusCode.Should().NotBeNull();
             ((OkObjectResult)actionResult).StatusCode.Should().Be((int)HttpStatusCode.OK);
+            
             var resultObj = JsonConvert.DeserializeObject<ServiceResultList<TestViewModel>>(((OkObjectResult)actionResult).Value.ToJson());
             resultObj.DataList.Should().HaveCount(3);
             resultObj.DataList.Any(a => a.Id == entity.Id).Should().BeTrue();
             resultObj.DataList.Any(a => a.Contato == entity2.Email.ToString()).Should().BeTrue();
             resultObj.DataList.Any(a => a.Nome == entity3.Nome.ToString()).Should().BeTrue();
         }
+
+        [Fact]
+        public async Task DeveBuscarRegistroPorIdPelaController()
+        {
+            //Given
+            var services = new ServiceCollection();
+            var entity = new TestEntity(
+                new NomeValueObject("Weslley_1", "Carneiro"),
+                new EmailValueObject("weslley.carneiro@optsol.com.br")
+            );
+            var entity2 = new TestEntity(
+                new NomeValueObject("Weslley_2", "Carneiro"),
+                new EmailValueObject("weslley.carneiro@optsol.com.br")
+            );
+            var entity3 = new TestEntity(
+                new NomeValueObject("Weslley_3", "Carneiro"),
+                new EmailValueObject("weslley.carneiro@optsol.com.br")
+            );
+
+            services.AddLogging();
+            services.AddAutoMapper(typeof(TestViewModel));
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
+
+            var provider = services.BuildServiceProvider();
+            IApiControllerBase<TestEntity, Guid> controllerBase = new ApiControllerBase<TestEntity, Guid>(
+                provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, Guid>>>(), 
+                provider.GetRequiredService<IServiceApplication>());
+
+            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            var repository = provider.GetRequiredService<ITestWriteRepository>();
+            
+            await repository.InsertAsync(entity);
+            await repository.InsertAsync(entity2);
+            await repository.InsertAsync(entity3);
+
+            await unitOfWork.CommitAsync();
+
+            //When
+            var actionResult = await controllerBase.GetByIdAsync<TestViewModel>(entity.Id);
+
+            //Then
+            ((OkObjectResult)actionResult).StatusCode.Should().NotBeNull();
+            ((OkObjectResult)actionResult).StatusCode.Should().Be((int)HttpStatusCode.OK);
+            
+            var resultObj = JsonConvert.DeserializeObject<ServiceResult<TestViewModel>>(((OkObjectResult)actionResult).Value.ToJson());
+            resultObj.Data.Should().NotBeNull();
+            resultObj.Data.Nome.Should().Be(entity.Nome.ToString());
+            resultObj.Data.Contato.Should().Be(entity.Email.ToString());
+            resultObj.Data.Ativo.Should().Be("Inativo");
+        } 
     }
 }

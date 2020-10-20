@@ -5,7 +5,7 @@ namespace Optsol.Components.Application.Result
 {
     public interface IServiceResultFactory
     {
-        ServiceResut<TViewModel> Create<TViewModel>(TViewModel viewModel) where TViewModel : BaseViewModel;
+        ServiceResult<TViewModel> Create<TViewModel>(TViewModel viewModel) where TViewModel : BaseViewModel;
         ServiceResultList<TViewModel> Create<TViewModel>(IEnumerable<TViewModel> viewModels) where TViewModel : BaseViewModel;
         ServiceResult Create();
     }

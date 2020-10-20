@@ -6,12 +6,12 @@ namespace Optsol.Components.Application.Result
 {
     public class ServiceResult : Notifiable { }
 
-    public class ServiceResut<TViewModel> : ServiceResult
+    public class ServiceResult<TViewModel> : ServiceResult
         where TViewModel: BaseViewModel
     {
         public TViewModel Data { get; private set; }
 
-        public ServiceResut(TViewModel data)
+        public ServiceResult(TViewModel data)
         {
             Data = data;
 

@@ -79,7 +79,7 @@ namespace Optsol.Components.Test.Integration.Application
             modelResult.DataList.Where(w => w.Contato.Equals(model.Contato)).Should().HaveCount(3);
         } 
 
-         [Fact]
+        [Fact]
         public async Task DeveBuscarRegistroPorIdPeloServico()
         {
             //Given
