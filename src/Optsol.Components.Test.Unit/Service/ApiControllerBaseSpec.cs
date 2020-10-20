@@ -6,6 +6,7 @@ using FluentAssertions;
 using Moq;
 using Optsol.Components.Application.Service;
 using Optsol.Components.Service;
+using Optsol.Components.Service.Response;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Shared.Logger;
@@ -30,12 +31,14 @@ namespace Optsol.Components.Test.Unit.Service
 
             var logger = new XunitLogger<ApiControllerBase<TestEntity, Guid>>();
             
-            var mockApplicationService = new Mock<IBaseServiceApplication<TestEntity, Guid>>();
             Mock<IMapper> mapperMock = new Mock<IMapper>();
             mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(model);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestViewModel>())).Returns(entity);
 
-            var controller = new TestController(logger, mockApplicationService.Object);
+            var mockApplicationService = new Mock<IBaseServiceApplication<TestEntity, Guid>>();
+            var mockResponseFactory = new Mock<IResponseFactory>();
+
+            var controller = new TestController(logger, mockResponseFactory.Object, mockApplicationService.Object);
             
             //When
             await controller.GetAllAsync<TestViewModel>();

@@ -1,27 +1,76 @@
 using System.Collections.Generic;
-using System.Net;
-using Flunt.Notifications;
+using Optsol.Components.Application.ViewModel;
 
-namespace Microsoft.AspNetCore.Mvc
+namespace Optsol.Components.Service.Response
 {
-    public class Response<TData>
-        where TData : class
+    public class Response
     {
         public bool Success { get; set; }
         public bool Failure { get; set; }
 
-        public TData Data { get; set; }
         public IEnumerable<string> Messages { get; set; }
 
-        public Response(TData data, bool success, HttpStatusCode statusCode)
+        public Response()
+        {
+            
+        }
+
+        public Response(bool success)
+        {
+            Success = success;
+            Failure = !Success;
+        }
+
+        public Response(bool success, IEnumerable<string> messages)
+            : this(success)
+        {
+            Messages = messages;
+        }
+    }
+    
+    public class Response<TViewModel> : Response
+        where TViewModel : BaseViewModel
+    {
+        public TViewModel Data { get; set; }
+
+        public Response()
+        {
+            
+        }
+
+        public Response(TViewModel data, bool success)
+            : base(success)
         {
             Data = data;
             Success = success;
             Failure = !Success;
         }
 
-        public Response(TData data, bool success, HttpStatusCode statusCode, IEnumerable<string> messages)
-            : this(data, success, statusCode)
+        public Response(TViewModel data, bool success, IEnumerable<string> messages)
+            : this(data, success)
+        {
+            Messages = messages;
+        }
+    }
+
+    public class ResponseList<TViewModel> : Response
+        where TViewModel: BaseViewModel
+    {
+        public IEnumerable<TViewModel> DataList { get; set; }
+
+        public ResponseList()
+        {
+            
+        }
+        
+        public ResponseList(IEnumerable<TViewModel> dataList, bool success) 
+            : base(success)
+        {
+            DataList = dataList;
+        }
+
+        public ResponseList(IEnumerable<TViewModel> dataList, bool success, IEnumerable<string> messages)
+            : this(dataList, success)
         {
             Messages = messages;
         }
