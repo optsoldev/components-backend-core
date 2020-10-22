@@ -1,17 +1,17 @@
 using Flunt.Notifications;
-using Optsol.Components.Application.ViewModel;
+using Optsol.Components.Application.DataTransferObject;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Application.Result
 {
     public class ServiceResult : Notifiable { }
 
-    public class ServiceResult<TViewModel> : ServiceResult
-        where TViewModel: BaseViewModel
+    public class ServiceResult<TDto> : ServiceResult
+        where TDto: BaseDataTransferObject
     {
-        public TViewModel Data { get; private set; }
+        public TDto Data { get; private set; }
 
-        public ServiceResult(TViewModel data)
+        public ServiceResult(TDto data)
         {
             Data = data;
 
@@ -20,12 +20,12 @@ namespace Optsol.Components.Application.Result
         }
     }
 
-    public class ServiceResultList<TViewModel> : ServiceResult
-        where TViewModel: BaseViewModel
+    public class ServiceResultList<TDto> : ServiceResult
+        where TDto: BaseDataTransferObject
     {
-        public IEnumerable<TViewModel> DataList { get; private set; }
+        public IEnumerable<TDto> DataList { get; private set; }
 
-        public ServiceResultList(IEnumerable<TViewModel> dataList)
+        public ServiceResultList(IEnumerable<TDto> dataList)
         {
             DataList = dataList;
 

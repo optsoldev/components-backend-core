@@ -1,4 +1,4 @@
-using Optsol.Components.Application.ViewModel;
+using Optsol.Components.Application.DataTransferObject;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Application.Result
@@ -6,7 +6,7 @@ namespace Optsol.Components.Application.Result
     public interface IServiceResultFactory
     {
         ServiceResult Create();
-        ServiceResult<TViewModel> Create<TViewModel>(TViewModel viewModel) where TViewModel : BaseViewModel;
-        ServiceResultList<TViewModel> Create<TViewModel>(IEnumerable<TViewModel> viewModels) where TViewModel : BaseViewModel;
+        ServiceResult<TDto> Create<TDto>(TDto dto) where TDto : BaseDataTransferObject;
+        ServiceResultList<TDto> Create<TDto>(IEnumerable<TDto> dto) where TDto : BaseDataTransferObject;
     }
 }

@@ -20,7 +20,7 @@ namespace Optsol.Components.Test.Unit.Infra.Data
     {
 
         [Fact]
-        public void DeveRegistrarLogsNoRepositorio()
+        public void Deve_Registrar_Logs_No_Repositorio()
         {
             //Given
             var entity = new AggregateRoot();

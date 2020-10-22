@@ -1,3 +1,4 @@
+using Optsol.Components.Service;
 using Optsol.Components.Service.Response;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -7,7 +8,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddAServices(this IServiceCollection services)
         {
             services.AddTransient<IResponseFactory, ResponseFactory>();
-
             return services;
         } 
     }

@@ -1,9 +1,9 @@
 using Flunt.Validations;
-using Optsol.Components.Application.ViewModel;
+using Optsol.Components.Application.DataTransferObject;
 
 namespace Optsol.Components.Test.Utils.Application
 {
-    public class InsertTestViewModel: BaseViewModel
+    public class InsertTestViewModel: BaseDataTransferObject
     {
         public string Nome { get; set; }
         public string Contato { get; set; }

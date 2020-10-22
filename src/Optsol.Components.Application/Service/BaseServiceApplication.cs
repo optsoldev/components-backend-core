@@ -8,32 +8,36 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Application.ViewModel;
 using Optsol.Components.Application.Result;
+using Optsol.Components.Application.DataTransferObject;
 
 namespace Optsol.Components.Application.Service
 {
-    public class BaseServiceApplication<TEntity, TKey> 
-        : IBaseServiceApplication<TEntity, TKey>, IDisposable
-        where TEntity: class, IAggregateRoot<TKey>
+    public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+        : IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable
+        where TEntity: AggregateRoot
+        where TGetByIdDto: BaseDataTransferObject
+        where TGetAllDto: BaseDataTransferObject
+        where TInsertData: BaseDataTransferObject
+        where TUpdateData: BaseDataTransferObject
     {
         protected readonly IMapper _mapper;
         protected readonly ILogger _logger;
         protected readonly IUnitOfWork _unitOfWork;
-        protected readonly IReadRepository<TEntity, TKey> _readRepository;
-        protected readonly IWriteRepository<TEntity, TKey> _writeRepository;
+        protected readonly IReadRepository<TEntity, Guid> _readRepository;
+        protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
         protected readonly IServiceResultFactory _serviceResultFactory;
 
         public BaseServiceApplication(
             IMapper mapper,
-            ILogger<BaseServiceApplication<TEntity, TKey>> logger,
+            ILogger<BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> logger,
             IServiceResultFactory serviceResultFactory,
             IUnitOfWork unitOfWork,
-            IReadRepository<TEntity, TKey> readRepository, 
-            IWriteRepository<TEntity, TKey> writeRepository)
+            IReadRepository<TEntity, Guid> readRepository, 
+            IWriteRepository<TEntity, Guid> writeRepository)
         {
             _logger = logger;
-            _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");
+            _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, Guid>");
             
             _serviceResultFactory = serviceResultFactory ?? throw new ServiceResultNullException();
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
@@ -42,47 +46,44 @@ namespace Optsol.Components.Application.Service
             _writeRepository = writeRepository;
         }
 
-        public virtual async Task<ServiceResult<TViewModel>> GetByIdAsync<TViewModel>(TKey id)
-            where TViewModel: BaseViewModel
+        public async Task<ServiceResult<TGetByIdDto>> GetByIdAsync(Guid id)
         {
-            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TViewModel).Name }");
+             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetAllDto).Name }");
             
             var entity = await _readRepository.GetByIdAsync(id);
             
-            return _serviceResultFactory.Create(_mapper.Map<TViewModel>(entity));
+            return _serviceResultFactory.Create(_mapper.Map<TGetByIdDto>(entity));
         }
 
-        public virtual async Task<ServiceResultList<TViewModel>> GetAllAsync<TViewModel>()
-            where TViewModel: BaseViewModel
+        public async Task<ServiceResultList<TGetAllDto>> GetAllAsync()
         {
-            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TViewModel).Name }>");
+           _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
             
             var entities = await _readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
 
-            return _serviceResultFactory.Create(entities.Select(entity => _mapper.Map<TViewModel>(entity)));
+            return _serviceResultFactory.Create(entities.Select(entity => _mapper.Map<TGetAllDto>(entity)));
         }
 
-        public virtual async Task<ServiceResult> InsertAsync<TViewModel>(TViewModel viewModel)
-            where TViewModel: BaseViewModel
+        public async Task<ServiceResult> InsertAsync(TInsertData data)
         {
             var serviceResult =_serviceResultFactory.Create();
 
-            viewModel.Validate();
-            if(viewModel.Invalid)
+            data.Validate();
+            if(data.Invalid)
             {
-                serviceResult.AddNotifications(viewModel);
+                serviceResult.AddNotifications(data);
                 LogNotifications(nameof(InsertAsync), serviceResult);
                 return serviceResult;
             }
 
-            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ viewModel.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
             
-            var entity = _mapper.Map<TEntity>(viewModel);
+            var entity = _mapper.Map<TEntity>(data);
 
-            _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TInsertData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
             
             entity.Validate();
-            serviceResult.AddNotifications((entity as Entity<TKey>));
+            serviceResult.AddNotifications((entity as Entity<Guid>));
             LogNotifications(nameof(InsertAsync), serviceResult);
             
             await _writeRepository.InsertAsync(entity);
@@ -92,29 +93,27 @@ namespace Optsol.Components.Application.Service
             return serviceResult;
         }
 
-        
-        public virtual async Task<ServiceResult> UpdateAsync<TViewModel>(TViewModel viewModel)
-            where TViewModel: BaseViewModel
+        public async Task<ServiceResult> UpdateAsync(TUpdateData data)
         {
             var serviceResult =_serviceResultFactory.Create();
 
-            viewModel.Validate();
-            if(viewModel.Invalid)
+            data.Validate();
+            if(data.Invalid)
             {
-                serviceResult.AddNotifications(viewModel);
+                serviceResult.AddNotifications(data);
                 LogNotifications(nameof(UpdateAsync), serviceResult);
                 return serviceResult;
             }
 
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ viewModel.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
             
-            var entity = _mapper.Map<TEntity>(viewModel);
+            var entity = _mapper.Map<TEntity>(data);
             var edit = await _readRepository.GetByIdAsync(entity.Id);
                          
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TViewModel).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TUpdateData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
             entity.Validate();
-            serviceResult.AddNotifications((entity as Entity<TKey>));
+            serviceResult.AddNotifications((entity as Entity<Guid>));
             LogNotifications(nameof(entity), serviceResult);
 
             await _writeRepository.UpdateAsync(entity);
@@ -124,7 +123,7 @@ namespace Optsol.Components.Application.Service
             return serviceResult;
         }
 
-        public virtual async Task<ServiceResult> DeleteAsync(TKey id)
+        public async Task<ServiceResult> DeleteAsync(Guid id)
         {
             var serviceResult =_serviceResultFactory.Create();
 
@@ -148,8 +147,7 @@ namespace Optsol.Components.Application.Service
 
         public void Dispose()
         {
-            _writeRepository.Dispose();
-            _readRepository.Dispose();
+            throw new NotImplementedException();
         }
 
         private void LogNotifications(string method, ServiceResult serviceResult)
@@ -157,6 +155,5 @@ namespace Optsol.Components.Application.Service
             if(serviceResult.Invalid)
                 _logger?.LogInformation($"Método: { method } Valid: { serviceResult.Valid } Notifications: { serviceResult.Notifications.ToJson() }");
         }
-
     }
 }

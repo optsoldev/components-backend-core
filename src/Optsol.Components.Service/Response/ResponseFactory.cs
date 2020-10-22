@@ -1,6 +1,6 @@
 using System.Linq;
+using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Result;
-using Optsol.Components.Application.ViewModel;
 
 namespace Optsol.Components.Service.Response
 {
@@ -11,15 +11,15 @@ namespace Optsol.Components.Service.Response
             return new Response(serviceResult.Valid, serviceResult.Notifications.Select(s => s.Message));
         }
 
-        public Response<TViewModel> Create<TViewModel>(ServiceResult<TViewModel> serviceResult) 
-            where TViewModel : BaseViewModel
+        public Response<TData> Create<TData>(ServiceResult<TData> serviceResult) 
+            where TData : BaseDataTransferObject
         {
-            return new Response<TViewModel>(serviceResult.Data, serviceResult.Valid, serviceResult.Notifications.Select(s => s.Message));
+            return new Response<TData>(serviceResult.Data, serviceResult.Valid, serviceResult.Notifications.Select(s => s.Message));
         }
 
-        public ResponseList<TViewModel> Create<TViewModel>(ServiceResultList<TViewModel> serviceResult) where TViewModel : BaseViewModel
+        public ResponseList<TData> Create<TData>(ServiceResultList<TData> serviceResult) where TData : BaseDataTransferObject
         {
-            return new ResponseList<TViewModel>(serviceResult.DataList, serviceResult.Valid, serviceResult.Notifications.Select(s => s.Message));
+            return new ResponseList<TData>(serviceResult.DataList, serviceResult.Valid, serviceResult.Notifications.Select(s => s.Message));
         }
     }
 }

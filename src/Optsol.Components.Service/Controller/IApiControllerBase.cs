@@ -1,16 +1,22 @@
+using System;
 using System.Threading.Tasks;
-using Optsol.Components.Application.ViewModel;
+using Microsoft.AspNetCore.Mvc;
+using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Domain;
 
-namespace Microsoft.AspNetCore.Mvc
+namespace Optsol.Components.Service
 {
-    public interface IApiControllerBase<TEntity, TKey>
-        where TEntity: IAggregateRoot<TKey>
+    public interface IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+        where TEntity: AggregateRoot
+        where TGetByIdDto: BaseDataTransferObject
+        where TGetAllDto: BaseDataTransferObject
+        where TInsertData: BaseDataTransferObject
+        where TUpdateData: BaseDataTransferObject
     {
-        Task<IActionResult> GetAllAsync<TViewModel>() where TViewModel: BaseViewModel;
-        Task<IActionResult> GetByIdAsync<TViewModel>(TKey id) where TViewModel: BaseViewModel;
-        Task<IActionResult> InsertAsync<TViewModel>(TViewModel viewModel) where TViewModel: BaseViewModel;
-        Task<IActionResult> UpdateAsync<TViewModel>(TViewModel viewModel) where TViewModel: BaseViewModel;
-        Task<IActionResult> DeleteAsync(TKey id);
+        Task<IActionResult> GetAllAsync();
+        Task<IActionResult> GetByIdAsync(Guid id);
+        Task<IActionResult> InsertAsync(TInsertData data);
+        Task<IActionResult> UpdateAsync(TUpdateData data);
+        Task<IActionResult> DeleteAsync(Guid id);
     }
 }

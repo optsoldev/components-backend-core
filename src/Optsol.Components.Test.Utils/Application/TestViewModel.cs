@@ -1,10 +1,10 @@
 using System;
 using Flunt.Validations;
-using Optsol.Components.Application.ViewModel;
+using Optsol.Components.Application.DataTransferObject;
 
 namespace Optsol.Components.Test.Utils.Application
 {
-    public class TestViewModel: BaseViewModel
+    public class TestViewModel: BaseDataTransferObject
     {
         public Guid Id { get; set; }
         public string Nome { get; set; }

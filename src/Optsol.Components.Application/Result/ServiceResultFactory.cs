@@ -1,20 +1,20 @@
-using Optsol.Components.Application.ViewModel;
+using Optsol.Components.Application.DataTransferObject;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Application.Result
 {
     public class ServiceResultFactory : IServiceResultFactory
     {
-        public ServiceResult<TViewModel> Create<TViewModel>(TViewModel viewModel)
-            where TViewModel : BaseViewModel
+        public ServiceResult<TDto> Create<TDto>(TDto viewModel)
+            where TDto : BaseDataTransferObject
         {
-            return new ServiceResult<TViewModel>(viewModel);
+            return new ServiceResult<TDto>(viewModel);
         }
 
-        public ServiceResultList<TViewModel> Create<TViewModel>(IEnumerable<TViewModel> viewModels)
-            where TViewModel : BaseViewModel
+        public ServiceResultList<TDto> Create<TDto>(IEnumerable<TDto> viewModels)
+            where TDto : BaseDataTransferObject
         {
-            return new ServiceResultList<TViewModel>(viewModels);
+            return new ServiceResultList<TDto>(viewModels);
         }
 
         public ServiceResult Create()

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Optsol.Components.Application.ViewModel;
+using Optsol.Components.Application.DataTransferObject;
 
 namespace Optsol.Components.Service.Response
 {
@@ -28,17 +28,17 @@ namespace Optsol.Components.Service.Response
         }
     }
     
-    public class Response<TViewModel> : Response
-        where TViewModel : BaseViewModel
+    public class Response<TData> : Response
+        where TData : BaseDataTransferObject
     {
-        public TViewModel Data { get; set; }
+        public TData Data { get; set; }
 
         public Response()
         {
             
         }
 
-        public Response(TViewModel data, bool success)
+        public Response(TData data, bool success)
             : base(success)
         {
             Data = data;
@@ -46,30 +46,30 @@ namespace Optsol.Components.Service.Response
             Failure = !Success;
         }
 
-        public Response(TViewModel data, bool success, IEnumerable<string> messages)
+        public Response(TData data, bool success, IEnumerable<string> messages)
             : this(data, success)
         {
             Messages = messages;
         }
     }
 
-    public class ResponseList<TViewModel> : Response
-        where TViewModel: BaseViewModel
+    public class ResponseList<TData> : Response
+        where TData: BaseDataTransferObject
     {
-        public IEnumerable<TViewModel> DataList { get; set; }
+        public IEnumerable<TData> DataList { get; set; }
 
         public ResponseList()
         {
             
         }
         
-        public ResponseList(IEnumerable<TViewModel> dataList, bool success) 
+        public ResponseList(IEnumerable<TData> dataList, bool success) 
             : base(success)
         {
             DataList = dataList;
         }
 
-        public ResponseList(IEnumerable<TViewModel> dataList, bool success, IEnumerable<string> messages)
+        public ResponseList(IEnumerable<TData> dataList, bool success, IEnumerable<string> messages)
             : this(dataList, success)
         {
             Messages = messages;

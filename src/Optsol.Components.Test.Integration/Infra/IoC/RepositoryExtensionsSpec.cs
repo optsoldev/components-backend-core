@@ -15,7 +15,7 @@ namespace Optsol.Components.Test.Integration.IoC
         public class RepositoryExtensionSpec
         {
             [Fact]
-            public async Task DeveTestarConfiguracaoDoRepositorio()
+            public async Task Deve_Testar_Configuracao_Do_Repositorio()
             {
                 //Given
                 var services = new ServiceCollection();
@@ -42,7 +42,7 @@ namespace Optsol.Components.Test.Integration.IoC
             }
 
             [Fact]
-            public async Task DeveBuscarTodosPeloRepositorio()
+            public async Task Deve_Buscar_Todos_Pelo_Repositorio()
             {
                 //Given
                 var services = new ServiceCollection();
@@ -82,7 +82,7 @@ namespace Optsol.Components.Test.Integration.IoC
             }
 
             [Fact]
-            public async Task DeveBuscarPorIdPeloRepositorio()
+            public async Task Deve_Buscar_Por_Id_Pelo_Repositorio()
             {
                 //Given
                 var services = new ServiceCollection();
@@ -111,7 +111,7 @@ namespace Optsol.Components.Test.Integration.IoC
             }
 
             [Fact]
-            public async Task DeveInserirRegistroPeloRepositorio()
+            public async Task Deve_Inserir_Registro_Pelo_Repositorio()
             {
                 //Given
                 var services = new ServiceCollection();
@@ -143,7 +143,7 @@ namespace Optsol.Components.Test.Integration.IoC
             }
 
             [Fact]
-            public async Task DeveAtualizarRegistroPeloRepositorio()
+            public async Task Deve_Atualizar_Registro_Pelo_Repositorio()
             {
                 //Given
                 var services = new ServiceCollection();
@@ -180,7 +180,7 @@ namespace Optsol.Components.Test.Integration.IoC
             }
 
             [Fact]
-            public async Task DeveRemoverRegistroPeloIdPeloRepositorio()
+            public async Task Deve_Remover_Registro_Pelo_Id_Pelo_Repositorio()
             {
                 //Given
                 var services = new ServiceCollection();

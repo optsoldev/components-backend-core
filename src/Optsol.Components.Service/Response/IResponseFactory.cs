@@ -1,5 +1,5 @@
+using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Result;
-using Optsol.Components.Application.ViewModel;
 
 namespace Optsol.Components.Service.Response
 {
@@ -7,10 +7,10 @@ namespace Optsol.Components.Service.Response
     {
         Response Create(ServiceResult serviceResult);
 
-        Response<TViewModel> Create<TViewModel>(ServiceResult<TViewModel> serviceResult) 
-            where TViewModel : BaseViewModel;
+        Response<TData> Create<TData>(ServiceResult<TData> serviceResult) 
+            where TData : BaseDataTransferObject;
 
-        ResponseList<TViewModel> Create<TViewModel>(ServiceResultList<TViewModel> serviceResult) 
-            where TViewModel : BaseViewModel;
+        ResponseList<TData> Create<TData>(ServiceResultList<TData> serviceResult) 
+            where TData : BaseDataTransferObject;
     }
 }
