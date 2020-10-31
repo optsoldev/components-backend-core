@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Optsol.Playground.Domain.Repositories;
+using Optsol.Playground.Infra.Data.Context;
 
 namespace Optsol.Playground.Api
 {
@@ -25,11 +27,12 @@ namespace Optsol.Playground.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var stringConnection = this.Configuration.GetSection("ConnectionStrings:DefaultConnection");
 
             services.AddControllers();
+            services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra"));
             // services.AddAutoMapper(typeof(TestViewModel));
-            // services.AddContext<TestContext>(new ContextOptionsBuilder());
-            // services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+            // services.AddRepository<IClienteReadRepository>("Optsol.Playground.Infra");
             // services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
             // services.AddAServices();
         }

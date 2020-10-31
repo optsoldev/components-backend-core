@@ -7,7 +7,7 @@ namespace Optsol.Playground.Domain.Entidades
 {
     public class ClienteEntity : AggregateRoot
     {
-         public NomeValueObject Nome { get; private set; }
+        public NomeValueObject Nome { get; private set; }
         public EmailValueObject Email { get; private set; }
         public bool Ativo { get; private set; }
 
@@ -19,7 +19,7 @@ namespace Optsol.Playground.Domain.Entidades
         public ClienteEntity(Guid id, NomeValueObject nome, EmailValueObject email)
             : this(nome, email)
         {
-            Id  = id;
+            Id = id;
         }
 
         public ClienteEntity(NomeValueObject nome, EmailValueObject email)
@@ -46,11 +46,11 @@ namespace Optsol.Playground.Domain.Entidades
                 .IsNotNull(Nome, "Nome", "O Nome não pode ser nulo")
                 .IsNotNull(Email, "Email", "O Email não pode ser nulo"));
 
-            if(Invalid)
+            if (Invalid)
                 return;
 
             AddNotifications(Nome, Email);
-            
+
         }
 
 
