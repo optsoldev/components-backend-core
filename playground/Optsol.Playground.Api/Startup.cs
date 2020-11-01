@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Optsol.Playground.Application;
+using Optsol.Playground.Application.Mappers;
 using Optsol.Playground.Domain.Repositories;
 using Optsol.Playground.Infra.Data.Context;
 
@@ -31,10 +28,12 @@ namespace Optsol.Playground.Api
 
             services.AddControllers();
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra"));
-            // services.AddAutoMapper(typeof(TestViewModel));
-            // services.AddRepository<IClienteReadRepository>("Optsol.Playground.Infra");
-            // services.AddApplicationServices<IServiceApplication>("Optsol.Components.Test.Utils");
-            // services.AddAServices();
+            services.AddRepository<IClienteReadRepository>("Optsol.Playground.Infra");
+            services.AddApplicationServices<IClienteServiceApplication>("Optsol.Playground.Application");
+            services.AddAServices();
+            services.AddAutoMapper(typeof(ClienteDomainToViewModelMapper));
+            services.AddMediatR(typeof(Startup));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
