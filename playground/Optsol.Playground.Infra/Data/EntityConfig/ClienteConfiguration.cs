@@ -41,6 +41,12 @@ namespace Optsol.Playground.Infra.Data.EntityConfig
 
             builder.Property(entity => entity.Ativo);
 
+            builder
+                .HasMany(entity => entity.Cartoes)
+                .WithOne(src => src.Cliente)
+                .HasForeignKey(src => src.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.Configure(builder);
         }
     }

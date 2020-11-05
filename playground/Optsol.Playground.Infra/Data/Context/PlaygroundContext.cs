@@ -1,4 +1,3 @@
-using System;
 using Microsoft.EntityFrameworkCore;
 using Optsol.Playground.Infra.Data.EntityConfig;
 
@@ -14,8 +13,9 @@ namespace Optsol.Playground.Infra.Data.Context
         {
 
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new ClienteConfiguration());
 
+            modelBuilder.ApplyConfiguration(new ClienteConfiguration());
+            modelBuilder.ApplyConfiguration(new CartaoCreditoConfiguration());
 
             // modelBuilder.Seed();
         }

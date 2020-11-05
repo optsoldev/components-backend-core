@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Optsol.Playground.Application;
+using Optsol.Playground.Application.Services;
 using Optsol.Playground.Application.Mappers;
 using Optsol.Playground.Domain.Repositories;
 using Optsol.Playground.Infra.Data.Context;

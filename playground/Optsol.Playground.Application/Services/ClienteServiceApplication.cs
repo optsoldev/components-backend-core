@@ -8,7 +8,7 @@ using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entidades;
 
-namespace Optsol.Playground.Application
+namespace Optsol.Playground.Application.Services
 {
     public class ClienteServiceApplication : BaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, ClienteViewModel, ClienteViewModel>,
         IClienteServiceApplication
