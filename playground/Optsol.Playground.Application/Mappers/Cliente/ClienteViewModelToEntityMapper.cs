@@ -4,9 +4,9 @@ using Optsol.Playground.Domain.Entidades;
 
 namespace Optsol.Playground.Application.Mappers.Cliente
 {
-    public class ClienteViewModelToClienteEntity : Profile
+    public class ClienteViewModelToEntityMapper : Profile
     {
-        public ClienteViewModelToClienteEntity()
+        public ClienteViewModelToEntityMapper()
         {
             CreateMap<InsertClienteViewModel, ClienteEntity>()
                 .ForMember(item => item.Nome, item => item.MapFrom(src => src.Nome))

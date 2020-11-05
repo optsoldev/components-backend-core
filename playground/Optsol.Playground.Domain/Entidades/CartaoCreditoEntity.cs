@@ -20,7 +20,7 @@ namespace Optsol.Playground.Domain.Entidades
         public CartaoCreditoEntity(Guid id, string nomeCliente, string numero, string codigoVerificacao, string validade, Guid clienteId)
             : this(nomeCliente, numero, codigoVerificacao, validade, clienteId)
         {
-            Id = Id;
+            Id = id;
         }
 
         public CartaoCreditoEntity(string nomeCliente, string numero, string codigoVerificacao, string validade, Guid clienteId)
@@ -36,6 +36,8 @@ namespace Optsol.Playground.Domain.Entidades
 
         public override void Validate()
         {
+            base.Validate();
+
             AddNotifications(new Contract()
                 .Requires()
                 .IsNotNullOrEmpty(NomeCliente, "NomeCliente", "O Nome do cliente não pode ser nulo")
@@ -43,6 +45,9 @@ namespace Optsol.Playground.Domain.Entidades
                 .IsNotNullOrEmpty(CodigoVerificacao, "CodigoVerificacao", "O Codigo Verificacao do cliente não pode ser nulo")
                 .IsNotEmpty(ClienteId, "ClienteId", "O Nome do cliente não pode ser nulo")
             );
+
+            if (Invalid)
+                return;
         }
     }
 }
