@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Optsol.Playground.Application.Services.CartaoCredito;
-using Optsol.Playground.Application.Mappers.CartaoCredito;
-using Optsol.Playground.Domain.Repositories.CartaoCredito;
+using Optsol.Playground.Application.Services.Cliente;
+using Optsol.Playground.Application.Mappers.Cliente;
+using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
+using Optsol.Playground.Infra.Data.Repositories.Cliente;
 
 namespace Optsol.Playground.Api
 {
@@ -28,10 +29,11 @@ namespace Optsol.Playground.Api
 
             services.AddControllers();
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra"));
-            services.AddRepository<ICartaoCreditoReadRepository>("Optsol.Playground.Infra");
-            services.AddApplicationServices<ICartaoCreditoServiceApplication>("Optsol.Playground.Application");
+            // services.AddRepository<IClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
+            services.AddScoped<IClienteReadRepository, ClienteReadRepository>();
+            services.AddApplicationServices<IClienteServiceApplication>("Optsol.Playground.Application");
             services.AddAServices();
-            services.AddAutoMapper(typeof(CartaoCreditoViewModelToEntityMapper));
+            services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
             services.AddMediatR(typeof(Startup));
 
         }
