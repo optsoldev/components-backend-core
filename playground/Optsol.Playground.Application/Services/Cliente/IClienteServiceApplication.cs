@@ -9,6 +9,6 @@ namespace Optsol.Playground.Application.Services.Cliente
 {
     public interface IClienteServiceApplication : IBaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>
     {
-        Task<ServiceResult<ClienteViewModel>> GetClienteComCartaoCredito(Guid id);
+        Task<ServiceResult<ClienteComCartoesViewModel>> GetClienteComCartaoCredito(Guid id);
     }
 }

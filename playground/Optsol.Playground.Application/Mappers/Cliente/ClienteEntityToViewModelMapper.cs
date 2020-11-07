@@ -11,6 +11,8 @@ namespace Optsol.Playground.Application.Mappers.Cliente
             CreateMap<ClienteEntity, ClienteViewModel>()
                 .ForMember(item => item.Sobrenome, item => item.MapFrom(src => src.Nome.SobreNome));
 
+            CreateMap<ClienteEntity, ClienteComCartoesViewModel>()
+                .ForMember(item => item.Sobrenome, item => item.MapFrom(src => src.Nome.SobreNome));
         }
     }
 }

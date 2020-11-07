@@ -30,10 +30,10 @@ namespace Optsol.Playground.Application.Services.Cliente
             _clienteReadRepository = clienteReadRepository;
         }
 
-        public async Task<ServiceResult<ClienteViewModel>> GetClienteComCartaoCredito(Guid id)
+        public async Task<ServiceResult<ClienteComCartoesViewModel>> GetClienteComCartaoCredito(Guid id)
         {
             var clienteEntity = await _clienteReadRepository.GetClienteComCartaoCredito(id);
-            var clienteViewModel = _mapper.Map<ClienteViewModel>(clienteEntity);
+            var clienteViewModel = _mapper.Map<ClienteComCartoesViewModel>(clienteEntity);
 
             return _serviceResultFactory.Create(clienteViewModel);
         }
