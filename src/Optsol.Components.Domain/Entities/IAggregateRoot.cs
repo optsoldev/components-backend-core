@@ -1,4 +1,4 @@
-namespace Optsol.Components.Domain
+namespace Optsol.Components.Domain.Entities
 {
     public interface IAggregateRoot<TKey> : IEntity<TKey>
     {

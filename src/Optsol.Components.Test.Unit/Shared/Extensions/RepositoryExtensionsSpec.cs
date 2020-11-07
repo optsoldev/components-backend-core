@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;

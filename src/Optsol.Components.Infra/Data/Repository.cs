@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
 

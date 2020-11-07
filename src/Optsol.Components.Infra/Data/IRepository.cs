@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
-    //Todo: Mover para camada de Domain
-
     public interface IRepository<TEntity, TKey> :
         IReadRepository<TEntity, TKey>,
         IWriteRepository<TEntity, TKey>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Flunt.Validations;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Playground.Domain.ValueObjects;
 
 namespace Optsol.Playground.Domain.Entidades

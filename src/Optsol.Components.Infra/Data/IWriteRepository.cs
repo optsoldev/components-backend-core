@@ -1,11 +1,9 @@
 using System;
 using System.Threading.Tasks;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
-    //Todo: Mover para camada de Domain
-
     public interface IWriteRepository<TEntity, TKey> : IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Service;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Service.Response;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;

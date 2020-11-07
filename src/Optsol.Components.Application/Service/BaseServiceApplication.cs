@@ -1,6 +1,6 @@
 ﻿using System;
 using AutoMapper;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Extensions;
 using System.Linq;

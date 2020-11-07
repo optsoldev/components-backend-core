@@ -90,7 +90,7 @@ namespace Optsol.Components.Test.Unit.Application
             var msgUpdateAsyncMapper = $"Método: UpdateAsync Mapper: { updateModel.GetType().Name } To: { entity.GetType().Name }";
             var msgDeleteAsync = $"Método: DeleteAsync({{ id:{ entity.Id } }})";
 
-            logger.Logs.Should().HaveCount(10); //Todo: Verificar as mensagens notification
+            logger.Logs.Should().HaveCount(10);
             logger.Logs.Any(a => a.Equals(msgConstructor)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgGetByIdAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();

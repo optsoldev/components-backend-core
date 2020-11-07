@@ -3,7 +3,7 @@ using Xunit;
 using Moq;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Shared.Extensions;

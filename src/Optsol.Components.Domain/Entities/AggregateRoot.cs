@@ -1,7 +1,6 @@
-using System.Reflection.Emit;
 using System;
 
-namespace Optsol.Components.Domain
+namespace Optsol.Components.Domain.Entities
 {
     public class AggregateRoot : Entity<Guid>, IAggregateRoot<Guid>
     {
