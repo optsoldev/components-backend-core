@@ -67,6 +67,14 @@ namespace Optsol.Components.Infra.Data
         public async Task DeleteAsync(TKey id)
         {
             var entity = await Set.FindAsync(id);
+            
+            if(entity == null)
+            {
+                _logger?.LogError($"Método: { nameof(DeleteAsync) }({{ TKey:{ id.ToJson() } }}) Registro não encontrado");
+                return;
+            }
+                
+
             await DeleteAsync(entity);
         }
 

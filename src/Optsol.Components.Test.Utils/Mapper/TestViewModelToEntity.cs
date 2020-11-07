@@ -1,6 +1,4 @@
 using System.Linq;
-using System.ComponentModel.DataAnnotations;
-using System;
 using AutoMapper;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Shared.Data;

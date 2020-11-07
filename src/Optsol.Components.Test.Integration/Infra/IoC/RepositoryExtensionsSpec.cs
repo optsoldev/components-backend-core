@@ -1,4 +1,5 @@
 using Xunit;
+using System;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -206,6 +207,35 @@ namespace Optsol.Components.Test.Integration.IoC
                 //Then
                 var entityResult = await readRepository.GetByIdAsync(entity.Id);
                 entityResult.Should().BeNull();
+            }
+
+            [Fact]
+            public async Task Nao_Deve_Remover_Se_Id_For_Invalido()
+            {
+                //Given
+                var services = new ServiceCollection();
+                var entity = new TestEntity(
+                    new NomeValueObject("Weslley", "Carneiro")
+                    , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+
+                services.AddLogging();
+                services.AddContext<TestContext>(new ContextOptionsBuilder());
+                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+
+                var provider = services.BuildServiceProvider();
+                IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
+                ITestReadRepository readRepository = provider.GetRequiredService<ITestReadRepository>();
+                ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
+                await writeRepository.InsertAsync(entity);
+                await unitOfWork.CommitAsync();
+
+                //When
+                await writeRepository.DeleteAsync(Guid.NewGuid());
+                await unitOfWork.CommitAsync();
+                
+                //Then
+                var entityResult = await readRepository.GetByIdAsync(entity.Id);
+                entityResult.Should().NotBeNull();
             }
         }
     }

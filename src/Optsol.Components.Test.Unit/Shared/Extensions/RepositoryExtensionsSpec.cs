@@ -1,4 +1,3 @@
-using System.Transactions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,22 +8,14 @@ using Optsol.Components.Domain;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
-using Optsol.Components.Test.Utils.Data;
 using Xunit;
 using System.Linq;
+using static Optsol.Components.Test.Utils.Utils;
 
 namespace Optsol.Components.Test.Unit.Shared.Extensions
 {
     public class RepositoryExtensionsSpec
     {
-
-        public static async IAsyncEnumerable<AggregateRoot> GetAllAggregateRootAsyncEnumerable(params AggregateRoot[] entities)
-        {            
-            foreach (var entity in entities)
-                yield return entity;
-
-            await Task.CompletedTask;
-        }
 
         [Fact]
         public async Task DeveConverterIAsyncEnumerableEmIEnumerable()

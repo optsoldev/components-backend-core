@@ -8,11 +8,6 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Shared.Extensions;
 using System.Linq;
-using System.Collections.Generic;
-using System.Collections;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Optsol.Components.Test.Unit.Infra.Data
 {
