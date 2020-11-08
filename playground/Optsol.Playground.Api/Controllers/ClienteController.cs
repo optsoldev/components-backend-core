@@ -22,7 +22,7 @@ namespace Optsol.Playground.Api.Controllers
         public ClienteController(
             ILogger<ApiControllerBase<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>> logger,
             IResponseFactory responseFactory,
-            IBaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel> applicationService,
+            IBaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel> applicationService, //TODO: Explicar sobre a interface base
             IClienteServiceApplication clienteServiceApplication)
             : base(logger, applicationService, responseFactory)
         {
