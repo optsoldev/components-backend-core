@@ -4,12 +4,21 @@ using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Playground.Domain.Entidades
 {
-    public class CartaoCreditoEntity : AggregateRoot
+    public class CartaoCreditoEntity : Entity<Guid>
     {
         public string NomeCliente { get; private set; }
         public string Numero { get; private set; }
         public string CodigoVerificacao { get; private set; }
-        public string Validade { get; private set; }
+        public DateTime Validade { get; private set; }
+        public bool Valido 
+        { 
+            get 
+            {
+                return ObterSituacaoValidade();
+            } 
+        }
+
+
         public Guid ClienteId { get; private set; }
         public ClienteEntity Cliente { get; private set; }
 
@@ -17,13 +26,13 @@ namespace Optsol.Playground.Domain.Entidades
         {
         }
 
-        public CartaoCreditoEntity(Guid id, string nomeCliente, string numero, string codigoVerificacao, string validade, Guid clienteId)
+        public CartaoCreditoEntity(Guid id, string nomeCliente, string numero, string codigoVerificacao, DateTime validade, Guid clienteId)
             : this(nomeCliente, numero, codigoVerificacao, validade, clienteId)
         {
             Id = id;
         }
 
-        public CartaoCreditoEntity(string nomeCliente, string numero, string codigoVerificacao, string validade, Guid clienteId)
+        public CartaoCreditoEntity(string nomeCliente, string numero, string codigoVerificacao, DateTime validade, Guid clienteId)
         {
             NomeCliente = nomeCliente;
             Numero = numero;
@@ -45,9 +54,11 @@ namespace Optsol.Playground.Domain.Entidades
                 .IsNotNullOrEmpty(CodigoVerificacao, "CodigoVerificacao", "O Codigo Verificacao do cliente não pode ser nulo")
                 .IsNotEmpty(ClienteId, "ClienteId", "O Nome do cliente não pode ser nulo")
             );
+        }
 
-            if (Invalid)
-                return;
+        private bool ObterSituacaoValidade()
+        {
+            return DateTime.Now.Subtract(Validade).TotalDays < 0;
         }
     }
 }
