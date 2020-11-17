@@ -26,6 +26,7 @@ namespace Optsol.Playground.Test
             var clienteId = Guid.NewGuid();
             ClienteEntity clienteEntity = new ClienteEntity(clienteId, new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley@outlook.com"));
             CartaoCreditoEntity cartaoCreditoEntity = new CartaoCreditoEntity(Guid.NewGuid(), "Weslley B. Carneiro", "1326554545455", "985", new DateTime(2030, 11, 30), clienteId);
+
             //When
             clienteEntity.AdicionarCartao(cartaoCreditoEntity);
 
@@ -34,13 +35,18 @@ namespace Optsol.Playground.Test
         }
 
         [Fact]
-        public void Deve_Inserir_cartao_Vencido()
+        public void Deve_Inserir_Cartao_Vencido()
         {
             //Given
-            
+            var clienteId = Guid.NewGuid();
+            ClienteEntity clienteEntity = new ClienteEntity(clienteId, new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley@outlook.com"));
+            CartaoCreditoEntity cartaoCreditoEntity = new CartaoCreditoEntity(Guid.NewGuid(), "Weslley B. Carneiro", "1326554545455", "985", new DateTime(2019, 11, 30), clienteId);
+
             //When
-            
+            clienteEntity.AdicionarCartao(cartaoCreditoEntity);
+
             //Then
+            clienteEntity.Cartoes.FirstOrDefault().Valido.Should().BeFalse();
         }
     }
 }

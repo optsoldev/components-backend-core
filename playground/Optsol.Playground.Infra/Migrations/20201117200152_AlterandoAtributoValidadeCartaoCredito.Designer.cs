@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Optsol.Playground.Infra.Data.Context;
 
 namespace Optsol.Playground.Infra.Migrations
 {
     [DbContext(typeof(PlaygroundContext))]
-    partial class PlaygroundContextModelSnapshot : ModelSnapshot
+    [Migration("20201117200152_AlterandoAtributoValidadeCartaoCredito")]
+    partial class AlterandoAtributoValidadeCartaoCredito
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
