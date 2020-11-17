@@ -29,9 +29,8 @@ namespace Optsol.Playground.Api
 
             services.AddControllers();
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra"));
-            // services.AddRepository<IClienteReadRepository>("Optsol.Playground.Infra");
-            services.AddScoped<IClienteReadRepository, ClienteReadRepository>();
-            services.AddApplicationServices<IClienteServiceApplication>("Optsol.Playground.Application");
+            services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
+            services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
             services.AddAServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
             services.AddMediatR(typeof(Startup));

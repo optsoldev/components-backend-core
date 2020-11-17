@@ -27,7 +27,7 @@ namespace Optsol.Components.Test.Integration.IoC
                 //When
                 services.AddLogging();
                 services.AddContext<TestContext>(new ContextOptionsBuilder());
-                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -61,7 +61,7 @@ namespace Optsol.Components.Test.Integration.IoC
 
                 services.AddLogging();
                 services.AddContext<TestContext>(new ContextOptionsBuilder());
-                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -93,7 +93,7 @@ namespace Optsol.Components.Test.Integration.IoC
 
                 services.AddLogging();
                 services.AddContext<TestContext>(new ContextOptionsBuilder());
-                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -122,7 +122,7 @@ namespace Optsol.Components.Test.Integration.IoC
 
                 services.AddLogging();
                 services.AddContext<TestContext>(new ContextOptionsBuilder());
-                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -154,7 +154,7 @@ namespace Optsol.Components.Test.Integration.IoC
 
                 services.AddLogging();
                 services.AddContext<TestContext>(new ContextOptionsBuilder());
-                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -191,7 +191,7 @@ namespace Optsol.Components.Test.Integration.IoC
 
                 services.AddLogging();
                 services.AddContext<TestContext>(new ContextOptionsBuilder());
-                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 
@@ -220,7 +220,7 @@ namespace Optsol.Components.Test.Integration.IoC
 
                 services.AddLogging();
                 services.AddContext<TestContext>(new ContextOptionsBuilder());
-                services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
+                services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
                 var provider = services.BuildServiceProvider();
                 IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>(); 

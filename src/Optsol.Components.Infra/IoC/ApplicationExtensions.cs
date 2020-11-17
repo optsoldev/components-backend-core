@@ -1,4 +1,0 @@
-namespace Microsoft.Extensions.DependencyInjection
-{
-    
-}
