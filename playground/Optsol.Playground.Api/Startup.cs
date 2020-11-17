@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.Mappers.Cliente;
-using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
 
@@ -29,8 +28,7 @@ namespace Optsol.Playground.Api
 
             services.AddControllers();
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra"));
-            // services.AddRepository<IClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
-            services.AddScoped<IClienteReadRepository, ClienteReadRepository>();
+            services.AddRepository<IClienteReadRepository>("Optsol.Playground.Infra");
             services.AddApplicationServices<IClienteServiceApplication>("Optsol.Playground.Application");
             services.AddAServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));

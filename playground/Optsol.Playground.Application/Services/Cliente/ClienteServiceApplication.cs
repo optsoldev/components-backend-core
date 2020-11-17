@@ -8,8 +8,7 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entidades;
-using Optsol.Playground.Domain.Repositories.Cliente;
-
+using Optsol.Playground.Infra.Data.Repositories.Cliente;
 namespace Optsol.Playground.Application.Services.Cliente
 {
     public class ClienteServiceApplication : BaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>,
