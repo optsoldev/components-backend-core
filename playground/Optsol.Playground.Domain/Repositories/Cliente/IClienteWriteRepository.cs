@@ -2,7 +2,7 @@ using System;
 using Optsol.Components.Infra.Data;
 using Optsol.Playground.Domain.Entidades;
 
-namespace Optsol.Playground.Infra.Data.Repositories.Cliente
+namespace Optsol.Playground.Domain.Repositories.Cliente
 {
     public interface IClienteWriteRepository : IWriteRepository<ClienteEntity, Guid>
     {

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Data;
 using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Repositories.Cliente;
 
 namespace Optsol.Playground.Infra.Data.Repositories.Cliente
 {
@@ -14,13 +15,13 @@ namespace Optsol.Playground.Infra.Data.Repositories.Cliente
         {
         }
 
-        public async Task<ClienteEntity> GetClienteComCartaoCredito(Guid id)
+        public async Task<ClienteEntity> GetClienteComCartaoCreditoAsync(Guid id)
         {
             var entity = await Set.Include(x => x.Cartoes).FirstAsync(x => x.Id == id);
             return entity;
         }
 
-        public IAsyncEnumerable<ClienteEntity> GetClientesComCartaoCredito()
+        public IAsyncEnumerable<ClienteEntity> GetClientesComCartaoCreditoAsync()
         {
             return Set.Include(x => x.Cartoes).AsAsyncEnumerable();
         }

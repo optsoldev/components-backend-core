@@ -4,12 +4,11 @@ using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.Result;
 using Optsol.Components.Application.Service;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entidades;
-using Optsol.Playground.Infra.Data.Repositories.Cliente;
+using Optsol.Playground.Domain.Repositories.Cliente;
 namespace Optsol.Playground.Application.Services.Cliente
 {
     public class ClienteServiceApplication : BaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>,
@@ -33,7 +32,7 @@ namespace Optsol.Playground.Application.Services.Cliente
 
         public async Task<ServiceResult<ClienteComCartoesViewModel>> GetClienteComCartaoCreditoAsync(Guid id)
         {
-            var clienteEntity = await _clienteReadRepository.GetClienteComCartaoCredito(id);
+            var clienteEntity = await _clienteReadRepository.GetClienteComCartaoCreditoAsync(id);
             var clienteViewModel = _mapper.Map<ClienteComCartoesViewModel>(clienteEntity);
 
             return _serviceResultFactory.Create(clienteViewModel);
@@ -44,10 +43,10 @@ namespace Optsol.Playground.Application.Services.Cliente
             var serviceResult = _serviceResultFactory.Create();
 
             var clienteEntity = await _clienteReadRepository.GetByIdAsync(insertCartaoCreditoViewModel.ClienteId);
-            
+
             var entity = _mapper.Map<CartaoCreditoEntity>(insertCartaoCreditoViewModel);
             clienteEntity.AdicionarCartao(entity);
-            
+
             await _clienteWriteRepository.UpdateAsync(clienteEntity);
 
             return serviceResult;
