@@ -49,6 +49,8 @@ namespace Optsol.Playground.Application.Services.Cliente
 
             await _clienteWriteRepository.UpdateAsync(clienteEntity);
 
+            await CommitAsync(serviceResult);
+
             return serviceResult;
         }
     }

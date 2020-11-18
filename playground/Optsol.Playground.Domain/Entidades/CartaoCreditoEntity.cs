@@ -10,12 +10,12 @@ namespace Optsol.Playground.Domain.Entidades
         public string Numero { get; private set; }
         public string CodigoVerificacao { get; private set; }
         public DateTime Validade { get; private set; }
-        public bool Valido 
-        { 
-            get 
+        public bool Valido
+        {
+            get
             {
                 return ObterSituacaoValidade();
-            } 
+            }
         }
 
 
@@ -39,7 +39,8 @@ namespace Optsol.Playground.Domain.Entidades
             CodigoVerificacao = codigoVerificacao;
             Validade = validade;
             ClienteId = clienteId;
-
+            Id = Guid.NewGuid();
+            CreateDate = DateTime.Now;
             Validate();
         }
 

@@ -9,7 +9,7 @@ namespace Optsol.Playground.Application.ViewModels.CartaoCredito
         public string NomeCliente { get; set; }
         public string Numero { get; set; }
         public string CodigoVerificacao { get; set; }
-        public string Validade { get; set; }
+        public DateTime Validade { get; set; }
         public Guid ClienteId { get; set; }
 
         public override void Validate()
