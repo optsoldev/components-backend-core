@@ -33,7 +33,7 @@ namespace Optsol.Playground.Api
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
             services.AddAServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
-            services.AddMediatR(typeof(Startup));
+            services.AddMediatR(typeof(Startup)); //TODO: Não usamos Mediator
 
         }
 
