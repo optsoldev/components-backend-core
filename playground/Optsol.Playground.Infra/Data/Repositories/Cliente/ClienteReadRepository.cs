@@ -15,13 +15,13 @@ namespace Optsol.Playground.Infra.Data.Repositories.Cliente
         {
         }
 
-        public async Task<ClienteEntity> GetClienteComCartaoCreditoAsync(Guid id)
+        public async Task<ClienteEntity> BuscarClienteComCartaoCreditoAsync(Guid id)
         {
             var entity = await Set.Include(x => x.Cartoes).FirstAsync(x => x.Id == id);
             return entity;
         }
 
-        public IAsyncEnumerable<ClienteEntity> GetClientesComCartaoCreditoAsync()
+        public IAsyncEnumerable<ClienteEntity> BuscarClientesComCartaoCreditoAsync()
         {
             return Set.Include(x => x.Cartoes).AsAsyncEnumerable();
         }
