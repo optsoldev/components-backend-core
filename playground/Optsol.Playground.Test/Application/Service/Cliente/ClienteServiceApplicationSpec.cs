@@ -99,7 +99,7 @@ namespace Optsol.Playground.Test
             var clientes = await clienteReadRepository.BuscarClientesComCartaoCreditoAsync().AsyncEnumerableToEnumerable();
 
             clientes.Should().HaveCount(1);
-            
+
             var cartoes = clientes.FirstOrDefault().Cartoes;
             cartoes.Should().HaveCount(1);
 
