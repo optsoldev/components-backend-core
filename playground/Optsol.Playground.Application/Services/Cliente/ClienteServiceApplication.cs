@@ -34,7 +34,7 @@ namespace Optsol.Playground.Application.Services.Cliente
 
         public async Task<ServiceResult<ClienteComCartoesViewModel>> GetClienteComCartaoCreditoAsync(Guid id)
         {
-            var clienteEntity = await _clienteReadRepository.GetClienteComCartaoCreditoAsync(id);
+            var clienteEntity = await _clienteReadRepository.BuscarClienteComCartaoCreditoAsync(id);
             var clienteViewModel = _mapper.Map<ClienteComCartoesViewModel>(clienteEntity);
 
             return _serviceResultFactory.Create(clienteViewModel);
@@ -48,16 +48,16 @@ namespace Optsol.Playground.Application.Services.Cliente
 
             var entity = _mapper.Map<CartaoCreditoEntity>(insertCartaoCreditoViewModel);
             clienteEntity.AdicionarCartao(entity);
-            
-            await _clienteWriteRepository.UpdateAsync(clienteEntity, 
-                (context, entity) => 
+
+            await _clienteWriteRepository.UpdateAsync(clienteEntity,
+                (context, entity) =>
                 {
                     var dbSet = context.Set<CartaoCreditoEntity>();
-                    foreach(var cartao in entity.Cartoes) 
+                    foreach (var cartao in entity.Cartoes)
                     {
                         var localEntity = dbSet.Local?.Where(w => w.Id.Equals(cartao.Id)).FirstOrDefault();
                         var inLocal = localEntity != null;
-                        if(inLocal)
+                        if (inLocal)
                         {
                             context.Entry(localEntity).State = EntityState.Added;
                         }
@@ -67,7 +67,7 @@ namespace Optsol.Playground.Application.Services.Cliente
                         }
                     }
                 });
-            
+
             await CommitAsync(serviceResult);
 
             return serviceResult;

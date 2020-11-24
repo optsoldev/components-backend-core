@@ -42,7 +42,7 @@ namespace Optsol.Playground.Test
 
             _serviceProvider = services.BuildServiceProvider();
         }
-        
+
         [Fact]
         public async Task Deve_Inserir_Cliente_Sem_Cartao()
         {
@@ -68,7 +68,7 @@ namespace Optsol.Playground.Test
             cliente.PossuiCartao.Should().BeFalse();
             cliente.Ativo.Should().BeFalse();
             cliente.Valid.Should().BeTrue();
-            
+
         }
 
         [Fact]
@@ -91,18 +91,22 @@ namespace Optsol.Playground.Test
             //When
             await clienteWriteRepository.InsertAsync(clienteEntity);
             await uow.CommitAsync();
-            
+
             await clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
 
             //Then
             var clienteReadRepository = _serviceProvider.GetRequiredService<IClienteReadRepository>();
-            var clientes = await clienteReadRepository.GetClientesComCartaoCreditoAsync().AsyncEnumerableToEnumerable();
+            var clientes = await clienteReadRepository.BuscarClientesComCartaoCreditoAsync().AsyncEnumerableToEnumerable();
 
             clientes.Should().HaveCount(1);
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> c619c97b918a08b760b1afe8fb64fd63717225de
             var cartoes = clientes.FirstOrDefault().Cartoes;
             cartoes.Should().HaveCount(1);
-            
+
             var cartao = cartoes.FirstOrDefault();
             cartao.ClienteId.Should().Be(insertCartaoCreditoViewModel.ClienteId);
             cartao.NomeCliente.Should().Be(insertCartaoCreditoViewModel.NomeCliente);

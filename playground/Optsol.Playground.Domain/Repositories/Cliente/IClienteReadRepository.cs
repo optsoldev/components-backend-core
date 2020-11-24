@@ -8,7 +8,7 @@ namespace Optsol.Playground.Domain.Repositories.Cliente
 {
     public interface IClienteReadRepository : IReadRepository<ClienteEntity, Guid>
     {
-        Task<ClienteEntity> GetClienteComCartaoCreditoAsync(Guid id);
-        IAsyncEnumerable<ClienteEntity> GetClientesComCartaoCreditoAsync();
+        Task<ClienteEntity> BuscarClienteComCartaoCreditoAsync(Guid id);
+        IAsyncEnumerable<ClienteEntity> BuscarClientesComCartaoCreditoAsync();
     }
 }
