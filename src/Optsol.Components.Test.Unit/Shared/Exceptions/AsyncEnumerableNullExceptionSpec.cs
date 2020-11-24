@@ -7,10 +7,10 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
     public class AsyncEnumerableNullExceptionSpec
     {
         [Fact]
-        public void DeveInicializarComMensagemDeErro()
+        public void Deve_Inicializar_Com_Mensagem_De_Erro()
         {
             //Given
-            AsyncEnumerableNullException exception;;  
+            AsyncEnumerableNullException exception;
 
             //When
             exception = new AsyncEnumerableNullException();

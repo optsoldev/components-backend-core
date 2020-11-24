@@ -1,9 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Optsol.Components.Service\Optsol.Components.Service.csproj"/>
+    <ProjectReference Include="..\..\src\Optsol.Components.Service\Optsol.Components.Service.csproj" />
+    <ProjectReference Include="..\Optsol.Playground.Domain\Optsol.Playground.Domain.csproj" />
+    <ProjectReference Include="..\Optsol.Playground.Infra\Optsol.Playground.Infra.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="1.0.5"/>
+    <PackageReference Include="Flunt" Version="1.0.5" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>

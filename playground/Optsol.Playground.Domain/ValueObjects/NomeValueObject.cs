@@ -1,5 +1,5 @@
 using Flunt.Validations;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.ValueObjects;
 
 namespace Optsol.Playground.Domain.ValueObjects
 {

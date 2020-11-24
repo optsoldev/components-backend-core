@@ -1,9 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Optsol.Components.Domain\Optsol.Components.Domain.csproj"/>
+    <ProjectReference Include="..\..\src\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="1.0.5"/>
+    <PackageReference Include="Flunt" Version="1.0.5" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>

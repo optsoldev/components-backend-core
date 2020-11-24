@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Result;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Application.Service
 {

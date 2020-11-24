@@ -2,7 +2,7 @@ using System;
 using Flunt.Notifications;
 using Flunt.Validations;
 
-namespace Optsol.Components.Domain
+namespace Optsol.Components.Domain.Entities
 {
     public class Entity<TKey> : Notifiable, IEntity<TKey>
     {

@@ -19,6 +19,6 @@ namespace Optsol.Components.Shared.Extensions
             }
 
             return result.AsEnumerable();
-        }
+        }    
     }
 }

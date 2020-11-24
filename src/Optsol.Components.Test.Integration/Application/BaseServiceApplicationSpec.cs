@@ -27,8 +27,8 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddRepository<ITestReadRepository>("Optsol.Components.Test.Utils");
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
@@ -58,7 +58,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
@@ -91,7 +91,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
@@ -122,7 +122,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
@@ -154,7 +154,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
@@ -194,7 +194,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
@@ -226,7 +226,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
@@ -252,7 +252,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();

@@ -19,9 +19,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddRepository<TType>(this IServiceCollection services,  params string[] namespaces)
+        public static IServiceCollection AddRepository<TInterface, TImplementation>(this IServiceCollection services,  params string[] namespaces)
         {
-            return services.RegisterScoped<TType>(namespaces);
+            return services.RegisterScoped<TInterface, TImplementation>(namespaces);
         }
     }
 }

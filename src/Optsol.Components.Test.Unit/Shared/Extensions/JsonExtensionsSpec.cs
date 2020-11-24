@@ -1,5 +1,5 @@
 using Xunit;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Shared.Extensions;
 using FluentAssertions;
 

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {

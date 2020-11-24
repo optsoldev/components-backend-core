@@ -1,6 +1,6 @@
 using System;
 using Flunt.Validations;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Test.Shared.Data
 {

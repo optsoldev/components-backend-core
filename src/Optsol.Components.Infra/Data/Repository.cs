@@ -1,12 +1,14 @@
+using System.ComponentModel;
 using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Domain;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
+using System.Collections;
 
 namespace Optsol.Components.Infra.Data
 {
@@ -53,14 +55,24 @@ namespace Optsol.Components.Infra.Data
         {
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
             
-            var local = Context.Set<TEntity>().Local?.Where(w => w.Id.Equals(entity.Id)).FirstOrDefault();
-            if(local != null)
+            var localEntity = Context.Set<TEntity>().Local?.Where(w => w.Id.Equals(entity.Id)).FirstOrDefault();
+            var inLocal = localEntity != null;
+            if(inLocal)
             {
-                Context.Entry(local).State = EntityState.Detached;
+                Context.Entry(localEntity).State = EntityState.Detached;
             }
 
             Set.Update(entity);
             
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateAsync(TEntity entity, Action<DbContext, TEntity> track)
+        {
+            UpdateAsync(entity);
+            
+            track?.Invoke(Context, entity);
+
             return Task.CompletedTask;
         }
 
