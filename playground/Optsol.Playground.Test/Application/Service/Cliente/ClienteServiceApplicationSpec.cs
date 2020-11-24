@@ -1,12 +1,7 @@
-using System.ComponentModel;
 using System.Linq;
 using System;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Optsol.Components.Application.Result;
-using Optsol.Components.Application.Service;
 using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
@@ -105,7 +100,7 @@ namespace Optsol.Playground.Test
 
             clientes.Should().HaveCount(1);
             
-            var cartoes = clientes.FirstOrDefault().Cartoes;   w
+            var cartoes = clientes.FirstOrDefault().Cartoes;
             cartoes.Should().HaveCount(1);
             
             var cartao = cartoes.FirstOrDefault();
