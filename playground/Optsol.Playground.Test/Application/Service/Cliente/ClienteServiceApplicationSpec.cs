@@ -1,12 +1,7 @@
-using System.ComponentModel;
 using System.Linq;
 using System;
 using AutoMapper;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Moq;
-using Optsol.Components.Application.Result;
-using Optsol.Components.Application.Service;
 using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
