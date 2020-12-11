@@ -30,28 +30,28 @@ namespace Optsol.Components.Infra.Data
             this.Set = context.Set<TEntity>();
         }
 
-        public Task<TEntity> GetByIdAsync(TKey id)
+        public virtual Task<TEntity> GetByIdAsync(TKey id)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TEntity).Name }");
 
             return Set.FindAsync(id).AsTask();
         }
         
-        public IAsyncEnumerable<TEntity> GetAllAsync()
+        public virtual IAsyncEnumerable<TEntity> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
 
             return Set.AsAsyncEnumerable();
         }
 
-        public Task InsertAsync(TEntity entity)
+        public virtual Task InsertAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ entity:{ entity.ToJson() } }})");
                 
             return Set.AddAsync(entity).AsTask();
         }
 
-        public Task UpdateAsync(TEntity entity)
+        public virtual Task UpdateAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
             
@@ -67,7 +67,7 @@ namespace Optsol.Components.Infra.Data
             return Task.CompletedTask;
         }
 
-        public Task UpdateAsync(TEntity entity, Action<DbContext, TEntity> track)
+        public virtual Task UpdateAsync(TEntity entity, Action<DbContext, TEntity> track)
         {
             UpdateAsync(entity);
             
@@ -76,7 +76,7 @@ namespace Optsol.Components.Infra.Data
             return Task.CompletedTask;
         }
 
-        public async Task DeleteAsync(TKey id)
+        public virtual async Task DeleteAsync(TKey id)
         {
             var entity = await Set.FindAsync(id);
             
@@ -90,7 +90,7 @@ namespace Optsol.Components.Infra.Data
             await DeleteAsync(entity);
         }
 
-        public async Task DeleteAsync(TEntity entity)
+        public virtual async Task DeleteAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ entity:{ entity.ToJson() } }})");
 
@@ -105,7 +105,7 @@ namespace Optsol.Components.Infra.Data
             }
         }
 
-        public Task<int> SaveChanges()
+        public virtual Task<int> SaveChanges()
         {
             _logger?.LogInformation($"Método: { nameof(SaveChanges) }()");
 
