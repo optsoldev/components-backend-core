@@ -46,7 +46,7 @@ namespace Optsol.Components.Application.Service
             _writeRepository = writeRepository;
         }
 
-        public async Task<ServiceResult<TGetByIdDto>> GetByIdAsync(Guid id)
+        public virtual async Task<ServiceResult<TGetByIdDto>> GetByIdAsync(Guid id)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetAllDto).Name }");
 
@@ -55,7 +55,7 @@ namespace Optsol.Components.Application.Service
             return _serviceResultFactory.Create(_mapper.Map<TGetByIdDto>(entity));
         }
 
-        public async Task<ServiceResultList<TGetAllDto>> GetAllAsync()
+        public virtual async Task<ServiceResultList<TGetAllDto>> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
 
@@ -64,7 +64,7 @@ namespace Optsol.Components.Application.Service
             return _serviceResultFactory.Create(entities.Select(entity => _mapper.Map<TGetAllDto>(entity)));
         }
 
-        public async Task<ServiceResult> InsertAsync(TInsertData data)
+        public virtual async Task<ServiceResult> InsertAsync(TInsertData data)
         {
             var serviceResult = _serviceResultFactory.Create();
 
@@ -93,7 +93,7 @@ namespace Optsol.Components.Application.Service
             return serviceResult;
         }
 
-        public async Task<ServiceResult> UpdateAsync(TUpdateData data)
+        public virtual async Task<ServiceResult> UpdateAsync(TUpdateData data)
         {
             var serviceResult = _serviceResultFactory.Create();
 
@@ -123,7 +123,7 @@ namespace Optsol.Components.Application.Service
             return serviceResult;
         }
 
-        public async Task<ServiceResult> DeleteAsync(Guid id)
+        public virtual async Task<ServiceResult> DeleteAsync(Guid id)
         {
             var serviceResult = _serviceResultFactory.Create();
 
@@ -145,7 +145,7 @@ namespace Optsol.Components.Application.Service
             return false;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
 
             GC.SuppressFinalize(this);
