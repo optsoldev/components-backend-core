@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Entities;
 using Optsol.Playground.Domain.ValueObjects;
 using Xunit;
 

@@ -6,7 +6,7 @@ using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
-using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Entities;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Domain.ValueObjects;
 using Xunit;

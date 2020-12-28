@@ -4,7 +4,7 @@ using Optsol.Components.Application.Result;
 using Optsol.Components.Application.Service;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
-using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Application.Services.Cliente
 {

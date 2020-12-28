@@ -7,7 +7,7 @@ using Optsol.Components.Service;
 using Optsol.Components.Service.Response;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.Cliente;
-using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Entities;
 using Optsol.Playground.Domain.Repositories.Cliente;
 
 namespace Optsol.Playground.Api.Controllers
