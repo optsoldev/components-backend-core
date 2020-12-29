@@ -22,7 +22,7 @@ namespace Optsol.Components.Test.Unit.Shared
             aggregateRootJson.EndsWith("}").Should().BeTrue();
             aggregateRootJson.Contains(":").Should().BeTrue();
             aggregateRootJson.Contains(aggregateRoot.ToString()).Should().BeTrue();
-            aggregateRootJson.Contains(nameof(aggregateRoot.CreateDate)).Should().BeTrue();
+            aggregateRootJson.Contains(nameof(aggregateRoot.CreatedDate)).Should().BeTrue();
         }
     }
 }

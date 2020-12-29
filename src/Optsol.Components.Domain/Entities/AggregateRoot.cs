@@ -7,7 +7,7 @@ namespace Optsol.Components.Domain.Entities
         public AggregateRoot()
         {
             Id = Guid.NewGuid();
-            CreateDate = DateTime.Now;
+            CreatedDate = DateTime.Now;
         }
 
         public override string ToString()

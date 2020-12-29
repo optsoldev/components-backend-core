@@ -40,9 +40,6 @@ namespace Optsol.Components.Service
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            if (id == null)
-                return NoContent();
-
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type Guid");
 
             var serviceResult = await _serviceApplication.GetByIdAsync(id);

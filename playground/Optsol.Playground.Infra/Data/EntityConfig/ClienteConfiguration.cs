@@ -2,7 +2,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Infra.Data;
-using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Infra.Data.EntityConfig
 {

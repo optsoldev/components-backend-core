@@ -10,7 +10,6 @@ namespace Optsol.Components.Infra.Data
     {
         Task InsertAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
-        Task UpdateAsync(TEntity entity, Action<DbContext, TEntity> track);
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(TKey id);
         Task<int> SaveChanges();

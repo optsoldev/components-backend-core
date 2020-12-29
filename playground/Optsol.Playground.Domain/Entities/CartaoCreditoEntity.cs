@@ -2,7 +2,7 @@ using System;
 using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
 
-namespace Optsol.Playground.Domain.Entidades
+namespace Optsol.Playground.Domain.Entities
 {
     public class CartaoCreditoEntity : Entity<Guid>
     {
@@ -40,7 +40,7 @@ namespace Optsol.Playground.Domain.Entidades
             Validade = validade;
             ClienteId = clienteId;
             Id = Guid.NewGuid();
-            CreateDate = DateTime.Now;
+            CreatedDate = DateTime.Now;
             Validate();
         }
 

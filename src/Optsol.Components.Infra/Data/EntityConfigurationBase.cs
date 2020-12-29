@@ -15,9 +15,11 @@ namespace Optsol.Components.Infra.Data
             builder.Ignore(entity => entity.Valid);
             
             builder.HasKey(entity => entity.Id);
+            builder.Property(entity => entity.Id).ValueGeneratedNever();
+            
             builder
-                .Property(entity => entity.CreateDate)
-                .HasColumnName(nameof(Entity<TKey>.CreateDate))
+                .Property(entity => entity.CreatedDate)
+                .HasColumnName(nameof(Entity<TKey>.CreatedDate))
                 .HasColumnType("datetime")
                 .IsRequired();
         }
