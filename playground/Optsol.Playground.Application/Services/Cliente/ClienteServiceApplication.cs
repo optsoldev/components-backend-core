@@ -50,24 +50,6 @@ namespace Optsol.Playground.Application.Services.Cliente
             clienteEntity.AdicionarCartao(entity);
 
             await _clienteWriteRepository.UpdateAsync(clienteEntity);
-            // ,
-            //     (context, entity) =>
-            //     {
-            //         var dbSet = context.Set<CartaoCreditoEntity>();
-            //         foreach (var cartao in entity.Cartoes)
-            //         {
-            //             var localEntity = dbSet.Local?.Where(w => w.Id.Equals(cartao.Id)).FirstOrDefault();
-            //             var inLocal = localEntity != null;
-            //             if (inLocal)
-            //             {
-            //                 context.Entry(localEntity).State = EntityState.Added;
-            //             }
-            //             else
-            //             {
-            //                 context.Entry(cartao).State = EntityState.Modified;
-            //             }
-            //         }
-            //     });
 
             await CommitAsync(serviceResult);
 

@@ -18,7 +18,7 @@ namespace Optsol.Playground.Domain.Entities
         { 
             get 
             { 
-                return ObterCartoesValidos();
+                return ExisteCartoesValidos();
             }
         }
 
@@ -67,7 +67,7 @@ namespace Optsol.Playground.Domain.Entities
             return this;
         }
 
-        private bool ObterCartoesValidos()
+        private bool ExisteCartoesValidos()
         {
             return Cartoes.Any(a => a.Valido);
         }
