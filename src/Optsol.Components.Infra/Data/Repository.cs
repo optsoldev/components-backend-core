@@ -42,6 +42,14 @@ namespace Optsol.Components.Infra.Data
             return Set.AsAsyncEnumerable();
         }
 
+        public IAsyncEnumerable<TEntity> GetAllAsync<TSearch>(IRequestSearch<TSearch> requestSearch)
+            where TSearch : class
+        {
+            var requestFilter = requestSearch.Search as ISearch<TEntity, TKey>;
+            
+            throw new NotImplementedException();
+        }
+
         public virtual Task InsertAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ entity:{ entity.ToJson() } }})");
