@@ -9,7 +9,7 @@ using Optsol.Components.Application.Service;
 using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
-using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Entities;
 using Optsol.Playground.Domain.Repositories.Cliente;
 namespace Optsol.Playground.Application.Services.Cliente
 {
@@ -49,24 +49,25 @@ namespace Optsol.Playground.Application.Services.Cliente
             var entity = _mapper.Map<CartaoCreditoEntity>(insertCartaoCreditoViewModel);
             clienteEntity.AdicionarCartao(entity);
 
-            await _clienteWriteRepository.UpdateAsync(clienteEntity,
-                (context, entity) =>
-                {
-                    var dbSet = context.Set<CartaoCreditoEntity>();
-                    foreach (var cartao in entity.Cartoes)
-                    {
-                        var localEntity = dbSet.Local?.Where(w => w.Id.Equals(cartao.Id)).FirstOrDefault();
-                        var inLocal = localEntity != null;
-                        if (inLocal)
-                        {
-                            context.Entry(localEntity).State = EntityState.Added;
-                        }
-                        else
-                        {
-                            context.Entry(cartao).State = EntityState.Modified;
-                        }
-                    }
-                });
+            await _clienteWriteRepository.UpdateAsync(clienteEntity);
+            // ,
+            //     (context, entity) =>
+            //     {
+            //         var dbSet = context.Set<CartaoCreditoEntity>();
+            //         foreach (var cartao in entity.Cartoes)
+            //         {
+            //             var localEntity = dbSet.Local?.Where(w => w.Id.Equals(cartao.Id)).FirstOrDefault();
+            //             var inLocal = localEntity != null;
+            //             if (inLocal)
+            //             {
+            //                 context.Entry(localEntity).State = EntityState.Added;
+            //             }
+            //             else
+            //             {
+            //                 context.Entry(cartao).State = EntityState.Modified;
+            //             }
+            //         }
+            //     });
 
             await CommitAsync(serviceResult);
 

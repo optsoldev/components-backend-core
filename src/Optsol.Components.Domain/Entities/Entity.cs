@@ -8,13 +8,13 @@ namespace Optsol.Components.Domain.Entities
     {
         public TKey Id { get; protected set; }
 
-        public DateTime CreateDate { get; protected set; }
+        public DateTime CreatedDate { get; protected set; }
 
         public virtual void Validate()
         {
             AddNotifications(new Contract()
                 .Requires()
-                .IsLowerThan(CreateDate, DateTime.Now, "CreateDate", "A Data de criação não pode ser maior que a data atual"));
+                .IsLowerThan(CreatedDate, DateTime.Now, "CreationDate", "A Data de criação não pode ser maior que a data atual"));
         }
     }
 }

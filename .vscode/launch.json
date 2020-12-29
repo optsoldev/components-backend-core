@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/playground/Optsol.Playground.Api/bin/Debug/netcoreapp3.1/Optsol.Playground.Api.dll",
+            "program": "${workspaceFolder}/playground/Optsol.Playground.Api/bin/Debug/net5.0/Optsol.Playground.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}/playground/Optsol.Playground.Api",
             "stopAtEntry": false,

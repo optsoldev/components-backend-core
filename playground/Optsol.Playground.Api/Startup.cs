@@ -9,17 +9,20 @@ using Optsol.Playground.Application.Mappers.Cliente;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
+using Microsoft.AspNetCore.Http;
 
 namespace Optsol.Playground.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -27,9 +30,10 @@ namespace Optsol.Playground.Api
             var stringConnection = this.Configuration.GetSection("ConnectionStrings:DefaultConnection");
 
             services.AddControllers();
-            services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra"));
+            services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra", Environment.IsDevelopment()));
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+
             services.AddAServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
 
@@ -51,6 +55,10 @@ namespace Optsol.Playground.Api
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGet("/", async context => 
+                {
+                    await context.Response.WriteAsync("Playground API Started.");
+                });
                 endpoints.MapControllers();
             });
         }

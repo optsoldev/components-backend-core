@@ -6,7 +6,7 @@ using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
 using Optsol.Playground.Domain.ValueObjects;
 
-namespace Optsol.Playground.Domain.Entidades
+namespace Optsol.Playground.Domain.Entities
 {
     public class ClienteEntity : AggregateRoot
     {

@@ -1,6 +1,6 @@
 using AutoMapper;
 using Optsol.Playground.Application.ViewModels.Cliente;
-using Optsol.Playground.Domain.Entidades;
+using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Application.Mappers.Cliente
 {
