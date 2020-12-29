@@ -6,9 +6,13 @@ namespace Optsol.Components.Shared.Extensions
     {
         public static string ToJson<T>(this T source)
         {
-            if(source == null) return "{}";
+            if (source == null) return "{}";
 
-            return JsonConvert.SerializeObject(source);
+            return JsonConvert.SerializeObject(source, Formatting.Indented, 
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                });
         }
     }
 }

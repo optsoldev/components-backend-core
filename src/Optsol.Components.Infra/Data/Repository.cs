@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Linq;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
-using System.Collections;
 
 namespace Optsol.Components.Infra.Data
 {
@@ -64,15 +62,6 @@ namespace Optsol.Components.Infra.Data
 
             Set.Update(entity);
             
-            return Task.CompletedTask;
-        }
-
-        public virtual Task UpdateAsync(TEntity entity, Action<DbContext, TEntity> track)
-        {
-            UpdateAsync(entity);
-            
-            track?.Invoke(Context, entity);
-
             return Task.CompletedTask;
         }
 
