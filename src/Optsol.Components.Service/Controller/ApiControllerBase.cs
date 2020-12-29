@@ -31,7 +31,7 @@ namespace Optsol.Components.Service
             IResponseFactory responseFactory)
         {
             _logger = logger;
-            _logger?.LogInformation($"Inicializando Controller Base<{ typeof(TEntity).Name }, Guid >");
+            _logger?.LogInformation($"Inicializando Controller Base<{ typeof(TEntity).Name }, Guid>");
 
             _responseFactory = responseFactory ?? throw new ResponseFactoryNullException();
             _serviceApplication = serviceApplication;
@@ -40,7 +40,7 @@ namespace Optsol.Components.Service
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
-            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type Guid");
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }})");
 
             var serviceResult = await _serviceApplication.GetByIdAsync(id);
 
