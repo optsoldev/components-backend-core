@@ -4,8 +4,7 @@ using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
-    public interface ISearch<TEntity, TKey>
-        where TEntity : IAggregateRoot<TKey>
+    public interface ISearch<TEntity>
     {
         Expression<Func<TEntity,bool>> GetSearcher();
     }

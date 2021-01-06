@@ -2,11 +2,10 @@ using System;
 
 namespace Optsol.Components.Domain.Entities
 {
-    public class AggregateRoot : Entity<Guid>, IAggregateRoot<Guid>
+    public class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot<TKey>
     {
         public AggregateRoot()
         {
-            Id = Guid.NewGuid();
             CreatedDate = DateTime.Now;
         }
 
@@ -14,5 +13,15 @@ namespace Optsol.Components.Domain.Entities
         {
             return Id.ToString();
         }
+    }
+
+    public class AggregateRoot : AggregateRoot<Guid>
+    {
+        public AggregateRoot()
+            : base()
+        {
+            Id = Guid.NewGuid();
+        }
+
     }
 }
