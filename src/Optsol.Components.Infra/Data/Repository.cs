@@ -52,11 +52,11 @@ namespace Optsol.Components.Infra.Data
 
             IQueryable<TEntity> query = this.Set;
 
-            query = ApplySearch(query, search.GetSearcher());
+            query = ApplySearch(query, search?.GetSearcher());
 
-            query = ApplyInclude(query, include.GetInclude());
+            query = ApplyInclude(query, include?.GetInclude());
 
-            query = ApplyOrderBy(query, orderBy.GetOrderBy());
+            query = ApplyOrderBy(query, orderBy?.GetOrderBy());
 
             return CreateSearchResult(query, requestSearch.Page, requestSearch.PageSize);
         }
@@ -68,17 +68,17 @@ namespace Optsol.Components.Infra.Data
             searchResult.Total = await query.CountAsync();
 
             query = ApplyPagination(query, page, pageSize);
-            
+
             searchResult.Itens = await query.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
             searchResult.TotalItens = searchResult.Itens.Count();
-            
+
             return searchResult;
         }
 
         private IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
             var skip = page <= 0 ? 1 : --page * (pageSize ?? 0);
-            
+
             query = query.Skip(skip.ToInt());
 
             if (pageSize.HasValue)
