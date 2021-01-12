@@ -1,0 +1,33 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",
+        "donjayamanne.githistory",
+        "ms-vsliveshare.vsliveshare",
+        "waderyan.gitblame",
+        "formulahendry.dotnet-test-explorer",
+        "formulahendry.dotnet",
+        "hookyqr.beautify",
+        "ms-dotnettools.csharp",
+        "k--kato.docomment",
+        "naumovs.color-highlight",
+        "msjsdiag.debugger-for-chrome",
+        "ms-azuretools.vscode-docker",
+        "dracula-theme.theme-dracula",
+        "eamodio.gitlens",
+        "icsharpcode.ilspy-vscode",
+        "ms-toolsai.jupyter",
+        "ritwickdey.liveserver",
+        "shd101wyy.markdown-preview-enhanced",
+        "jmrog.vscode-nuget-package-manager",
+        "christian-kohler.path-intellisense",
+        "ms-mssql.mssql",
+        "hbenl.vscode-test-explorer",
+        "gruntfuggly.todo-tree",
+        "visualstudioexptteam.vscodeintellicode",
+        "ms-vscode.vs-keybindings",
+        "vscode-icons-team.vscode-icons",
+        "fernandoescolar.vscode-solution-explorer",
+		"jakob101.relativepath",
+		"formulahendry.auto-rename-tag"
+    ]
+}

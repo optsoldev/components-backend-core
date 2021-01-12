@@ -10,5 +10,6 @@ namespace Optsol.Components.Infra.Data
     {
         Task<TEntity> GetByIdAsync(TKey id);
         IAsyncEnumerable<TEntity> GetAllAsync();
+        Task<SearchResult<TEntity>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch) where TSearch : class;
     }
 }
