@@ -69,8 +69,8 @@ namespace Optsol.Components.Infra.Data
 
             query = ApplyPagination(query, page, pageSize);
 
-            searchResult.Itens = await query.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
-            searchResult.TotalItens = searchResult.Itens.Count();
+            searchResult.Items = await query.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
+            searchResult.TotalItems = searchResult.Items.Count();
 
             return searchResult;
         }

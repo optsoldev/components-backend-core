@@ -258,26 +258,26 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             testEntityPage1.Should().NotBeNull();
             testEntityPage1.Page.Should().Be(requestSearchPage1.Page);
             testEntityPage1.PageSize.Should().Be(requestSearchPage1.PageSize);
-            testEntityPage1.Itens.Should().HaveCount(requestSearchPage1.PageSize.Value.ToInt());
-            testEntityPage1.TotalItens.Should().Be(requestSearchPage1.PageSize.Value);
+            testEntityPage1.Items.Should().HaveCount(requestSearchPage1.PageSize.Value.ToInt());
+            testEntityPage1.TotalItems.Should().Be(requestSearchPage1.PageSize.Value);
 
             var skip1 = requestSearchPage1.Page <= 0 ? 1 : --requestSearchPage1.Page * (requestSearchPage1.PageSize ?? 0);
 
-            testEntityPage1.Itens.First().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).First().Id);
-            testEntityPage1.Itens.Last().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).Take(requestSearchPage1.PageSize.Value.ToInt()).Last().Id);
+            testEntityPage1.Items.First().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).First().Id);
+            testEntityPage1.Items.Last().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).Take(requestSearchPage1.PageSize.Value.ToInt()).Last().Id);
             testEntityPage1.Total.Should().Be(testEntityList.Count);
 
             //Paginação 2
             testEntityPage2.Should().NotBeNull();
             testEntityPage2.Page.Should().Be(requestSearchPage2.Page);
             testEntityPage2.PageSize.Should().Be(requestSearchPage2.PageSize);
-            testEntityPage2.Itens.Should().HaveCount(requestSearchPage2.PageSize.Value.ToInt());
-            testEntityPage2.TotalItens.Should().Be(requestSearchPage2.PageSize.Value);
+            testEntityPage2.Items.Should().HaveCount(requestSearchPage2.PageSize.Value.ToInt());
+            testEntityPage2.TotalItems.Should().Be(requestSearchPage2.PageSize.Value);
 
             var skip2 = requestSearchPage2.Page <= 0 ? 1 : --requestSearchPage2.Page * (requestSearchPage2.PageSize ?? 0);
 
-            testEntityPage2.Itens.First().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).First().Id);
-            testEntityPage2.Itens.Last().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).Take(requestSearchPage2.PageSize.Value.ToInt()).Last().Id);
+            testEntityPage2.Items.First().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).First().Id);
+            testEntityPage2.Items.Last().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).Take(requestSearchPage2.PageSize.Value.ToInt()).Last().Id);
             testEntityPage2.Total.Should().Be(testEntityList.Count);
         }
 
@@ -327,26 +327,26 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             testEntityPage1.Should().NotBeNull();
             testEntityPage1.Page.Should().Be(requestSearchPage1.Page);
             testEntityPage1.PageSize.Should().Be(requestSearchPage1.PageSize);
-            testEntityPage1.Itens.Should().HaveCount(requestSearchPage1.PageSize.Value.ToInt());
-            testEntityPage1.TotalItens.Should().Be(requestSearchPage1.PageSize.Value);
+            testEntityPage1.Items.Should().HaveCount(requestSearchPage1.PageSize.Value.ToInt());
+            testEntityPage1.TotalItems.Should().Be(requestSearchPage1.PageSize.Value);
 
             var skip1 = requestSearchPage1.Page <= 0 ? 1 : --requestSearchPage1.Page * (requestSearchPage1.PageSize ?? 0);
 
-            testEntityPage1.Itens.First().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).First().Id);
-            testEntityPage1.Itens.Last().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).Take(requestSearchPage1.PageSize.Value.ToInt()).Last().Id);
+            testEntityPage1.Items.First().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).First().Id);
+            testEntityPage1.Items.Last().Id.Should().Be(testEntityList.Skip(skip1.ToInt()).Take(requestSearchPage1.PageSize.Value.ToInt()).Last().Id);
             testEntityPage1.Total.Should().Be(testEntityList.Count);
 
             //Paginação 2
             testEntityPage2.Should().NotBeNull();
             testEntityPage2.Page.Should().Be(requestSearchPage2.Page);
             testEntityPage2.PageSize.Should().Be(requestSearchPage2.PageSize);
-            testEntityPage2.Itens.Should().HaveCount(requestSearchPage2.PageSize.Value.ToInt());
-            testEntityPage2.TotalItens.Should().Be(requestSearchPage2.PageSize.Value);
+            testEntityPage2.Items.Should().HaveCount(requestSearchPage2.PageSize.Value.ToInt());
+            testEntityPage2.TotalItems.Should().Be(requestSearchPage2.PageSize.Value);
 
             var skip2 = requestSearchPage2.Page <= 0 ? 1 : --requestSearchPage2.Page * (requestSearchPage2.PageSize ?? 0);
 
-            testEntityPage2.Itens.First().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).First().Id);
-            testEntityPage2.Itens.Last().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).Take(requestSearchPage2.PageSize.Value.ToInt()).Last().Id);
+            testEntityPage2.Items.First().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).First().Id);
+            testEntityPage2.Items.Last().Id.Should().Be(testEntityList.Skip(skip2.ToInt()).Take(requestSearchPage2.PageSize.Value.ToInt()).Last().Id);
             testEntityPage2.Total.Should().Be(testEntityList.Count);
         }
 
