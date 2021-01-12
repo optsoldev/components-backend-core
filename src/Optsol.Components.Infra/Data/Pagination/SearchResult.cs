@@ -8,11 +8,11 @@ namespace Optsol.Components.Infra.Data
         private uint page;
         public uint Page
         {
-            get 
+            get
             {
                 return page;
             }
-            
+
             set
             {
                 page = value <= 0 ? 1 : value;
@@ -20,8 +20,8 @@ namespace Optsol.Components.Infra.Data
         }
         public uint? PageSize { get; set; }
         public long Total { get; set; }
-        public long TotalItens { get; set; }
-        public IEnumerable<TEntity> Itens { get; set; }
+        public long TotalItems { get; set; }
+        public IEnumerable<TEntity> Items { get; set; }
         public SearchResult(uint page, uint? pageSize)
         {
             this.Page = page;
