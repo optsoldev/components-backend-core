@@ -5,12 +5,24 @@ namespace Optsol.Components.Infra.Data
     public class SearchResult<TEntity>
         where TEntity : class
     {
-        public int Page { get; set; }
-        public int? PageSize { get; set; }
+        private uint page;
+        public uint Page
+        {
+            get 
+            {
+                return page;
+            }
+            
+            set
+            {
+                page = value <= 0 ? 1 : value;
+            }
+        }
+        public uint? PageSize { get; set; }
         public long Total { get; set; }
         public long TotalItens { get; set; }
         public IEnumerable<TEntity> Itens { get; set; }
-        public SearchResult(int page, int? pageSize)
+        public SearchResult(uint page, uint? pageSize)
         {
             this.Page = page;
             this.PageSize = pageSize;

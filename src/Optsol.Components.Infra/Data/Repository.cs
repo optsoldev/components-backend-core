@@ -43,7 +43,7 @@ namespace Optsol.Components.Infra.Data
             return Set.AsAsyncEnumerable();
         }
 
-        public virtual Task<SearchResult<TEntity>> GetAllAsync<TSearch>(IRequestSearch<TSearch> requestSearch)
+        public virtual Task<SearchResult<TEntity>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch)
             where TSearch : class
         {
             var search = requestSearch.Search as ISearch<TEntity>;
@@ -61,30 +61,29 @@ namespace Optsol.Components.Infra.Data
             return CreateSearchResult(query, requestSearch.Page, requestSearch.PageSize);
         }
 
-        private async Task<SearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, int page, int? pageSize)
+        private async Task<SearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
-
             var searchResult = new SearchResult<TEntity>(page, pageSize);
 
-            searchResult.Itens = await query.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
             searchResult.Total = await query.CountAsync();
 
             query = ApplyPagination(query, page, pageSize);
-
-            searchResult.Total = await query.CountAsync();
-
+            
+            searchResult.Itens = await query.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
+            searchResult.TotalItens = searchResult.Itens.Count();
+            
             return searchResult;
         }
 
-        private IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, int page, int? pageSize)
+        private IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
-            var skip = page == 0 ? 0 : page * (pageSize ?? 0);
-
-            query = query.Skip(skip);
+            var skip = page <= 0 ? 1 : --page * (pageSize ?? 0);
+            
+            query = query.Skip(skip.ToInt());
 
             if (pageSize.HasValue)
             {
-                query = query.Take(pageSize.Value);
+                query = query.Take(pageSize.Value.ToInt());
             }
 
             return query;

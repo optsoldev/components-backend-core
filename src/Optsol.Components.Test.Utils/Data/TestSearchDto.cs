@@ -8,7 +8,7 @@ using Optsol.Components.Test.Shared.Data;
 namespace Optsol.Components.Test.Utils.Data
 {
 
-    public class TestSearchDto : ISearch<TestEntity>, IOrderBy<TestEntity>, IInclude<TestEntity>
+    public class  TestSearchDto : ISearch<TestEntity>, IOrderBy<TestEntity>, IInclude<TestEntity>
     {
         public string Nome { get; set; }
         public string SobreNome { get; set; }
