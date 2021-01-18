@@ -20,7 +20,7 @@
 [license-shield]: https://img.shields.io/github/license/optsoldev/components-backend-core.svg
 [license-url]: https://github.com/optsoldev/components-backend-core/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/company/optsoltecnologia/about/
+[linkedin-url]: https://www.linkedin.com/company/optsoltecnologia/
 [product-screenshot]: images/screenshot.png
 [build-shield]: https://dev.azure.com/optsoldev/OPTSOL%20Components%20Backend/_apis/build/status/optsoldev.components-backend-core?branchName=main
 [build-url]: https://dev.azure.com/optsoldev/OPTSOL%20Components%20Backend/_build/latest?definitionId=4&branchName=main
