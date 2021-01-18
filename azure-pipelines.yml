@@ -30,7 +30,10 @@ steps:
 
 - task: VSTest@2
   inputs:
-    testSelector: 'testRun'
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      **\*Optsol.Components.Test*.dll
+      !**\Optsol.Components.Test*\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
     vsTestVersion: '16.0'
     platform: '$(buildPlatform)'
