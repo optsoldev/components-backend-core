@@ -43,7 +43,7 @@ steps:
     arguments: '-c $(buildConfiguration) --no-restore --no-build --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
-  displayName: 'Criando Pacote Nuget'
+  displayName: 'Criando Pacotes Nuget'
   inputs:
     command: 'custom'
     projects: |
@@ -53,6 +53,13 @@ steps:
     custom: 'pack'
     arguments: '-c $(buildConfiguration) --no-restore --no-build'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: CopyFiles@2
+  displayName: 'Copiando Pacotes'
+  inputs:
+    Contents: '*.nupkg'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+    CleanTargetFolder: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publicando Artefato'
