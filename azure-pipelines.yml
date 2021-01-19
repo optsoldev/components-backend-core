@@ -34,8 +34,10 @@ steps:
     testAssemblyVer2: |
       **\*Optsol.Components.Test*.dll
       !**\*TestAdapter.dll
+      !**\*TestHost.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
     vsTestVersion: '16.0'
+    codeCoverageEnabled: true
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
