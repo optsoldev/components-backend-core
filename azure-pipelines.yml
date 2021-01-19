@@ -13,6 +13,12 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Instalando Sdk 5.0'
+  inputs:
+    packageType: 'sdk'
+    version: '5.0'
+
 - task: DotNetCoreCLI@2
   displayName: 'Restaurando Dependências'
   inputs:
@@ -22,7 +28,7 @@ steps:
     noCache: true
 
 - task: DotNetCoreCLI@2
-  displayName: 'Rodando o Build sem Restore'
+  displayName: 'Rodando o Build'
   inputs:
     command: 'build'
     projects: '**/*.csproj'
