@@ -1,15 +1,16 @@
 <#
 .SYNOPSIS
-    Script to increment project versions for beta, minor releases and hotfixes.
+    
+	Script para incrementar as versões do projeto para beta, release e hotfixes.
 
 .DESCRIPTION
-    Script will increment either the patch or minor version for all projects under a ./src folder. Intelligently infers the next beta, release, or hotfix version. 
+    O script irá incrementar o patch ou a versão secundária para todos os projetos em uma pasta ./src. Infere de forma inteligente a próxima versão beta, lançamento ou hotfix. 
 
 .PARAMETER mode 
-    Specify 'beta', 'release' or 'hotfix'
+    Especificamos 'beta', 'release' or 'hotfix'
 
 .EXAMPLE 
-    publish.ps1 release
+    version-bump.ps1 release
 
 #>
 
@@ -19,9 +20,9 @@ param([string]$mode)
 
 
 if($mode -ne "release" -and $mode -ne "hotfix" -and $mode -ne "beta"){
-    Write-Output "Syntax:  publish.ps1 [[-mode] <String>]"
+    Write-Output "Syntax:  version-bump.ps1 [[-mode] <String>]"
     Write-Output "Please specify a mode; 'beta', 'release' or 'hotfix'."
-    Write-Output "Get-Help ./publish.ps1 for more info"
+    Write-Output "Get-Help ./version-bump.ps1 for more info"
     exit 0;
 }
 Write-Output "mode = $mode"
