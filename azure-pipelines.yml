@@ -17,7 +17,12 @@ steps:
   displayName: 'Instalando Sdk 5.0'
   inputs:
     packageType: 'sdk'
-    version: '5.0.102'
+    version: '5.0.x'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
 
 - task: DotNetCoreCLI@2
   displayName: 'Restaurando Dependências'
