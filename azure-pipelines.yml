@@ -38,7 +38,10 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'Criando Pacote Nuget'
   inputs:
-    command: 'pack'
-    packagesToPack: '**/src/*Components*/*.csproj;!**/playground/;!**/*.Test.*/*.csproj'
-    nobuild: true
-    versioningScheme: 'off'
+    command: 'custom'
+    projects: |
+      **/src/*Components*/*.csproj
+      !**/*.Test.*/*.csproj
+      !**/playground/
+    custom: 'pack'
+    arguments: '--no-restore --no-build'
