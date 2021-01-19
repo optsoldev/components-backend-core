@@ -1,5 +1,4 @@
 using System.Linq;
-using System.Runtime.Versioning;
 using System;
 using System.Collections.Generic;
 using Flunt.Validations;
@@ -18,7 +17,7 @@ namespace Optsol.Playground.Domain.Entities
         { 
             get 
             { 
-                return ObterCartoesValidos();
+                return ExisteCartoesValidos();
             }
         }
 
@@ -67,7 +66,7 @@ namespace Optsol.Playground.Domain.Entities
             return this;
         }
 
-        private bool ObterCartoesValidos()
+        private bool ExisteCartoesValidos()
         {
             return Cartoes.Any(a => a.Valido);
         }

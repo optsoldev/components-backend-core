@@ -4,13 +4,18 @@ using Flunt.Validations;
 
 namespace Optsol.Components.Domain.Entities
 {
-    public class Entity<TKey> : Notifiable, IEntity<TKey>
+    public abstract class Entity : Notifiable, IEntity
+    {
+        public DateTime CreatedDate { get; protected set; }
+
+        public abstract void Validate();
+    }
+
+    public class Entity<TKey> : Entity, IEntity<TKey>
     {
         public TKey Id { get; protected set; }
 
-        public DateTime CreatedDate { get; protected set; }
-
-        public virtual void Validate()
+        public override void Validate()
         {
             AddNotifications(new Contract()
                 .Requires()

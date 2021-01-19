@@ -1,10 +1,11 @@
 <#
 .SYNOPSIS
+    Script to increment project versions for beta, minor releases and hotfixes.
     
-	Script para incrementar as versÃµes do projeto para beta, release e hotfixes.
+	Script para incrementar as versões do projeto para beta, release e hotfixes.
 
 .DESCRIPTION
-    O script irÃ¡ incrementar o patch ou a versÃ£o secundÃ¡ria para todos os projetos em uma pasta ./src. Infere de forma inteligente a prÃ³xima versÃ£o beta, lanÃ§amento ou hotfix. 
+    O script irá incrementar o patch ou a versão secundária para todos os projetos em uma pasta ./src. Infere de forma inteligente a próxima versão beta, lançamento ou hotfix. 
 
 .PARAMETER mode 
     Especificamos 'beta', 'release' or 'hotfix'
