@@ -55,8 +55,9 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)'
 
 - task: CopyFiles@2
-  displayName: 'Copiando Pacotes'
+  displayName: 'Copiando Pacotes para $(Build.ArtifactStagingDirectory)'
   inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
     Contents: '*.nupkg'
     TargetFolder: '$(build.artifactstagingdirectory)'
     CleanTargetFolder: true
@@ -65,5 +66,5 @@ steps:
   displayName: 'Publicando Artefato'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'NuGetPackage'
+    ArtifactName: 'drop'
     publishLocation: 'Container'
