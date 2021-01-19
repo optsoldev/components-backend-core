@@ -1,0 +1,70 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+  
+variables:
+  buildConfiguration: 'Release'
+  dotnetSdkVersion: '5.0.x'
+
+steps:
+- task: UseDotNet@2
+  displayName: 'Usando .NET SDK $(dotnetSdkVersion)'
+  inputs:
+    packageType: 'sdk'
+    version: '$(dotnetSdkVersion)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restaurando Dependências'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+    noCache: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'Rodando o Build'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '-c $(buildConfiguration) --no-restore'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Rodando Testes Automatizados'
+  inputs:
+    command: 'test'
+    projects: '**/Optsol.Components.Test.*/*.csproj'
+    arguments: '-c $(buildConfiguration) --no-restore --no-build --collect "Code coverage"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Criando Pacotes Nuget'
+  inputs:
+    command: 'custom'
+    projects: |
+      **/src/*Components*/*.csproj
+      !**/*.Test.*/*.csproj
+      !**/playground/
+    custom: 'pack'
+    arguments: '-c $(buildConfiguration) --no-restore --no-build -o packages'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: CopyFiles@2
+  displayName: 'Copiando Pacotes'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)/packages'
+    Contents: '*.nupkg'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+    CleanTargetFolder: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicando Artefato'
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
