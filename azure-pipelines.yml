@@ -14,9 +14,9 @@ variables:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'Restaurando Dependências'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
-    feedsToUse: 'config'
-    nugetConfigPath: './nuget.config'
+    feedsToUse: 'select'
     noCache: true
