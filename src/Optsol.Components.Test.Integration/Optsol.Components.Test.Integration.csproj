@@ -3,6 +3,12 @@
     <TargetFramework>net5.0</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+  <Target Name="CopyDepsJsonFiles" AfterTargets="Publish">
+    <ItemGroup>
+      <DepsJsonFiles Include="$(TargetDir)*.deps.json"/>
+    </ItemGroup>
+    <Copy SourceFiles="@(DepsJsonFiles)" DestinationFolder="$(PublishDir)" />
+  </Target>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="xunit" Version="2.4.1" />
