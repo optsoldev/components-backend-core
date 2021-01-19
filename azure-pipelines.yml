@@ -51,13 +51,13 @@ steps:
       !**/*.Test.*/*.csproj
       !**/playground/
     custom: 'pack'
-    arguments: '-c $(buildConfiguration) --no-restore --no-build'
+    arguments: '-c $(buildConfiguration) --no-restore --no-build -o packages'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
 
 - task: CopyFiles@2
-  displayName: 'Copiando Pacotes para $(Build.ArtifactStagingDirectory)'
+  displayName: 'Copiando Pacotes'
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/packages'
     Contents: '*.nupkg'
     TargetFolder: '$(build.artifactstagingdirectory)'
     CleanTargetFolder: true
