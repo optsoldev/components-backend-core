@@ -55,7 +55,8 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publicando Artefato'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
+    ArtifactName: 'NuGetPackage'
     publishLocation: 'Container'
