@@ -28,17 +28,22 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
+#- task: VSTest@2
+#  inputs:
+#    testSelector: 'testAssemblies'
+#    testAssemblyVer2: |
+#      **\*Optsol.Components.Test*.dll
+#      !**\*TestAdapter.dll
+#      !**\*TestHost.dll
+#      !**\obj\**
+#    searchFolder: '$(System.DefaultWorkingDirectory)'
+#    vsTestVersion: '16.0'
+#    codeCoverageEnabled: true
+#    otherConsoleOptions: '/framework:".NETCoreApp,Version=v5.0"'
+#    platform: '$(buildPlatform)'
+#    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
   inputs:
-    testSelector: 'testAssemblies'
-    testAssemblyVer2: |
-      **\*Optsol.Components.Test*.dll
-      !**\*TestAdapter.dll
-      !**\*TestHost.dll
-      !**\obj\**
-    searchFolder: '$(System.DefaultWorkingDirectory)'
-    vsTestVersion: '16.0'
-    codeCoverageEnabled: true
-    otherConsoleOptions: '/framework:".NETCoreApp,Version=v5.0"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    command: 'test'
+    projects: '**\*Optsol.Components.Test*.dll'
