@@ -39,5 +39,6 @@ steps:
     searchFolder: '$(System.DefaultWorkingDirectory)'
     vsTestVersion: '16.0'
     codeCoverageEnabled: true
+    otherConsoleOptions: '/framework:".NETCoreApp,Version=v5.0"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
