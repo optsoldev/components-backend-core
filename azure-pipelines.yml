@@ -22,7 +22,14 @@ steps:
     noCache: true
 
 - task: DotNetCoreCLI@2
+  displayName: 'Rodando o Build sem Restore'
   inputs:
     command: 'build'
     projects: '**/*.csproj'
     arguments: '-c $(buildConfiguration) --no-restore'
+  
+- task: DotNetCoreCLI@2
+  displayName: 'Rodando Testes Automatizados'
+  inputs:
+    command: 'test'
+    projects: '**/Optsol.Components.Test.*/*.csproj'
