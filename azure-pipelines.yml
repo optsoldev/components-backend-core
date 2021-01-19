@@ -33,4 +33,12 @@ steps:
   inputs:
     command: 'test'
     projects: '**/Optsol.Components.Test.*/*.csproj'
-    arguments: '-c $(buildConfiguration) --collect "Code coverage"'
+    arguments: '-c $(buildConfiguration) --no-restore --no-build --collect "Code coverage"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Criando Pacote Nuget'
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/src/*Components*/*.csproj;!**/playground/;!**/*.Test.*/*.csproj'
+    nobuild: true
+    versioningScheme: 'off'
