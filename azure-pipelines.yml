@@ -20,3 +20,9 @@ steps:
     projects: '**/*.csproj'
     feedsToUse: 'select'
     noCache: true
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '-c $(buildConfiguration) --no-restore'
