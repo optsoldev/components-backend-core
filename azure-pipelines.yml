@@ -33,3 +33,4 @@ steps:
   inputs:
     command: 'test'
     projects: '**/Optsol.Components.Test.*/*.csproj'
+    arguments: '-c $(buildConfiguration) --collect "Code coverage"'
