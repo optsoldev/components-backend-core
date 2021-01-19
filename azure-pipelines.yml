@@ -51,4 +51,5 @@ steps:
       !**/*.Test.*/*.csproj
       !**/playground/
     custom: 'pack'
-    arguments: '--no-restore --no-build'
+    arguments: '-c $(buildConfiguration) --no-restore --no-build'
+    workingDirectory: '$(System.DefaultWorkingDirectory)'
