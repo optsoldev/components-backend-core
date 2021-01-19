@@ -33,7 +33,8 @@ steps:
     testSelector: 'testAssemblies'
     testAssemblyVer2: |
       **\*Optsol.Components.Test*.dll
-      !**\Optsol.Components.Test*\obj\**
+      !**\*TestAdapter.dll
+      !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
     vsTestVersion: '16.0'
     platform: '$(buildPlatform)'
