@@ -53,3 +53,9 @@ steps:
     custom: 'pack'
     arguments: '-c $(buildConfiguration) --no-restore --no-build'
     workingDirectory: '$(System.DefaultWorkingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
