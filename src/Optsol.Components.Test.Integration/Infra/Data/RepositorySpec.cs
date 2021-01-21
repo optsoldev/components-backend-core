@@ -7,11 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
-using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Utils.Data;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Optsol.Components.Test.Integration.Infra.Data
@@ -216,6 +212,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
         }
 
         [Fact]
+        public async Task Deve_Obter_Registros_Paginados()
         {
             //Given
             var searchDto = new TestSearchDto();
@@ -459,7 +456,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
             };
         }
-    [Fact]
+        [Fact]
         public async Task Nao_Deve_Buscar_Registros_Excluidos_Logicamente()
         {
             //Given
