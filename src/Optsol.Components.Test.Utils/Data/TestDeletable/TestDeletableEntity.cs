@@ -1,27 +1,30 @@
-using System;
-using Flunt.Validations;
+﻿using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
+using System;
 
-namespace Optsol.Components.Test.Shared.Data
+namespace Optsol.Components.Test.Utils.Data
 {
-    public class TestEntity: AggregateRoot
+    public class TestDeletableEntity : AggregateRoot, IDeletable
     {
         public NomeValueObject Nome { get; private set; }
         public EmailValueObject Email { get; private set; }
         public bool Ativo { get; private set; }
 
-        public TestEntity()
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedDate { get; private set; }
+
+        public TestDeletableEntity()
         {
         }
 
 
-        public TestEntity(Guid id, NomeValueObject nome, EmailValueObject email)
+        public TestDeletableEntity(Guid id, NomeValueObject nome, EmailValueObject email)
             : this(nome, email)
         {
-            Id  = id;
+            Id = id;
         }
 
-        public TestEntity(NomeValueObject nome, EmailValueObject email)
+        public TestDeletableEntity(NomeValueObject nome, EmailValueObject email)
         {
             Nome = nome;
             Email = email;
@@ -45,13 +48,17 @@ namespace Optsol.Components.Test.Shared.Data
                 .IsNotNull(Nome, "Nome", "O Nome não pode ser nulo")
                 .IsNotNull(Email, "Email", "O Email não pode ser nulo"));
 
-            if(Invalid)
+            if (Invalid)
                 return;
 
             AddNotifications(Nome, Email);
-            
+
         }
 
-        
+        public void Delete()
+        {
+            IsDeleted = true;
+            DeletedDate = DateTime.Now;
+        }
     }
 }

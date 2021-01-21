@@ -1,12 +1,8 @@
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices.ComTypes;
 using System;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
 using Optsol.Components.Application.Service;
-using Optsol.Components.Domain;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Shared.Logger;
@@ -15,8 +11,8 @@ using Xunit;
 using Optsol.Components.Shared.Extensions;
 using System.Linq;
 using Optsol.Components.Application.Result;
-using Optsol.Components.Test.Shared.Data;
 using static Optsol.Components.Test.Utils.Utils;
+using Optsol.Components.Test.Utils.Data;
 
 namespace Optsol.Components.Test.Unit.Application
 {
@@ -35,7 +31,7 @@ namespace Optsol.Components.Test.Unit.Application
             var model = new TestViewModel();
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
-            
+
             var insertModel = new InsertTestViewModel();
             insertModel.Nome = "Weslley Carneiro";
             insertModel.Contato = "weslley.carneiro@optsol.com.br";
@@ -44,13 +40,13 @@ namespace Optsol.Components.Test.Unit.Application
             updateModel.Id = Guid.NewGuid();
             updateModel.Nome = "Weslley Carneiro";
             updateModel.Contato = "weslley.carneiro@optsol.com.br";
-          
+
             Mock<IMapper> mapperMock = new Mock<IMapper>();
             mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(model);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestViewModel>())).Returns(entity);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<InsertTestViewModel>())).Returns(entity);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<UpdateTestViewModel>())).Returns(entity);
-            
+
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(true);
 
@@ -63,7 +59,7 @@ namespace Optsol.Components.Test.Unit.Application
             readRepository.Setup(repository => repository.GetAllAsync()).Returns(GetAllAggregateRootAsyncEnumerable(entity, entity2));
 
             Mock<IWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
-            
+
             var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
             var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
                 mapperMock.Object,

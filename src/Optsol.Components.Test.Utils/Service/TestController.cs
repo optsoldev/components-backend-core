@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.Service;
 using Optsol.Components.Service;
 using Optsol.Components.Service.Response;
-using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Utils.Application;
+using Optsol.Components.Test.Utils.Data;
 
 namespace Optsol.Components.Test.Utils.Service
 {

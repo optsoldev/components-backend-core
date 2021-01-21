@@ -1,7 +1,7 @@
 using Flunt.Validations;
 using Optsol.Components.Domain.ValueObjects;
 
-namespace Optsol.Components.Test.Shared.Data
+namespace Optsol.Components.Test.Utils.Data
 {
     public class EmailValueObject : ValueObject
     {
