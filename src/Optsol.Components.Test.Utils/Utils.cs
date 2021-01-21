@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Test.Shared.Data;
+using Optsol.Components.Test.Utils.Data;
 
 namespace Optsol.Components.Test.Utils
 {

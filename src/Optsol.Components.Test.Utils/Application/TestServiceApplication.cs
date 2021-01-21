@@ -1,14 +1,11 @@
 using System;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Result;
 using Optsol.Components.Application.Service;
-using Optsol.Components.Domain;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Test.Shared.Data;
+using Optsol.Components.Test.Utils.Data;
 
 namespace Optsol.Components.Test.Utils.Application
 {

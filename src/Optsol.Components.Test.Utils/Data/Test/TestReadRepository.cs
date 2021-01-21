@@ -2,7 +2,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Data;
-using Optsol.Components.Test.Shared.Data;
 
 namespace Optsol.Components.Test.Utils.Data
 {

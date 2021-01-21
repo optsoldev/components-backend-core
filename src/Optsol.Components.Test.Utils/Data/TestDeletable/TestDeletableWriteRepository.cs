@@ -2,13 +2,12 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Data;
-using Optsol.Components.Test.Shared.Data;
 
 namespace Optsol.Components.Test.Utils.Data
 {
-    public class TestWriteRepository : Repository<TestEntity, Guid>, ITestWriteRepository
+    public class TestDeletableWriteRepository : Repository<TestDeletableEntity, Guid>, ITestDeletableWriteRepository
     {
-        public TestWriteRepository(DbContext context, ILogger<Repository<TestEntity, Guid>> logger) 
+        public TestDeletableWriteRepository(DbContext context, ILogger<Repository<TestDeletableEntity, Guid>> logger) 
             : base(context, logger)
         {
         }

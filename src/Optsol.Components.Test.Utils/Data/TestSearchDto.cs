@@ -3,7 +3,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Extensions;
-using Optsol.Components.Test.Shared.Data;
 
 namespace Optsol.Components.Test.Utils.Data
 {

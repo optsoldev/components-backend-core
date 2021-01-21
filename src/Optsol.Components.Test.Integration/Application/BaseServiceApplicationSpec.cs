@@ -1,11 +1,9 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
 using Xunit;

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Optsol.Components.Test.Shared.Data
+namespace Optsol.Components.Test.Utils.Data
 {
 
     public class TestContext : DbContext
@@ -15,7 +15,8 @@ namespace Optsol.Components.Test.Shared.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new TestConfiguration());
-            
+            modelBuilder.ApplyConfiguration(new TestDeletableConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
     }

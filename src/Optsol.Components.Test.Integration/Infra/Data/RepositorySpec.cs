@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
-using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Utils.Data;
 using Xunit;
 
@@ -456,6 +455,46 @@ namespace Optsol.Components.Test.Integration.Infra.Data
                 new TestEntity (new NomeValueObject("Ignatius", "Decker"), new EmailValueObject("Donec.porttitor.tellus@risusDonec.ca"))
 
             };
+        }
+        [Fact]
+        public async Task Nao_Deve_Buscar_Registros_Excluidos_Logicamente()
+        {
+            //Given
+            var services = new ServiceCollection();
+            var entity = new TestDeletableEntity(
+                new NomeValueObject("Weslley", "Carneiro")
+                , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+            entity.Delete();
+
+            var entity1 = new TestDeletableEntity(
+                new NomeValueObject("Weslley", "Carneiro")
+                , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+
+            var entity2 = new TestDeletableEntity(
+                new NomeValueObject("Weslley", "Carneiro")
+                , new EmailValueObject("weslley.carneiro@optsol.com.br"));
+
+            services.AddLogging();
+            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
+
+            var provider = services.BuildServiceProvider();
+            IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            ITestDeletableReadRepository readRepository = provider.GetRequiredService<ITestDeletableReadRepository>();
+            ITestDeletableWriteRepository writeRepository = provider.GetRequiredService<ITestDeletableWriteRepository>();
+            await writeRepository.InsertAsync(entity);
+            await writeRepository.InsertAsync(entity1);
+            await writeRepository.InsertAsync(entity2);
+            await unitOfWork.CommitAsync();
+
+            await writeRepository.DeleteAsync(entity.Id);
+            await unitOfWork.CommitAsync();
+
+            //When
+            var entityResult = await readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
+
+            //Then
+            entityResult.Should().HaveCount(2);
         }
     }
 }

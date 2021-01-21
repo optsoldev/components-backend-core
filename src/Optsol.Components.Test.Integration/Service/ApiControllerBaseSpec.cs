@@ -1,12 +1,10 @@
 using System.Net;
-using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Service;
-using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
 using Xunit;
