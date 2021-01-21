@@ -9,6 +9,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddTransient<IResponseFactory, ResponseFactory>();
             return services;
-        } 
+        }
     }
 }

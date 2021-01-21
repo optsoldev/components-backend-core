@@ -1,7 +1,6 @@
-using System;
 using AutoMapper;
-using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Utils.Application;
+using Optsol.Components.Test.Utils.Data;
 
 namespace Optsol.Components.Test.Utils.Mapper
 {

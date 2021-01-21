@@ -13,15 +13,26 @@ namespace Optsol.Components.Infra.Data
             builder.Ignore(entity => entity.Notifications);
             builder.Ignore(entity => entity.Invalid);
             builder.Ignore(entity => entity.Valid);
-            
+
             builder.HasKey(entity => entity.Id);
             builder.Property(entity => entity.Id).ValueGeneratedNever();
-            
+
             builder
                 .Property(entity => entity.CreatedDate)
                 .HasColumnName(nameof(Entity<TKey>.CreatedDate))
                 .HasColumnType("datetime")
                 .IsRequired();
+        }
+    }
+
+    public class EntityConfigurationDeletableBase<TEntity, TKey> : EntityConfigurationBase<TEntity, TKey>, IEntityTypeConfiguration<TEntity>
+        where TEntity : Entity<TKey>, IDeletable
+    {
+        public override void Configure(EntityTypeBuilder<TEntity> builder)
+        {
+            base.Configure(builder);
+
+            builder.HasQueryFilter(entity => !entity.IsDeleted);
         }
     }
 }

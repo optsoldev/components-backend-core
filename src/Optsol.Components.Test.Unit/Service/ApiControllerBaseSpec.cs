@@ -6,9 +6,9 @@ using Moq;
 using Optsol.Components.Service;
 using Optsol.Components.Service.Response;
 using Optsol.Components.Shared.Extensions;
-using Optsol.Components.Test.Shared.Data;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
+using Optsol.Components.Test.Utils.Data;
 using Optsol.Components.Test.Utils.Service;
 using Xunit;
 
