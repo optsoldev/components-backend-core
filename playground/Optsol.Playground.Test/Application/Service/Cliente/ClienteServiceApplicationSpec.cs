@@ -50,8 +50,9 @@ namespace Optsol.Playground.Test
             var clienteServiceApplication = _serviceProvider.GetRequiredService<IClienteServiceApplication>();
 
             var insertClienteViewModel = new InsertClienteViewModel();
-            insertClienteViewModel.Nome = new NomeObjectViewModel { Nome = "Weslley", SobreNome = "Bruno" };
-            insertClienteViewModel.Email = new EmailObjetcViewModel { Email = "weslley@outlook.com" };
+            insertClienteViewModel.Nome = "Weslley";
+            insertClienteViewModel.SobreNome = "Bruno";
+            insertClienteViewModel.Email = "weslley@outlook.com";
 
             //When
             await clienteServiceApplication.InsertAsync(insertClienteViewModel);
@@ -62,9 +63,9 @@ namespace Optsol.Playground.Test
 
             clientes.Should().HaveCount(1);
             var cliente = clientes.FirstOrDefault();
-            cliente.Nome.Nome.Should().Be(insertClienteViewModel.Nome.Nome);
-            cliente.Nome.SobreNome.Should().Be(insertClienteViewModel.Nome.SobreNome);
-            cliente.Email.Email.Should().Be(insertClienteViewModel.Email.Email);
+            cliente.Nome.Nome.Should().Be(insertClienteViewModel.Nome);
+            cliente.Nome.SobreNome.Should().Be(insertClienteViewModel.SobreNome);
+            cliente.Email.Email.Should().Be(insertClienteViewModel.Email);
             cliente.PossuiCartao.Should().BeFalse();
             cliente.Ativo.Should().BeFalse();
             cliente.Valid.Should().BeTrue();
