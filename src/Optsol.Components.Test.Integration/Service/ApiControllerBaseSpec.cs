@@ -73,14 +73,14 @@ namespace Optsol.Components.Test.Integration.Service
             resultObj.Success.Should().BeTrue();
             resultObj.Failure.Should().BeFalse();
             resultObj.Messages.Should().BeEmpty();
-            resultObj.DataList.Should().NotBeNull();
-            resultObj.DataList.All(a => a.Valid).Should().BeTrue();
-            resultObj.DataList.All(a => a.Invalid).Should().BeFalse();
-            resultObj.DataList.SelectMany(s => s.Notifications).Should().BeEmpty();
-            resultObj.DataList.Should().HaveCount(3);
-            resultObj.DataList.Any(a => a.Id == entity.Id).Should().BeTrue();
-            resultObj.DataList.Any(a => a.Contato == entity2.Email.ToString()).Should().BeTrue();
-            resultObj.DataList.Any(a => a.Nome == entity3.Nome.ToString()).Should().BeTrue();
+            resultObj.Data.Should().NotBeNull();
+            resultObj.Data.All(a => a.Valid).Should().BeTrue();
+            resultObj.Data.All(a => a.Invalid).Should().BeFalse();
+            resultObj.Data.SelectMany(s => s.Notifications).Should().BeEmpty();
+            resultObj.Data.Should().HaveCount(3);
+            resultObj.Data.Any(a => a.Id == entity.Id).Should().BeTrue();
+            resultObj.Data.Any(a => a.Contato == entity2.Email.ToString()).Should().BeTrue();
+            resultObj.Data.Any(a => a.Nome == entity3.Nome.ToString()).Should().BeTrue();
         }
 
         [Fact]
