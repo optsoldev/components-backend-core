@@ -37,6 +37,8 @@ namespace Optsol.Playground.Api
             services.AddAServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
 
+            services.AddSwagger(Configuration);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +49,8 @@ namespace Optsol.Playground.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseSwagger(Configuration);
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -55,12 +59,13 @@ namespace Optsol.Playground.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context => 
+                endpoints.MapGet("/index.html", async context =>
                 {
                     await context.Response.WriteAsync("Playground API Started.");
                 });
                 endpoints.MapControllers();
             });
+
         }
     }
 }

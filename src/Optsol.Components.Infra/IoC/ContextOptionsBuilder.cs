@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
-        public Action<DbContextOptionsBuilder> BuilderInMemory()
+        private Action<DbContextOptionsBuilder> BuilderInMemory()
         {
             return options => options
                 .UseInMemoryDatabase($"ComponentsOptsolInMemoryDatabase{Guid.NewGuid()}")
@@ -61,7 +61,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .EnableSensitiveDataLogging(EnableLogging);
         }
 
-        public Action<DbContextOptionsBuilder> BuilderConnectionString()
+        private  Action<DbContextOptionsBuilder> BuilderConnectionString()
         {
             Action<SqlServerDbContextOptionsBuilder> sqlOptions = null;
             if (!string.IsNullOrEmpty(this.MigrationsAssemblyName))
@@ -70,6 +70,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return options => options
                 .UseSqlServer(ConnectionString, sqlOptions)
                 .EnableSensitiveDataLogging(EnableLogging);
+
         }
     }
 }
