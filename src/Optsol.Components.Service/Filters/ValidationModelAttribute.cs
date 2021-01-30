@@ -1,0 +1,75 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.Result;
+using Optsol.Components.Service.Response;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Optsol.Components.Service.Filters
+{
+    public class ValidationModelAttribute : ActionFilterAttribute
+    {
+
+        protected readonly IResponseFactory _responseFactory;
+
+        public ValidationModelAttribute(IResponseFactory responseFactory)
+        {
+            _responseFactory = responseFactory;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+
+            var existsArgumets = context.ActionArguments.Any();
+            if (existsArgumets)
+            {
+
+                var listOfBaseDataTransferObject = ResolverBaseDataTransferObject(context.ActionArguments);
+                
+                var responseFromBaseDataTransferObject = GetResponseFromBaseDataTransferObject(listOfBaseDataTransferObject);
+                
+                var responseIsInvalid = responseFromBaseDataTransferObject.Failure;
+                if (responseIsInvalid)
+                {
+                    context.Result = new BadRequestObjectResult(responseFromBaseDataTransferObject);
+                }
+
+            }
+            base.OnActionExecuting(context);
+        }
+
+        private Response.Response GetResponseFromBaseDataTransferObject(List<BaseDataTransferObject> listOfBaseDataTransferObject)
+        {
+            var serviceResult = new ServiceResult();
+            foreach (var baseDataTransferObject in listOfBaseDataTransferObject)
+            {
+                baseDataTransferObject.Validate();
+                serviceResult.AddNotifications(baseDataTransferObject);
+            }
+
+            return _responseFactory.Create(serviceResult);
+        }
+
+        readonly Func<IDictionary<string, object>, List<BaseDataTransferObject>> ResolverBaseDataTransferObject
+            = (actionArguments) =>
+            {
+                List<BaseDataTransferObject> listOfBaseDataTransferObject = new List<BaseDataTransferObject>();
+
+                var argumentsBaseDataTransfers = actionArguments.Where(args => args.Value.GetType().BaseType.Equals(typeof(BaseDataTransferObject)));
+                foreach (var argumentDataTransfer in argumentsBaseDataTransfers)
+                {
+                    var baseDataTransferObject = argumentDataTransfer.Value as BaseDataTransferObject;
+                    listOfBaseDataTransferObject.Add(baseDataTransferObject);
+                }
+
+                return listOfBaseDataTransferObject;
+            };
+
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            base.OnActionExecuted(context);
+        }
+    }
+}

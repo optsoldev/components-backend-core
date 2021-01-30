@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Service;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Service.Filters;
 using Optsol.Components.Service.Response;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
@@ -13,6 +14,7 @@ namespace Optsol.Components.Service
 {
     [ApiController]
     [Route("api/[controller]")]
+    [TypeFilter(typeof(ValidationModelAttribute))]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         : ControllerBase, IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         where TEntity : AggregateRoot
