@@ -1,16 +1,16 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.Results;
 using Optsol.Components.Application.Services;
+using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
 using Optsol.Playground.Domain.Repositories.Cliente;
+using System;
+using System.Threading.Tasks;
+
 namespace Optsol.Playground.Application.Services.Cliente
 {
     public class ClienteServiceApplication : BaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>,
@@ -25,8 +25,9 @@ namespace Optsol.Playground.Application.Services.Cliente
             IServiceResultFactory serviceResultFactory,
             IUnitOfWork unitOfWork,
             IClienteWriteRepository clienteWriteRepository,
-            IClienteReadRepository clienteReadRepository)
-            : base(mapper, logger, serviceResultFactory, unitOfWork, clienteReadRepository, clienteWriteRepository)
+            IClienteReadRepository clienteReadRepository,
+            NotificationContext notificationContext)
+            : base(mapper, logger, serviceResultFactory, unitOfWork, clienteReadRepository, clienteWriteRepository, notificationContext)
         {
             _clienteReadRepository = clienteReadRepository;
             _clienteWriteRepository = clienteWriteRepository;

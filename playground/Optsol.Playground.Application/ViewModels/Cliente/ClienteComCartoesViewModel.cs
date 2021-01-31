@@ -7,6 +7,7 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
 {
     public class ClienteComCartoesViewModel : BaseDataTransferObject
     {
+        
         public string Id { get; set; }
         public string Nome { get; set; }
         public string Sobrenome { get; set; }

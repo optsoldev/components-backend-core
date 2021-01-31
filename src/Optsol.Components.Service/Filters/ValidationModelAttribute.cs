@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Application.Results;
+using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Service.Responses;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,12 @@ namespace Optsol.Components.Service.Filters
     {
 
         protected readonly IResponseFactory _responseFactory;
+        protected readonly NotificationContext _notificationContext;
 
-        public ValidationModelAttribute(IResponseFactory responseFactory)
+        public ValidationModelAttribute(IResponseFactory responseFactory, NotificationContext notificationContext)
         {
             _responseFactory = responseFactory;
+            _notificationContext = notificationContext;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -27,9 +30,9 @@ namespace Optsol.Components.Service.Filters
             {
 
                 var listOfBaseDataTransferObject = ResolverBaseDataTransferObject(context.ActionArguments);
-                
+
                 var responseFromBaseDataTransferObject = GetResponseFromBaseDataTransferObject(listOfBaseDataTransferObject);
-                
+
                 var responseIsInvalid = responseFromBaseDataTransferObject.Failure;
                 if (responseIsInvalid)
                 {
@@ -51,7 +54,7 @@ namespace Optsol.Components.Service.Filters
             foreach (var baseDataTransferObject in listOfBaseDataTransferObject)
             {
                 baseDataTransferObject.Validate();
-                serviceResult.AddNotifications(baseDataTransferObject);
+                _notificationContext.AddNotifications(baseDataTransferObject.Notifications);
             }
 
             return _responseFactory.Create(serviceResult);

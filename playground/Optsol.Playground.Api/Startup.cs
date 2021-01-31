@@ -10,6 +10,9 @@ using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
 using Microsoft.AspNetCore.Http;
+using System.Text.Json.Serialization;
+using System;
+using System.Text.Json;
 
 namespace Optsol.Playground.Api
 {

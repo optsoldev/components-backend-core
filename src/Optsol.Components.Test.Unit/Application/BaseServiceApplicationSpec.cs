@@ -1,18 +1,19 @@
-using System;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
+using Optsol.Components.Application.Results;
 using Optsol.Components.Application.Services;
+using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
+using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
-using Xunit;
-using Optsol.Components.Shared.Extensions;
-using System.Linq;
-using Optsol.Components.Application.Results;
-using static Optsol.Components.Test.Utils.Utils;
 using Optsol.Components.Test.Utils.Data;
+using System;
+using System.Linq;
+using Xunit;
+using static Optsol.Components.Test.Utils.Utils;
 
 namespace Optsol.Components.Test.Unit.Application
 {
@@ -60,6 +61,8 @@ namespace Optsol.Components.Test.Unit.Application
 
             Mock<IWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
 
+            Mock<NotificationContext> notificationContextMock = new Mock<NotificationContext>();
+
             var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
             var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
                 mapperMock.Object,
@@ -67,7 +70,8 @@ namespace Optsol.Components.Test.Unit.Application
                 serviceResultFactoryMock.Object,
                 unitOfWork.Object,
                 readRepository.Object,
-                writeRepository.Object);
+                writeRepository.Object,
+                notificationContextMock.Object);
 
             //When
             service.GetByIdAsync(entity.Id).ConfigureAwait(false);

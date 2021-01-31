@@ -204,7 +204,7 @@ namespace Optsol.Components.Test.Integration.Service
 
             await serviceApplication.InsertAsync(model);
 
-            var data = (await serviceApplication.GetAllAsync()).DataList.Single();
+            var data = (await serviceApplication.GetAllAsync()).Data.Single();
             var updateModel = new UpdateTestViewModel();
             updateModel.Id = data.Id;
             updateModel.Nome = $"Weslley Alterado";
@@ -257,7 +257,7 @@ namespace Optsol.Components.Test.Integration.Service
 
             await serviceApplication.InsertAsync(model);
             
-            var entity = (await serviceApplication.GetAllAsync()).DataList.FirstOrDefault();
+            var entity = (await serviceApplication.GetAllAsync()).Data.FirstOrDefault();
 
             //When
             var actionResult = await controllerBase.DeleteAsync(entity.Id);
@@ -272,7 +272,7 @@ namespace Optsol.Components.Test.Integration.Service
             resultObj.Failure.Should().BeFalse();
             resultObj.Messages.Should().BeEmpty();
 
-            (await serviceApplication.GetAllAsync()).DataList.Should().BeEmpty();
+            (await serviceApplication.GetAllAsync()).Data.Should().BeEmpty();
 
         }
     }

@@ -16,7 +16,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception = new UnitOfWorkNullException();
 
             //Then
-            var msg = "O parametro unitOfWork não foi resolvido pela IoC";
+            var msg = "O parametro unitOfWork não foi resolvido pela DI";
             exception.Message.Should().Be(msg);
         }
     }

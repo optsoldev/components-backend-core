@@ -1,15 +1,16 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application.Results;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.UoW;
+using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Optsol.Components.Shared.Exceptions;
-using Optsol.Components.Infra.UoW;
-using Optsol.Components.Application.Results;
-using Optsol.Components.Application.DataTransferObjects;
 
 namespace Optsol.Components.Application.Services
 {
@@ -27,6 +28,7 @@ namespace Optsol.Components.Application.Services
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
         protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
         protected readonly IServiceResultFactory _serviceResultFactory;
+        protected readonly NotificationContext _notificationContext;
 
         public BaseServiceApplication(
             IMapper mapper,
@@ -34,15 +36,22 @@ namespace Optsol.Components.Application.Services
             IServiceResultFactory serviceResultFactory,
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, Guid> readRepository,
-            IWriteRepository<TEntity, Guid> writeRepository)
+            IWriteRepository<TEntity, Guid> writeRepository,
+            NotificationContext notificationContext)
         {
             _logger = logger;
             _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, Guid>");
 
             _serviceResultFactory = serviceResultFactory ?? throw new ServiceResultNullException();
+            
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
+            
             _mapper = mapper ?? throw new AutoMapperNullException();
+
+            _notificationContext = notificationContext ?? throw new NotificationContextException();
+
             _readRepository = readRepository;
+
             _writeRepository = writeRepository;
         }
 
@@ -71,8 +80,10 @@ namespace Optsol.Components.Application.Services
             data.Validate();
             if (data.Invalid)
             {
-                serviceResult.AddNotifications(data);
-                LogNotifications(nameof(InsertAsync), serviceResult);
+                _notificationContext.AddNotifications(data.Notifications);
+
+                LogNotifications(nameof(InsertAsync));
+
                 return serviceResult;
             }
 
@@ -83,8 +94,10 @@ namespace Optsol.Components.Application.Services
             _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TInsertData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
             entity.Validate();
-            serviceResult.AddNotifications((entity as Entity<Guid>));
-            LogNotifications(nameof(InsertAsync), serviceResult);
+
+            _notificationContext.AddNotifications((entity as Entity<Guid>).Notifications);
+
+            LogNotifications(nameof(InsertAsync));
 
             await _writeRepository.InsertAsync(entity);
 
@@ -100,21 +113,26 @@ namespace Optsol.Components.Application.Services
             data.Validate();
             if (data.Invalid)
             {
-                serviceResult.AddNotifications(data);
-                LogNotifications(nameof(UpdateAsync), serviceResult);
+                _notificationContext.AddNotifications(data.Notifications);
+
+                LogNotifications(nameof(UpdateAsync));
+
                 return serviceResult;
             }
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
 
             var entity = _mapper.Map<TEntity>(data);
+
             var edit = await _readRepository.GetByIdAsync(entity.Id);
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TUpdateData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
             entity.Validate();
-            serviceResult.AddNotifications((entity as Entity<Guid>));
-            LogNotifications(nameof(entity), serviceResult);
+
+            _notificationContext.AddNotifications((entity as Entity<Guid>).Notifications);
+
+            LogNotifications(nameof(entity));
 
             await _writeRepository.UpdateAsync(entity);
 
@@ -138,10 +156,10 @@ namespace Optsol.Components.Application.Services
 
         public virtual async Task<Boolean> CommitAsync(ServiceResult serviceResult)
         {
-            if (serviceResult.Invalid) return false;
+            if (_notificationContext.HasNotifications) return false;
             if ((await _unitOfWork.CommitAsync())) return true;
 
-            serviceResult.AddNotification("Commit", "Houve um problema ao salvar os dados!");
+            _notificationContext.AddNotification("Commit", "Houve um problema ao salvar os dados!");
             return false;
         }
 
@@ -152,10 +170,10 @@ namespace Optsol.Components.Application.Services
             _unitOfWork.Dispose();
         }
 
-        private void LogNotifications(string method, ServiceResult serviceResult)
+        private void LogNotifications(string method)
         {
-            if (serviceResult.Invalid)
-                _logger?.LogInformation($"Método: { method } Valid: { serviceResult.Valid } Notifications: { serviceResult.Notifications.ToJson() }");
+            if (_notificationContext.HasNotifications)
+                _logger?.LogInformation($"Método: { method } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
         }
     }
 }
