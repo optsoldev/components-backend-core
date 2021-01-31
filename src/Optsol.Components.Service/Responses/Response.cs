@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.DataTransferObjects;
 
 namespace Optsol.Components.Service.Responses
 {

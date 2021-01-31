@@ -1,8 +1,8 @@
 using System;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Application.Result;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Results;
+using Optsol.Components.Application.Services;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Data;

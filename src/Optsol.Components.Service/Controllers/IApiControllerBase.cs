@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Service.Controllers

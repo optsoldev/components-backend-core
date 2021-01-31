@@ -1,6 +1,6 @@
 using Flunt.Notifications;
 
-namespace Optsol.Components.Application.DataTransferObject
+namespace Optsol.Components.Application.DataTransferObjects
 {
     public abstract class BaseDataTransferObject : Notifiable
     {

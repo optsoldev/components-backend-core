@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Optsol.Components.Application.Result;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Results;
+using Optsol.Components.Application.Services;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;

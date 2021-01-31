@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Flunt.Validations;
-using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente

@@ -1,4 +1,4 @@
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Services;
 using Optsol.Components.Test.Utils.Data;
 
 namespace Optsol.Components.Test.Utils.Application

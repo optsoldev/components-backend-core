@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Services;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;

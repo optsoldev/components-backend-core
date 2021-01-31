@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using Optsol.Components.Application.DataTransferObject;
-using Optsol.Components.Application.Result;
+using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application.Results;
 using Optsol.Components.Domain.Entities;
 
-namespace Optsol.Components.Application.Service
+namespace Optsol.Components.Application.Services
 {
     public interface IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> : IDisposable
         where TEntity: AggregateRoot

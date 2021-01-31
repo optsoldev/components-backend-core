@@ -2,7 +2,7 @@ using System;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Services;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Shared.Logger;
@@ -10,7 +10,7 @@ using Optsol.Components.Test.Utils.Application;
 using Xunit;
 using Optsol.Components.Shared.Extensions;
 using System.Linq;
-using Optsol.Components.Application.Result;
+using Optsol.Components.Application.Results;
 using static Optsol.Components.Test.Utils.Utils;
 using Optsol.Components.Test.Utils.Data;
 

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Application.Result;
-using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.Results;
+using Optsol.Components.Application.DataTransferObjects;
 
-namespace Optsol.Components.Application.Service
+namespace Optsol.Components.Application.Services
 {
     public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         : IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable

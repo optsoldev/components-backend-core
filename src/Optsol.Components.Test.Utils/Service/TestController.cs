@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Services;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Test.Utils.Application;

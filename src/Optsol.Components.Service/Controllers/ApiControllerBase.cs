@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Application.DataTransferObject;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Service.Filters;
 using Optsol.Components.Service.Responses;

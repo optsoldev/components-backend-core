@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Flunt.Notifications;
-using Optsol.Components.Application.DataTransferObject;
-using Optsol.Components.Application.Result;
+using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application.Results;
 
 namespace Optsol.Components.Service.Responses
 {

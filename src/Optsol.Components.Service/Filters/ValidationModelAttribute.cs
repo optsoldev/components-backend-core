@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Optsol.Components.Application.DataTransferObject;
-using Optsol.Components.Application.Result;
+using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application.Results;
 using Optsol.Components.Service.Responses;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,5 @@
-using Optsol.Components.Application.DataTransferObject;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Services

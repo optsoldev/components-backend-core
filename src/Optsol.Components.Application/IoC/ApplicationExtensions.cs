@@ -1,5 +1,5 @@
-using Optsol.Components.Application.Result;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Results;
+using Optsol.Components.Application.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

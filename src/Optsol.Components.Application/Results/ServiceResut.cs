@@ -1,8 +1,8 @@
 using Flunt.Notifications;
-using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.DataTransferObjects;
 using System.Collections.Generic;
 
-namespace Optsol.Components.Application.Result
+namespace Optsol.Components.Application.Results
 {
     public class ServiceResult : Notifiable { }
 
