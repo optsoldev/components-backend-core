@@ -61,6 +61,69 @@ namespace Optsol.Components.Infra.Data
             return CreateSearchResult(query, requestSearch.Page, requestSearch.PageSize);
         }
 
+        public virtual Task InsertAsync(TEntity entity)
+        {
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ entity:{ entity.ToJson() } }})");
+
+            return Set.AddAsync(entity).AsTask();
+        }
+
+        public virtual Task UpdateAsync(TEntity entity)
+        {
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
+
+            var localEntity = Context.Set<TEntity>().Local?.Where(w => w.Id.Equals(entity.Id)).FirstOrDefault();
+            var inLocal = localEntity != null;
+            if (inLocal)
+            {
+                Context.Entry(localEntity).State = EntityState.Detached;
+            }
+
+            Set.Update(entity);
+
+            return Task.CompletedTask;
+        }
+
+        public virtual async Task DeleteAsync(TKey id)
+        {
+            var entity = await Set.FindAsync(id);
+
+            var entityNotFound = entity == null;
+            if (entityNotFound)
+            {
+                _logger?.LogError($"Método: { nameof(DeleteAsync) }({{ TKey:{ id.ToJson() } }}) Registro não encontrado");
+                return;
+            }
+
+
+            await DeleteAsync(entity);
+        }
+
+        public virtual async Task DeleteAsync(TEntity entity)
+        {
+            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ entity:{ entity.ToJson() } }})");
+
+            var entityFound = entity != null;
+            var entityIsDeletable = entity is IDeletable;
+
+            if (entityFound && entityIsDeletable)
+            {
+                ((IDeletable)entity).Delete();
+                await UpdateAsync(entity);
+            }
+            else
+            {
+                Set.Attach(entity).State = EntityState.Deleted;
+            }
+        }
+
+        public virtual Task<int> SaveChanges()
+        {
+            _logger?.LogInformation($"Método: { nameof(SaveChanges) }()");
+
+            return Context.SaveChangesAsync();
+        }
+
         private async Task<SearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
             var searchResult = new SearchResult<TEntity>(page, pageSize);
@@ -77,7 +140,7 @@ namespace Optsol.Components.Infra.Data
 
         private IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
-            var skip = page <= 0 ? 1 : --page * (pageSize ?? 0);
+            var skip = --page * (pageSize ?? 0);
 
             query = query.Skip(skip.ToInt());
 
@@ -110,6 +173,7 @@ namespace Optsol.Components.Infra.Data
 
             return query;
         }
+
         private IQueryable<TEntity> ApplyOrderBy(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             var orderByIsNotNull = orderBy != null;
@@ -119,65 +183,6 @@ namespace Optsol.Components.Infra.Data
             }
 
             return query;
-        }
-
-        public virtual Task InsertAsync(TEntity entity)
-        {
-            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ entity:{ entity.ToJson() } }})");
-
-            return Set.AddAsync(entity).AsTask();
-        }
-
-        public virtual Task UpdateAsync(TEntity entity)
-        {
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
-
-            var localEntity = Context.Set<TEntity>().Local?.Where(w => w.Id.Equals(entity.Id)).FirstOrDefault();
-            var inLocal = localEntity != null;
-            if (inLocal)
-            {
-                Context.Entry(localEntity).State = EntityState.Detached;
-            }
-
-            Set.Update(entity);
-
-            return Task.CompletedTask;
-        }
-
-        public virtual async Task DeleteAsync(TKey id)
-        {
-            var entity = await Set.FindAsync(id);
-
-            if (entity == null)
-            {
-                _logger?.LogError($"Método: { nameof(DeleteAsync) }({{ TKey:{ id.ToJson() } }}) Registro não encontrado");
-                return;
-            }
-
-
-            await DeleteAsync(entity);
-        }
-
-        public virtual async Task DeleteAsync(TEntity entity)
-        {
-            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ entity:{ entity.ToJson() } }})");
-
-            if (entity != null && entity is IDeletable)
-            {
-                ((IDeletable)entity).Delete();
-                await UpdateAsync(entity);
-            }
-            else
-            {
-                Set.Attach(entity).State = EntityState.Deleted;
-            }
-        }
-
-        public virtual Task<int> SaveChanges()
-        {
-            _logger?.LogInformation($"Método: { nameof(SaveChanges) }()");
-
-            return Context.SaveChangesAsync();
         }
 
         public void Dispose()
