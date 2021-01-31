@@ -5,7 +5,7 @@ using Flunt.Notifications;
 using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Result;
 
-namespace Optsol.Components.Service.Response
+namespace Optsol.Components.Service.Responses
 {
     public class ResponseFactory : IResponseFactory
     {

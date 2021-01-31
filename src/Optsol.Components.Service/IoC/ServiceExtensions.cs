@@ -1,6 +1,5 @@
-using Optsol.Components.Service;
 using Optsol.Components.Service.Filters;
-using Optsol.Components.Service.Response;
+using Optsol.Components.Service.Responses;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

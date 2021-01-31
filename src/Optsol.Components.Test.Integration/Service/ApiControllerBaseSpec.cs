@@ -1,20 +1,21 @@
-using System.Net;
-using System.Threading.Tasks;
 using AutoMapper;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Service;
+using Newtonsoft.Json;
+using Optsol.Components.Application.Service;
+using Optsol.Components.Infra.UoW;
+using Optsol.Components.Service.Controllers;
+using Optsol.Components.Service.Responses;
+using Optsol.Components.Services;
+using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
-using Xunit;
-using FluentAssertions;
-using Optsol.Components.Shared.Extensions;
-using Newtonsoft.Json;
 using System.Linq;
-using Optsol.Components.Infra.UoW;
-using Optsol.Components.Service.Response;
-using Optsol.Components.Application.Service;
+using System.Net;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace Optsol.Components.Test.Integration.Service
 {

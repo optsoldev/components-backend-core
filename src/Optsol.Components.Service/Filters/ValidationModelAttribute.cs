@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Result;
-using Optsol.Components.Service.Response;
+using Optsol.Components.Service.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +40,12 @@ namespace Optsol.Components.Service.Filters
             base.OnActionExecuting(context);
         }
 
-        private Response.Response GetResponseFromBaseDataTransferObject(List<BaseDataTransferObject> listOfBaseDataTransferObject)
+        public override void OnActionExecuted(ActionExecutedContext context)
+        {
+            base.OnActionExecuted(context);
+        }
+
+        private Response GetResponseFromBaseDataTransferObject(List<BaseDataTransferObject> listOfBaseDataTransferObject)
         {
             var serviceResult = new ServiceResult();
             foreach (var baseDataTransferObject in listOfBaseDataTransferObject)
@@ -52,7 +57,7 @@ namespace Optsol.Components.Service.Filters
             return _responseFactory.Create(serviceResult);
         }
 
-        readonly Func<IDictionary<string, object>, List<BaseDataTransferObject>> ResolverBaseDataTransferObject
+        private readonly Func<IDictionary<string, object>, List<BaseDataTransferObject>> ResolverBaseDataTransferObject
             = (actionArguments) =>
             {
                 List<BaseDataTransferObject> listOfBaseDataTransferObject = new List<BaseDataTransferObject>();
@@ -67,9 +72,5 @@ namespace Optsol.Components.Service.Filters
                 return listOfBaseDataTransferObject;
             };
 
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            base.OnActionExecuted(context);
-        }
     }
 }

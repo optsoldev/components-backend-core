@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Optsol.Components.Application.DataTransferObject;
 
-namespace Optsol.Components.Service.Response
+namespace Optsol.Components.Service.Responses
 {
     public class Response
     {

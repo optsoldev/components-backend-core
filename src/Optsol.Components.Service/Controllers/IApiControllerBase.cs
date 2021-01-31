@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Domain.Entities;
 
-namespace Optsol.Components.Service
+namespace Optsol.Components.Service.Controllers
 {
     public interface IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         where TEntity: AggregateRoot

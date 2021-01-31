@@ -1,15 +1,15 @@
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
-using Optsol.Components.Service;
-using Optsol.Components.Service.Response;
+using Optsol.Components.Service.Controllers;
+using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
 using Optsol.Components.Test.Utils.Service;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Service

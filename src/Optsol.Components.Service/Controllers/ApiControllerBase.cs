@@ -1,16 +1,16 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObject;
 using Optsol.Components.Application.Service;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Service.Filters;
-using Optsol.Components.Service.Response;
+using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
+using System;
+using System.Threading.Tasks;
 
-namespace Optsol.Components.Service
+namespace Optsol.Components.Service.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
