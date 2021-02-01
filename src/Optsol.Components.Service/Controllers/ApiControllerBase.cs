@@ -70,7 +70,7 @@ namespace Optsol.Components.Service.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetByIdAsync(Guid id)
+        public virtual async Task<IActionResult> GetByIdAsync(Guid id)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }})");
 
@@ -81,7 +81,7 @@ namespace Optsol.Components.Service.Controllers
 
         [HttpGet]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetAllAsync()
+        public virtual async Task<IActionResult> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IActionResult");
 
@@ -93,7 +93,7 @@ namespace Optsol.Components.Service.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> InsertAsync([FromBody] TInsertData data)
+        public virtual async Task<IActionResult> InsertAsync([FromBody] TInsertData data)
         {
             if (data == null)
                 return NoContent();
@@ -108,7 +108,7 @@ namespace Optsol.Components.Service.Controllers
         [HttpPut]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> UpdateAsync([FromBody] TUpdateData data)
+        public virtual async Task<IActionResult> UpdateAsync([FromBody] TUpdateData data)
         {
             if (data == null)
                 return NoContent();
@@ -123,7 +123,7 @@ namespace Optsol.Components.Service.Controllers
 
         [HttpDelete("{id}")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public virtual async Task<IActionResult> DeleteAsync(Guid id)
         {
             _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ id:{ id } }})");
 

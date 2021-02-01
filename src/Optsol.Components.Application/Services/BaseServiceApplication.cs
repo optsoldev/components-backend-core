@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Application.Services
 {
-    public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+    public partial class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         : IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
@@ -148,7 +148,7 @@ namespace Optsol.Components.Application.Services
             await CommitAsync();
         }
 
-        public virtual async Task<Boolean> CommitAsync()
+        public virtual async Task<bool> CommitAsync()
         {
             if (_notificationContext.HasNotifications) return false;
             if ((await _unitOfWork.CommitAsync())) return true;
@@ -162,12 +162,6 @@ namespace Optsol.Components.Application.Services
 
             GC.SuppressFinalize(this);
             _unitOfWork.Dispose();
-        }
-
-        private void LogNotifications(string method)
-        {
-            if (_notificationContext.HasNotifications)
-                _logger?.LogInformation($"Método: { method } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
         }
     }
 }
