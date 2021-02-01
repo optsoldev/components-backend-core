@@ -15,12 +15,12 @@ namespace Optsol.Components.Infra.Data
         IRepository<TEntity, TKey>, IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
-        public DbContext Context { get; protected set; }
+        public CoreContext Context { get; protected set; }
         public DbSet<TEntity> Set { get; protected set; }
 
         private ILogger _logger;
 
-        public Repository(DbContext context, ILogger<Repository<TEntity, TKey>> logger)
+        public Repository(CoreContext context, ILogger<Repository<TEntity, TKey>> logger)
         {
             _logger = logger;
             _logger?.LogInformation($"Inicializando Repository<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");

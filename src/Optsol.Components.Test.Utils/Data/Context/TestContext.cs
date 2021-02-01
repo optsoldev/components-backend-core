@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Optsol.Components.Infra.Data;
 
 namespace Optsol.Components.Test.Utils.Data
 {
 
-    public class TestContext : DbContext
+    public class TestContext : CoreContext
     {
-        public TestContext(DbContextOptions options) 
+        public TestContext(DbContextOptions options)
             : base(options)
         {
         }

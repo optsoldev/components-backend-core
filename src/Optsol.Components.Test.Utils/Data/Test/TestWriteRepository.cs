@@ -7,7 +7,7 @@ namespace Optsol.Components.Test.Utils.Data
 {
     public class TestWriteRepository : Repository<TestEntity, Guid>, ITestWriteRepository
     {
-        public TestWriteRepository(DbContext context, ILogger<Repository<TestEntity, Guid>> logger) 
+        public TestWriteRepository(CoreContext context, ILogger<Repository<TestEntity, Guid>> logger) 
             : base(context, logger)
         {
         }

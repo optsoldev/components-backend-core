@@ -1,7 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Optsol.Components.Infra.Data;
+using System;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.UoW
 {
@@ -9,10 +10,10 @@ namespace Optsol.Components.Infra.UoW
     {
         private bool disposed = false;
         private ILogger _logger;
-        
-        public DbContext Context { get; protected set; }
 
-        public UnitOfWork(DbContext context, ILogger<UnitOfWork> logger)
+        public CoreContext Context { get; protected set; }
+
+        public UnitOfWork(CoreContext context, ILogger<UnitOfWork> logger)
         {
             _logger = logger;
             _logger?.LogInformation("Inicializando UnitOfWork");
@@ -29,13 +30,13 @@ namespace Optsol.Components.Infra.UoW
 
         private void Dispose(bool disposing)
         {
-            if(!disposed)
+            if (!disposed)
             {
-                if(disposing)
+                if (disposing)
                 {
                     Context.Dispose();
                 }
-            }            
+            }
             disposed = true;
         }
 

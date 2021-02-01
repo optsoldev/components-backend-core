@@ -1,19 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Application", "src\Optsol.Components.Application\Optsol.Components.Application.csproj", "{5C4B004A-C641-4F6C-91BE-1CC647EB89A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Application", "src\Optsol.Components.Application\Optsol.Components.Application.csproj", "{5C4B004A-C641-4F6C-91BE-1CC647EB89A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Domain", "src\Optsol.Components.Domain\Optsol.Components.Domain.csproj", "{74D7EB71-FE64-45CA-8215-CD144FC0BD0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Domain", "src\Optsol.Components.Domain\Optsol.Components.Domain.csproj", "{74D7EB71-FE64-45CA-8215-CD144FC0BD0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra", "src\Optsol.Components.Infra\Optsol.Components.Infra.csproj", "{C80A01E9-0288-4309-B9F9-59D12AE70182}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra", "src\Optsol.Components.Infra\Optsol.Components.Infra.csproj", "{C80A01E9-0288-4309-B9F9-59D12AE70182}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Shared", "src\Optsol.Components.Shared\Optsol.Components.Shared.csproj", "{2FBD3609-0172-4BB1-8339-4220BFE859D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Shared", "src\Optsol.Components.Shared\Optsol.Components.Shared.csproj", "{2FBD3609-0172-4BB1-8339-4220BFE859D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Test.Integration", "src\Optsol.Components.Test.Integration\Optsol.Components.Test.Integration.csproj", "{04972773-32AB-4436-9929-FD0879D5D7E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Test.Integration", "src\Optsol.Components.Test.Integration\Optsol.Components.Test.Integration.csproj", "{04972773-32AB-4436-9929-FD0879D5D7E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Test.Unit", "src\Optsol.Components.Test.Unit\Optsol.Components.Test.Unit.csproj", "{31E0B5F7-AFB7-4194-A0FD-8285DC763DB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Test.Unit", "src\Optsol.Components.Test.Unit\Optsol.Components.Test.Unit.csproj", "{31E0B5F7-AFB7-4194-A0FD-8285DC763DB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SDK", "SDK", "{86076FE0-099A-11EB-AD53-654EEF259C2F}"
 EndProject
@@ -27,9 +27,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Shared", "4 - Shared", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 - Test", "5 - Test", "{C0109D60-099A-11EB-AD53-654EEF259C2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Test.Utils", "src\Optsol.Components.Test.Utils\Optsol.Components.Test.Utils.csproj", "{CB120383-D3E5-47EA-9C4C-D0514198E75B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Test.Utils", "src\Optsol.Components.Test.Utils\Optsol.Components.Test.Utils.csproj", "{CB120383-D3E5-47EA-9C4C-D0514198E75B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Service", "src\Optsol.Components.Service\Optsol.Components.Service.csproj", "{404E3B8A-865A-4CE8-9D78-161467B94F64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Service", "src\Optsol.Components.Service\Optsol.Components.Service.csproj", "{404E3B8A-865A-4CE8-9D78-161467B94F64}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.1 - Service", "1.1 - Service", "{3CD84D80-0E3B-11EB-94B9-0FB324CF5AB4}"
 EndProject
@@ -37,15 +37,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{1037
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{30332850-13A6-11EB-B567-E5127B3188FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Playground.Application", "playground\Optsol.Playground.Application\Optsol.Playground.Application.csproj", "{67ABABA4-9E6A-45CE-8F45-5D5E80022581}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Playground.Application", "playground\Optsol.Playground.Application\Optsol.Playground.Application.csproj", "{67ABABA4-9E6A-45CE-8F45-5D5E80022581}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Playground.Domain", "playground\Optsol.Playground.Domain\Optsol.Playground.Domain.csproj", "{2B046F96-9DD0-437C-B15F-EFD98F2952E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Playground.Domain", "playground\Optsol.Playground.Domain\Optsol.Playground.Domain.csproj", "{2B046F96-9DD0-437C-B15F-EFD98F2952E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Playground.Infra", "playground\Optsol.Playground.Infra\Optsol.Playground.Infra.csproj", "{1D34ED22-0004-4D8A-BC64-74DBB7A9478D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Playground.Infra", "playground\Optsol.Playground.Infra\Optsol.Playground.Infra.csproj", "{1D34ED22-0004-4D8A-BC64-74DBB7A9478D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Playground.Test", "playground\Optsol.Playground.Test\Optsol.Playground.Test.csproj", "{38A00196-1067-4B14-8930-63D92ABBE0B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Playground.Test", "playground\Optsol.Playground.Test\Optsol.Playground.Test.csproj", "{38A00196-1067-4B14-8930-63D92ABBE0B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Playground.Api", "playground\Optsol.Playground.Api\Optsol.Playground.Api.csproj", "{327825D9-B872-4A25-9551-3493BDF27048}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Playground.Api", "playground\Optsol.Playground.Api\Optsol.Playground.Api.csproj", "{327825D9-B872-4A25-9551-3493BDF27048}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.MongoDB", "src\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj", "{967A51D2-C73C-4CB7-A404-E2438FFDCD58}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,9 +57,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5C4B004A-C641-4F6C-91BE-1CC647EB89A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -216,27 +215,46 @@ Global
 		{327825D9-B872-4A25-9551-3493BDF27048}.Release|x64.Build.0 = Release|Any CPU
 		{327825D9-B872-4A25-9551-3493BDF27048}.Release|x86.ActiveCfg = Release|Any CPU
 		{327825D9-B872-4A25-9551-3493BDF27048}.Release|x86.Build.0 = Release|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Debug|x64.Build.0 = Debug|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Debug|x86.Build.0 = Debug|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Release|x64.ActiveCfg = Release|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Release|x64.Build.0 = Release|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Release|x86.ActiveCfg = Release|Any CPU
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{30332850-13A6-11EB-B567-E5127B3188FE} = {10372380-13A6-11EB-B567-E5127B3188FE}
+		{5C4B004A-C641-4F6C-91BE-1CC647EB89A9} = {98A277D0-099A-11EB-AD53-654EEF259C2F}
+		{74D7EB71-FE64-45CA-8215-CD144FC0BD0E} = {A1256C50-099A-11EB-AD53-654EEF259C2F}
+		{C80A01E9-0288-4309-B9F9-59D12AE70182} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
+		{2FBD3609-0172-4BB1-8339-4220BFE859D3} = {B7B491D0-099A-11EB-AD53-654EEF259C2F}
+		{04972773-32AB-4436-9929-FD0879D5D7E5} = {C0109D60-099A-11EB-AD53-654EEF259C2F}
+		{31E0B5F7-AFB7-4194-A0FD-8285DC763DB6} = {C0109D60-099A-11EB-AD53-654EEF259C2F}
+		{98A277D0-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
+		{A1256C50-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
+		{A8DC8550-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
+		{B7B491D0-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
+		{C0109D60-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
+		{CB120383-D3E5-47EA-9C4C-D0514198E75B} = {C0109D60-099A-11EB-AD53-654EEF259C2F}
 		{404E3B8A-865A-4CE8-9D78-161467B94F64} = {3CD84D80-0E3B-11EB-94B9-0FB324CF5AB4}
 		{3CD84D80-0E3B-11EB-94B9-0FB324CF5AB4} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
-		{31E0B5F7-AFB7-4194-A0FD-8285DC763DB6} = {C0109D60-099A-11EB-AD53-654EEF259C2F}
-		{04972773-32AB-4436-9929-FD0879D5D7E5} = {C0109D60-099A-11EB-AD53-654EEF259C2F}
-		{C0109D60-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
-		{2FBD3609-0172-4BB1-8339-4220BFE859D3} = {B7B491D0-099A-11EB-AD53-654EEF259C2F}
-		{B7B491D0-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
-		{C80A01E9-0288-4309-B9F9-59D12AE70182} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
-		{A8DC8550-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
-		{74D7EB71-FE64-45CA-8215-CD144FC0BD0E} = {A1256C50-099A-11EB-AD53-654EEF259C2F}
-		{A1256C50-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
-		{5C4B004A-C641-4F6C-91BE-1CC647EB89A9} = {98A277D0-099A-11EB-AD53-654EEF259C2F}
-		{98A277D0-099A-11EB-AD53-654EEF259C2F} = {86076FE0-099A-11EB-AD53-654EEF259C2F}
-		{CB120383-D3E5-47EA-9C4C-D0514198E75B} = {C0109D60-099A-11EB-AD53-654EEF259C2F}
+		{30332850-13A6-11EB-B567-E5127B3188FE} = {10372380-13A6-11EB-B567-E5127B3188FE}
 		{67ABABA4-9E6A-45CE-8F45-5D5E80022581} = {30332850-13A6-11EB-B567-E5127B3188FE}
 		{2B046F96-9DD0-437C-B15F-EFD98F2952E7} = {30332850-13A6-11EB-B567-E5127B3188FE}
 		{1D34ED22-0004-4D8A-BC64-74DBB7A9478D} = {30332850-13A6-11EB-B567-E5127B3188FE}
 		{38A00196-1067-4B14-8930-63D92ABBE0B2} = {30332850-13A6-11EB-B567-E5127B3188FE}
 		{327825D9-B872-4A25-9551-3493BDF27048} = {30332850-13A6-11EB-B567-E5127B3188FE}
+		{967A51D2-C73C-4CB7-A404-E2438FFDCD58} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66165739-5FCB-4C53-AC8B-7BC212D5FEFC}
 	EndGlobalSection
 EndGlobal

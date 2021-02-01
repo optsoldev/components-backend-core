@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
+using Optsol.Components.Infra.Data;
 using Optsol.Playground.Infra.Data.EntityConfig;
 
 namespace Optsol.Playground.Infra.Data.Context
 {
-    public class PlaygroundContext : DbContext
+    public class PlaygroundContext : CoreContext
     {
-        public PlaygroundContext(DbContextOptions options) : base(options)
+        public PlaygroundContext(DbContextOptions options) 
+            : base(options)
         {
         }
 
