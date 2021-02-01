@@ -60,7 +60,7 @@ namespace Optsol.Playground.Api
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/index.html", async context =>
+                endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Playground API Started.");
                 });

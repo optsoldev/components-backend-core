@@ -12,9 +12,11 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Service.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public abstract class ApiControllerBase : ControllerBase
     {
-        public IActionResult CreateResult(Response response)
+        protected IActionResult CreateResult(Response response)
         {
             if (response.Failure)
                 return BadRequest(response);
@@ -22,7 +24,7 @@ namespace Optsol.Components.Service.Controllers
             return Ok(response);
         }
 
-        public IActionResult CreateResult<TData>(Response<TData> response)
+        protected IActionResult CreateResult<TData>(Response<TData> response)
             where TData : BaseDataTransferObject
         {
             if (response.Failure)
@@ -31,7 +33,7 @@ namespace Optsol.Components.Service.Controllers
             return Ok(response);
         }
 
-        public IActionResult CreateResult<TData>(ResponseList<TData> response)
+        protected IActionResult CreateResult<TData>(ResponseList<TData> response)
             where TData : BaseDataTransferObject
         {
             if (response.Failure)
@@ -41,8 +43,6 @@ namespace Optsol.Components.Service.Controllers
         }
     }
 
-    [ApiController]
-    [Route("api/[controller]")]
     [TypeFilter(typeof(ValidationModelAttribute))]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         : ApiControllerBase, IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
@@ -132,6 +132,6 @@ namespace Optsol.Components.Service.Controllers
             return CreateResult(_responseFactory.Create());
         }
 
-        
+
     }
 }
