@@ -1,7 +1,6 @@
 using AutoMapper;
 using FluentAssertions;
 using Moq;
-using Optsol.Components.Application.Results;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.Data;
@@ -50,11 +49,7 @@ namespace Optsol.Components.Test.Unit.Application
 
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(true);
-
-            Mock<IServiceResultFactory> serviceResultFactoryMock = new Mock<IServiceResultFactory>();
-            serviceResultFactoryMock.Setup(factory => factory.Create()).Returns(new ServiceResult());
-            serviceResultFactoryMock.Setup(factory => factory.Create<TestViewModel>(It.IsAny<TestViewModel>())).Returns(new ServiceResult<TestViewModel>(model));
-
+                        
             Mock<IReadRepository<TestEntity, Guid>> readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
             readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
             readRepository.Setup(repository => repository.GetAllAsync()).Returns(GetAllAggregateRootAsyncEnumerable(entity, entity2));
@@ -67,7 +62,6 @@ namespace Optsol.Components.Test.Unit.Application
             var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
                 mapperMock.Object,
                 logger,
-                serviceResultFactoryMock.Object,
                 unitOfWork.Object,
                 readRepository.Object,
                 writeRepository.Object,

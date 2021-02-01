@@ -1,10 +1,10 @@
-using System;
 using Flunt.Validations;
 using Optsol.Components.Application.DataTransferObjects;
+using System;
 
 namespace Optsol.Components.Test.Utils.Application
 {
-    public class TestViewModel: BaseDataTransferObject
+    public class TestViewModel : BaseDataTransferObject
     {
         public Guid Id { get; set; }
         public string Nome { get; set; }
@@ -15,9 +15,9 @@ namespace Optsol.Components.Test.Utils.Application
         {
             AddNotifications(new Contract()
                 .Requires()
-                .HasMinLen(Nome, 3, "NomeValueObject.Nome", "O nome deve ter no mínino 3 caracteres")
-                .HasMaxLen(Nome, 70, "NomeValueObject.Nome", "O nome deve ter no máximo 35 caracteres")
-                .IsEmail(Contato, "NomeValueObject.SobreNome", "O sobrenome deve ter no máximo 35 caracteres")
+                .HasMinLen(Nome, 3, $"{nameof(TestViewModel.Nome)}", "O nome deve ter no mínino 3 caracteres")
+                .HasMaxLen(Nome, 70, $"{nameof(TestViewModel.Nome)}", "O nome deve ter no máximo 35 caracteres")
+                .IsEmail(Contato, $"{nameof(TestViewModel.Contato)}", "O sobrenome deve ter no máximo 35 caracteres")
                 );
         }
     }

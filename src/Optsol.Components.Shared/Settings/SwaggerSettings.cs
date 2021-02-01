@@ -19,7 +19,17 @@ namespace Optsol.Components.Shared.Settings
                 throw new ArgumentNullException(nameof(Title));
             }
 
-            //TODO: Adicionar as outras validações
+            var versionIsNullOrEmpty = string.IsNullOrEmpty(Version);
+            if (versionIsNullOrEmpty)
+            {
+                throw new ArgumentNullException(nameof(Version));
+            }
+
+            var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
+            if (nameIsNullOrEmpty)
+            {
+                throw new ArgumentNullException(nameof(Name));
+            }
         }
     }
 }

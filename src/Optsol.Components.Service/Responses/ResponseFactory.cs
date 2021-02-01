@@ -1,6 +1,5 @@
 using Flunt.Notifications;
 using Optsol.Components.Application.DataTransferObjects;
-using Optsol.Components.Application.Results;
 using Optsol.Components.Domain.Notifications;
 using System;
 using System.Collections.Generic;
@@ -16,24 +15,24 @@ namespace Optsol.Components.Service.Responses
             _notificationContext = notificationContext;
         }
 
-        public Response Create(ServiceResult serviceResult)
+        public Response Create()
         {
             var responseSuccess = !_notificationContext.HasNotifications;
 
             return new Response(responseSuccess, MessageResolver(_notificationContext.Notifications));
         }
 
-        public Response<TData> Create<TData>(ServiceResult<TData> serviceResult)
+        public Response<TData> Create<TData>(TData data)
             where TData : BaseDataTransferObject
         {
-            return new Response<TData>(serviceResult.Data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
+            return new Response<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
-        public ResponseList<TData> Create<TData>(ServiceResultList<TData> serviceResult) where TData : BaseDataTransferObject
+        public ResponseList<TData> Create<TData>(IEnumerable<TData> data) where TData : BaseDataTransferObject
         {
             var responseSuccess = !_notificationContext.HasNotifications;
 
-            return new ResponseList<TData>(serviceResult.Data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
+            return new ResponseList<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
         private bool ResponseSuccess()

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
-using Optsol.Components.Application.Results;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.Data;
@@ -9,6 +8,7 @@ using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,13 +27,11 @@ namespace Optsol.Components.Application.Services
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
         protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
-        protected readonly IServiceResultFactory _serviceResultFactory;
         protected readonly NotificationContext _notificationContext;
 
         public BaseServiceApplication(
             IMapper mapper,
             ILogger<BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> logger,
-            IServiceResultFactory serviceResultFactory,
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, Guid> readRepository,
             IWriteRepository<TEntity, Guid> writeRepository,
@@ -42,10 +40,8 @@ namespace Optsol.Components.Application.Services
             _logger = logger;
             _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, Guid>");
 
-            _serviceResultFactory = serviceResultFactory ?? throw new ServiceResultNullException();
-            
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
-            
+
             _mapper = mapper ?? throw new AutoMapperNullException();
 
             _notificationContext = notificationContext ?? throw new NotificationContextException();
@@ -55,28 +51,26 @@ namespace Optsol.Components.Application.Services
             _writeRepository = writeRepository;
         }
 
-        public virtual async Task<ServiceResult<TGetByIdDto>> GetByIdAsync(Guid id)
+        public virtual async Task<TGetByIdDto> GetByIdAsync(Guid id)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetAllDto).Name }");
 
             var entity = await _readRepository.GetByIdAsync(id);
 
-            return _serviceResultFactory.Create(_mapper.Map<TGetByIdDto>(entity));
+            return _mapper.Map<TGetByIdDto>(entity);
         }
 
-        public virtual async Task<ServiceResultList<TGetAllDto>> GetAllAsync()
+        public virtual async Task<IEnumerable<TGetAllDto>> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
 
             var entities = await _readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
 
-            return _serviceResultFactory.Create(entities.Select(entity => _mapper.Map<TGetAllDto>(entity)));
+            return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
         }
 
-        public virtual async Task<ServiceResult> InsertAsync(TInsertData data)
+        public virtual async Task InsertAsync(TInsertData data)
         {
-            var serviceResult = _serviceResultFactory.Create();
-
             data.Validate();
             if (data.Invalid)
             {
@@ -84,7 +78,7 @@ namespace Optsol.Components.Application.Services
 
                 LogNotifications(nameof(InsertAsync));
 
-                return serviceResult;
+                return;
             }
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
@@ -101,15 +95,12 @@ namespace Optsol.Components.Application.Services
 
             await _writeRepository.InsertAsync(entity);
 
-            await CommitAsync(serviceResult);
-
-            return serviceResult;
+            await CommitAsync();
+            
         }
 
-        public virtual async Task<ServiceResult> UpdateAsync(TUpdateData data)
+        public virtual async Task UpdateAsync(TUpdateData data)
         {
-            var serviceResult = _serviceResultFactory.Create();
-
             data.Validate();
             if (data.Invalid)
             {
@@ -117,44 +108,47 @@ namespace Optsol.Components.Application.Services
 
                 LogNotifications(nameof(UpdateAsync));
 
-                return serviceResult;
+                return;
             }
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
 
             var entity = _mapper.Map<TEntity>(data);
 
-            var edit = await _readRepository.GetByIdAsync(entity.Id);
-
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TUpdateData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
+            var entitySelectForUpdate = await _readRepository.GetByIdAsync(entity.Id);
+
+            var entityNotFound = entitySelectForUpdate == null;
+            if (entityNotFound)
+            {
+                _notificationContext.AddNotification(entity.Id.ToString(), "Registro não foi encontrado.");
+            }
+
             entity.Validate();
+            _notificationContext.AddNotifications(entity.Notifications);
 
-            _notificationContext.AddNotifications((entity as Entity<Guid>).Notifications);
-
-            LogNotifications(nameof(entity));
+            var hasNotifications = _notificationContext.HasNotifications;
+            if (hasNotifications)
+            {
+                LogNotifications(nameof(entity));
+            }
 
             await _writeRepository.UpdateAsync(entity);
 
-            await CommitAsync(serviceResult);
-
-            return serviceResult;
+            await CommitAsync();
         }
 
-        public virtual async Task<ServiceResult> DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
-            var serviceResult = _serviceResultFactory.Create();
-
             _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ id:{ id.ToString() } }})");
 
             await _writeRepository.DeleteAsync(id);
 
-            await CommitAsync(serviceResult);
-
-            return serviceResult;
+            await CommitAsync();
         }
 
-        public virtual async Task<Boolean> CommitAsync(ServiceResult serviceResult)
+        public virtual async Task<Boolean> CommitAsync()
         {
             if (_notificationContext.HasNotifications) return false;
             if ((await _unitOfWork.CommitAsync())) return true;

@@ -1,8 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using Optsol.Components.Application.DataTransferObjects;
-using Optsol.Components.Application.Results;
 using Optsol.Components.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Application.Services
 {
@@ -13,10 +13,14 @@ namespace Optsol.Components.Application.Services
         where TInsertData: BaseDataTransferObject
         where TUpdateData: BaseDataTransferObject
     {        
-        Task<ServiceResult<TGetByIdDto>> GetByIdAsync(Guid id);
-        Task<ServiceResultList<TGetAllDto>> GetAllAsync();
-        Task<ServiceResult> InsertAsync(TInsertData data);  
-        Task<ServiceResult> UpdateAsync(TUpdateData data);
-        Task<ServiceResult> DeleteAsync(Guid id);
+        Task<TGetByIdDto> GetByIdAsync(Guid id);
+
+        Task<IEnumerable<TGetAllDto>> GetAllAsync();
+
+        Task InsertAsync(TInsertData data);  
+
+        Task UpdateAsync(TUpdateData data);
+
+        Task DeleteAsync(Guid id);
     }
 }

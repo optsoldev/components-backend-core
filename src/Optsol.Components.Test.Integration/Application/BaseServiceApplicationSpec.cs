@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
@@ -33,15 +35,16 @@ namespace Optsol.Components.Test.Integration.Application
             IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
-            //When
             await writeRepository.InsertAsync(entity);
             await unitOfWork.CommitAsync();
-            var modelResult = await serviceApplication.GetAllAsync();
+
+            //When
+            var viewModels = await serviceApplication.GetAllAsync();
 
             //Then            
-            modelResult.Data.Should().HaveCount(1);
-            modelResult.Data.First().Nome.Should().Be(entity.Nome.ToString());
-            modelResult.Data.First().Contato.Should().Be(entity.Email.ToString());
+            viewModels.Should().HaveCount(1);
+            viewModels.First().Nome.Should().Be(entity.Nome.ToString());
+            viewModels.First().Contato.Should().Be(entity.Email.ToString());
         }
 
         [Fact]
@@ -66,16 +69,12 @@ namespace Optsol.Components.Test.Integration.Application
             await serviceApplication.InsertAsync(model);
             await serviceApplication.InsertAsync(model);
 
-            var modelResult = await serviceApplication.GetAllAsync();
+            var viewModels = await serviceApplication.GetAllAsync();
 
             //Then
-            //modelResult.Invalid.Should().BeFalse();
-            //modelResult.Notifications.Should().HaveCount(0);
-            //TODO: Revisar
-
-            modelResult.Data.Should().HaveCount(3);
-            modelResult.Data.Where(w => w.Nome.Equals(model.Nome)).Should().HaveCount(3);
-            modelResult.Data.Where(w => w.Contato.Equals(model.Contato)).Should().HaveCount(3);
+            viewModels.Should().HaveCount(3);
+            viewModels.Where(w => w.Nome.Equals(model.Nome)).Should().HaveCount(3);
+            viewModels.Where(w => w.Contato.Equals(model.Contato)).Should().HaveCount(3);
         }
 
         [Fact]
@@ -95,23 +94,21 @@ namespace Optsol.Components.Test.Integration.Application
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
-            //When
             await serviceApplication.InsertAsync(model);
-            var list = await serviceApplication.GetAllAsync();
-            var modelResult = await serviceApplication.GetByIdAsync(list.Data.Single().Id);
+
+            var findId = (await serviceApplication.GetAllAsync()).First().Id;
+
+            //When
+            var viewModel = await serviceApplication.GetByIdAsync(findId);
 
             //Then
-            //modelResult.Invalid.Should().BeFalse();
-            //modelResult.Notifications.Should().HaveCount(0);
-            //TODO: Revisar
-
-            modelResult.Should().NotBeNull();
-            modelResult.Data.Nome.Should().Be(model.Nome);
-            modelResult.Data.Contato.Should().Be(model.Contato);
+            viewModel.Should().NotBeNull();
+            viewModel.Nome.Should().Be(model.Nome);
+            viewModel.Contato.Should().Be(model.Contato);
         }
 
         [Fact]
-        public async Task Deve_Inserir_Registro_Pelo_Servico()
+        public void Deve_Inserir_Registro_Pelo_Servico()
         {
             //Given
             InsertTestViewModel model = new InsertTestViewModel();
@@ -126,22 +123,16 @@ namespace Optsol.Components.Test.Integration.Application
 
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
+            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
 
             //When
-            var modelResult = await serviceApplication.InsertAsync(model);
+            Action action = () => serviceApplication.InsertAsync(model);
 
             //Then
-            var entity = await serviceApplication.GetAllAsync();
+            action.Should().NotThrow();
 
-            //modelResult.Invalid.Should().BeFalse();
-            //modelResult.Notifications.Should().HaveCount(0);
-            //TODO: Revisar
-
-            entity.Data.Should().HaveCount(1);
-            entity.Data.Single().Id.Should().NotBeEmpty();
-            entity.Data.Single().Nome.Should().Be(model.Nome);
-            entity.Data.Single().Contato.Should().Be(model.Contato);
-            entity.Data.Single().Ativo.Should().Be("Inativo");
+            notificationContext.HasNotifications.Should().BeFalse();
+            notificationContext.Notifications.Should().HaveCount(0);
         }
 
         [Fact]
@@ -159,30 +150,26 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
+            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
+
+            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
             await serviceApplication.InsertAsync(model);
 
-            var data = (await serviceApplication.GetAllAsync()).Data.Single();
+            var data = (await serviceApplication.GetAllAsync()).Single();
             var updateModel = new UpdateTestViewModel();
             updateModel.Id = data.Id;
             updateModel.Nome = $"Weslley Alterado";
             updateModel.Contato = model.Contato;
 
             //When
-            var modelResult = await serviceApplication.UpdateAsync(updateModel);
+            Action action = () => serviceApplication.UpdateAsync(updateModel);
 
             //Then
-            var entity = await serviceApplication.GetAllAsync();
-            //modelResult.Invalid.Should().BeFalse();
-            //modelResult.Notifications.Should().HaveCount(0);
-            //TODO: Revisar
+            action.Should().NotThrow();
 
-            entity.Data.Should().HaveCount(1);
-            entity.Data.Single().Id.Should().NotBeEmpty();
-            entity.Data.Single().Nome.Should().Be(updateModel.Nome);
-            entity.Data.Single().Contato.Should().Be(updateModel.Contato);
-            entity.Data.Single().Ativo.Should().Be("Inativo");
+            notificationContext.HasNotifications.Should().BeFalse();
+            notificationContext.Notifications.Should().HaveCount(0);
         }
 
         [Fact]
@@ -200,26 +187,26 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
+            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
+
+            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
             await serviceApplication.InsertAsync(model);
 
-            var data = (await serviceApplication.GetAllAsync()).Data.Single();
+            var data = (await serviceApplication.GetAllAsync()).Single();
 
             //When
-            var modelResult = await serviceApplication.DeleteAsync(data.Id);
+            Action action = () => serviceApplication.DeleteAsync(data.Id);
 
             //Then
-            var entity = await serviceApplication.GetAllAsync();
-            //modelResult.Invalid.Should().BeFalse();
-            //modelResult.Notifications.Should().HaveCount(0);
-            //TODO: Revisar
+            action.Should().NotThrow();
 
-            entity.Data.Should().HaveCount(0);
+            notificationContext.HasNotifications.Should().BeFalse();
+            notificationContext.Notifications.Should().HaveCount(0);
         }
 
         [Fact]
-        public async Task Nao_Deve_Inserir_Registro_Pelo_Servico()
+        public void Nao_Deve_Inserir_Registro_Pelo_Servico()
         {
             //Given
             InsertTestViewModel model = new InsertTestViewModel();
@@ -233,16 +220,19 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
+
+            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
+
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            var modelResult = await serviceApplication.InsertAsync(model);
+            Action action = () => serviceApplication.InsertAsync(model);
 
             //Then
-            var entity = await serviceApplication.GetAllAsync();
-            //modelResult.Invalid.Should().BeTrue();
-            //modelResult.Notifications.Should().HaveCount(3);
-            //TODO: Revisar
+            action.Should().NotThrow();
+
+            notificationContext.HasNotifications.Should().BeTrue();
+            notificationContext.Notifications.Should().HaveCount(3);
         }
 
         [Fact]
@@ -260,25 +250,28 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
+
+            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
+
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             await serviceApplication.InsertAsync(model);
 
-            var data = (await serviceApplication.GetAllAsync()).Data.Single();
+            var data = (await serviceApplication.GetAllAsync()).Single();
+
             var updateModel = new UpdateTestViewModel();
             updateModel.Id = data.Id;
             updateModel.Nome = "";
             updateModel.Contato = "weslley.carneiro";
 
             //When
-            var modelResult = await serviceApplication.UpdateAsync(updateModel);
+            Action action = () => serviceApplication.UpdateAsync(updateModel);
 
             //Then
-            var entity = await serviceApplication.GetAllAsync();
-            //modelResult.Invalid.Should().BeTrue();
-            //modelResult.Valid.Should().BeFalse();
-            //modelResult.Notifications.Should().HaveCount(3);
-            //TODO: Revisar
+            action.Should().NotThrow();
+
+            notificationContext.HasNotifications.Should().BeTrue();
+            notificationContext.Notifications.Should().HaveCount(3);
         }
     }
 }

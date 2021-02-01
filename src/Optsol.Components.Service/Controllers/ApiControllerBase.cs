@@ -12,11 +12,22 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Service.Controllers
 {
+    public abstract class ApiControllerBase : ControllerBase
+    {
+        public IActionResult CreateResult(Response response)
+        {
+            if (response.Failure)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     [TypeFilter(typeof(ValidationModelAttribute))]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
-        : ControllerBase, IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+        : ApiControllerBase, IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
         where TGetAllDto : BaseDataTransferObject
@@ -40,59 +51,69 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200)]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }})");
 
-            var serviceResult = await _serviceApplication.GetByIdAsync(id);
+            var viewModelOfResultService = await _serviceApplication.GetByIdAsync(id);
 
-            return Ok(_responseFactory.Create(serviceResult));
+            return CreateResult(_responseFactory.Create(viewModelOfResultService));
         }
 
         [HttpGet]
+        [ProducesResponseType(200)]
         public async Task<IActionResult> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IActionResult");
 
-            var serviceResult = await _serviceApplication.GetAllAsync();
+            await _serviceApplication.GetAllAsync();
 
-            return Ok(_responseFactory.Create(serviceResult));
+            return CreateResult(_responseFactory.Create());
         }
 
         [HttpPost]
-        public async Task<IActionResult> InsertAsync(TInsertData data)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> InsertAsync([FromBody] TInsertData data)
         {
             if (data == null)
                 return NoContent();
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
 
-            var serviceResult = await _serviceApplication.InsertAsync(data);
+            await _serviceApplication.InsertAsync(data);
 
-            return Ok(_responseFactory.Create(serviceResult));
+            return CreateResult(_responseFactory.Create());
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(TUpdateData data)
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> UpdateAsync([FromBody] TUpdateData data)
         {
             if (data == null)
                 return NoContent();
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
 
-            var serviceResult = await _serviceApplication.UpdateAsync(data);
+            await _serviceApplication.UpdateAsync(data);
 
-            return Ok(_responseFactory.Create(serviceResult));
+            return CreateResult(_responseFactory.Create());
+
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ id:{ id } }})");
 
-            var serviceResult = await _serviceApplication.DeleteAsync(id);
+            await _serviceApplication.DeleteAsync(id);
 
-            return Ok(_responseFactory.Create(serviceResult));
+            return CreateResult(_responseFactory.Create());
         }
+
+        
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Optsol.Components.Application.DataTransferObjects;
-using Optsol.Components.Application.Results;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Service.Responses;
 using System;
@@ -50,14 +49,13 @@ namespace Optsol.Components.Service.Filters
 
         private Response GetResponseFromBaseDataTransferObject(List<BaseDataTransferObject> listOfBaseDataTransferObject)
         {
-            var serviceResult = new ServiceResult();
             foreach (var baseDataTransferObject in listOfBaseDataTransferObject)
             {
                 baseDataTransferObject.Validate();
                 _notificationContext.AddNotifications(baseDataTransferObject.Notifications);
             }
 
-            return _responseFactory.Create(serviceResult);
+            return _responseFactory.Create();
         }
 
         private readonly Func<IDictionary<string, object>, List<BaseDataTransferObject>> ResolverBaseDataTransferObject
