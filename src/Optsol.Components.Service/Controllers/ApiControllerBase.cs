@@ -21,6 +21,24 @@ namespace Optsol.Components.Service.Controllers
 
             return Ok(response);
         }
+
+        public IActionResult CreateResult<TData>(Response<TData> response)
+            where TData : BaseDataTransferObject
+        {
+            if (response.Failure)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        public IActionResult CreateResult<TData>(ResponseList<TData> response)
+            where TData : BaseDataTransferObject
+        {
+            if (response.Failure)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
     }
 
     [ApiController]
@@ -67,9 +85,9 @@ namespace Optsol.Components.Service.Controllers
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IActionResult");
 
-            await _serviceApplication.GetAllAsync();
+            var viewModelsOfResultService = await _serviceApplication.GetAllAsync();
 
-            return CreateResult(_responseFactory.Create());
+            return CreateResult(_responseFactory.Create(viewModelsOfResultService));
         }
 
         [HttpPost]
