@@ -13,7 +13,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
 {
     public class MongoRepositorySpec
     {
-        [Fact]
+        [Fact(Skip ="Integração com mongodb somente local")]
         public async Task Deve_Inserir_Registro_Pelo_Repositorio()
         {
             //Given
