@@ -1,7 +1,7 @@
 using Flunt.Validations;
 using Optsol.Components.Domain.ValueObjects;
 
-namespace Optsol.Components.Test.Utils.Entity
+namespace Optsol.Components.Test.Utils.Data
 {
     public class NomeValueObject : ValueObject
     {

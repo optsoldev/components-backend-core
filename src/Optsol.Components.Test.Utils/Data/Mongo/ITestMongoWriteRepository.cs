@@ -1,9 +1,10 @@
 ﻿using Optsol.Components.Infra.Data;
+using Optsol.Components.Test.Utils.Entity;
 using System;
 
-namespace Optsol.Components.Test.Utils.Entity.Test
+namespace Optsol.Components.Test.Utils.Data.Mongo
 {
-    public interface ITestMongoWriteRepository : IMontoWriteRepository<TestEntity, Guid>
+    public interface ITestMongoWriteRepository : IWriteRepository<TestEntity, Guid>
     {
     }
 }

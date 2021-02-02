@@ -1,15 +1,14 @@
-using System;
-using Xunit;
-using Moq;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Optsol.Components.Domain.Entities;
-using Optsol.Components.Infra.Data;
-using Optsol.Components.Test.Shared.Logger;
-using Optsol.Components.Shared.Extensions;
-using System.Linq;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Moq;
+using Optsol.Components.Infra.Data;
+using Optsol.Components.Shared.Extensions;
+using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Entity;
+using System;
+using System.Linq;
+using Xunit;
 
 namespace Optsol.Components.Test.Unit.Infra.Data
 {

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
+using Optsol.Components.Test.Utils.Data;
 using Optsol.Components.Test.Utils.Entity;
 using System;
 using System.Linq;

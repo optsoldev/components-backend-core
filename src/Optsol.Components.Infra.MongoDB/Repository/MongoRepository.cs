@@ -103,5 +103,10 @@ namespace Optsol.Components.Infra.MongoDB.Repository
             Context.Dispose();
             GC.SuppressFinalize(this);
         }
+
+        public Task<SearchResult<TEntity>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch) where TSearch : class
+        {
+            throw new NotImplementedException();
+        }
     }
 }

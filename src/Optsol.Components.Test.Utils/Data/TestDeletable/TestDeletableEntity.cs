@@ -2,7 +2,7 @@
 using Optsol.Components.Domain.Entities;
 using System;
 
-namespace Optsol.Components.Test.Utils.Entity
+namespace Optsol.Components.Test.Utils.Data
 {
     public class TestDeletableEntity : AggregateRoot, IDeletable
     {

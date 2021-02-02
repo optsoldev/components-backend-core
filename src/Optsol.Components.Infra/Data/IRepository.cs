@@ -5,7 +5,7 @@ namespace Optsol.Components.Infra.Data
 {
     public interface IBaseRepository<TEntity, TKey> :
         IReadRepository<TEntity, TKey>,
-        IMontoWriteRepository<TEntity, TKey>
+        IWriteRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
 

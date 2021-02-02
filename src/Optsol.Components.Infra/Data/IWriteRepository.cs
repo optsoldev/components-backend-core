@@ -1,11 +1,10 @@
+using Optsol.Components.Domain.Entities;
 using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
-    public interface IMontoWriteRepository<TEntity, TKey> : IDisposable
+    public interface IWriteRepository<TEntity, TKey> : IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
         Task InsertAsync(TEntity entity);

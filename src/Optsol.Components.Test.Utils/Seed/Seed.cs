@@ -1,4 +1,5 @@
-﻿using Optsol.Components.Test.Utils.Entity;
+﻿using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Test.Utils.Seed

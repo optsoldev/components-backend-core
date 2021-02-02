@@ -54,7 +54,7 @@ namespace Optsol.Components.Test.Unit.Application
             readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
             readRepository.Setup(repository => repository.GetAllAsync()).Returns(GetAllAggregateRootAsyncEnumerable(entity, entity2));
 
-            Mock<IMontoWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IMontoWriteRepository<TestEntity, Guid>>();
+            Mock<IWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
 
             Mock<NotificationContext> notificationContextMock = new Mock<NotificationContext>();
 

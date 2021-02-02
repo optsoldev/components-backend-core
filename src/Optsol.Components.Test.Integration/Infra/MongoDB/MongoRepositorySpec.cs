@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.MongoDB.UoW;
+using Optsol.Components.Test.Utils.Data;
 using Optsol.Components.Test.Utils.Data.Context;
+using Optsol.Components.Test.Utils.Data.Mongo;
 using Optsol.Components.Test.Utils.Entity;
-using Optsol.Components.Test.Utils.Entity.Mongo;
-using Optsol.Components.Test.Utils.Entity.Test;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,7 +18,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         {
             //Given
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile($@"Settings\")
+                .AddJsonFile($@"Settings\appsettings.mongo.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -28,7 +28,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
 
             services.AddLogging();
             services.AddMongoContext<TestMongoContext>(configuration);
-            services.AddMongoRepository<ITestReadRepository, TestReadMongoRepository>("Optsol.Components.Test.Utils");
+            services.AddMongoRepository<ITestMongoReadRepository, TestMongoReadRepository>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
             IMongoUnitOfWork unitOfWork = provider.GetRequiredService<IMongoUnitOfWork>();

@@ -26,7 +26,7 @@ namespace Optsol.Components.Application.Services
         protected readonly ILogger _logger;
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
-        protected readonly IMontoWriteRepository<TEntity, Guid> _writeRepository;
+        protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
         protected readonly NotificationContext _notificationContext;
 
         public BaseServiceApplication(
@@ -34,7 +34,7 @@ namespace Optsol.Components.Application.Services
             ILogger<BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> logger,
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, Guid> readRepository,
-            IMontoWriteRepository<TEntity, Guid> writeRepository,
+            IWriteRepository<TEntity, Guid> writeRepository,
             NotificationContext notificationContext)
         {
             _logger = logger;
