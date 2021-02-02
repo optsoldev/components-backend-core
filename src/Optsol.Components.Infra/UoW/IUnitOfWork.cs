@@ -6,7 +6,6 @@ namespace Optsol.Components.Infra.UoW
 {
     public interface IUnitOfWork : IDisposable
     {
-        CoreContext Context { get; }
         Task<bool> CommitAsync();
     }
 }

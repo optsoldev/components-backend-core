@@ -17,7 +17,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception = new ResponseFactoryNullException();
 
             //Then
-            var msg = "O parametro IResponseFactory não foi resolvido pela DI";
+            var msg = "O parametro IResponseFactory não foi resolvido pela injeção de dependência";
             exception.Message.Should().Be(msg);
         }
     }

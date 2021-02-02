@@ -16,7 +16,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception = new UnitOfWorkNullException();
 
             //Then
-            var msg = "O parametro unitOfWork não foi resolvido pela DI";
+            var msg = "O parametro UnitOfWork não foi resolvido pela injeção de dependência";
             exception.Message.Should().Be(msg);
         }
     }

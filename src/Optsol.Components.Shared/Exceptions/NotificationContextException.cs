@@ -5,7 +5,7 @@ namespace Optsol.Components.Shared.Exceptions
     public class NotificationContextException : Exception
     {
         public NotificationContextException()
-            : base("O parametro notificationContext não foi resolvido pela DI")
+            : base("O parametro NotificationContext não foi resolvido pela injeção de dependência")
         {
 
         }

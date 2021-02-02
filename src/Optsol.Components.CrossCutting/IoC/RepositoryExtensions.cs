@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<TContext>(options.Builder());
             services.AddScoped<CoreContext, TContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+            services.AddScoped(typeof(IEntityRepository<,>), typeof(Repository<,>));
             services.AddScoped(typeof(IReadRepository<,>), typeof(Repository<,>));
             services.AddScoped(typeof(IWriteRepository<,>), typeof(Repository<,>));
 

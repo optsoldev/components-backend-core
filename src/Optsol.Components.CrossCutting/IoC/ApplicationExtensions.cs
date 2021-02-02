@@ -1,5 +1,4 @@
 using Optsol.Components.Application.Services;
-using Optsol.Components.Domain.Notifications;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -9,8 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.RegisterScoped<TInterface, TImplementation>(namespaces);
             services.AddScoped(typeof(IBaseServiceApplication<,,,,>), typeof(BaseServiceApplication<,,,,>));
-            services.AddScoped<NotificationContext>();
-
+            
             return services;
         }
     }

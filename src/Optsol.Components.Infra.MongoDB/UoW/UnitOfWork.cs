@@ -1,18 +1,19 @@
-using Microsoft.Extensions.Logging;
-using Optsol.Components.Infra.Data;
+﻿using Microsoft.Extensions.Logging;
+using Optsol.Components.Infra.MongoDB.Context;
+using Optsol.Components.Infra.UoW;
 using System;
 using System.Threading.Tasks;
 
-namespace Optsol.Components.Infra.UoW
+namespace Optsol.Components.Infra.MongoDB.UoW
 {
     public class UnitOfWork : IUnitOfWork
     {
         private bool disposed = false;
         private readonly ILogger _logger;
 
-        public CoreContext Context { get; protected set; }
+        public MongoContext Context { get; protected set; }
 
-        public UnitOfWork(CoreContext context, ILogger<UnitOfWork> logger)
+        public UnitOfWork(MongoContext context, ILogger<UnitOfWork> logger)
         {
             _logger = logger;
             _logger?.LogInformation("Inicializando UnitOfWork");
@@ -20,14 +21,16 @@ namespace Optsol.Components.Infra.UoW
             Context = context;
         }
 
-        public Task<bool> CommitAsync()
+        public async Task<bool> CommitAsync()
         {
             _logger?.LogInformation($"Método: { nameof(CommitAsync) }() Retorno: bool");
 
-            var saveChanges = Context.SaveChanges() > 0;
+            var saveChanges = await Context.SaveChangesAsync() > 0;
 
-            return Task.FromResult(saveChanges);
+            return saveChanges;
         }
+
+
 
         public void Dispose()
         {

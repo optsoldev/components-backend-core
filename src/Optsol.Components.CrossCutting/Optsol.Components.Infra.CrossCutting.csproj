@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Optsol.Components.Application\Optsol.Components.Application.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Service\Optsol.Components.Service.csproj" />
+  </ItemGroup>
+
+</Project>

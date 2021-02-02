@@ -42,9 +42,10 @@ namespace Optsol.Components.Test.Integration.Service
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddDomainNotifications();
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-            services.AddAServices();
+            services.AddApiServices();
             
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel> controllerBase = 
@@ -104,10 +105,11 @@ namespace Optsol.Components.Test.Integration.Service
 
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
+            services.AddDomainNotifications();
             services.AddContext<TestContext>(new ContextOptionsBuilder());
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             services.AddApplicationServices<IServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-            services.AddAServices();
+            services.AddApiServices();
             
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel> controllerBase = 
@@ -154,9 +156,10 @@ namespace Optsol.Components.Test.Integration.Service
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
+            services.AddDomainNotifications();
             services.AddContext<TestContext>(new ContextOptionsBuilder());
             services.AddApplicationServices<IServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-            services.AddAServices();
+            services.AddApiServices();
             
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel> controllerBase = 
@@ -190,9 +193,10 @@ namespace Optsol.Components.Test.Integration.Service
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
+            services.AddDomainNotifications();
             services.AddContext<TestContext>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-            services.AddAServices();
+            services.AddApiServices();
             
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
@@ -244,9 +248,10 @@ namespace Optsol.Components.Test.Integration.Service
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
+            services.AddDomainNotifications();
             services.AddContext<TestContext>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-            services.AddAServices();
+            services.AddApiServices();
             
             var provider = services.BuildServiceProvider();
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();

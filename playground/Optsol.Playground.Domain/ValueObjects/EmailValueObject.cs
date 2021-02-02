@@ -10,7 +10,7 @@ namespace Optsol.Playground.Domain.ValueObjects
         public EmailValueObject(string email)
         {
             Email = email;
-            
+
             Validate();
         }
 
@@ -21,10 +21,10 @@ namespace Optsol.Playground.Domain.ValueObjects
 
         public override void Validate()
         {
-             AddNotifications(new Contract()
-                .Requires()
-                .IsEmail(Email, "EmailValueObject.Email", "E-mail inválido")
-            );
+            AddNotifications(new Contract()
+               .Requires()
+               .IsEmail(Email, $"{nameof(EmailValueObject.Email)}", "E-mail inválido")
+           );
         }
     }
 }

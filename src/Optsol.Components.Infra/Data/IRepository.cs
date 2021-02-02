@@ -8,6 +8,14 @@ namespace Optsol.Components.Infra.Data
         IWriteRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
+
+    }
+
+    public interface IEntityRepository<TEntity, TKey> :
+        IReadRepository<TEntity, TKey>,
+        IWriteRepository<TEntity, TKey>
+        where TEntity : class, IAggregateRoot<TKey>
+    {
         CoreContext Context { get; }
 
         DbSet<TEntity> Set { get; }

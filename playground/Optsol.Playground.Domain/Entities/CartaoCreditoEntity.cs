@@ -7,9 +7,13 @@ namespace Optsol.Playground.Domain.Entities
     public class CartaoCreditoEntity : Entity<Guid>
     {
         public string NomeCliente { get; private set; }
+
         public string Numero { get; private set; }
+
         public string CodigoVerificacao { get; private set; }
+
         public DateTime Validade { get; private set; }
+
         public bool Valido
         {
             get

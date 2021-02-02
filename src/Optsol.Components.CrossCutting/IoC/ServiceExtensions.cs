@@ -5,7 +5,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddAServices(this IServiceCollection services)
+        public static IServiceCollection AddApiServices(this IServiceCollection services)
         {
             services.AddScoped<ValidationModelAttribute>();
             services.AddTransient<IResponseFactory, ResponseFactory>();

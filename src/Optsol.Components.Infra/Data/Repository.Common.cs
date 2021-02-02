@@ -1,4 +1,5 @@
-﻿using Optsol.Components.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Shared.Extensions;
 using System;
 using System.Linq;

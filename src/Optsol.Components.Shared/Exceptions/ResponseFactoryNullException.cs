@@ -5,7 +5,7 @@ namespace Optsol.Components.Shared.Exceptions
     public class ResponseFactoryNullException: Exception
     {  
         public ResponseFactoryNullException()
-            : base ("O parametro IResponseFactory não foi resolvido pela DI")
+            : base("O parametro IResponseFactory não foi resolvido pela injeção de dependência")
         {
             
         }
