@@ -5,11 +5,17 @@ using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
-    public interface IReadRepository<TEntity, TKey> : IDisposable
+    public interface IBaseReadRepository<TEntity, TKey> : IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
         Task<TEntity> GetByIdAsync(TKey id);
+
         IAsyncEnumerable<TEntity> GetAllAsync();
+    }
+
+    public interface IReadRepository<TEntity, TKey> : IBaseReadRepository<TEntity, TKey> 
+        where TEntity : class, IAggregateRoot<TKey>
+    {
         Task<SearchResult<TEntity>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch) where TSearch : class;
     }
 }

@@ -5,13 +5,13 @@ using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
-    public interface IWriteRepository<TEntity, TKey> : IDisposable
+    public interface IMontoWriteRepository<TEntity, TKey> : IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
         Task InsertAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(TKey id);
-        Task<int> SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

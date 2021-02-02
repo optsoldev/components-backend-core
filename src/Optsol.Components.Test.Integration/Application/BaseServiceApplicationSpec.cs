@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

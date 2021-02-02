@@ -30,80 +30,75 @@ namespace Optsol.Components.Infra.MongoDB.Repository
             Set = Context.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
-        public async IAsyncEnumerable<TEntity> GetAllAsync()
+        public virtual IAsyncEnumerable<TEntity> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
 
-            var entities = await Set.FindAsync(Builders<TEntity>.Filter.Empty);
+            var entities = Set.FindAsync(Builders<TEntity>.Filter.Empty)
+                .GetAwaiter()
+                .GetResult();
 
-            foreach (var entity in entities.ToEnumerable())
-                yield return entity;
+            return entities.ToListAsync().AsyncCursorToAsyncEnumerable();
         }
 
-        public Task<SearchResult<TEntity>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch)
-            where TSearch : class
+        public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task<TEntity> GetByIdAsync(TKey id)
-        {
-            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TEntity).Name }");
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{id:{ id }}} ) Retorno: type { typeof(TEntity).Name }");
 
             var entity = await Set.FindAsync(Builders<TEntity>.Filter.Eq("_id", id));
 
             return entity.SingleOrDefault();
         }
 
-        public Task InsertAsync(TEntity entity)
+        public virtual Task InsertAsync(TEntity entity)
         {
-            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ entity:{ entity.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) }( {{entity:{ entity.ToJson()}}} )");
 
             Context.AddCommand(() => Set.InsertOneAsync(entity));
 
             return Task.CompletedTask;
         }
 
-        public Task UpdateAsync(TEntity entity)
+        public virtual Task UpdateAsync(TEntity entity)
         {
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson()}}} )");
 
             Context.AddCommand(() => Set.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", entity.Id), entity));
 
             return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(TEntity entity)
+        public virtual Task DeleteAsync(TEntity entity)
         {
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }( {{entity:{ entity.ToJson()}}} )");
 
             Context.AddCommand(() => Set.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", entity.Id)));
 
             return Task.CompletedTask;
         }
 
-        public async Task DeleteAsync(TKey id)
+        public virtual async Task DeleteAsync(TKey id)
         {
             var entity = await GetByIdAsync(id);
 
             var entityNotFound = entity == null;
             if (entityNotFound)
             {
-                _logger?.LogError($"Método: { nameof(DeleteAsync) }({{ TKey:{ id.ToJson() } }}) Registro não encontrado");
+                _logger?.LogError($"Método: { nameof(DeleteAsync) }( {{id:{ id }}} ) Registro não encontrado");
                 return;
             }
 
             await DeleteAsync(entity);
         }
 
-        public Task<int> SaveChanges()
+        public virtual Task<int> SaveChangesAsync()
         {
-            _logger?.LogInformation($"Método: { nameof(SaveChanges) }()");
+            _logger?.LogInformation($"Método: { nameof(SaveChangesAsync) }()");
 
             return Context.SaveChangesAsync();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Context.Dispose();
             GC.SuppressFinalize(this);

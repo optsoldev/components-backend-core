@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Optsol.Components.Infra.Data;
 
-namespace Optsol.Components.Test.Utils.Data
+namespace Optsol.Components.Test.Utils.Entity
 {
 
     public class TestContext : CoreContext

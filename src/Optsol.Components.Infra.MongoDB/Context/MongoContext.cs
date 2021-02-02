@@ -61,5 +61,18 @@ namespace Optsol.Components.Infra.MongoDB.Context
             Session?.Dispose();
             GC.SuppressFinalize(this);
         }
+
+        private void Configure()
+        {
+            var mongoClintIsNull = MongoClient != null;
+            if (mongoClintIsNull)
+            {
+                return;
+            }
+
+            MongoClient = new MongoClient(_mongoSettings.ConnectionString);
+
+            _database = MongoClient.GetDatabase(_mongoSettings.DatabaseName);
+        }
     }
 }

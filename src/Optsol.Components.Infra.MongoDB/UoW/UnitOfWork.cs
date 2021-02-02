@@ -1,19 +1,18 @@
 ﻿using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.MongoDB.Context;
-using Optsol.Components.Infra.UoW;
 using System;
 using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.MongoDB.UoW
 {
-    public class UnitOfWork : IUnitOfWork
+    public class MongoUnitOfWork : IMongoUnitOfWork
     {
         private bool disposed = false;
         private readonly ILogger _logger;
 
         public MongoContext Context { get; protected set; }
 
-        public UnitOfWork(MongoContext context, ILogger<UnitOfWork> logger)
+        public MongoUnitOfWork(MongoContext context, ILogger<MongoUnitOfWork> logger)
         {
             _logger = logger;
             _logger?.LogInformation("Inicializando UnitOfWork");
@@ -29,8 +28,6 @@ namespace Optsol.Components.Infra.MongoDB.UoW
 
             return saveChanges;
         }
-
-
 
         public void Dispose()
         {

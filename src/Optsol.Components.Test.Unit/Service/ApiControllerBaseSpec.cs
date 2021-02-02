@@ -6,7 +6,7 @@ using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 using Optsol.Components.Test.Utils.Service;
 using System.Collections.Generic;
 using System.Linq;

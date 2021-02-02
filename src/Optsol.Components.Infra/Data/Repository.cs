@@ -11,7 +11,7 @@ using Optsol.Components.Shared.Extensions;
 
 namespace Optsol.Components.Infra.Data
 {
-    public partial class Repository<TEntity, TKey> : IEntityRepository<TEntity, TKey>, IDisposable
+    public partial class Repository<TEntity, TKey> : IRepository<TEntity, TKey>, IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
         private ILogger _logger;
@@ -32,7 +32,7 @@ namespace Optsol.Components.Infra.Data
 
         public virtual Task<TEntity> GetByIdAsync(TKey id)
         {
-            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TEntity).Name }");
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ id:{ id } }} ) Retorno: type { typeof(TEntity).Name }");
 
             return Set.FindAsync(id).AsTask();
         }
@@ -64,14 +64,14 @@ namespace Optsol.Components.Infra.Data
 
         public virtual Task InsertAsync(TEntity entity)
         {
-            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ entity:{ entity.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) }( {{entity:{ entity.ToJson() }}} )");
 
             return Set.AddAsync(entity).AsTask();
         }
 
         public virtual Task UpdateAsync(TEntity entity)
         {
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ entity:{ entity.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson() }}} )");
 
             var localEntity = Context.Set<TEntity>().Local?.Where(w => w.Id.Equals(entity.Id)).FirstOrDefault();
             var inLocal = localEntity != null;
@@ -102,7 +102,7 @@ namespace Optsol.Components.Infra.Data
 
         public virtual async Task DeleteAsync(TEntity entity)
         {
-            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ entity:{ entity.ToJson() } }})");
+            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }( {{entity:{ entity.ToJson() }}} )");
 
             var entityFound = entity != null;
             var entityIsDeletable = entity is IDeletable;
@@ -118,9 +118,9 @@ namespace Optsol.Components.Infra.Data
             }
         }
 
-        public virtual Task<int> SaveChanges()
+        public virtual Task<int> SaveChangesAsync()
         {
-            _logger?.LogInformation($"Método: { nameof(SaveChanges) }()");
+            _logger?.LogInformation($"Método: { nameof(SaveChangesAsync) }()");
 
             return Context.SaveChangesAsync();
         }
@@ -129,6 +129,67 @@ namespace Optsol.Components.Infra.Data
         {
             Context.Dispose();
             GC.SuppressFinalize(this);
+        }
+
+        private async Task<SearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
+        {
+            var searchResult = new SearchResult<TEntity>(page, pageSize);
+
+            searchResult.Total = await query.CountAsync();
+
+            query = ApplyPagination(query, page, pageSize);
+
+            searchResult.Items = await query.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
+            searchResult.TotalItems = searchResult.Items.Count();
+
+            return searchResult;
+        }
+
+        private IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize)
+        {
+            var skip = --page * (pageSize ?? 0);
+
+            query = query.Skip(skip.ToInt());
+
+            if (pageSize.HasValue)
+            {
+                query = query.Take(pageSize.Value.ToInt());
+            }
+
+            return query;
+        }
+
+        private IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> search = null)
+        {
+            var searchIsNotNull = search != null;
+            if (searchIsNotNull)
+            {
+                query = query.Where(search);
+            }
+
+            return query;
+        }
+
+        private IQueryable<TEntity> ApplyInclude(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
+        {
+            var includesIsNotNull = includes != null;
+            if (includesIsNotNull)
+            {
+                query = includes(query);
+            }
+
+            return query;
+        }
+
+        private IQueryable<TEntity> ApplyOrderBy(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        {
+            var orderByIsNotNull = orderBy != null;
+            if (orderByIsNotNull)
+            {
+                query = orderBy(query);
+            }
+
+            return query;
         }
     }
 }

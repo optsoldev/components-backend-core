@@ -8,7 +8,7 @@ using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 using System;
 using System.Linq;
 using Xunit;
@@ -54,7 +54,7 @@ namespace Optsol.Components.Test.Unit.Application
             readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
             readRepository.Setup(repository => repository.GetAllAsync()).Returns(GetAllAggregateRootAsyncEnumerable(entity, entity2));
 
-            Mock<IWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
+            Mock<IMontoWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IMontoWriteRepository<TestEntity, Guid>>();
 
             Mock<NotificationContext> notificationContextMock = new Mock<NotificationContext>();
 

@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\Optsol.Components.Application\Optsol.Components.Application.csproj" />
     <ProjectReference Include="..\Optsol.Components.Service\Optsol.Components.Service.csproj" />

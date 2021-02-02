@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Application.Services
 {
-    public partial class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+    public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         : IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
@@ -26,7 +26,7 @@ namespace Optsol.Components.Application.Services
         protected readonly ILogger _logger;
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
-        protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
+        protected readonly IMontoWriteRepository<TEntity, Guid> _writeRepository;
         protected readonly NotificationContext _notificationContext;
 
         public BaseServiceApplication(
@@ -34,7 +34,7 @@ namespace Optsol.Components.Application.Services
             ILogger<BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> logger,
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, Guid> readRepository,
-            IWriteRepository<TEntity, Guid> writeRepository,
+            IMontoWriteRepository<TEntity, Guid> writeRepository,
             NotificationContext notificationContext)
         {
             _logger = logger;
@@ -162,6 +162,12 @@ namespace Optsol.Components.Application.Services
 
             GC.SuppressFinalize(this);
             _unitOfWork.Dispose();
+        }
+
+        private void LogNotifications(string method)
+        {
+            if (_notificationContext.HasNotifications)
+                _logger?.LogInformation($"Método: { method } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
         }
     }
 }

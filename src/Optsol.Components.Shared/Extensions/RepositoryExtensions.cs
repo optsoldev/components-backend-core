@@ -1,7 +1,7 @@
+using Optsol.Components.Shared.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Optsol.Components.Shared.Exceptions;
 
 namespace Optsol.Components.Shared.Extensions
 {
@@ -9,7 +9,7 @@ namespace Optsol.Components.Shared.Extensions
     {
         public static async Task<IEnumerable<TEntity>> AsyncEnumerableToEnumerable<TEntity>(this IAsyncEnumerable<TEntity> source)
         {
-            if(source == null)
+            if (source == null)
                 throw new AsyncEnumerableNullException();
 
             var result = new List<TEntity>();
@@ -19,6 +19,12 @@ namespace Optsol.Components.Shared.Extensions
             }
 
             return result.AsEnumerable();
+        }
+
+        public static async IAsyncEnumerable<TEntity> AsyncCursorToAsyncEnumerable<TEntity>(this Task<List<TEntity>> entities)
+        {
+            foreach (var entity in await entities)
+                yield return entity;
         }
     }
 }

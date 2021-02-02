@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Data;
 
-namespace Optsol.Components.Test.Utils.Data
+namespace Optsol.Components.Test.Utils.Entity
 {
     public class TestReadRepository : Repository<TestEntity, Guid>, ITestReadRepository
     {

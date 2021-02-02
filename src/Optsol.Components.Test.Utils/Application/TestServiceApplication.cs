@@ -4,7 +4,7 @@ using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 using System;
 
 namespace Optsol.Components.Test.Utils.Application
@@ -16,7 +16,7 @@ namespace Optsol.Components.Test.Utils.Application
             ILogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>> logger,
             IUnitOfWork unitOfWork,
             IReadRepository<TestEntity, Guid> readRepository,
-            IWriteRepository<TestEntity, Guid> writeRepository,
+            IMontoWriteRepository<TestEntity, Guid> writeRepository,
             NotificationContext notificationContext)
             : base(mapper, logger, unitOfWork, readRepository, writeRepository, notificationContext)
         {

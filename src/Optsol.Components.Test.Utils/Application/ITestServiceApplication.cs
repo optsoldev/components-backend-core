@@ -1,5 +1,5 @@
 using Optsol.Components.Application.Services;
-using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 
 namespace Optsol.Components.Test.Utils.Application
 {

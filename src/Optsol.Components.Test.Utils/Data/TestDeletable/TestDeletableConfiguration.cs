@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Infra.Data;
 
-namespace Optsol.Components.Test.Utils.Data
+namespace Optsol.Components.Test.Utils.Entity
 {
     public class TestDeletableConfiguration : EntityConfigurationDeletableBase<TestDeletableEntity, Guid>
     {

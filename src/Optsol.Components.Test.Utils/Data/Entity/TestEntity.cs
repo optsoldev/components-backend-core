@@ -2,7 +2,7 @@ using System;
 using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
 
-namespace Optsol.Components.Test.Utils.Data
+namespace Optsol.Components.Test.Utils.Entity
 {
     public class TestEntity : AggregateRoot
     {

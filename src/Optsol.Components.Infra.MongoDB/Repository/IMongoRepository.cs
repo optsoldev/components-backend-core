@@ -2,12 +2,12 @@
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.MongoDB.Context;
-using System;
 
 namespace Optsol.Components.Infra.MongoDB.Repository
 {
-    public interface IMongoRepository<TEntity, TKey>
-        : IRepository<TEntity, TKey>, IDisposable
+    public interface IMongoRepository<TEntity, TKey> :
+        IMongoReadRepository<TEntity, TKey>,
+        IMontoWriteRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
         MongoContext Context { get; }

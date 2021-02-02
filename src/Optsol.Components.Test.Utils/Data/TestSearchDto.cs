@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Extensions;
 
-namespace Optsol.Components.Test.Utils.Data
+namespace Optsol.Components.Test.Utils.Entity
 {
 
     public class TestSearchDto : ISearch<TestEntity>, IOrderBy<TestEntity>, IInclude<TestEntity>
