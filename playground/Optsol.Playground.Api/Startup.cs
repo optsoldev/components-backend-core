@@ -45,6 +45,7 @@ namespace Optsol.Playground.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger(Configuration);
             }
 
             app.UseSwagger(Configuration);

@@ -14,7 +14,7 @@ namespace Optsol.Components.Service.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public abstract class ApiControllerBase : ControllerBase
+    public class ApiControllerBase : ControllerBase, IApiControllerBase
     {
         protected IActionResult CreateResult(Response response)
         {

@@ -14,20 +14,44 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Application.Services
 {
+    public class BaseServiceApplication : IBaseServiceApplication
+    {
+        protected readonly IMapper _mapper;
+        protected readonly ILogger _logger;
+        protected readonly IUnitOfWork _unitOfWork;
+        protected readonly NotificationContext _notificationContext;
+
+        public BaseServiceApplication(IMapper mapper, ILogger logger, IUnitOfWork unitOfWork, NotificationContext notificationContext)
+        {
+            _logger = logger;
+            _logger?.LogInformation($"Inicializando Application Service");
+
+            _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
+
+            _mapper = mapper ?? throw new AutoMapperNullException();
+
+            _notificationContext = notificationContext ?? throw new NotificationContextException();
+        }
+
+        public virtual void Dispose()
+        {
+
+            GC.SuppressFinalize(this);
+            _unitOfWork.Dispose();
+        }
+    }
+
     public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
-        : IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable
+        : BaseServiceApplication, IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
     {
-        protected readonly IMapper _mapper;
-        protected readonly ILogger _logger;
-        protected readonly IUnitOfWork _unitOfWork;
+        
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
         protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
-        protected readonly NotificationContext _notificationContext;
 
         public BaseServiceApplication(
             IMapper mapper,
@@ -35,16 +59,10 @@ namespace Optsol.Components.Application.Services
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, Guid> readRepository,
             IWriteRepository<TEntity, Guid> writeRepository,
-            NotificationContext notificationContext)
+            NotificationContext notificationContext) :
+            base(mapper, logger, unitOfWork, notificationContext)
         {
-            _logger = logger;
             _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, Guid>");
-
-            _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
-
-            _mapper = mapper ?? throw new AutoMapperNullException();
-
-            _notificationContext = notificationContext ?? throw new NotificationContextException();
 
             _readRepository = readRepository;
 
@@ -155,13 +173,6 @@ namespace Optsol.Components.Application.Services
 
             _notificationContext.AddNotification("Commit", "Houve um problema ao salvar os dados!");
             return false;
-        }
-
-        public virtual void Dispose()
-        {
-
-            GC.SuppressFinalize(this);
-            _unitOfWork.Dispose();
         }
 
         private void LogNotifications(string method)

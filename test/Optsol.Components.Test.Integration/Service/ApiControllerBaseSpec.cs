@@ -8,7 +8,6 @@ using Optsol.Components.Application.Services;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
-using Optsol.Components.Services;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
@@ -109,7 +108,7 @@ namespace Optsol.Components.Test.Integration.Service
             services.AddDomainNotifications();
             services.AddContext<TestContext>(new ContextOptionsBuilder());
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
-            services.AddApplicationServices<IServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>, TestServiceApplication>("Optsol.Components.Test.Utils");
             services.AddApiServices();
             
             var provider = services.BuildServiceProvider();
@@ -159,7 +158,7 @@ namespace Optsol.Components.Test.Integration.Service
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
             services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<IServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplicationServices<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>, TestServiceApplication>("Optsol.Components.Test.Utils");
             services.AddApiServices();
             
             var provider = services.BuildServiceProvider();
