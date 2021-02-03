@@ -1,7 +1,6 @@
+using Optsol.Components.Domain.Entities;
 using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
@@ -12,6 +11,6 @@ namespace Optsol.Components.Infra.Data
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(TKey id);
-        Task<int> SaveChanges();
+        Task<int> SaveChangesAsync();
     }
 }

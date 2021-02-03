@@ -25,10 +25,10 @@ namespace Optsol.Components.Test.Utils.Data
         {
             AddNotifications(new Contract()
                 .Requires()
-                .HasMinLen(Nome, 3, "NomeValueObject.Nome", "O nome deve ter no mínino 3 caracteres")
-                .HasMinLen(SobreNome, 3, "NomeValueObject.SobreNome", "O sobrenome deve ter no mínino 3 caracteres")
-                .HasMaxLen(Nome, 35, "NomeValueObject.Nome", "O nome deve ter no máximo 35 caracteres")
-                .HasMaxLen(SobreNome, 35, "NomeValueObject.SobreNome", "O sobrenome deve ter no máximo 35 caracteres")
+                .HasMinLen(Nome, 3, $"{nameof(NomeValueObject.Nome)}", "O nome deve ter no mínino 3 caracteres")
+                .HasMinLen(SobreNome, 3, $"{nameof(NomeValueObject.SobreNome)}", "O sobrenome deve ter no mínino 3 caracteres")
+                .HasMaxLen(Nome, 35, $"{nameof(NomeValueObject.Nome)}", "O nome deve ter no máximo 35 caracteres")
+                .HasMaxLen(SobreNome, 35, $"{nameof(NomeValueObject.SobreNome)}", "O sobrenome deve ter no máximo 35 caracteres")
                 );
         }
     }

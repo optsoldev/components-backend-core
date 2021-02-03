@@ -1,5 +1,6 @@
 using Flunt.Validations;
-using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.DataTransferObjects;
+using System;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
 {
@@ -7,8 +8,8 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
     {
         public string Id { get; set; }
         public string Nome { get; set; }
-        public string Sobrenome { get; set; }
         public string Email { get; set; }
+        public DateTime DataCriacao { get; set; } 
         public bool Ativo { get; set; }
 
         public override void Validate()

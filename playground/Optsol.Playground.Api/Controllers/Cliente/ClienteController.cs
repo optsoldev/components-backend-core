@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Service;
-using Optsol.Components.Service.Response;
+using Optsol.Components.Service.Controllers;
+using Optsol.Components.Service.Responses;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;

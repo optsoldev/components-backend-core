@@ -1,0 +1,173 @@
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
+using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Domain.Entities;
+using Optsol.Components.Domain.Notifications;
+using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.UoW;
+using Optsol.Components.Shared.Exceptions;
+using Optsol.Components.Shared.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Optsol.Components.Application.Services
+{
+    public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+        : IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable
+        where TEntity : AggregateRoot
+        where TGetByIdDto : BaseDataTransferObject
+        where TGetAllDto : BaseDataTransferObject
+        where TInsertData : BaseDataTransferObject
+        where TUpdateData : BaseDataTransferObject
+    {
+        protected readonly IMapper _mapper;
+        protected readonly ILogger _logger;
+        protected readonly IUnitOfWork _unitOfWork;
+        protected readonly IReadRepository<TEntity, Guid> _readRepository;
+        protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
+        protected readonly NotificationContext _notificationContext;
+
+        public BaseServiceApplication(
+            IMapper mapper,
+            ILogger<BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> logger,
+            IUnitOfWork unitOfWork,
+            IReadRepository<TEntity, Guid> readRepository,
+            IWriteRepository<TEntity, Guid> writeRepository,
+            NotificationContext notificationContext)
+        {
+            _logger = logger;
+            _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, Guid>");
+
+            _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
+
+            _mapper = mapper ?? throw new AutoMapperNullException();
+
+            _notificationContext = notificationContext ?? throw new NotificationContextException();
+
+            _readRepository = readRepository;
+
+            _writeRepository = writeRepository;
+        }
+
+        public virtual async Task<TGetByIdDto> GetByIdAsync(Guid id)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetAllDto).Name }");
+
+            var entity = await _readRepository.GetByIdAsync(id);
+
+            return _mapper.Map<TGetByIdDto>(entity);
+        }
+
+        public virtual async Task<IEnumerable<TGetAllDto>> GetAllAsync()
+        {
+            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
+
+            var entities = await _readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
+
+            return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
+        }
+
+        public virtual async Task InsertAsync(TInsertData data)
+        {
+            data.Validate();
+            if (data.Invalid)
+            {
+                _notificationContext.AddNotifications(data.Notifications);
+
+                LogNotifications(nameof(InsertAsync));
+
+                return;
+            }
+
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
+
+            var entity = _mapper.Map<TEntity>(data);
+
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TInsertData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+
+            entity.Validate();
+
+            _notificationContext.AddNotifications((entity as Entity<Guid>).Notifications);
+
+            LogNotifications(nameof(InsertAsync));
+
+            await _writeRepository.InsertAsync(entity);
+
+            await CommitAsync();
+            
+        }
+
+        public virtual async Task UpdateAsync(TUpdateData data)
+        {
+            data.Validate();
+            if (data.Invalid)
+            {
+                _notificationContext.AddNotifications(data.Notifications);
+
+                LogNotifications(nameof(UpdateAsync));
+
+                return;
+            }
+
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
+
+            var entity = _mapper.Map<TEntity>(data);
+
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TUpdateData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+
+            var entitySelectForUpdate = await _readRepository.GetByIdAsync(entity.Id);
+
+            var entityNotFound = entitySelectForUpdate == null;
+            if (entityNotFound)
+            {
+                _notificationContext.AddNotification(entity.Id.ToString(), "Registro não foi encontrado.");
+            }
+
+            entity.Validate();
+            _notificationContext.AddNotifications(entity.Notifications);
+
+            var hasNotifications = _notificationContext.HasNotifications;
+            if (hasNotifications)
+            {
+                LogNotifications(nameof(entity));
+            }
+
+            await _writeRepository.UpdateAsync(entity);
+
+            await CommitAsync();
+        }
+
+        public virtual async Task DeleteAsync(Guid id)
+        {
+            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ id:{ id.ToString() } }})");
+
+            await _writeRepository.DeleteAsync(id);
+
+            await CommitAsync();
+        }
+
+        public virtual async Task<bool> CommitAsync()
+        {
+            if (_notificationContext.HasNotifications) return false;
+            if ((await _unitOfWork.CommitAsync())) return true;
+
+            _notificationContext.AddNotification("Commit", "Houve um problema ao salvar os dados!");
+            return false;
+        }
+
+        public virtual void Dispose()
+        {
+
+            GC.SuppressFinalize(this);
+            _unitOfWork.Dispose();
+        }
+
+        private void LogNotifications(string method)
+        {
+            if (_notificationContext.HasNotifications)
+                _logger?.LogInformation($"Método: { method } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
+        }
+    }
+}

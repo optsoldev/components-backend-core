@@ -3,12 +3,19 @@ using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Data
 {
-    public interface IRepository<TEntity, TKey> :
+    public interface IBaseRepository<TEntity, TKey> :
         IReadRepository<TEntity, TKey>,
         IWriteRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
-        DbContext Context { get; }
+
+    }
+
+    public interface IRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
+        where TEntity : class, IAggregateRoot<TKey>
+    {
+        CoreContext Context { get; }
+
         DbSet<TEntity> Set { get; }
     }
 }

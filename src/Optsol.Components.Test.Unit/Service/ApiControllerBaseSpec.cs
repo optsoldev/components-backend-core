@@ -1,15 +1,17 @@
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
-using Optsol.Components.Service;
-using Optsol.Components.Service.Response;
+using Optsol.Components.Service.Controllers;
+using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 using Optsol.Components.Test.Utils.Service;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Service
@@ -41,7 +43,13 @@ namespace Optsol.Components.Test.Unit.Service
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestViewModel>())).Returns(entity);
 
             var mockApplicationService = new Mock<ITestServiceApplication>();
+            
+            var mockResponse = new Mock<Response>();
+
             var mockResponseFactory = new Mock<IResponseFactory>();
+            mockResponseFactory.Setup(setup => setup.Create()).Returns(new Response());
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<TestViewModel>())).Returns(new Response<TestViewModel>(model, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<IEnumerable<TestViewModel>>())).Returns(new ResponseList<TestViewModel>(new[] { model }, true));
 
             var controller = new TestController(logger, mockApplicationService.Object, mockResponseFactory.Object);
 

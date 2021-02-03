@@ -16,7 +16,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception = new DbContextNullException();
 
             //Then
-            var msg = "O parametro contexto está nulo";
+            var msg = "O parametro DBContext não foi resolvido pela injeção de dependência";
             exception.Message.Should().Be(msg);
         }
     }

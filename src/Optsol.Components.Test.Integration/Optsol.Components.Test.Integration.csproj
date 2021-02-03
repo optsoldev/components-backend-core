@@ -4,6 +4,14 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Settings\appsettings.mongo.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Settings\appsettings.mongo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -20,6 +28,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />

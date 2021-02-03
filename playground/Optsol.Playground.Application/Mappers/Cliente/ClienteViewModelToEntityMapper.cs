@@ -1,6 +1,7 @@
 using AutoMapper;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
+using Optsol.Playground.Domain.ValueObjects;
 
 namespace Optsol.Playground.Application.Mappers.Cliente
 {
@@ -9,12 +10,17 @@ namespace Optsol.Playground.Application.Mappers.Cliente
         public ClienteViewModelToEntityMapper()
         {
             CreateMap<InsertClienteViewModel, ClienteEntity>()
-                .ForMember(item => item.Nome, item => item.MapFrom(src => src.Nome))
-                .ForMember(item => item.Email, item => item.MapFrom(src => src.Email));
+                .IgnoreAllPropertiesWithAnInaccessibleSetter()
+                .ConstructUsing(source => new ClienteEntity(
+                    new NomeValueObject(source.Nome, source.SobreNome),
+                    new EmailValueObject(source.Email)));
 
             CreateMap<UpdateClienteViewModel, ClienteEntity>()
-                .ForMember(item => item.Nome, item => item.MapFrom(src => src.Nome))
-                .ForMember(item => item.Email, item => item.MapFrom(src => src.Email));
+                .IgnoreAllPropertiesWithAnInaccessibleSetter()
+                .ConstructUsing(source => new ClienteEntity(
+                    source.Id, 
+                    new NomeValueObject(source.Nome, source.SobreNome), 
+                    new EmailValueObject(source.Email)));
         }
     }
 }

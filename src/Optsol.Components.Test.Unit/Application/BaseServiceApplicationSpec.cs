@@ -1,18 +1,18 @@
-using System;
 using AutoMapper;
 using FluentAssertions;
 using Moq;
-using Optsol.Components.Application.Service;
+using Optsol.Components.Application.Services;
+using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
+using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
-using Xunit;
-using Optsol.Components.Shared.Extensions;
+using Optsol.Components.Test.Utils.Entity;
+using System;
 using System.Linq;
-using Optsol.Components.Application.Result;
+using Xunit;
 using static Optsol.Components.Test.Utils.Utils;
-using Optsol.Components.Test.Utils.Data;
 
 namespace Optsol.Components.Test.Unit.Application
 {
@@ -49,25 +49,23 @@ namespace Optsol.Components.Test.Unit.Application
 
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(true);
-
-            Mock<IServiceResultFactory> serviceResultFactoryMock = new Mock<IServiceResultFactory>();
-            serviceResultFactoryMock.Setup(factory => factory.Create()).Returns(new ServiceResult());
-            serviceResultFactoryMock.Setup(factory => factory.Create<TestViewModel>(It.IsAny<TestViewModel>())).Returns(new ServiceResult<TestViewModel>(model));
-
+                        
             Mock<IReadRepository<TestEntity, Guid>> readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
             readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
             readRepository.Setup(repository => repository.GetAllAsync()).Returns(GetAllAggregateRootAsyncEnumerable(entity, entity2));
 
             Mock<IWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
 
+            Mock<NotificationContext> notificationContextMock = new Mock<NotificationContext>();
+
             var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
             var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
                 mapperMock.Object,
                 logger,
-                serviceResultFactoryMock.Object,
                 unitOfWork.Object,
                 readRepository.Object,
-                writeRepository.Object);
+                writeRepository.Object,
+                notificationContextMock.Object);
 
             //When
             service.GetByIdAsync(entity.Id).ConfigureAwait(false);

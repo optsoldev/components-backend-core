@@ -1,22 +1,21 @@
-using System.Linq;
-using System;
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.UoW;
+using Optsol.Components.Shared.Extensions;
+using Optsol.Playground.Application.Mappers.Cliente;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Domain.ValueObjects;
-using Xunit;
-using Microsoft.Extensions.DependencyInjection;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
-using Optsol.Playground.Application.Mappers.Cliente;
-using Optsol.Playground.Application.ViewModels;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Optsol.Components.Shared.Extensions;
+using Xunit;
 
 namespace Optsol.Playground.Test
 {
@@ -35,9 +34,10 @@ namespace Optsol.Playground.Test
 
             services.AddLogging();
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder());
+            services.AddDomainNotifications();
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
-            services.AddAServices();
+            services.AddApiServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
 
             _serviceProvider = services.BuildServiceProvider();
@@ -50,8 +50,9 @@ namespace Optsol.Playground.Test
             var clienteServiceApplication = _serviceProvider.GetRequiredService<IClienteServiceApplication>();
 
             var insertClienteViewModel = new InsertClienteViewModel();
-            insertClienteViewModel.Nome = new NomeObjectViewModel { Nome = "Weslley", SobreNome = "Bruno" };
-            insertClienteViewModel.Email = new EmailObjetcViewModel { Email = "weslley@outlook.com" };
+            insertClienteViewModel.Nome = "Weslley";
+            insertClienteViewModel.SobreNome = "Bruno";
+            insertClienteViewModel.Email = "weslley@outlook.com";
 
             //When
             await clienteServiceApplication.InsertAsync(insertClienteViewModel);
@@ -62,9 +63,9 @@ namespace Optsol.Playground.Test
 
             clientes.Should().HaveCount(1);
             var cliente = clientes.FirstOrDefault();
-            cliente.Nome.Nome.Should().Be(insertClienteViewModel.Nome.Nome);
-            cliente.Nome.SobreNome.Should().Be(insertClienteViewModel.Nome.SobreNome);
-            cliente.Email.Email.Should().Be(insertClienteViewModel.Email.Email);
+            cliente.Nome.Nome.Should().Be(insertClienteViewModel.Nome);
+            cliente.Nome.SobreNome.Should().Be(insertClienteViewModel.SobreNome);
+            cliente.Email.Email.Should().Be(insertClienteViewModel.Email);
             cliente.PossuiCartao.Should().BeFalse();
             cliente.Ativo.Should().BeFalse();
             cliente.Valid.Should().BeTrue();

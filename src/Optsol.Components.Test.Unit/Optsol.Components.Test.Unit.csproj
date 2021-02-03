@@ -19,6 +19,7 @@
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
     <ProjectReference Include="..\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />

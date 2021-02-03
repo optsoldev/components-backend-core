@@ -15,14 +15,13 @@ namespace Optsol.Playground.Infra.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.2");
 
-            modelBuilder.Entity("Optsol.Playground.Domain.Entidades.CartaoCreditoEntity", b =>
+            modelBuilder.Entity("Optsol.Playground.Domain.Entities.CartaoCreditoEntity", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ClienteId")
@@ -30,26 +29,26 @@ namespace Optsol.Playground.Infra.Migrations
 
                     b.Property<string>("CodigoVerificacao")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnName("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("CreatedDate");
 
                     b.Property<string>("NomeCliente")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Numero")
                         .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("Validade")
-                        .HasColumnType("datetime2")
-                        .HasMaxLength(200);
+                        .HasMaxLength(200)
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -58,34 +57,35 @@ namespace Optsol.Playground.Infra.Migrations
                     b.ToTable("CartaoCredito");
                 });
 
-            modelBuilder.Entity("Optsol.Playground.Domain.Entidades.ClienteEntity", b =>
+            modelBuilder.Entity("Optsol.Playground.Domain.Entities.ClienteEntity", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnName("CreateDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("CreatedDate");
 
                     b.HasKey("Id");
 
                     b.ToTable("Cliente");
                 });
 
-            modelBuilder.Entity("Optsol.Playground.Domain.Entidades.CartaoCreditoEntity", b =>
+            modelBuilder.Entity("Optsol.Playground.Domain.Entities.CartaoCreditoEntity", b =>
                 {
-                    b.HasOne("Optsol.Playground.Domain.Entidades.ClienteEntity", "Cliente")
+                    b.HasOne("Optsol.Playground.Domain.Entities.ClienteEntity", "Cliente")
                         .WithMany("Cartoes")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Cliente");
                 });
 
-            modelBuilder.Entity("Optsol.Playground.Domain.Entidades.ClienteEntity", b =>
+            modelBuilder.Entity("Optsol.Playground.Domain.Entities.ClienteEntity", b =>
                 {
                     b.OwnsOne("Optsol.Playground.Domain.ValueObjects.EmailValueObject", "Email", b1 =>
                         {
@@ -94,9 +94,9 @@ namespace Optsol.Playground.Infra.Migrations
 
                             b1.Property<string>("Email")
                                 .IsRequired()
-                                .HasColumnName("Email")
+                                .HasMaxLength(200)
                                 .HasColumnType("nvarchar(200)")
-                                .HasMaxLength(200);
+                                .HasColumnName("Email");
 
                             b1.HasKey("ClienteEntityId");
 
@@ -113,15 +113,15 @@ namespace Optsol.Playground.Infra.Migrations
 
                             b1.Property<string>("Nome")
                                 .IsRequired()
-                                .HasColumnName("Nome")
+                                .HasMaxLength(200)
                                 .HasColumnType("nvarchar(200)")
-                                .HasMaxLength(200);
+                                .HasColumnName("Nome");
 
                             b1.Property<string>("SobreNome")
                                 .IsRequired()
-                                .HasColumnName("Sobrenome")
+                                .HasMaxLength(200)
                                 .HasColumnType("nvarchar(200)")
-                                .HasMaxLength(200);
+                                .HasColumnName("Sobrenome");
 
                             b1.HasKey("ClienteEntityId");
 
@@ -130,6 +130,15 @@ namespace Optsol.Playground.Infra.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("ClienteEntityId");
                         });
+
+                    b.Navigation("Email");
+
+                    b.Navigation("Nome");
+                });
+
+            modelBuilder.Entity("Optsol.Playground.Domain.Entities.ClienteEntity", b =>
+                {
+                    b.Navigation("Cartoes");
                 });
 #pragma warning restore 612, 618
         }
