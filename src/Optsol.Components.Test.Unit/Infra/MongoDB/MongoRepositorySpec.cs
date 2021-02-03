@@ -16,7 +16,7 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
 {
     public class MongoRepositorySpec
     {
-        [Fact]
+        [Fact(Skip = "Integração com mongodb somente local")]
         public void Deve_Registrar_Logs_No_Repositorio_MongoDB()
         {
             //Given
