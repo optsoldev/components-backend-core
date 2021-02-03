@@ -5,22 +5,34 @@ namespace Optsol.Components.Infra.Data
     public class RequestSearch<TSearch>
         where TSearch : class
     {
-        public TSearch Search { get; set; }
+        private uint _page;
 
-        public uint page;
         public uint Page
         {
             get
             {
-                return page;
+                return _page;
             }
 
             set
             {
-                page = value <= 0 ? 1 : value;
+                _page = SetPageValue(value);
             }
         }
 
+        public TSearch Search { get; set; }
+
         public uint? PageSize { get; set; }
+
+        readonly Func<uint, uint> SetPageValue = 
+            (value) =>
+            {
+                var isZero = value == 0;
+                if (isZero)
+                {
+                    return 1;
+                }
+                return value;
+            };
     }
 }

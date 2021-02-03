@@ -7,7 +7,7 @@ namespace Optsol.Components.Test.Utils.Data
 {
     public class TestDeletableReadRepository : Repository<TestDeletableEntity, Guid>, ITestDeletableReadRepository
     {
-        public TestDeletableReadRepository(DbContext context, ILogger<Repository<TestDeletableEntity, Guid>> logger) 
+        public TestDeletableReadRepository(CoreContext context, ILogger<Repository<TestDeletableEntity, Guid>> logger) 
             : base(context, logger)
         {
         }

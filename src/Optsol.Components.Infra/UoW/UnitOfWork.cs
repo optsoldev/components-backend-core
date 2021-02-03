@@ -1,18 +1,18 @@
+using Microsoft.Extensions.Logging;
+using Optsol.Components.Infra.Data;
 using System;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Optsol.Components.Infra.UoW
 {
     public class UnitOfWork : IUnitOfWork
     {
         private bool disposed = false;
-        private ILogger _logger;
-        
-        public DbContext Context { get; protected set; }
+        private readonly ILogger _logger;
 
-        public UnitOfWork(DbContext context, ILogger<UnitOfWork> logger)
+        public CoreContext Context { get; protected set; }
+
+        public UnitOfWork(CoreContext context, ILogger<UnitOfWork> logger)
         {
             _logger = logger;
             _logger?.LogInformation("Inicializando UnitOfWork");
@@ -24,19 +24,9 @@ namespace Optsol.Components.Infra.UoW
         {
             _logger?.LogInformation($"Método: { nameof(CommitAsync) }() Retorno: bool");
 
-            return Task.FromResult(Context.SaveChanges() > 0);
-        }
+            var saveChanges = Context.SaveChanges() > 0;
 
-        private void Dispose(bool disposing)
-        {
-            if(!disposed)
-            {
-                if(disposing)
-                {
-                    Context.Dispose();
-                }
-            }            
-            disposed = true;
+            return Task.FromResult(saveChanges);
         }
 
         public void Dispose()
@@ -45,6 +35,18 @@ namespace Optsol.Components.Infra.UoW
 
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    Context.Dispose();
+                }
+            }
+            disposed = true;
         }
     }
 }

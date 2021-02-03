@@ -5,7 +5,7 @@ namespace Optsol.Components.Shared.Exceptions
     public class DbContextNullException : Exception
     {  
         public DbContextNullException()
-            : base ("O parametro contexto está nulo")
+            : base ("O parametro DBContext não foi resolvido pela injeção de dependência")
         {
             
         }

@@ -16,7 +16,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception = new AutoMapperNullException();
 
             //Then
-            var msg = "O parametro mapper não foi resolvido pela IoC";
+            var msg = "O parametro mapper não foi resolvido pela injeção de dependência";
             exception.Message.Should().Be(msg);
         }
     }

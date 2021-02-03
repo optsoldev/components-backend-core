@@ -1,5 +1,5 @@
 using Flunt.Validations;
-using Optsol.Components.Application.DataTransferObject;
+using Optsol.Components.Application.DataTransferObjects;
 
 namespace Optsol.Playground.Application.ViewModels.CartaoCredito
 {

@@ -13,15 +13,15 @@ namespace Optsol.Playground.Api.Controllers
         {
             var cliente = await _clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
 
-            return Ok(_responseFactory.Create(cliente));
+            return CreateResult(_responseFactory.Create(cliente));
         }
 
         [HttpPost("cartaoCredito")]
         public async Task<IActionResult> InserirCartaoNoCliente([FromBody] InsertCartaoCreditoViewModel insertCartaoCreditoViewModel)
         {
-            var response = await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
+            await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
 
-            return Ok(_responseFactory.Create(response));
+            return CreateResult(_responseFactory.Create());
         }
     }
 }

@@ -10,9 +10,11 @@ namespace Optsol.Playground.Domain.Entities
     public class ClienteEntity : AggregateRoot
     {
         public NomeValueObject Nome { get; private set; }
+
         public EmailValueObject Email { get; private set; }
 
         public bool Ativo { get; private set; }
+
         public bool PossuiCartao 
         { 
             get 

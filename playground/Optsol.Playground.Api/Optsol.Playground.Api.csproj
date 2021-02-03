@@ -1,17 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>dc49c63a-2ff2-4c0c-bc45-75d20767851d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Service\Optsol.Components.Service.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Application\Optsol.Components.Application.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\Optsol.Playground.Application\Optsol.Playground.Application.csproj" />
     <ProjectReference Include="..\Optsol.Playground.Domain\Optsol.Playground.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\Optsol.Playground.Infra\Optsol.Playground.Infra.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Flunt" Version="1.0.5" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Data;
+using Optsol.Components.Test.Utils.Entity;
 
 namespace Optsol.Components.Test.Integration.IoC
 {

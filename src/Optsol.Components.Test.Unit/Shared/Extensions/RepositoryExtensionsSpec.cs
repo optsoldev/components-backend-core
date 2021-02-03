@@ -30,11 +30,11 @@ namespace Optsol.Components.Test.Unit.Shared.Extensions
             
             setMock.Setup(set => set.AsAsyncEnumerable()).Returns(entitiesAsync);
             
-            Mock<DbContext> dbContextMock = new Mock<DbContext>();
-            dbContextMock.Setup(context => context.Set<AggregateRoot>()).Returns(setMock.Object);
+            var coreContextMock = new Mock<CoreContext>();
+            coreContextMock.Setup(context => context.Set<AggregateRoot>()).Returns(setMock.Object);
             
             var logger = new XunitLogger<Repository<AggregateRoot, Guid>>();
-            var repository = new Repository<AggregateRoot, Guid>(dbContextMock.Object, logger);
+            var repository = new Repository<AggregateRoot, Guid>(coreContextMock.Object, logger);
 
             //When
             var entities = await repository.GetAllAsync().AsyncEnumerableToEnumerable();
