@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.MongoDB.Context
 {
-    public partial class MongoContext : IDisposable
+    public class MongoContext : IDisposable
     {
         protected IMongoDatabase _database;
 

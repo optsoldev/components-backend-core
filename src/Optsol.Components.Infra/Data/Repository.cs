@@ -11,7 +11,7 @@ using Optsol.Components.Shared.Extensions;
 
 namespace Optsol.Components.Infra.Data
 {
-    public partial class Repository<TEntity, TKey> : IRepository<TEntity, TKey>, IDisposable
+    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>, IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
         private ILogger _logger;

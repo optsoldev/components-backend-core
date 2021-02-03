@@ -4,14 +4,6 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Settings\appsettings.mongo.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Settings\appsettings.mongo.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -22,17 +14,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.2" />
+    <PackageReference Include="Moq" Version="4.16.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
-    <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
-    <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
-    <ProjectReference Include="..\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />
     <ProjectReference Include="..\Optsol.Components.Test.Utils\Optsol.Components.Test.Utils.csproj" />
-    <ProjectReference Include="..\Optsol.Components.Service\Optsol.Components.Service.csproj" />
   </ItemGroup>
 </Project>
