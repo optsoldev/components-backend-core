@@ -14,42 +14,35 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Application.Services
 {
-    public class BaseServiceApplication : IBaseServiceApplication
+    public abstract class BaseServiceApplication : IBaseServiceApplication
     {
         protected readonly IMapper _mapper;
         protected readonly ILogger _logger;
-        protected readonly IUnitOfWork _unitOfWork;
+        
         protected readonly NotificationContext _notificationContext;
 
-        public BaseServiceApplication(IMapper mapper, ILogger logger, IUnitOfWork unitOfWork, NotificationContext notificationContext)
+        public BaseServiceApplication(IMapper mapper, ILogger logger, NotificationContext notificationContext)
         {
             _logger = logger;
             _logger?.LogInformation($"Inicializando Application Service");
-
-            _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
 
             _mapper = mapper ?? throw new AutoMapperNullException();
 
             _notificationContext = notificationContext ?? throw new NotificationContextException();
         }
 
-        public virtual void Dispose()
-        {
-
-            GC.SuppressFinalize(this);
-            _unitOfWork.Dispose();
-        }
+        public abstract void Dispose();
     }
 
     public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
-        : BaseServiceApplication, IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>, IDisposable
+        : BaseServiceApplication, IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
     {
-        
+        protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
         protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
 
@@ -60,13 +53,15 @@ namespace Optsol.Components.Application.Services
             IReadRepository<TEntity, Guid> readRepository,
             IWriteRepository<TEntity, Guid> writeRepository,
             NotificationContext notificationContext) :
-            base(mapper, logger, unitOfWork, notificationContext)
+            base(mapper, logger, notificationContext)
         {
             _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, Guid>");
 
             _readRepository = readRepository;
 
             _writeRepository = writeRepository;
+            
+            _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
         }
 
         public virtual async Task<TGetByIdDto> GetByIdAsync(Guid id)
@@ -179,6 +174,13 @@ namespace Optsol.Components.Application.Services
         {
             if (_notificationContext.HasNotifications)
                 _logger?.LogInformation($"Método: { method } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
+        }
+
+        public override void Dispose()
+        {
+
+            GC.SuppressFinalize(this);
+            _unitOfWork.Dispose();
         }
     }
 }
