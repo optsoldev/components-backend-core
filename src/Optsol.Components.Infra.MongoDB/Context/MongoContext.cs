@@ -37,6 +37,8 @@ namespace Optsol.Components.Infra.MongoDB.Context
         {
             Configure();
 
+            var countSaveTasks = 0;
+
             using (Session = await MongoClient.StartSessionAsync())
             {
                 Session.StartTransaction();
@@ -45,10 +47,14 @@ namespace Optsol.Components.Infra.MongoDB.Context
 
                 await Task.WhenAll(commandsTasks);
 
+                countSaveTasks = _commands.Count;
+
+                _commands.Clear();
+
                 await Session.CommitTransactionAsync();
             }
 
-            return _commands.Count;
+            return countSaveTasks;
         }
         
         public void AddCommand(Func<Task> command)
