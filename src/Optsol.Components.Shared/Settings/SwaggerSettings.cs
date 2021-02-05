@@ -2,7 +2,7 @@
 
 namespace Optsol.Components.Shared.Settings
 {
-    public class SwaggerSettings
+    public class SwaggerSettings : BaseSettings
     {
         public string Title { get; set; }
 
@@ -14,7 +14,7 @@ namespace Optsol.Components.Shared.Settings
 
         public string Description { get; set; }
 
-        public void Validate()
+        public override void Validate()
         {
             var titleIsNullOrEmpty = string.IsNullOrEmpty(Title);
             if (titleIsNullOrEmpty)
