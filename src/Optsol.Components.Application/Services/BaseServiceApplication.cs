@@ -82,6 +82,16 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
         }
 
+        public virtual async Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch)
+            where TSearch : class
+        {
+            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
+
+            var entities = await _readRepository.GetAllAsync(requestSearch);
+
+            return _mapper.Map<SearchResult<TGetAllDto>>(entities);
+        }
+
         public virtual async Task InsertAsync(TInsertData data)
         {
             data.Validate();
