@@ -18,7 +18,7 @@ namespace Optsol.Components.Application.Services
     {
         protected readonly IMapper _mapper;
         protected readonly ILogger _logger;
-        
+
         protected readonly NotificationContext _notificationContext;
 
         public BaseServiceApplication(IMapper mapper, ILogger logger, NotificationContext notificationContext)
@@ -60,7 +60,7 @@ namespace Optsol.Components.Application.Services
             _readRepository = readRepository;
 
             _writeRepository = writeRepository;
-            
+
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
         }
 
@@ -119,7 +119,7 @@ namespace Optsol.Components.Application.Services
             await _writeRepository.InsertAsync(entity);
 
             await CommitAsync();
-            
+
         }
 
         public virtual async Task UpdateAsync(TUpdateData data)
@@ -173,11 +173,23 @@ namespace Optsol.Components.Application.Services
 
         public virtual async Task<bool> CommitAsync()
         {
-            if (_notificationContext.HasNotifications) return false;
-            if ((await _unitOfWork.CommitAsync())) return true;
+            if (_notificationContext.HasNotifications)
+            {
+                return false;
+            }
 
-            _notificationContext.AddNotification("Commit", "Houve um problema ao salvar os dados!");
-            return false;
+            try
+            {
+                await _unitOfWork.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                _notificationContext.AddNotification("Error", ex.Message);
+
+                throw;
+            }
+
+            return true;
         }
 
         private void LogNotifications(string method)

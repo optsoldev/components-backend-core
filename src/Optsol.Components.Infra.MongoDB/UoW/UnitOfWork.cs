@@ -20,13 +20,11 @@ namespace Optsol.Components.Infra.MongoDB.UoW
             Context = context;
         }
 
-        public async Task<bool> CommitAsync()
+        public async Task<int> CommitAsync()
         {
             _logger?.LogInformation($"Método: { nameof(CommitAsync) }() Retorno: bool");
 
-            var saveChanges = await Context.SaveChangesAsync() > 0;
-
-            return saveChanges;
+            return await Context.SaveChangesAsync();
         }
 
         public void Dispose()
