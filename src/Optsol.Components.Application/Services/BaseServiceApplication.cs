@@ -77,7 +77,7 @@ namespace Optsol.Components.Application.Services
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
 
-            var entities = await _readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
+            var entities = await _readRepository.GetAllAsync();
 
             return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
         }

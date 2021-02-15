@@ -21,10 +21,18 @@ namespace Optsol.Components.Shared.Extensions
             return result.AsEnumerable();
         }
 
-        public static async IAsyncEnumerable<TEntity> AsyncCursorToAsyncEnumerable<TEntity>(this Task<List<TEntity>> entities)
+        public static async Task<IEnumerable<TEntity>> AsyncCursorToAsyncEnumerable<TEntity>(this Task<List<TEntity>> source)
         {
-            foreach (var entity in await entities)
-                yield return entity;
+            if (source == null)
+                throw new AsyncEnumerableNullException();
+
+            var result = new List<TEntity>();
+            foreach (var entity in await source)
+            {
+                result.Add(entity);
+            }
+
+            return result.AsEnumerable();
         }
     }
 }

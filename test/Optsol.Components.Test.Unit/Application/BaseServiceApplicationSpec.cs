@@ -10,6 +10,7 @@ using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Application;
 using Optsol.Components.Test.Utils.Entity;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using static Optsol.Components.Test.Utils.Utils;
@@ -49,10 +50,10 @@ namespace Optsol.Components.Test.Unit.Application
 
             Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(true);
-                        
+
             Mock<IReadRepository<TestEntity, Guid>> readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
             readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
-            readRepository.Setup(repository => repository.GetAllAsync()).Returns(GetAllAggregateRootAsyncEnumerable(entity, entity2));
+            readRepository.Setup(repository => repository.GetAllAsync()).ReturnsAsync(new List<TestEntity> { entity, entity2 });
 
             Mock<IWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
 
