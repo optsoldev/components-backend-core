@@ -33,35 +33,32 @@ namespace Optsol.Playground.Security.Identity
 
             services.AddControllers();
 
-            services.AddSecurity(Configuration, migrationAssembly, setup =>
-            {
-                return new ConfigurationSecurityData();
-            });
+            services.AddSecurity(Configuration, migrationAssembly);
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Optsol.Security.Identity", Version = "v1" });
 
-                c.AddSecurityDefinition("My Security Definition", new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    OpenIdConnectUrl = new Uri($"https://localhost:5003/.well-known/openid-configuration"),
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        AuthorizationCode = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri($"https://localhost:5003/connnect/authorize"),
-                            TokenUrl = new Uri($"https://localhost:5001/connect/token"),
-                            Scopes = new Dictionary<string, string>
-                                {
-                                    { "write", "the right to write" },
-                                    { "read", "the right to read" }
-                                }
-                        }
-                    }
-                });
+                //c.AddSecurityDefinition("My Security Definition", new OpenApiSecurityScheme
+                //{
+                //    Type = SecuritySchemeType.OAuth2,
+                //    BearerFormat = "JWT",
+                //    In = ParameterLocation.Header,
+                //    OpenIdConnectUrl = new Uri($"https://localhost:5003/.well-known/openid-configuration"),
+                //    Flows = new OpenApiOAuthFlows
+                //    {
+                //        AuthorizationCode = new OpenApiOAuthFlow
+                //        {
+                //            AuthorizationUrl = new Uri($"https://localhost:5003/connnect/authorize"),
+                //            TokenUrl = new Uri($"https://localhost:5001/connect/token"),
+                //            Scopes = new Dictionary<string, string>
+                //                {
+                //                    { "write", "the right to write" },
+                //                    { "read", "the right to read" }
+                //                }
+                //        }7
+                //    }
+                //});
             });
         }
 
@@ -79,7 +76,7 @@ namespace Optsol.Playground.Security.Identity
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

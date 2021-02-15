@@ -2,15 +2,16 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Optsol.Components.Shared.Settings;
 using Optsol.Playground.Application.Mappers.Cliente;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
+using System;
 
 namespace Optsol.Playground.Api
 {
@@ -31,6 +32,7 @@ namespace Optsol.Playground.Api
             var stringConnection = this.Configuration.GetSection("ConnectionStrings:DefaultConnection");
 
             services.AddControllers().ConfigureNewtonsoftJson();
+            services.AddScoped<DbContextOptions>();
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra", Environment.IsDevelopment()));
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
@@ -38,6 +40,10 @@ namespace Optsol.Playground.Api
             services.AddDomainNotifications();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
             services.AddSwagger(Configuration);
+        }
+        private Func<DbContextOptionsBuilder, DbContextOptions> Teste()
+        {
+            return options => options.Options;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

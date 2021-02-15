@@ -31,6 +31,7 @@ namespace Optsol.Security.Identity.Data
                 {
                     ClientId = "optsol-client",
                     RequirePkce = true,
+                    EnableLocalLogin = false,
                     AccessTokenType = AccessTokenType.Jwt,
                     AllowedGrantTypes = new List<string> { GrantType.AuthorizationCode },
                     ClientSecrets = { new Secret("secret".Sha256()) },

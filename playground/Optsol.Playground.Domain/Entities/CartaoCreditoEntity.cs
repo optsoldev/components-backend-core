@@ -22,8 +22,8 @@ namespace Optsol.Playground.Domain.Entities
             }
         }
 
-
         public Guid ClienteId { get; private set; }
+
         public ClienteEntity Cliente { get; private set; }
 
         public CartaoCreditoEntity()
