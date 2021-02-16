@@ -33,7 +33,7 @@ namespace Optsol.Playground.Security.Identity
                 builder =>
                 {
                     builder
-                        .WithOrigins("https://localhost:5003")
+                        .WithOrigins("https://localhost:5003", "https://localhost:5001")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();

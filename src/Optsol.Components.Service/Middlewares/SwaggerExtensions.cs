@@ -6,7 +6,7 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class SwaggerExtensions
     {
-        public static IApplicationBuilder UseSwagger(this IApplicationBuilder builder, IConfiguration configuration, bool isDevelopment)
+        public static IApplicationBuilder UseSwagger(this IApplicationBuilder app, IConfiguration configuration, bool isDevelopment)
         {
             var swaggerSettings = configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>();
             swaggerSettings.Validate();
@@ -14,8 +14,8 @@ namespace Microsoft.AspNetCore.Builder
             var enabledSwagger = swaggerSettings.Enabled;
             if (enabledSwagger)
             {
-                builder.UseSwagger();
-                builder.UseSwaggerUI(options =>
+                app.UseSwagger();
+                app.UseSwaggerUI(options =>
                 {
                     options.SwaggerEndpoint($"/swagger/{swaggerSettings.Version}/swagger.json", $"{swaggerSettings.Name} {swaggerSettings.Version.ToUpper()}");
 
@@ -33,9 +33,19 @@ namespace Microsoft.AspNetCore.Builder
                     }
                 });
 
+                if (isDevelopment)
+                {
+                    app.Use(async (context, next) =>
+                    {
+                        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                        context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                        await next();
+                    });
+                }
+
             }
 
-            return builder;
+            return app;
         }
     }
 }

@@ -34,7 +34,20 @@ namespace Optsol.Playground.Api
             services
                 .AddControllers()
                 .ConfigureNewtonsoftJson();
-            
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder
+                        .WithOrigins("https://localhost:5003")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra", Environment.IsDevelopment()));
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
@@ -57,11 +70,18 @@ namespace Optsol.Playground.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
+
             app.UseSwagger(Configuration, env.IsDevelopment());
+
+
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -71,7 +91,6 @@ namespace Optsol.Playground.Api
                 });
                 endpoints.MapDefaultControllerRoute();
             });
-
         }
     }
 }

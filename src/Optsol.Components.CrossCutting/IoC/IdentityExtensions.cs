@@ -1,4 +1,5 @@
 ﻿using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,12 +20,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services
                 .AddSingleton(securitySettings)
-                .AddAuthentication()
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
                     options.ApiName = securitySettings.ApiName;
                     options.Authority = securitySettings.Authority;
-                });
+                })
+                .AddCookie();
 
             return services;
         }

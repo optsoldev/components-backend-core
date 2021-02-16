@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Application.Services;
@@ -69,6 +70,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetByIdAsync(Guid id)
         {
@@ -80,6 +82,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetAllAsync()
         {
@@ -91,6 +94,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public virtual async Task<IActionResult> InsertAsync([FromBody] TInsertData data)
@@ -106,6 +110,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpPut]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public virtual async Task<IActionResult> UpdateAsync([FromBody] TUpdateData data)
@@ -122,6 +127,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> DeleteAsync(Guid id)
         {
