@@ -1,4 +1,4 @@
-﻿using IdentityServer4;
+﻿using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,13 +12,29 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class IdentityExtensions
     {
+        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
+        {
+            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>();
+            securitySettings.Validate();
+
+            services
+                .AddSingleton(securitySettings)
+                .AddAuthentication()
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    options.ApiName = securitySettings.ApiName;
+                    options.Authority = securitySettings.Authority;
+                });
+
+            return services;
+        }
 
         public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, string migrationAssembly, bool isDevelopment)
         {
-            IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+            IdentityModel.Logging.IdentityModelEventSource.ShowPII = isDevelopment;
 
-            var securityStrings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>();
-            securityStrings.Validate();
+            var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>() ?? throw new ArgumentNullException(nameof(ConnectionStrings));
+            connectionStrings.Validate();
 
             var migrationAssemblyIsNullOrEmpty = string.IsNullOrEmpty(migrationAssembly);
             if (migrationAssemblyIsNullOrEmpty)
@@ -27,15 +43,15 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services
-                .AddSingleton(securityStrings)
+                .AddSingleton(connectionStrings)
                 .AddIdentityServer()
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = context => context.UseSqlServer(securityStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
+                    options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
                 })
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = context => context.UseSqlServer(securityStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
+                    options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
                 })
                 .AddDeveloperSigningCredential(isDevelopment)
                 .AddTestUsers(isDevelopment, Confg.GetUsers());

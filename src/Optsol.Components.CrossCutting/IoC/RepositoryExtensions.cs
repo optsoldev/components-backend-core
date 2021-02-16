@@ -8,7 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddContext<TContext>(this IServiceCollection services, ContextOptionsBuilder options)
             where TContext: CoreContext
-        {
+        {            
+            
             services.AddDbContext<TContext>(options.Builder());
             services.AddScoped<CoreContext, TContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();

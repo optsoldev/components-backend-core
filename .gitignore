@@ -353,3 +353,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+#Node/React Project 
+node_modules
+dist

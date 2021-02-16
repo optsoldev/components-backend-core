@@ -24,29 +24,32 @@ namespace Optsol.Playground.Api
         }
 
         public IConfiguration Configuration { get; }
+        
         public IWebHostEnvironment Environment { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var stringConnection = this.Configuration.GetSection("ConnectionStrings:DefaultConnection");
 
-            services.AddControllers().ConfigureNewtonsoftJson();
-            services.AddScoped<DbContextOptions>();
+            services
+                .AddControllers()
+                .ConfigureNewtonsoftJson();
+            
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra", Environment.IsDevelopment()));
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+            
             services.AddApiServices();
-            services.AddDomainNotifications();
-            services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
+            
+            services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
-        }
-        private Func<DbContextOptionsBuilder, DbContextOptions> Teste()
-        {
-            return options => options.Options;
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            services.AddDomainNotifications();
+
+            services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
+
+        }
+                
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -54,13 +57,11 @@ namespace Optsol.Playground.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseSwagger(Configuration);
+            app.UseSwagger(Configuration, env.IsDevelopment());
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -68,7 +69,7 @@ namespace Optsol.Playground.Api
                 {
                     await context.Response.WriteAsync("Playground API Started.");
                 });
-                endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute();
             });
 
         }

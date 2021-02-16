@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Service.Controllers;
@@ -8,6 +9,7 @@ using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[Controller]")]
     public partial class ClienteController : ApiControllerBase<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>,

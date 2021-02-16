@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
+using Optsol.Components.Service.Filters;
 using Optsol.Components.Shared.Settings;
-using System.Linq;
+using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -12,21 +13,47 @@ namespace Microsoft.Extensions.DependencyInjection
             var swaggerSettings = configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>();
             swaggerSettings.Validate();
 
+            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>();
+            securitySettings.Validate();
+
             var enabledSwagger = swaggerSettings.Enabled;
             if (enabledSwagger)
             {
                 services.AddSingleton(swaggerSettings);
-                services.AddSwaggerGen(setup =>
+                services.AddSwaggerGen(options =>
                 {
-                    setup.SwaggerDoc(swaggerSettings.Version,
+                    options.SwaggerDoc(swaggerSettings.Version,
                         new OpenApiInfo
                         {
                             Title = swaggerSettings.Title,
                             Version = swaggerSettings.Version,
                             Description = swaggerSettings.Description
                         });
+
+                    var enabledSecurity = swaggerSettings.Security?.Enabled ?? false;
+                    if (enabledSecurity)
+                    {
+                        swaggerSettings.Security.Validate();
+
+                        options.AddSecurityDefinition(swaggerSettings.Security.Name,
+                            new OpenApiSecurityScheme
+                            {
+                                Type = SecuritySchemeType.OAuth2,
+                                Flows = new OpenApiOAuthFlows
+                                {
+                                    AuthorizationCode = new OpenApiOAuthFlow
+                                    {
+                                        AuthorizationUrl = new Uri($"{securitySettings.Authority}/connect/authorize"),
+                                        TokenUrl = new Uri($"{securitySettings.Authority}/connect/token"),
+                                        Scopes = swaggerSettings.Security.Scopes
+                                    }
+                                }
+                            });
+                    }
+
+                    options.OperationFilter<AuthorizeCheckOperationFilter>();
                 });
-            } 
+            }
 
             return services;
         }

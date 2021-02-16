@@ -2,17 +2,12 @@
 
 namespace Optsol.Components.Shared.Settings
 {
-    public class SecuritySettings : BaseSettings
+    public class ConnectionStrings : BaseSettings
     {
+        public string DefaultConnection { get; set; }
+
         public string IdentityConnection { get; set; }
 
-        public override void Validate()
-        {
-            var identityConnectionIsNullOrEmpty = string.IsNullOrEmpty(IdentityConnection);
-            if (identityConnectionIsNullOrEmpty)
-            {
-                throw new ArgumentNullException(nameof(IdentityConnection));
-            }
-        }
+        public override void Validate() { }
     }
 }

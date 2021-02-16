@@ -49,6 +49,22 @@ namespace Optsol.Security.Identity.Data
                         "https://localhost:5001",
                     },
                     AccessTokenLifetime = 86400
+                },
+                new Client
+                {
+                    ClientId = "optsol-swagger",
+                    ClientName = "Swagger UI for components optsol",
+                    ClientSecrets = {new Secret("secret".Sha256())},
+
+
+                    AllowAccessTokensViaBrowser = true,
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+
+                    RedirectUris = {"https://localhost:5001/swagger/oauth2-redirect.html"},
+                    AllowedCorsOrigins = {"https://localhost:5001"},
+                    AllowedScopes = { "webapi", "write", "read" },
                 }
             };
         }

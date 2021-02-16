@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Optsol.Components.Shared.Settings
 {
@@ -14,6 +15,9 @@ namespace Optsol.Components.Shared.Settings
 
         public string Description { get; set; }
 
+        public SwaggerSecurity Security { get; set; }
+
+
         public override void Validate()
         {
             var titleIsNullOrEmpty = string.IsNullOrEmpty(Title);
@@ -28,6 +32,24 @@ namespace Optsol.Components.Shared.Settings
                 throw new ArgumentNullException(nameof(Version));
             }
 
+            var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
+            if (nameIsNullOrEmpty)
+            {
+                throw new ArgumentNullException(nameof(Name));
+            }
+        }
+    }
+
+    public class SwaggerSecurity : BaseSettings
+    {
+        public string Name { get; set; }
+
+        public bool Enabled { get; set; }
+
+        public IDictionary<string, string> Scopes { get; set; } = new Dictionary<string, string>();
+
+        public override void Validate()
+        {
             var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
             if (nameIsNullOrEmpty)
             {
