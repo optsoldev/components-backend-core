@@ -18,6 +18,9 @@ namespace Optsol.Components.Infra.Security.Development
                     Claims = new List<Claim>
                     {
                         new Claim("sub", "1"),
+                        new Claim("optsol", "crud.buscar.id"),
+                        new Claim("optsol", "cliente.buscar.id"),
+                        new Claim("optsol", "cliente.buscar.todos")
                     },
                 },
                 new TestUser

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Components.Service.Filters;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Exceptions;
@@ -70,7 +71,8 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize]
+        [OptsolAuthorize("crud.buscar.id", AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetByIdAsync(Guid id)
         {

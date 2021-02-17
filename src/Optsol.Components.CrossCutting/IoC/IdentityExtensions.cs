@@ -1,11 +1,8 @@
-﻿using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Optsol.Components.Infra.Security.Data;
-using Optsol.Components.Infra.Security.Development;
-using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Shared.Settings;
 using System;
 
@@ -44,8 +41,9 @@ namespace Microsoft.Extensions.DependencyInjection
                 throw new ArgumentNullException(nameof(migrationAssembly));
             }
 
+            services.AddSingleton(connectionStrings);
+
             services
-                .AddSingleton(connectionStrings)
                 .AddIdentityServer()
                 .AddConfigurationStore(options =>
                 {
@@ -55,21 +53,21 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
                 })
-                .AddDeveloperSigningCredential(isDevelopment)
-                .AddTestUsers(isDevelopment, Confg.GetUsers());
-
+                .AddUserStore(options =>
+                {
+                    options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.DefaultConnection, sql => sql.MigrationsAssembly(migrationAssembly));
+                });
 
             return services;
         }
 
-        public static IServiceCollection AddSecurity<TSecurityData, TUserService>(this IServiceCollection services, IConfiguration configuration, string migrationAssembly, bool enableTestUser)
-            where TSecurityData : IConfigurationSecurityData
-            where TUserService : IUserService
+        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, string migrationAssembly, bool isDevelopment, Action<ConfigSecurityOptions> options)
         {
-            AddSecurity(services, configuration, migrationAssembly, enableTestUser);
+            AddSecurity(services, configuration, migrationAssembly, isDevelopment);
 
-            services.AddScoped(typeof(IConfigurationSecurityData), typeof(TSecurityData));
-            services.AddTransient(typeof(IUserService), typeof(TUserService));
+            var configSecurityOptions = new ConfigSecurityOptions(services);
+            
+            options(configSecurityOptions);
 
             return services;
         }

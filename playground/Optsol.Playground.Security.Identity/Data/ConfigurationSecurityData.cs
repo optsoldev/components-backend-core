@@ -1,10 +1,10 @@
 ﻿using IdentityServer4.Models;
-using Optsol.Components.Infra.Security.Data;
+using Optsol.Components.Infra.Security.Services;
 using System.Collections.Generic;
 
 namespace Optsol.Security.Identity.Data
 {
-    public class ConfigurationSecurityData : IConfigurationSecurityData
+    public class SecurityDataService : ISecurityDataService
     {
         public IList<ApiResource> GetApiResourcesConfig()
         {
@@ -29,35 +29,10 @@ namespace Optsol.Security.Identity.Data
             {
                 new Client
                 {
-                    ClientId = "optsol-client",
-                    RequirePkce = true,
-                    EnableLocalLogin = false,
-                    AccessTokenType = AccessTokenType.Jwt,
-                    AllowedGrantTypes = new List<string> { GrantType.AuthorizationCode },
-                    ClientSecrets = { new Secret("secret".Sha256()) },
-                    AllowedScopes = { "webapi", "write", "read" },
-                    Claims = new List<ClientClaim>
-                    {
-                        new ClientClaim("companyName", "John Doe LTD")
-                    },
-                    RedirectUris = new List<string>
-                    {
-                        "https://localhost:5001/signin-oidc"
-                    },
-                    AllowedCorsOrigins = new List<string>
-                    {
-                        "https://localhost:5001",
-                    },
-                    AccessTokenLifetime = 86400
-                },
-                new Client
-                {
                     ClientId = "optsol-swagger",
                     ClientName = "Swagger UI for components optsol",
                     ClientSecrets = {new Secret("secret".Sha256())},
 
-
-                    AllowAccessTokensViaBrowser = true,
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,

@@ -9,5 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Optsol.Components.Application\Optsol.Components.Application.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Infra.Security\Optsol.Components.Infra.Security.csproj" />
   </ItemGroup>
 </Project>

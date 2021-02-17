@@ -42,7 +42,12 @@ namespace Optsol.Playground.Security.Identity
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
-            services.AddSecurity<ConfigurationSecurityData, UserService>(Configuration, migrationAssembly, Environment.IsDevelopment());
+            services.AddSecurity(Configuration, migrationAssembly, Environment.IsDevelopment(), options =>
+            {
+                options.AddUserService<UserService>();
+
+                options.AddSecurityDataService<SecurityDataService>();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

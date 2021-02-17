@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Shared.Exceptions;
 using System.Linq;
 
@@ -14,7 +15,7 @@ namespace Optsol.Components.Infra.Security.Data
             var serviceScopeFactory = app.ApplicationServices.GetService<IServiceScopeFactory>();
             using (var serviceScope = serviceScopeFactory.CreateScope())
             {
-                var configurationSecurityData = serviceScope.ServiceProvider.GetRequiredService<IConfigurationSecurityData>() ?? throw new ConfigurationSecurityDataException<IConfigurationSecurityData>();
+                var configurationSecurityData = serviceScope.ServiceProvider.GetRequiredService<ISecurityDataService>() ?? throw new ConfigurationSecurityDataException<ISecurityDataService>();
 
                 serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
 
