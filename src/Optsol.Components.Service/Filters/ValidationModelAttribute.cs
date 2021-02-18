@@ -9,12 +9,21 @@ using System.Linq;
 
 namespace Optsol.Components.Service.Filters
 {
-    public class ValidationModelAttribute : ActionFilterAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public class ValidationModelAttribute : TypeFilterAttribute
+    {
+        public ValidationModelAttribute() : base(typeof(ValidationModelFilter))
+        {
+
+        }
+    }
+
+    public class ValidationModelFilter : ActionFilterAttribute
     {
         protected readonly IResponseFactory _responseFactory;
         protected readonly NotificationContext _notificationContext;
 
-        public ValidationModelAttribute(IResponseFactory responseFactory, NotificationContext notificationContext)
+        public ValidationModelFilter(IResponseFactory responseFactory, NotificationContext notificationContext)
         {
             _responseFactory = responseFactory;
             _notificationContext = notificationContext;

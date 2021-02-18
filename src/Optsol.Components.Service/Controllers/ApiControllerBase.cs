@@ -45,7 +45,7 @@ namespace Optsol.Components.Service.Controllers
         }
     }
 
-    [TypeFilter(typeof(ValidationModelAttribute))]
+    [ValidationModelAttribute]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         : ApiControllerBase, IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         where TEntity : AggregateRoot
