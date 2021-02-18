@@ -15,7 +15,6 @@
     <ProjectReference Include="..\Optsol.Components.Application\Optsol.Components.Application.csproj" />
     <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj" />
-    <ProjectReference Include="..\Optsol.Components.Infra.Security\Optsol.Components.Infra.Security.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\Optsol.Components.Service\Optsol.Components.Service.csproj" />
   </ItemGroup>
