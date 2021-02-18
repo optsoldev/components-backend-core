@@ -28,18 +28,7 @@ namespace Optsol.Playground.Security.Identity
         {
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                builder =>
-                {
-                    builder
-                        .WithOrigins("https://localhost:5003", "https://localhost:5001")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            services.AddCors(Configuration);
 
             services.AddMvc(options => { options.EnableEndpointRouting = false; });
 
@@ -58,7 +47,7 @@ namespace Optsol.Playground.Security.Identity
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("CorsPolicy");
+            app.UseCors(Configuration);
 
             app.UseHttpsRedirection();
 

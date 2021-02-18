@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Security.Data;
+using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using System;
 
@@ -13,10 +15,16 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
         {
-            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>() ?? throw new ArgumentNullException(nameof(SecuritySettings));
+            var servicesProvider = services.BuildServiceProvider();
+
+            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>() 
+                ?? throw new SecuritySettingNullException(servicesProvider.GetRequiredService<ILogger<SecuritySettingNullException>>());
+
             securitySettings.Validate();
 
-            var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>() ?? throw new ArgumentNullException(nameof(ConnectionStrings));
+            var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>()
+                ?? throw new ConnectionStringNullException(servicesProvider.GetRequiredService<ILogger<ConnectionStringNullException>>());
+
             connectionStrings.Validate();
 
             services

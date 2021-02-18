@@ -1,23 +1,24 @@
 using FluentAssertions;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Test.Shared.Logger;
+using System.Linq;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
-    public class ConnectionStringNullExceptionSpec
+    public class SecuritySettingsNullExceptionSpec
     {
         [Fact]
         public void Deve_Inicializar_Com_Mensagem_Erro()
         {
             //Given
-            ConnectionStringNullException exception;;  
+            SecuritySettingNullException exception;
 
             //When
-            exception = new ConnectionStringNullException();
+            exception = new SecuritySettingNullException(null);
 
             //Then
-            var msg = "A string de conexão não foi encontrada no appsettings";
+            var msg = "A configuração de segurança não foi encontrada no appsettings";
             exception.Message.Should().Be(msg);
         }
 
@@ -25,18 +26,19 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
         public void Deve_Logar_Informacao_Referente_Falta_Settings()
         {
             //Given
-            var logger = new XunitLogger<ConnectionStringNullException>();
+            var logger = new XunitLogger<SecuritySettingNullException>();
 
-            ConnectionStringNullException exception;
+            SecuritySettingNullException exception;
 
             //When
-            exception = new ConnectionStringNullException(logger);
+            exception = new SecuritySettingNullException(logger);
 
             //Then
-            var msg = "A string de conexão não foi encontrada no appsettings";
+            var msg = "A configuração de segurança não foi encontrada no appsettings";
             exception.Message.Should().Be(msg);
 
             logger.Logs.Should().NotBeEmpty();
+            logger.Logs.Any(a => a.Contains("SecuritySettings")).Should().BeTrue();
         }
     }
 }

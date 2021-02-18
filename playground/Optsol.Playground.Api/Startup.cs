@@ -36,18 +36,7 @@ namespace Optsol.Playground.Api
                 .AddControllers()
                 .ConfigureNewtonsoftJson();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                builder =>
-                {
-                    builder
-                        .WithOrigins("https://localhost:5003")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            services.AddCors(Configuration);
 
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra", Environment.IsDevelopment()));
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
@@ -68,7 +57,7 @@ namespace Optsol.Playground.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("CorsPolicy");
+            app.UseCors(Configuration);
 
             app.UseSwagger(Configuration, env.IsDevelopment());
 

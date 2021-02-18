@@ -5,16 +5,16 @@ using Xunit;
 
 namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
-    public class ConnectionStringNullExceptionSpec
+    public class CorsSettingsNullExceptionSpec
     {
         [Fact]
         public void Deve_Inicializar_Com_Mensagem_Erro()
         {
             //Given
-            ConnectionStringNullException exception;;  
+            CorsSettingsNullException exception;;  
 
             //When
-            exception = new ConnectionStringNullException();
+            exception = new CorsSettingsNullException(null);
 
             //Then
             var msg = "A string de conexão não foi encontrada no appsettings";
@@ -25,12 +25,12 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
         public void Deve_Logar_Informacao_Referente_Falta_Settings()
         {
             //Given
-            var logger = new XunitLogger<ConnectionStringNullException>();
+            var logger = new XunitLogger<CorsSettingsNullException>();
 
-            ConnectionStringNullException exception;
+            CorsSettingsNullException exception;
 
             //When
-            exception = new ConnectionStringNullException(logger);
+            exception = new CorsSettingsNullException(logger);
 
             //Then
             var msg = "A string de conexão não foi encontrada no appsettings";
