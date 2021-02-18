@@ -53,7 +53,7 @@ namespace Optsol.Components.Infra.Security.Attributes
                 return;
             }
 
-            context.Result = new ForbidResult();
+            context.Result = new UnauthorizedResult();
         }
     }
 }
