@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using IdentityServer4.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Optsol.Components.Infra.Security.Data;
 using Optsol.Components.Infra.Security.Services;
@@ -15,9 +16,12 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public readonly IServiceCollection ServiceCollection;
 
-        public ConfigSecurityOptions(IServiceCollection serviceCollection)
+        public readonly IIdentityServerBuilder IdentityBuilder;
+
+        public ConfigSecurityOptions(IServiceCollection serviceCollection, IIdentityServerBuilder identityBuilder)
         {
             ServiceCollection = serviceCollection;
+            IdentityBuilder = identityBuilder;
         }
 
         public IServiceCollection AddUserService<TUserService>()
@@ -34,6 +38,13 @@ namespace Microsoft.Extensions.DependencyInjection
             ServiceCollection.AddTransient<ISecurityDataService, TSecurityDataService>();
 
             return ServiceCollection;
+        }
+
+        public IIdentityServerBuilder AddProfileService<TProfileService>()
+            where TProfileService: class, IProfileService
+        {
+            ServiceCollection.AddTransient<IProfileService, TProfileService>();
+            return IdentityBuilder.AddProfileService<TProfileService>();
         }
     }
 

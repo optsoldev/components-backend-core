@@ -52,13 +52,11 @@ namespace Optsol.Playground.Api
             services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra", Environment.IsDevelopment()));
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
-            
+            services.AddDomainNotifications();
             services.AddApiServices();
 
             services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
-
-            services.AddDomainNotifications();
 
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
         }

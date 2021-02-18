@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.EntityFrameworkCore;
+using Optsol.Components.Infra.Security.Constants;
 using Optsol.Components.Infra.Security.Data;
 using System;
 using System.Linq;
@@ -34,10 +36,18 @@ namespace Optsol.Components.Infra.Security.Attributes
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var contextUser = context.HttpContext.User;
+            var nameUserForFilterNormalizedName = contextUser.FindFirst(SecurityClaimTypes.UserName).Value;
 
-            var applicationUser = _userManager.GetUserAsync(contextUser).GetAwaiter().GetResult();
+            var applicationUser = _userManager.Users
+                .Include(x => x.Claims)
+                .SingleAsync(x => x.NormalizedUserName == nameUserForFilterNormalizedName)
+                .GetAwaiter()
+                .GetResult();
 
-            var userAuthenticateHasClaim = contextUser.Identity.IsAuthenticated && applicationUser.Claims.Any(c => c.ClaimType.Equals("optsol") && c.ClaimValue.Equals(_claim, StringComparison.OrdinalIgnoreCase));
+            var userAuthenticateHasClaim = contextUser.Identity.IsAuthenticated
+                && applicationUser.Claims.Any(c => c.ClaimType.Equals("optsol")
+                && c.ClaimValue.Equals(_claim, StringComparison.OrdinalIgnoreCase));
+
             if (userAuthenticateHasClaim)
             {
                 return;

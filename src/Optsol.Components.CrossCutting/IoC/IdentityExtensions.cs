@@ -39,8 +39,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, string migrationAssembly, bool isDevelopment)
+        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, string migrationAssembly, bool isDevelopment, Action<ConfigSecurityOptions> securityOptions = null)
         {
+
             IdentityModel.Logging.IdentityModelEventSource.ShowPII = isDevelopment;
 
             var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>() ?? throw new ArgumentNullException(nameof(ConnectionStrings));
@@ -54,8 +55,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(connectionStrings);
 
-            services
-                .AddIdentityServer()
+            var identityBuilder = services.AddIdentityServer();
+            var configSecurityOptions = new ConfigSecurityOptions(services, identityBuilder);
+
+            identityBuilder
                 .AddDeveloperSigningCredential(isDevelopment)
                 .AddConfigurationStore(options =>
                 {
@@ -70,16 +73,9 @@ namespace Microsoft.Extensions.DependencyInjection
                     options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
                 });
 
-            return services;
-        }
 
-        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, string migrationAssembly, bool isDevelopment, Action<ConfigSecurityOptions> options)
-        {
-            AddSecurity(services, configuration, migrationAssembly, isDevelopment);
-
-            var configSecurityOptions = new ConfigSecurityOptions(services);
-            
-            options(configSecurityOptions);
+            if (securityOptions != null)
+                securityOptions(configSecurityOptions);
 
             return services;
         }

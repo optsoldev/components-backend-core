@@ -46,6 +46,8 @@ namespace Optsol.Playground.Security.Identity
             services.AddSecurity(Configuration, migrationAssembly, Environment.IsDevelopment(), options =>
             {
                 options.AddSecurityDataService<SecurityDataService>();
+
+                options.AddProfileService<ProfileService>();
             });
         }
 

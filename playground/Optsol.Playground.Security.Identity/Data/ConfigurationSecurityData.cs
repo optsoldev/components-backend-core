@@ -43,7 +43,7 @@ namespace Optsol.Security.Identity.Data
 
                     RedirectUris = {"https://localhost:5001/swagger/oauth2-redirect.html"},
                     AllowedCorsOrigins = {"https://localhost:5001"},
-                    AllowedScopes = { "webapi", "write", "read" },
+                    AllowedScopes = { "webapi", "write", "read" }
                 }
             };
         }
