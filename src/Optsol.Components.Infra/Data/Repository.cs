@@ -20,7 +20,6 @@ namespace Optsol.Components.Infra.Data
 
         public DbSet<TEntity> Set { get; protected set; }
 
-
         public Repository(CoreContext context, ILogger<Repository<TEntity, TKey>> logger)
         {
             _logger = logger;
@@ -37,11 +36,11 @@ namespace Optsol.Components.Infra.Data
             return Set.FindAsync(id).AsTask();
         }
 
-        public virtual IAsyncEnumerable<TEntity> GetAllAsync()
+        public virtual Task<IEnumerable<TEntity>> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
 
-            return Set.AsAsyncEnumerable();
+            return Set.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
         }
 
         public virtual Task<SearchResult<TEntity>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch)

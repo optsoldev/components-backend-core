@@ -2,13 +2,13 @@
 
 namespace Optsol.Components.Shared.Settings
 {
-    public class MongoSettings
+    public class MongoSettings : BaseSettings
     {
         public string ConnectionString { get; set; }
         
         public string DatabaseName { get; set; }
 
-        public void Validate()
+        public override void Validate()
         {
             var connectionStringIsNullOrEmpty = string.IsNullOrEmpty(ConnectionString);
             if (connectionStringIsNullOrEmpty)

@@ -37,7 +37,9 @@ bld/
 # Visual Studio 2015/2017 cache/options directory
 .vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
-#wwwroot/
+wwwroot/
+launchSettings.json
+*.jwk
 
 # Visual Studio 2017 auto generated files
 Generated\ Files/
@@ -351,3 +353,7 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+#Node/React Project 
+node_modules
+dist

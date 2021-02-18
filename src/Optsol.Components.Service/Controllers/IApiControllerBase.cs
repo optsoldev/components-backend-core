@@ -6,9 +6,7 @@ using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Service.Controllers
 {
-    public interface IApiControllerBase
-    {
-    }
+    public interface IApiControllerBase { }
 
     public interface IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> : IApiControllerBase
         where TEntity : AggregateRoot

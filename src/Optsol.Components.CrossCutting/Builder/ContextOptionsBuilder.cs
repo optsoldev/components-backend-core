@@ -15,6 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public string MigrationsAssemblyName { get; private set; }
 
+
         public ContextOptionsBuilder()
         {
             InMemory = true;
@@ -49,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 builder = BuilderInMemory();
             else
                 builder = BuilderConnectionString();
-
+                     
             return builder;
         }
 
@@ -61,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .EnableSensitiveDataLogging(EnableLogging);
         }
 
-        private  Action<DbContextOptionsBuilder> BuilderConnectionString()
+        private Action<DbContextOptionsBuilder> BuilderConnectionString()
         {
             Action<SqlServerDbContextOptionsBuilder> sqlOptions = null;
             if (!string.IsNullOrEmpty(this.MigrationsAssemblyName))

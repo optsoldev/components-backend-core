@@ -11,7 +11,6 @@ namespace Optsol.Components.Service.Filters
 {
     public class ValidationModelAttribute : ActionFilterAttribute
     {
-
         protected readonly IResponseFactory _responseFactory;
         protected readonly NotificationContext _notificationContext;
 

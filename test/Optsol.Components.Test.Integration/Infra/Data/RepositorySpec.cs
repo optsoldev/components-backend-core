@@ -47,7 +47,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             await unitOfWork.CommitAsync();
 
             //When
-            var entityResult = await readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
+            var entityResult = await readRepository.GetAllAsync();
 
             //Then
             entityResult.Should().HaveCount(3);
@@ -385,7 +385,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             await unitOfWork.CommitAsync();
 
             //When
-            var entityResult = await readRepository.GetAllAsync().AsyncEnumerableToEnumerable();
+            var entityResult = await readRepository.GetAllAsync();
 
             //Then
             entityResult.Should().HaveCount(2);

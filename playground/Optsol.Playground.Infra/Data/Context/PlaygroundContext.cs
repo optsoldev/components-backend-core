@@ -6,7 +6,7 @@ namespace Optsol.Playground.Infra.Data.Context
 {
     public class PlaygroundContext : CoreContext
     {
-        public PlaygroundContext(DbContextOptions options) 
+        public PlaygroundContext(DbContextOptions<PlaygroundContext> options) 
             : base(options)
         {
         }
