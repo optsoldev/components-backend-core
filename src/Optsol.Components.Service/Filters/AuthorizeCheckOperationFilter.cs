@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
+using Optsol.Components.Shared.Settings;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,19 @@ namespace Optsol.Components.Service.Filters
 {
     public class AuthorizeCheckOperationFilter : IOperationFilter
     {
+        private readonly SwaggerSettings _swaggerSettings;
+        private readonly SecuritySettings _securitySettings;
+
+        public AuthorizeCheckOperationFilter(SwaggerSettings swaggerSettings, SecuritySettings securitySettings)
+        {
+            _swaggerSettings = swaggerSettings;
+            _swaggerSettings.Validate();
+            _swaggerSettings.Security.Validate();
+
+            _securitySettings = securitySettings;
+            securitySettings.Validate();
+        }
+
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             var hasAuthorize =
@@ -24,12 +38,15 @@ namespace Optsol.Components.Service.Filters
                     new OpenApiSecurityRequirement
                     {
                         [
-                            new OpenApiSecurityScheme {Reference = new OpenApiReference
+                            new OpenApiSecurityScheme 
                             {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "oauth2"} //TODO: Load from config file or arguments
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = _swaggerSettings.Security.Name
+                                }
                             }
-                        ] = new[] {"webapi"} //TODO: Load from config file or arguments
+                        ] = new[] { _securitySettings.ApiName }
                     }
                 };
 

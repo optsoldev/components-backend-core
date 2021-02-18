@@ -17,7 +17,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception = new CorsSettingsNullException(null);
 
             //Then
-            var msg = "A string de conexão não foi encontrada no appsettings";
+            var msg = "A configuração do CORS não foi encontrada no appsettings";
             exception.Message.Should().Be(msg);
         }
 
@@ -33,7 +33,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception = new CorsSettingsNullException(logger);
 
             //Then
-            var msg = "A string de conexão não foi encontrada no appsettings";
+            var msg = "A configuração do CORS não foi encontrada no appsettings";
             exception.Message.Should().Be(msg);
 
             logger.Logs.Should().NotBeEmpty();
