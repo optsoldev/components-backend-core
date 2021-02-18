@@ -1,9 +1,10 @@
 ﻿using Optsol.Components.Infra.Security.Response;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Security.Services
 {
     public interface IUserService
     {
-        ValidationResult Authenticate(string username, string password);
+        Task<ValidationResult> Authenticate(string username, string password);
     }
 }

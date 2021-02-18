@@ -1,4 +1,5 @@
 ﻿using IdentityServer4.Models;
+using Optsol.Components.Infra.Security.Data;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Infra.Security.Services
@@ -10,5 +11,7 @@ namespace Optsol.Components.Infra.Security.Services
         IList<ApiScope> GetScopesConfig();
 
         IList<ApiResource> GetApiResourcesConfig();
+
+        IList<ApplicationUser> GetUsersConfig();
     }
 }

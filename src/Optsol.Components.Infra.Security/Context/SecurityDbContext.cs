@@ -6,10 +6,14 @@ namespace Optsol.Components.Infra.Security.Data
 {
     public class SecurityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid> 
     {
+        public SecurityDbContext()
+        {
+
+        }
+
         public SecurityDbContext(DbContextOptions<SecurityDbContext> options) 
             : base(options)
         {
-
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

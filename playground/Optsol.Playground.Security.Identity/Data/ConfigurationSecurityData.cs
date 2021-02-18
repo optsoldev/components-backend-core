@@ -1,11 +1,15 @@
 ﻿using IdentityServer4.Models;
+using Microsoft.AspNetCore.Identity;
+using Optsol.Components.Infra.Security.Data;
 using Optsol.Components.Infra.Security.Services;
+using System;
 using System.Collections.Generic;
 
 namespace Optsol.Security.Identity.Data
 {
     public class SecurityDataService : ISecurityDataService
     {
+
         public IList<ApiResource> GetApiResourcesConfig()
         {
             return new List<ApiResource>
@@ -51,6 +55,49 @@ namespace Optsol.Security.Identity.Data
                 new ApiScope("read"),
                 new ApiScope("write")
             };
+        }
+
+        public IList<ApplicationUser> GetUsersConfig()
+        {
+            var password = new PasswordHasher<ApplicationUser>();
+            Func<ApplicationUser, string> setPassword = (user) => password.HashPassword(user, "secret");
+
+            var users = new List<ApplicationUser>
+            {
+                 new ApplicationUser
+                 {
+                     Id = Guid.NewGuid(),
+                     UserName = "optsol",
+                     NormalizedUserName = "optsol",
+                     ExternalId = Guid.NewGuid(),
+                     IsEnabled = true,
+                     SecurityStamp = Guid.NewGuid().ToString(),
+                     Claims = new List<IdentityUserClaim<Guid>>
+                     {
+                         new IdentityUserClaim<Guid> { ClaimType = "sub", ClaimValue = "1" },
+                         new IdentityUserClaim<Guid> { ClaimType = "optsol", ClaimValue = "crud.buscar.id" },
+                         new IdentityUserClaim<Guid> { ClaimType = "optsol", ClaimValue = "cliente.buscar.id" },
+                         new IdentityUserClaim<Guid> { ClaimType = "optsol", ClaimValue = "cliente.buscar.todos" }
+                     },
+                 },
+                 new ApplicationUser
+                 {
+                     Id = Guid.NewGuid(),
+                     UserName = "basic",
+                     NormalizedUserName = "basic",
+                     ExternalId = Guid.NewGuid(),
+                     IsEnabled = true,
+                     SecurityStamp = Guid.NewGuid().ToString(),
+                     Claims = new List<IdentityUserClaim<Guid>>
+                     {
+                         new IdentityUserClaim<Guid> { ClaimType = "sub", ClaimValue = "2" }
+                     },
+                 }
+            };
+
+            users.ForEach(f => f.PasswordHash = setPassword(f));
+
+            return users;
         }
     }
 }

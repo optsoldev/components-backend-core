@@ -15,33 +15,59 @@ namespace Optsol.Components.Infra.Security.Data
             var serviceScopeFactory = app.ApplicationServices.GetService<IServiceScopeFactory>();
             using (var serviceScope = serviceScopeFactory.CreateScope())
             {
+                var persistedGrantContext = serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>();
+                MigratePersistedGrant(persistedGrantContext);
+
                 var configurationSecurityData = serviceScope.ServiceProvider.GetRequiredService<ISecurityDataService>() ?? throw new ConfigurationSecurityDataException<ISecurityDataService>();
 
-                serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
+                var configurationContext = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
+                MigrateConfiguration(configurationContext, configurationSecurityData);
 
-                var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
-                context.Database.Migrate();
+                var userContext = serviceScope.ServiceProvider.GetRequiredService<SecurityDbContext>();
+                MigrateUser(userContext, configurationSecurityData);
+            }
+        }
 
-                var clientsIsEmpty = !context.Clients.Any();
-                if (clientsIsEmpty)
-                {
-                    context.Clients.AddRange(configurationSecurityData.GetClientsConfig().ToEntity());
-                    context.SaveChanges();
-                }
+        private static void MigrateUser(SecurityDbContext context, ISecurityDataService configurationSecurityData)
+        {
+            context.Database.Migrate();
 
-                var apiResourcesIsEmpty = !context.ApiResources.Any();
-                if (apiResourcesIsEmpty)
-                {
-                    context.ApiResources.AddRange(configurationSecurityData.GetApiResourcesConfig().ToEntity());
-                    context.SaveChanges();
-                }
+            var usersIsEmpty = !context.Users.Any();
+            if (usersIsEmpty)
+            {
+                context.Users.AddRange(configurationSecurityData.GetUsersConfig());
+                context.SaveChanges();
+            }
+        }
 
-                var apiScopesIsEmpty = !context.ApiScopes.Any();
-                if(apiScopesIsEmpty)
-                {
-                    context.ApiScopes.AddRange(configurationSecurityData.GetScopesConfig().ToEntity());
-                    context.SaveChanges();
-                }
+        private static void MigratePersistedGrant(PersistedGrantDbContext persistedGrantContext)
+        {
+            persistedGrantContext.Database.Migrate();
+        }
+
+        private static void MigrateConfiguration(ConfigurationDbContext context, ISecurityDataService configurationSecurityData)
+        {
+            context.Database.Migrate();
+
+            var clientsIsEmpty = !context.Clients.Any();
+            if (clientsIsEmpty)
+            {
+                context.Clients.AddRange(configurationSecurityData.GetClientsConfig().ToEntity());
+                context.SaveChanges();
+            }
+
+            var apiResourcesIsEmpty = !context.ApiResources.Any();
+            if (apiResourcesIsEmpty)
+            {
+                context.ApiResources.AddRange(configurationSecurityData.GetApiResourcesConfig().ToEntity());
+                context.SaveChanges();
+            }
+
+            var apiScopesIsEmpty = !context.ApiScopes.Any();
+            if (apiScopesIsEmpty)
+            {
+                context.ApiScopes.AddRange(configurationSecurityData.GetScopesConfig().ToEntity());
+                context.SaveChanges();
             }
         }
     }

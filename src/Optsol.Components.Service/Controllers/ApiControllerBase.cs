@@ -71,8 +71,8 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
-        [OptsolAuthorize("crud.buscar.id", AuthenticationSchemes = "Bearer")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [OptsolAuthorize("crud.buscar.id")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetByIdAsync(Guid id)
         {

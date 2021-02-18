@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Optsol.Components.Infra.Security.Data;
@@ -12,8 +13,11 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
         {
-            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>();
+            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>() ?? throw new ArgumentNullException(nameof(SecuritySettings));
             securitySettings.Validate();
+
+            var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>() ?? throw new ArgumentNullException(nameof(ConnectionStrings));
+            connectionStrings.Validate();
 
             services
                 .AddSingleton(securitySettings)
@@ -24,6 +28,13 @@ namespace Microsoft.Extensions.DependencyInjection
                     options.Authority = securitySettings.Authority;
                 })
                 .AddCookie();
+
+            services.AddSingleton(connectionStrings);
+
+            services.AddUserStore(options =>
+            {
+                options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection);
+            });
 
             return services;
         }
@@ -45,6 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services
                 .AddIdentityServer()
+                .AddDeveloperSigningCredential(isDevelopment)
                 .AddConfigurationStore(options =>
                 {
                     options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
@@ -55,7 +67,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 })
                 .AddUserStore(options =>
                 {
-                    options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.DefaultConnection, sql => sql.MigrationsAssembly(migrationAssembly));
+                    options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
                 });
 
             return services;

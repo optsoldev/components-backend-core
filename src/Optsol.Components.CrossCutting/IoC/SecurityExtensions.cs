@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.Security.Data;
 using Optsol.Components.Infra.Security.Services;
 using System;
@@ -40,18 +39,25 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public static class SecurityStoreExtensions
     {
-        public static IIdentityServerBuilder AddUserStore(this IIdentityServerBuilder builder, Action<UserStoreOptions> action)
+        public static IServiceCollection AddUserStore(this IServiceCollection services, Action<UserStoreOptions> action)
         {
             var userOptions = new UserStoreOptions();
             action(userOptions);
 
-            builder.Services
+            services
                 .AddDbContext<SecurityDbContext>(userOptions.ConfigureDbContext);
 
-            builder.Services
+            services
                 .AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<SecurityDbContext>()
                 .AddDefaultTokenProviders();
+
+            return services;
+        }
+
+        public static IIdentityServerBuilder AddUserStore(this IIdentityServerBuilder builder, Action<UserStoreOptions> action)
+        {
+            builder.Services.AddUserStore(action);
 
             return builder;
         }

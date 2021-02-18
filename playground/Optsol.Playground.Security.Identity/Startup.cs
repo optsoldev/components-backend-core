@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Playground.Security.Identity.Services;
 using Optsol.Security.Identity.Data;
 using System.Collections.Generic;
@@ -40,12 +41,10 @@ namespace Optsol.Playground.Security.Identity
                 });
             });
 
-            services.AddMvc(options => options.EnableEndpointRouting = false);
+            services.AddMvc(options => { options.EnableEndpointRouting = false; });
 
             services.AddSecurity(Configuration, migrationAssembly, Environment.IsDevelopment(), options =>
             {
-                options.AddUserService<UserService>();
-
                 options.AddSecurityDataService<SecurityDataService>();
             });
         }

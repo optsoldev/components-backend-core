@@ -4,7 +4,9 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Optsol.Components.Infra.Security.Data;
 using Optsol.Components.Infra.Security.Services;
 using Optsol.Playground.Security.Identity.Models;
 using System;
@@ -18,27 +20,32 @@ namespace Optsol.Playground.Security.Identity.Controllers
 
         private readonly IEventService _eventService;
 
-        private readonly IUserService _userService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AuthenticationController(IIdentityServerInteractionService interactionService, IEventService eventService, IUserService userService)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+
+        public AuthenticationController(IIdentityServerInteractionService interactionService, IEventService eventService,
+            UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _interactionService = interactionService ?? throw new ArgumentNullException(nameof(interactionService));
             _eventService = eventService ?? throw new ArgumentNullException(nameof(eventService));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
         }
 
         [HttpPost]
         [Route("api/sign-in")]
         public async Task<IActionResult> SignIn([FromBody] SignInApiModel signIn)
         {
-            // TODO: error responses
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var validationResult = _userService.Authenticate(signIn.Username, signIn.Password);
-            if (!validationResult.IsSuccess)
+            var applicationUser = await _userManager.FindByNameAsync(signIn.Username);
+            var validationResult = await _signInManager.PasswordSignInAsync(applicationUser, signIn.Password, signIn.RememberLogin, false);
+            var passwordValidationReturnFalse = !validationResult.Succeeded;
+            if (passwordValidationReturnFalse)
             {
                 await _eventService.RaiseAsync(new UserLoginFailureEvent(signIn.Username, "invalid credentials"));
                 return Unauthorized();
@@ -46,7 +53,7 @@ namespace Optsol.Playground.Security.Identity.Controllers
 
             await _eventService.RaiseAsync(new UserLoginSuccessEvent(
                 username: signIn.Username,
-                subjectId: validationResult.SubjectId,
+                subjectId: applicationUser.Id.ToString(),
                 name: signIn.Username));
 
             AuthenticationProperties props = null;
@@ -60,7 +67,7 @@ namespace Optsol.Playground.Security.Identity.Controllers
                 };
             }
 
-            var isuser = new IdentityServerUser(validationResult.SubjectId)
+            var isuser = new IdentityServerUser(applicationUser.Id.ToString())
             {
                 DisplayName = signIn.Username
             };

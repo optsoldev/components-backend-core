@@ -20,7 +20,6 @@ namespace Optsol.Components.Infra.Data
 
         public DbSet<TEntity> Set { get; protected set; }
 
-
         public Repository(CoreContext context, ILogger<Repository<TEntity, TKey>> logger)
         {
             _logger = logger;

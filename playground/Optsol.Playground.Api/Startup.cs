@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Playground.Application.Mappers.Cliente;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Domain.Repositories.Cliente;
@@ -53,14 +54,13 @@ namespace Optsol.Playground.Api
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
             
             services.AddApiServices();
-            
+
             services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
 
             services.AddDomainNotifications();
 
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
-
         }
                 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -74,7 +74,6 @@ namespace Optsol.Playground.Api
 
             app.UseSwagger(Configuration, env.IsDevelopment());
 
-
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
@@ -83,12 +82,15 @@ namespace Optsol.Playground.Api
 
             app.UseAuthorization();
 
+            app.UseAuthentication();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Playground API Started.");
                 });
+
                 endpoints.MapDefaultControllerRoute();
             });
         }
