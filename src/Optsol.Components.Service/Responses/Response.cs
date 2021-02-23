@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Infra.Data;
 
 namespace Optsol.Components.Service.Responses
 {
@@ -13,7 +14,7 @@ namespace Optsol.Components.Service.Responses
 
         public Response()
         {
-            
+
         }
 
         public Response(bool success)
@@ -28,7 +29,7 @@ namespace Optsol.Components.Service.Responses
             Messages = messages;
         }
     }
-    
+
     public class Response<TData> : Response
         where TData : BaseDataTransferObject
     {
@@ -36,7 +37,7 @@ namespace Optsol.Components.Service.Responses
 
         public Response()
         {
-            
+
         }
 
         public Response(TData data, bool success)
@@ -55,16 +56,16 @@ namespace Optsol.Components.Service.Responses
     }
 
     public class ResponseList<TData> : Response
-        where TData: BaseDataTransferObject
+        where TData : BaseDataTransferObject
     {
         public IEnumerable<TData> Data { get; set; }
 
         public ResponseList()
         {
-            
+
         }
-        
-        public ResponseList(IEnumerable<TData> data, bool success) 
+
+        public ResponseList(IEnumerable<TData> data, bool success)
             : base(success)
         {
             Data = data;
@@ -74,6 +75,37 @@ namespace Optsol.Components.Service.Responses
             : this(data, success)
         {
             Messages = messages;
+        }
+    }
+
+    public class ResponseSearch<TData> : ResponseList<TData>
+        where TData : BaseDataTransferObject
+    {
+
+        public int Page { get; set; }
+
+        public int? PageSize { get; set; }
+
+        public ResponseSearch()
+        {
+        }
+
+        public ResponseSearch(SearchResult<TData> data, bool success) 
+            : base(data.Items, success)
+        {
+            SetPageData(data);
+        }
+
+        public ResponseSearch(SearchResult<TData> data, bool success, IEnumerable<string> messages) 
+            : base(data.Items, success, messages)
+        {
+            SetPageData(data);
+        }
+        
+        private void SetPageData(SearchResult<TData> data)
+        {
+            Page = (int)data.Page;
+            PageSize = (int?)data.PageSize;
         }
     }
 }

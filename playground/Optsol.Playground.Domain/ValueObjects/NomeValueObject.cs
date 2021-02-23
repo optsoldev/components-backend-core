@@ -1,5 +1,6 @@
 using Flunt.Validations;
 using Optsol.Components.Domain.ValueObjects;
+using System;
 
 namespace Optsol.Playground.Domain.ValueObjects
 {
@@ -31,6 +32,11 @@ namespace Optsol.Playground.Domain.ValueObjects
                 .HasMinLen(SobreNome, 3, $"{nameof(NomeValueObject.SobreNome)}", "O sobrenome deve ter no mínino 3 caracteres")
                 .HasMaxLen(SobreNome, 35, $"{nameof(NomeValueObject.SobreNome)}", "O sobrenome deve ter no máximo 35 caracteres")
                 );
+        }
+
+        public bool Constains(string nome)
+        {
+            return nome.Contains(nome) || SobreNome.Contains(nome);
         }
     }
 }

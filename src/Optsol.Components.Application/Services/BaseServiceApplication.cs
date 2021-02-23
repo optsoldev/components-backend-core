@@ -34,13 +34,14 @@ namespace Optsol.Components.Application.Services
         public abstract void Dispose();
     }
 
-    public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
-        : BaseServiceApplication, IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+    public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> : BaseServiceApplication,
+        IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
+
     {
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
@@ -192,6 +193,8 @@ namespace Optsol.Components.Application.Services
             return true;
         }
 
+        #region private
+
         private void LogNotifications(string method)
         {
             if (_notificationContext.HasNotifications)
@@ -204,5 +207,7 @@ namespace Optsol.Components.Application.Services
             GC.SuppressFinalize(this);
             _unitOfWork.Dispose();
         }
+
+        #endregion
     }
 }

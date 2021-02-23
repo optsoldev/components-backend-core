@@ -11,8 +11,8 @@ namespace Optsol.Components.Shared.Exceptions
             logger?.LogCritical(
 @$"{nameof(SecuritySettingNullException)}:
 ""SecuritySettings"": {{
-    ""ApiName"": ""webapi"",
-    ""Authority"": ""https://example:port""
+    ""ApiName"": ""{{client-name}}"",
+    ""Authority"": ""{{http(s)://authority:port}}""
   }}
 "
             );

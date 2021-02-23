@@ -49,10 +49,12 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration, string migrationAssembly, bool isDevelopment, Action<ConfigSecurityOptions> securityOptions = null)
         {
-
             IdentityModel.Logging.IdentityModelEventSource.ShowPII = isDevelopment;
 
-            var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>() ?? throw new ArgumentNullException(nameof(ConnectionStrings));
+            var servicesProvider = services.BuildServiceProvider();
+
+            var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>()
+                ?? throw new ConnectionStringNullException(servicesProvider.GetRequiredService<ILogger<ConnectionStringNullException>>());
             connectionStrings.Validate();
 
             var migrationAssemblyIsNullOrEmpty = string.IsNullOrEmpty(migrationAssembly);

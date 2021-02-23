@@ -1,11 +1,13 @@
+using Optsol.Components.Domain.Entities;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Infra.Data
 {
-    public class SearchResult<TEntity>
-        where TEntity : class
+    public class SearchResult<TData>
+        where TData : class
     {
         private uint page;
+        
         public uint Page
         {
             get
@@ -18,10 +20,15 @@ namespace Optsol.Components.Infra.Data
                 page = value <= 0 ? 1 : value;
             }
         }
+        
         public uint? PageSize { get; set; }
+        
         public long Total { get; set; }
+        
         public long TotalItems { get; set; }
-        public IEnumerable<TEntity> Items { get; set; }
+        
+        public IEnumerable<TData> Items { get; set; }
+
         public SearchResult(uint page, uint? pageSize)
         {
             this.Page = page;

@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Test.Shared.Logger;
+using System.Linq;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Shared.Exceptions
@@ -37,6 +38,9 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception.Message.Should().Be(msg);
 
             logger.Logs.Should().NotBeEmpty();
+            logger.Logs.Any(a => a.Contains("ConnectionStrings")).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains("DefaultConnection")).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains("IdentityConnection")).Should().BeTrue();
         }
     }
 }

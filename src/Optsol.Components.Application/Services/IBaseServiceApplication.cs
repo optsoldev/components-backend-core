@@ -20,8 +20,7 @@ namespace Optsol.Components.Application.Services
 
         Task<IEnumerable<TGetAllDto>> GetAllAsync();
 
-        Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch) 
-            where TSearch : class;
+        Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch) where TSearch : class;
 
         Task InsertAsync(TInsertData data);
 
