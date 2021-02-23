@@ -18,7 +18,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         {
             //Given
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile($@"Settings\appsettings.mongo.json")
+                .AddJsonFile($@"Settings/appsettings.mongo.json")
                 .Build();
 
             var services = new ServiceCollection();

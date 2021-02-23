@@ -19,7 +19,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
         {
             //Given 
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile($@"Settings\appsettings.storage.json")
+                .AddJsonFile($@"Settings/appsettings.storage.json")
                 .Build();
 
             var services = new ServiceCollection();
