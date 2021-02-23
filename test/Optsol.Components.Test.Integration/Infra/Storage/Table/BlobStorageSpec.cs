@@ -14,7 +14,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
     public class BlobStorageSpec
     {
 
-        [Fact]
+        [Fact(Skip = "Integração com storage somente local")]
         public void Deve_Registrar_Serico_Storage_Na_Injecao_De_Dependencia()
         {
             //Given 
@@ -39,12 +39,12 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             blobStorage.Should().NotThrow();
         }
 
-        [Fact]
+        [Fact(Skip = "Integração com storage somente local")]
         public async Task Deve_Criar_Container_Blob_No_Azure_Storage()
         {
             //Given 
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile($@"Settings\appsettings.storage.json")
+                .AddJsonFile($@"Settings/appsettings.storage.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -71,12 +71,12 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             containerExiteNoAzureStorage.Value.Should().BeTrue();
         }
 
-        [Fact]
+        [Fact(Skip = "Integração com storage somente local")]
         public void Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Stream()
         {
             //Given 
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.storage.json")
+                .AddJsonFile(@"Settings/appsettings.storage.json")
                 .Build();
 
             var services = new ServiceCollection(); 
@@ -90,7 +90,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var provider = services.BuildServiceProvider();
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();
 
-            Stream stream = File.OpenRead(@"Anexos\anexo.jpg");
+            Stream stream = File.OpenRead(@"Anexos/anexo.jpg");
 
 
             //When 
@@ -102,12 +102,12 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
-        [Fact]
+        [Fact(Skip = "Integração com storage somente local")]
         public void Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Path()
         {
             //Given 
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.storage.json")
+                .AddJsonFile(@"Settings/appsettings.storage.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -122,7 +122,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();
 
             //When 
-            Action action = () => blobStorage.UploadAsync($"{Guid.NewGuid()}.jpg", @"Anexos\anexo.jpg");
+            Action action = () => blobStorage.UploadAsync($"{Guid.NewGuid()}.jpg", @"Anexos/anexo.jpg");
 
             //Then
             blobStorage.Should().NotBeNull();
@@ -130,12 +130,12 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
-        [Fact]
+        [Fact(Skip = "Integração com storage somente local")]
         public async Task Deve_Apagar_Arquivo_No_Blob_Pelo_Nome()
         {
             //Given 
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.storage.json")
+                .AddJsonFile(@"Settings/appsettings.storage.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -150,7 +150,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();
 
             var name = $"{Guid.NewGuid()}.jpg";
-            await blobStorage.UploadAsync(name, @"Anexos\anexo.jpg");
+            await blobStorage.UploadAsync(name, @"Anexos/anexo.jpg");
 
             //When 
             Action action = () => blobStorage.DeleteAsync(name);
@@ -161,12 +161,12 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
-        [Fact]
+        [Fact(Skip = "Integração com storage somente local")]
         public async Task Deve_Fazer_Download_Do_Arquivo_No_Blob_Pelo_Nome()
         {
             //Given 
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.storage.json")
+                .AddJsonFile(@"Settings/appsettings.storage.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -181,7 +181,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();
 
             var name = $"{Guid.NewGuid()}.jpg";
-            await blobStorage.UploadAsync(name, @"Anexos\anexo.jpg");
+            await blobStorage.UploadAsync(name, @"Anexos/anexo.jpg");
 
             //When 
             var arquivoDoBlob = await blobStorage.DowloadAsync(name);
