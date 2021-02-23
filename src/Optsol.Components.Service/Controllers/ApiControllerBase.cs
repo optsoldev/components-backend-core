@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Components.Service.Filters;
 using Optsol.Components.Service.Responses;
@@ -46,20 +47,21 @@ namespace Optsol.Components.Service.Controllers
     }
 
     [ValidationModelAttribute]
-    public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
-        : ApiControllerBase, IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+    public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> : ApiControllerBase, 
+        IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
+        where TSearch : class, ISearch<TEntity>, IOrderBy<TEntity>, IInclude<TEntity>
     {
-        protected readonly ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> _logger;
+        protected readonly ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>> _logger;
         protected readonly IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> _serviceApplication;
         protected readonly IResponseFactory _responseFactory;
 
         public ApiControllerBase(
-            ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> logger,
+            ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>> logger,
             IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> serviceApplication,
             IResponseFactory responseFactory)
         {
@@ -90,6 +92,18 @@ namespace Optsol.Components.Service.Controllers
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IActionResult");
 
             var viewModelsOfResultService = await _serviceApplication.GetAllAsync();
+
+            return CreateResult(_responseFactory.Create(viewModelsOfResultService));
+        }
+
+        [HttpPost("paginated")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetAllAsync(RequestSearch<TSearch> search)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }({ search.ToJson() }) Retorno: IActionResult");
+
+            var viewModelsOfResultService = await _serviceApplication.GetAllAsync(search);
 
             return CreateResult(_responseFactory.Create(viewModelsOfResultService));
         }
@@ -138,7 +152,5 @@ namespace Optsol.Components.Service.Controllers
 
             return CreateResult(_responseFactory.Create());
         }
-
-
     }
 }

@@ -39,6 +39,8 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
 
             logger.Logs.Should().NotBeEmpty();
             logger.Logs.Any(a => a.Contains("SecuritySettings")).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains("ApiName")).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains("Authority")).Should().BeTrue();
         }
     }
 }

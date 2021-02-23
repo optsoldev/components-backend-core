@@ -130,6 +130,8 @@ namespace Optsol.Components.Infra.Data
             GC.SuppressFinalize(this);
         }
 
+        #region private 
+
         private async Task<SearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
             var searchResult = new SearchResult<TEntity>(page, pageSize);
@@ -190,5 +192,7 @@ namespace Optsol.Components.Infra.Data
 
             return query;
         }
+
+        #endregion
     }
 }

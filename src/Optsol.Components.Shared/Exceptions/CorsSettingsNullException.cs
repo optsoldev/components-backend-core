@@ -18,7 +18,7 @@ namespace Optsol.Components.Shared.Exceptions
             ""ReactFrontHttps"": ""http://example:port""
         }}
     }}
-])"
+]"
             );
         }
     }
