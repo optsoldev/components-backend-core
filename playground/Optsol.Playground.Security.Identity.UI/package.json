@@ -44,5 +44,9 @@
     "redux-thunk": "2.2.0",
     "styled-components": "^4.4.0"
   },
-  "-vs-binding": { "AfterBuild": [ "build" ] }
+  "-vs-binding": {
+    "AfterBuild": [
+      "build"
+    ]
+  }
 }
