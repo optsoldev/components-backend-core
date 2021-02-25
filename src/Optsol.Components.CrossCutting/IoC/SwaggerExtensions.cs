@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Optsol.Components.Service.Filters;
+using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using System;
 
@@ -10,11 +12,10 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration)
         {
-            var swaggerSettings = configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>();
-            swaggerSettings.Validate();
+            var provider = services.BuildServiceProvider();
 
-            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>();
-            securitySettings.Validate();
+            var swaggerSettings = configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>() ?? throw new SwaggerSettingsException();
+            swaggerSettings.Validate();
 
             var enabledSwagger = swaggerSettings.Enabled;
             if (enabledSwagger)
@@ -33,6 +34,11 @@ namespace Microsoft.Extensions.DependencyInjection
                     var enabledSecurity = swaggerSettings.Security?.Enabled ?? false;
                     if (enabledSecurity)
                     {
+                        var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>() 
+                        ?? throw new SecuritySettingNullException(provider.GetRequiredService<ILogger<SecuritySettingNullException>>());
+
+                        securitySettings.Validate();
+
                         swaggerSettings.Security.Validate();
 
                         options.AddSecurityDefinition(swaggerSettings.Security.Name,
