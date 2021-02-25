@@ -14,7 +14,9 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var provider = services.BuildServiceProvider();
 
-            var swaggerSettings = configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>() ?? throw new SwaggerSettingsException();
+            var swaggerSettings = configuration.GetSection(nameof(SwaggerSettings)).Get<SwaggerSettings>() 
+                ?? throw new SwaggerSettingsNullException(provider.GetRequiredService<ILogger<SwaggerSettingsNullException>>());
+
             swaggerSettings.Validate();
 
             var enabledSwagger = swaggerSettings.Enabled;
@@ -38,7 +40,6 @@ namespace Microsoft.Extensions.DependencyInjection
                         ?? throw new SecuritySettingNullException(provider.GetRequiredService<ILogger<SecuritySettingNullException>>());
 
                         securitySettings.Validate();
-
                         swaggerSettings.Security.Validate();
 
                         options.AddSecurityDefinition(swaggerSettings.Security.Name,
