@@ -1,19 +1,18 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
+using System;
+using System.Threading.Tasks;
 
 namespace Optsol.Playground.Api.Controllers
 {
     public partial class ClienteController
     {
-
         [HttpGet("{id}/cartaoCredito")]
         public async Task<IActionResult> GetClienteComCartaoCredito(Guid id)
         {
             var cliente = await _clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
 
-            return CreateResult(_responseFactory.Create(cliente));
+            return CreateResult(cliente);
         }
 
         [HttpPost("cartaoCredito")]
@@ -21,7 +20,7 @@ namespace Optsol.Playground.Api.Controllers
         {
             await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
 
-            return CreateResult(_responseFactory.Create());
+            return CreateResult();
         }
     }
 }

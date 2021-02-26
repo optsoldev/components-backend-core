@@ -20,13 +20,11 @@ namespace Optsol.Components.Infra.UoW
             Context = context;
         }
 
-        public Task<bool> CommitAsync()
+        public Task<int> CommitAsync()
         {
             _logger?.LogInformation($"Método: { nameof(CommitAsync) }() Retorno: bool");
 
-            var saveChanges = Context.SaveChanges() > 0;
-
-            return Task.FromResult(saveChanges);
+            return Task.FromResult(Context.SaveChanges());
         }
 
         public void Dispose()

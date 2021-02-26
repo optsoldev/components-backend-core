@@ -30,7 +30,7 @@ namespace Optsol.Components.Infra.MongoDB.Repository
             Set = Context.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
-        public virtual IAsyncEnumerable<TEntity> GetAllAsync()
+        public virtual Task<IEnumerable<TEntity>> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
 

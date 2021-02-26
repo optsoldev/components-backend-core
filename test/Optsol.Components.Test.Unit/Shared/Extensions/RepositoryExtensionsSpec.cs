@@ -37,7 +37,7 @@ namespace Optsol.Components.Test.Unit.Shared.Extensions
             var repository = new Repository<AggregateRoot, Guid>(coreContextMock.Object, logger);
 
             //When
-            var entities = await repository.GetAllAsync().AsyncEnumerableToEnumerable();
+            var entities = await repository.GetAllAsync();
 
             //Then
             entities.Should().BeOfType<List<AggregateRoot>>();

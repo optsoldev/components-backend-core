@@ -22,4 +22,13 @@ namespace Optsol.Components.Domain.Entities
                 .IsLowerThan(CreatedDate, DateTime.Now, "CreationDate", "A Data de criação não pode ser maior que a data atual"));
         }
     }
+
+    public class EntityGuid : Entity<Guid>
+    {
+        public EntityGuid() : base()
+        {
+            base.CreatedDate = DateTime.Now;
+            base.Id = Guid.NewGuid();
+        }
+    }
 }

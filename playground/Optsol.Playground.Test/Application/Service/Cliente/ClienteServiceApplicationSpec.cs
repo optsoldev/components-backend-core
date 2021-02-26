@@ -59,7 +59,7 @@ namespace Optsol.Playground.Test
 
             //Then
             var clienteReadRepository = _serviceProvider.GetRequiredService<IClienteReadRepository>();
-            var clientes = await clienteReadRepository.GetAllAsync().AsyncEnumerableToEnumerable();
+            var clientes = await clienteReadRepository.GetAllAsync();
 
             clientes.Should().HaveCount(1);
             var cliente = clientes.FirstOrDefault();
