@@ -3,8 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Security.Constants;
 using Optsol.Components.Infra.Security.Data;
+using Optsol.Components.Shared.Exceptions;
+using Optsol.Components.Shared.Settings;
 using System;
 using System.Linq;
 
@@ -24,16 +27,52 @@ namespace Optsol.Components.Infra.Security.Attributes
     public class OptsolAuthorizeFilter : AuthorizeAttribute, IAuthorizationFilter
     {
         private string _claim;
+
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public OptsolAuthorizeFilter(UserManager<ApplicationUser> userManager, string claim)
+        private readonly SecuritySettings _securitySettings;
+
+        public OptsolAuthorizeFilter(UserManager<ApplicationUser> userManager,
+            SecuritySettings securitySettings,
+            ILogger<SecuritySettingNullException> logger,
+            string claim)
         {
             _claim = claim;
+
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+
+            _securitySettings = securitySettings ?? throw new SecuritySettingNullException(logger);
+
             AuthenticationSchemes = "Bearer";
         }
 
         public void OnAuthorization(AuthorizationFilterContext context)
+        {
+            if (_securitySettings.IsDevelopment)
+            {
+                ContextLocalSecurity(context);
+            }
+            else
+            {
+                ContextRemoteSecurity(context);
+            }
+        }
+
+        private void ContextLocalSecurity(AuthorizationFilterContext context)
+        {
+            var contextUser = context.HttpContext.User;
+            var userAuthenticateHasClaim = contextUser.Claims.Any(w => w.Type.Equals("optsol") 
+                && w.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
+
+            if(userAuthenticateHasClaim)
+            {
+                return;
+            }
+
+            context.Result = new UnauthorizedResult();
+        }
+
+        private void ContextRemoteSecurity(AuthorizationFilterContext context)
         {
             var contextUser = context.HttpContext.User;
             var nameUserForFilterNormalizedName = contextUser.FindFirst(SecurityClaimTypes.UserName).Value;

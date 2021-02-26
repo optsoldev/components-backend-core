@@ -70,7 +70,7 @@ namespace Optsol.Components.Service.Controllers
         }
     }
 
-    [ValidationModelAttribute]
+    [ValidationModel]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> : ApiControllerBase,
         IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>
         where TEntity : AggregateRoot

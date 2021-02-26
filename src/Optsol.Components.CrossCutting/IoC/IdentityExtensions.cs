@@ -181,7 +181,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 new Claim("at_hash", "vGWPYD4ZcS5RbJh6kPtwOw"),
                 new Claim("http://schemas.microsoft.com/claims/authnmethodsreferences", "password"),
                 new Claim("auth_time", "1449516934"),
-                new Claim("http://schemas.microsoft.com/identity/claims/identityprovider", "devtest")
+                new Claim("http://schemas.microsoft.com/identity/claims/identityprovider", "devtest"),
+                new Claim("optsol", "crud.buscar.id")
             };
         }
 
