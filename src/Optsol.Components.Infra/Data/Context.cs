@@ -4,7 +4,7 @@ namespace Optsol.Components.Infra.Data
 {
     public class CoreContext : DbContext
     {
-        protected CoreContext() 
+        protected CoreContext()
             : base()
         {
         }
