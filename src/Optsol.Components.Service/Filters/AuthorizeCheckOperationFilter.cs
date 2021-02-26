@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
@@ -12,19 +14,26 @@ namespace Optsol.Components.Service.Filters
         private readonly SwaggerSettings _swaggerSettings;
         private readonly SecuritySettings _securitySettings;
 
-        public AuthorizeCheckOperationFilter(SwaggerSettings swaggerSettings, SecuritySettings securitySettings)
+        public AuthorizeCheckOperationFilter(
+            SwaggerSettings swaggerSettings, 
+            SecuritySettings securitySettings, 
+            ILogger<SwaggerSettingsNullException> loggerSwagger)
         {
-            _swaggerSettings = swaggerSettings;
+            _swaggerSettings = swaggerSettings ?? throw new SwaggerSettingsNullException(loggerSwagger);
             _swaggerSettings.Validate();
             _swaggerSettings.Security.Validate();
 
             _securitySettings = securitySettings;
-            securitySettings.Validate();
+            securitySettings?.Validate();
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            var hasAuthorize =
+            var notHaveSecurity = _securitySettings == null;
+            if (notHaveSecurity)
+                return;
+
+                var hasAuthorize =
                 context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
                 context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 

@@ -15,7 +15,7 @@ namespace Optsol.Components.Service.Controllers
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
-        where TSearch : class, ISearch<TEntity>, IOrderBy<TEntity>, IInclude<TEntity>
+        where TSearch : class, ISearch<TEntity>
     {
         Task<IActionResult> GetAllAsync();
         Task<IActionResult> GetAllAsync(RequestSearch<TSearch> search);

@@ -24,6 +24,8 @@ namespace Optsol.Components.Infra.MongoDB.Context
             _mongoSettings = mongoSettings;
 
             _commands = new List<Func<Task>>();
+
+            Configure();
         }
 
         public IMongoCollection<T> GetCollection<T>(string name)

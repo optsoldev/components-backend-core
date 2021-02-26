@@ -8,15 +8,17 @@ namespace Optsol.Components.Shared.Settings
 
         public string Authority { get; set; }
 
+        public bool IsDevelopment { get; set; }
+
         public override void Validate()
         {
-            var apiNameIsNullOrEmpty = string.IsNullOrEmpty(ApiName);
+            var apiNameIsNullOrEmpty = !IsDevelopment && string.IsNullOrEmpty(ApiName);
             if (apiNameIsNullOrEmpty)
             {
                 throw new ArgumentNullException(nameof(ApiName));
             }
 
-            var authorityIsNullOrEmpty = string.IsNullOrEmpty(Authority);
+            var authorityIsNullOrEmpty = !IsDevelopment && string.IsNullOrEmpty(Authority);
             if (authorityIsNullOrEmpty)
             {
                 throw new ArgumentNullException(nameof(Authority));

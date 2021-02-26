@@ -17,6 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(mongoSettings);
             services.AddScoped<MongoContext>();
+            services.AddScoped<TContext>();
             services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
             services.AddScoped(typeof(IMongoRepository<,>), typeof(MongoRepository<,>));
             services.AddScoped(typeof(IReadRepository<,>), typeof(MongoRepository<,>));

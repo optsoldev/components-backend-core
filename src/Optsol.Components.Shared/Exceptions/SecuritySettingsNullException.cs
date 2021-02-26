@@ -12,7 +12,8 @@ namespace Optsol.Components.Shared.Exceptions
 @$"{nameof(SecuritySettingNullException)}:
 ""SecuritySettings"": {{
     ""ApiName"": ""{{client-name}}"",
-    ""Authority"": ""{{http(s)://authority:port}}""
+    ""Authority"": ""{{http(s)://authority:port}}"",
+    ""IsDevelopment"": ""false|true"",
   }}
 "
             );

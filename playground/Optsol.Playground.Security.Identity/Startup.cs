@@ -58,9 +58,7 @@ namespace Optsol.Playground.Security.Identity
 
             app.UseStaticFiles();
 
-            app.UseSecurity();
-
-            app.ConfigureSecurity();
+            app.UseSecurity(Configuration);
 
             app.UseMvc(routes =>
             {

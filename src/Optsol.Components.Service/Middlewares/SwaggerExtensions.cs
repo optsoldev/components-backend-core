@@ -30,19 +30,18 @@ namespace Microsoft.AspNetCore.Builder
                         {
                             options.OAuthClientSecret("secret".Sha256());
                         }
+
+                        if (isDevelopment)
+                        {
+                            app.Use(async (context, next) =>
+                            {
+                                context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+                                context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                                await next();
+                            });
+                        }
                     }
                 });
-
-                if (isDevelopment)
-                {
-                    app.Use(async (context, next) =>
-                    {
-                        context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-                        context.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                        await next();
-                    });
-                }
-
             }
 
             return app;
