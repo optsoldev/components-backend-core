@@ -6,9 +6,12 @@ namespace Optsol.Components.Shared.Extensions
 {
     public static class PredicateBuilderExtensions
     {
-        public static Expression<Func<T, bool>> True<T>() { return exp => true; }
+        public static class PredicateBuilder
+        {
+            public static Expression<Func<T, bool>> True<T>() { return exp => true; }
 
-        public static Expression<Func<T, bool>> False<T>() { return exp => false; }
+            public static Expression<Func<T, bool>> False<T>() { return exp => false; }
+        }
 
         public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> sourceExp, Expression<Func<T, bool>> compareExp)
         {

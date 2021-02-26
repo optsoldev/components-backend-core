@@ -4,6 +4,7 @@ using Optsol.Playground.Domain.Entities;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
 
 namespace Optsol.Playground.Application.Searchs
 {
@@ -13,7 +14,7 @@ namespace Optsol.Playground.Application.Searchs
 
         public Expression<Func<ClienteEntity, bool>> GetSearcher()
         {
-            var expression = PredicateBuilderExtensions.True<ClienteEntity>();
+            var expression = PredicateBuilder.True<ClienteEntity>();
 
             expression = expression.And(_ => _.Nome.Constains(Nome));
 

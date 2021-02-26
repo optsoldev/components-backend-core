@@ -12,7 +12,7 @@ namespace Optsol.Playground.Api.Controllers
         {
             var cliente = await _clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
 
-            return CreateResult(_responseFactory.Create(cliente));
+            return CreateResult(cliente);
         }
 
         [HttpPost("cartaoCredito")]
@@ -20,7 +20,7 @@ namespace Optsol.Playground.Api.Controllers
         {
             await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
 
-            return CreateResult(_responseFactory.Create());
+            return CreateResult();
         }
     }
 }

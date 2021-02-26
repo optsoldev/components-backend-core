@@ -1,4 +1,7 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +16,8 @@ using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
 using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Optsol.Playground.Api
 {
@@ -25,7 +30,7 @@ namespace Optsol.Playground.Api
         }
 
         public IConfiguration Configuration { get; }
-        
+
         public IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -43,13 +48,12 @@ namespace Optsol.Playground.Api
             services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
             services.AddDomainNotifications();
             services.AddApiServices();
-
             services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
 
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
         }
-                
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -57,19 +61,17 @@ namespace Optsol.Playground.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(Configuration);
-
-            app.UseSwagger(Configuration, env.IsDevelopment());
-
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseSecurity(Configuration);
 
-            app.UseAuthentication();
+            app.UseCors(Configuration);
+
+            app.UseSwagger(Configuration, env.IsDevelopment());
 
             app.UseEndpoints(endpoints =>
             {

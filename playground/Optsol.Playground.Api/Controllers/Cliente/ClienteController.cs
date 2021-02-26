@@ -27,10 +27,10 @@ namespace Optsol.Playground.Api.Controllers
             _clienteServiceApplication = clienteServiceApplication;
         }
 
-        [OptsolAuthorize("crud.buscar.id")]
-        public override Task<IActionResult> GetAllAsync()
-        {
-            return base.GetAllAsync();
-        }
+        //[OptsolAuthorize("crud.buscar.id")]
+        //public override Task<IActionResult> GetAllAsync()
+        //{
+        //    return base.GetAllAsync();
+        //}
     }
 }

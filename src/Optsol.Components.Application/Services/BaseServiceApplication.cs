@@ -31,7 +31,7 @@ namespace Optsol.Components.Application.Services
             _notificationContext = notificationContext ?? throw new NotificationContextException();
         }
 
-        public abstract void Dispose();
+        public virtual void Dispose() { }
     }
 
     public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> : BaseServiceApplication,

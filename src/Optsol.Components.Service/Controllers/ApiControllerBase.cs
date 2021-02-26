@@ -11,6 +11,7 @@ using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Optsol.Components.Service.Controllers
@@ -19,26 +20,49 @@ namespace Optsol.Components.Service.Controllers
     [Route("api/[controller]")]
     public class ApiControllerBase : ControllerBase, IApiControllerBase
     {
-        protected IActionResult CreateResult(Response response)
+        protected readonly IResponseFactory _responseFactory;
+
+        public ApiControllerBase(IResponseFactory responseFactory)
         {
+            _responseFactory = responseFactory ?? throw new ResponseFactoryNullException();
+        }
+
+        protected IActionResult CreateResult()
+        {
+            var response = _responseFactory.Create();
+
             if (response.Failure)
                 return BadRequest(response);
 
             return Ok(response);
         }
 
-        protected IActionResult CreateResult<TData>(Response<TData> response)
+        protected IActionResult CreateResult<TData>(TData viewModelOfResultService)
             where TData : BaseDataTransferObject
         {
+            var response = _responseFactory.Create(viewModelOfResultService);
             if (response.Failure)
                 return BadRequest(response);
 
             return Ok(response);
         }
 
-        protected IActionResult CreateResult<TData>(ResponseList<TData> response)
+        protected IActionResult CreateResult<TData>(IEnumerable<TData> viewModelsOfResultService)
             where TData : BaseDataTransferObject
         {
+            var response = _responseFactory.Create(viewModelsOfResultService);
+
+            if (response.Failure)
+                return BadRequest(response);
+
+            return Ok(response);
+        }
+
+        protected IActionResult CreateResult<TData>(SearchResult<TData> viewModelsOfResultService)
+            where TData : BaseDataTransferObject
+        {
+            var response = _responseFactory.Create(viewModelsOfResultService);
+
             if (response.Failure)
                 return BadRequest(response);
 
@@ -47,28 +71,27 @@ namespace Optsol.Components.Service.Controllers
     }
 
     [ValidationModelAttribute]
-    public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> : ApiControllerBase, 
+    public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> : ApiControllerBase,
         IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>
         where TEntity : AggregateRoot
         where TGetByIdDto : BaseDataTransferObject
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
-        where TSearch : class, ISearch<TEntity>, IOrderBy<TEntity>, IInclude<TEntity>
+        where TSearch : class, ISearch<TEntity>
     {
         protected readonly ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>> _logger;
         protected readonly IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> _serviceApplication;
-        protected readonly IResponseFactory _responseFactory;
+
 
         public ApiControllerBase(
             ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>> logger,
             IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> serviceApplication,
-            IResponseFactory responseFactory)
+            IResponseFactory responseFactory) : base(responseFactory)
         {
             _logger = logger;
             _logger?.LogInformation($"Inicializando Controller Base<{ typeof(TEntity).Name }, Guid>");
 
-            _responseFactory = responseFactory ?? throw new ResponseFactoryNullException();
             _serviceApplication = serviceApplication;
         }
 
@@ -81,7 +104,7 @@ namespace Optsol.Components.Service.Controllers
 
             var viewModelOfResultService = await _serviceApplication.GetByIdAsync(id);
 
-            return CreateResult(_responseFactory.Create(viewModelOfResultService));
+            return CreateResult(viewModelOfResultService);
         }
 
         [HttpGet]
@@ -93,7 +116,7 @@ namespace Optsol.Components.Service.Controllers
 
             var viewModelsOfResultService = await _serviceApplication.GetAllAsync();
 
-            return CreateResult(_responseFactory.Create(viewModelsOfResultService));
+            return CreateResult(viewModelsOfResultService);
         }
 
         [HttpPost("paginated")]
@@ -105,7 +128,7 @@ namespace Optsol.Components.Service.Controllers
 
             var viewModelsOfResultService = await _serviceApplication.GetAllAsync(search);
 
-            return CreateResult(_responseFactory.Create(viewModelsOfResultService));
+            return CreateResult(viewModelsOfResultService);
         }
 
         [HttpPost]
@@ -121,7 +144,7 @@ namespace Optsol.Components.Service.Controllers
 
             await _serviceApplication.InsertAsync(data);
 
-            return CreateResult(_responseFactory.Create());
+            return CreateResult();
         }
 
         [HttpPut]
@@ -137,7 +160,7 @@ namespace Optsol.Components.Service.Controllers
 
             await _serviceApplication.UpdateAsync(data);
 
-            return CreateResult(_responseFactory.Create());
+            return CreateResult();
 
         }
 
@@ -150,7 +173,7 @@ namespace Optsol.Components.Service.Controllers
 
             await _serviceApplication.DeleteAsync(id);
 
-            return CreateResult(_responseFactory.Create());
+            return CreateResult();
         }
     }
 }

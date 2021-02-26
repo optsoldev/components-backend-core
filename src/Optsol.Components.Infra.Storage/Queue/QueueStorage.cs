@@ -12,6 +12,8 @@ namespace Optsol.Components.Infra.Storage.Queue
 {
     public abstract class QueueStorage : IQueueStorage
     {
+        private QueueClient _queueClient;
+
         private readonly ILogger _logger;
 
         private readonly StorageSettings _storageSettings;
@@ -27,46 +29,50 @@ namespace Optsol.Components.Infra.Storage.Queue
         public async Task<Response<SendReceipt>> SendMessageAsync<TData>(SendMessageModel<TData> message)
             where TData : class
         {
-            var client = await GetQueueClient(message.QueueName);
+            await GetQueueClient(message.QueueName);
 
-            return await client.SendMessageAsync(message.Data.ToJson());
+            return await _queueClient.SendMessageAsync(message.Data.ToJson());
         }
 
         public async Task<Response<UpdateReceipt>> UpdateMessageAsync<TData>(UpdateMessageModel<TData> message)
             where TData : class
         {
-            var client = await GetQueueClient(message.QueueName);
+            await GetQueueClient(message.QueueName);
 
-            return await client.UpdateMessageAsync(message.Message.MessageId, message.Message.PopReceipt, message.Data.ToJson());
+            return await _queueClient.UpdateMessageAsync(message.Message.MessageId, message.Message.PopReceipt, message.Data.ToJson());
         }
 
         public async Task<Response> DeleteMessageAsync<TData>(DeleteMessageModel message)
             where TData : class
         {
-            var client = await GetQueueClient(message.QueueName);
+            await GetQueueClient(message.QueueName);
 
-            return await client.DeleteMessageAsync(message.Message.MessageId, message.Message.PopReceipt);
+            return await _queueClient.DeleteMessageAsync(message.Message.MessageId, message.Message.PopReceipt);
         }
 
         public async Task<Response<QueueMessage[]>> ReceiveMessageAsync<TData>(string queueName)
             where TData : class
         {
-            var client = await GetQueueClient(queueName);
+            await GetQueueClient(queueName);
 
-            return await client.ReceiveMessagesAsync();
+            return await _queueClient.ReceiveMessagesAsync();
         }
 
         #region private
 
-        private async Task<QueueClient> GetQueueClient(string queueName)
+        private async Task GetQueueClient(string queueName)
         {
             _logger.LogInformation($"Executando: {nameof(GetQueueClient)}() Retorno: Task<QueueClient>");
 
-            var queue = new QueueClient(_storageSettings.ConnectionString, queueName);
+            var queueClientCreated = _queueClient != null;
+            if (queueClientCreated)
+            {
+                return;
+            }
 
-            await queue.CreateIfNotExistsAsync();
+            _queueClient = new QueueClient(_storageSettings.ConnectionString, queueName);
 
-            return queue;
+            await _queueClient.CreateIfNotExistsAsync();
         }
 
         #endregion
