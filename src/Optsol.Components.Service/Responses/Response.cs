@@ -81,7 +81,6 @@ namespace Optsol.Components.Service.Responses
     public class ResponseSearch<TData> : ResponseList<TData>
         where TData : BaseDataTransferObject
     {
-
         public int Page { get; set; }
 
         public int? PageSize { get; set; }

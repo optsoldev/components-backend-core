@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public static class StorageExtensions
     {
-        public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration, Action<StorageOptions> action)
+        public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration, Action<StorageOptions> action = null)
         {
             var servicesProvider = services.BuildServiceProvider();
 
@@ -38,7 +38,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton(storageSettings);
 
             var storageOptions = new StorageOptions();
-            action(storageOptions);
+            action?.Invoke(storageOptions);
 
             if (storageOptions.BlobEnabled)
                 services.AddScoped<IBlobStorage, BlobStorage>();

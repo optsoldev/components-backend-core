@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Storage.Queue
 {
-    public abstract class QueueStorage : IQueueStorage
+    public class QueueStorage : IQueueStorage
     {
         private QueueClient _queueClient;
 
