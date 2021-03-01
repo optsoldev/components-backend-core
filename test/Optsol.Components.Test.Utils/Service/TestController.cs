@@ -3,9 +3,8 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.ViewModels;
 
 namespace Optsol.Components.Test.Utils.Service
 {

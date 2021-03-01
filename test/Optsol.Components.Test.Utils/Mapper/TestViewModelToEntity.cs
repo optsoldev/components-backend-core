@@ -1,8 +1,8 @@
-using System.Linq;
 using AutoMapper;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.ViewModels;
+using System.Linq;
 
 namespace Optsol.Components.Test.Utils.Mapper
 {
