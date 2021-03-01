@@ -5,7 +5,7 @@ using Moq;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Entity.Entities;
 using System;
 using System.Linq;
 using Xunit;

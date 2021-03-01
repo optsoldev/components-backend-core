@@ -7,13 +7,12 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using static Optsol.Components.Test.Utils.Utils;
 
 namespace Optsol.Components.Test.Unit.Application
 {

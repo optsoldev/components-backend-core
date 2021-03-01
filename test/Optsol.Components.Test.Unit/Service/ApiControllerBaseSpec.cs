@@ -6,10 +6,10 @@ using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
 using Optsol.Components.Test.Utils.Service;
+using Optsol.Components.Test.Utils.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +30,7 @@ namespace Optsol.Components.Test.Unit.Service
             var testSearchDto = new TestSearchDto();
             testSearchDto.Nome = "Nome";
             testSearchDto.SobreNome = "Sobrenome";
-            var searchDto = new RequestSearch<TestSearchDto>();
+            var searchDto = new SearchRequest<TestSearchDto>();
             searchDto.Search = testSearchDto;
 
             var entity = new TestEntity(
