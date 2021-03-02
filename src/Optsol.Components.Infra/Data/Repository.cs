@@ -36,6 +36,13 @@ namespace Optsol.Components.Infra.Data
             return Set.FindAsync(id).AsTask();
         }
 
+        public virtual Task<TEntity> GetByIdAsync(TKey id, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ id:{ id } }} ) Retorno: type { typeof(TEntity).Name }");
+
+            return Includes(Set).Where(w => w.Id.Equals(id)).FirstAsync();
+        }
+
         public virtual Task<IEnumerable<TEntity>> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
@@ -43,7 +50,14 @@ namespace Optsol.Components.Infra.Data
             return Set.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
         }
 
-        public virtual Task<SearchResult<TEntity>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch)
+        public virtual Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
+
+            return Includes(Set).AsAsyncEnumerable().AsyncEnumerableToEnumerable();
+        }
+
+        public virtual Task<SearchResult<TEntity>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch)
             where TSearch : class
         {
             var search = requestSearch.Search as ISearch<TEntity>;

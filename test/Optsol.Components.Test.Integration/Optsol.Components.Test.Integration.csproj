@@ -4,10 +4,14 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Settings\appsettings.cors.json" />
     <None Remove="Settings\appsettings.mongo.json" />
     <None Remove="Settings\appsettings.storage.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Settings\appsettings.cors.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Settings\appsettings.storage.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

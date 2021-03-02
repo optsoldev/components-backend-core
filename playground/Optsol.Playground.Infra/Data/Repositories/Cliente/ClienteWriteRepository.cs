@@ -9,7 +9,7 @@ namespace Optsol.Playground.Infra.Data.Repositories.Cliente
 {
     public class ClienteWriteRepository : Repository<ClienteEntity, Guid>, IClienteWriteRepository
     {
-        public ClienteWriteRepository(CoreContext context, ILogger<Repository<ClienteEntity, Guid>> logger) : base(context, logger)
+        public ClienteWriteRepository(Components.Infra.Data.CoreContext context, ILogger<Repository<ClienteEntity, Guid>> logger) : base(context, logger)
         {
         }
     }

@@ -6,7 +6,7 @@ using Optsol.Components.Test.Utils.Entity.Entities;
 namespace Optsol.Components.Test.Utils.Data.Contexts
 {
 
-    public class Context : CoreContext
+    public class Context : Infra.Data.CoreContext
     {
         public Context(DbContextOptions options)
             : base(options)

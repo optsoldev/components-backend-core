@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.MongoDB.UoW;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Data.Context;
-using Optsol.Components.Test.Utils.Data.Mongo;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Contexts;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Data.Repositories.Mongo;
+using Optsol.Components.Test.Utils.Entity.Entities;
 using System.Threading.Tasks;
 using Xunit;
 

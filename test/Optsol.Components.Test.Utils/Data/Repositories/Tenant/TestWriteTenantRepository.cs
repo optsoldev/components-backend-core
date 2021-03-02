@@ -5,9 +5,9 @@ using System;
 
 namespace Optsol.Components.Test.Utils.Repositories.Tenant
 {
-    public class TestWriteTenantRepository : Repository<TestTenantEntity, Guid>, ITestWriteTenantRepository
+    public class TestTenantWriteRepository : Repository<TestTenantEntity, Guid>, ITestTenantWriteRepository
     {
-        public TestWriteTenantRepository(CoreContext context, ILogger<Repository<TestTenantEntity, Guid>> logger) 
+        public TestTenantWriteRepository(CoreContext context, ILogger<Repository<TestTenantEntity, Guid>> logger) 
             : base(context, logger)
         {
         }

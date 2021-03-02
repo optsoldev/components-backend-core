@@ -122,7 +122,7 @@ namespace Optsol.Components.Service.Controllers
         [HttpPost("paginated")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetAllAsync(RequestSearch<TSearch> search)
+        public async Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search)
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }({ search.ToJson() }) Retorno: IActionResult");
 

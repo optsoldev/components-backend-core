@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public ContextOptionsBuilder(string connectionString)
         {
-            this.ConnectionString = !string.IsNullOrEmpty(connectionString)
+            ConnectionString = !string.IsNullOrEmpty(connectionString)
                 ? connectionString : throw new ConnectionStringNullException();
 
             InMemory = false;
@@ -56,8 +56,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private Action<DbContextOptionsBuilder> BuilderInMemory()
         {
+            var serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
+
             return options => options
                 .UseInMemoryDatabase($"ComponentsOptsolInMemoryDatabase{Guid.NewGuid()}")
+                .UseInternalServiceProvider(serviceProvider)
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .EnableSensitiveDataLogging(EnableLogging);
         }

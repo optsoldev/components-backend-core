@@ -9,7 +9,9 @@ namespace Optsol.Components.Test.Utils.Data.Entities
     public class TestTenantEntity : AggregateRoot, ITenant
     {
         public NomeValueObject Nome { get; private set; }
+        
         public EmailValueObject Email { get; private set; }
+
         public bool Ativo { get; private set; }
 
         public Guid TenantId { get; private set; }
@@ -18,13 +20,13 @@ namespace Optsol.Components.Test.Utils.Data.Entities
         {
         }
 
-        public TestTenantEntity(Guid id, NomeValueObject nome, EmailValueObject email)
-            : this(nome, email)
+        public TestTenantEntity(Guid id, Guid tenantId, NomeValueObject nome, EmailValueObject email)
+            : this(tenantId, nome, email)
         {
             Id = id;
         }
 
-        public TestTenantEntity(NomeValueObject nome, EmailValueObject email)
+        public TestTenantEntity(Guid tenantId, NomeValueObject nome, EmailValueObject email)
         {
             Nome = nome;
             Email = email;
@@ -32,6 +34,7 @@ namespace Optsol.Components.Test.Utils.Data.Entities
             Validate();
 
             Ativo = false;
+            TenantId = tenantId;
         }
 
         public void InserirNome(NomeValueObject nomeValueObject)

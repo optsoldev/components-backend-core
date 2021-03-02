@@ -1,23 +1,14 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Playground.Application.Mappers.Cliente;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Optsol.Playground.Api
 {

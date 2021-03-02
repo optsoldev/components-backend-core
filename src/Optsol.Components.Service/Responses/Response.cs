@@ -85,6 +85,8 @@ namespace Optsol.Components.Service.Responses
 
         public int? PageSize { get; set; }
 
+        public long Total { get; set; }
+
         public ResponseSearch()
         {
         }
@@ -105,6 +107,7 @@ namespace Optsol.Components.Service.Responses
         {
             Page = (int)data.Page;
             PageSize = (int?)data.PageSize;
+            Total = data.TotalItems;
         }
     }
 }

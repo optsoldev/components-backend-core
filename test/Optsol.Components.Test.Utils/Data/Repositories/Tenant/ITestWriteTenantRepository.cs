@@ -4,7 +4,7 @@ using System;
 
 namespace Optsol.Components.Test.Utils.Repositories.Tenant
 {
-    public interface ITestWriteTenantRepository : IWriteRepository<TestTenantEntity, Guid>
+    public interface ITestTenantWriteRepository : IWriteRepository<TestTenantEntity, Guid>
     {
 
     }

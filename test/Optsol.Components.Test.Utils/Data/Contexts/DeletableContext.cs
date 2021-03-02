@@ -6,7 +6,7 @@ using Optsol.Components.Test.Utils.Data.Entities;
 namespace Optsol.Components.Test.Utils.Data.Contexts
 {
 
-    public class DeletableContext : CoreContext
+    public class DeletableContext : Infra.Data.CoreContext
     {
         public DeletableContext(DbContextOptions options)
             : base(options)

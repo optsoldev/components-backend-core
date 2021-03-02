@@ -4,7 +4,7 @@ using Optsol.Playground.Infra.Data.EntityConfig;
 
 namespace Optsol.Playground.Infra.Data.Context
 {
-    public class PlaygroundContext : CoreContext
+    public class PlaygroundContext : Components.Infra.Data.CoreContext
     {
         public PlaygroundContext(DbContextOptions<PlaygroundContext> options) 
             : base(options)

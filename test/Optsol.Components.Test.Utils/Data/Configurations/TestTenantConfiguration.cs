@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Test.Utils.Data.Entities;
 using System;
 
@@ -8,6 +9,12 @@ namespace Optsol.Components.Test.Utils.Data.Configurations
 {
     public class TestTenantConfiguration : EntityConfigurationBase<TestTenantEntity, Guid>
     {
+        public TestTenantConfiguration(ITenantProvider tenantProvider)
+            : base(tenantProvider)
+        {
+
+        }
+
         public override void Configure(EntityTypeBuilder<TestTenantEntity> builder)
         {
             builder.OwnsOne(valueObject => valueObject.Nome)
@@ -43,6 +50,22 @@ namespace Optsol.Components.Test.Utils.Data.Configurations
 
             builder
                 .Property(entity => entity.Ativo)
+                .IsRequired();
+
+            base.Configure(builder);
+        }
+    }
+
+    public class TenantConfiguration : EntityConfigurationBase<TenantEntity, Guid>
+    {
+        public override void Configure(EntityTypeBuilder<TenantEntity> builder)
+        {
+            builder
+                .Property(entity => entity.Host)
+                .IsRequired();
+
+            builder
+                .Property(entity => entity.Name)
                 .IsRequired();
 
             base.Configure(builder);

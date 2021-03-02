@@ -1,11 +1,12 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Contexts;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.Repositories.Core;
+using Optsol.Components.Test.Utils.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
@@ -61,7 +62,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
@@ -92,7 +93,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
@@ -123,7 +124,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
@@ -152,7 +153,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
@@ -190,7 +191,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
@@ -224,7 +225,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
@@ -255,7 +256,7 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
