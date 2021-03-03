@@ -40,6 +40,14 @@ namespace Optsol.Components.Test.Utils.Mapper
                         new NomeValueObject(viewModel.Nome.Split(' ').First(), viewModel.Nome.Split(' ').Last()),
                         new EmailValueObject(viewModel.Contato));
                 });
+
+            CreateMap<TestEntity, TestEntity>()
+               .ConstructUsing((viewModel, entity) =>
+               {
+                   return new TestEntity(
+                       new NomeValueObject(viewModel.Nome.Nome, viewModel.Nome.SobreNome),
+                       new EmailValueObject(viewModel.Email.Email));
+               });
         }
     }
 }

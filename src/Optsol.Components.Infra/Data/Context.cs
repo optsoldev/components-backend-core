@@ -20,6 +20,7 @@ namespace Optsol.Components.Infra.Data
         protected TenantContext()
             : base()
         {
+
         }
 
         protected TenantContext(DbContextOptions options) 

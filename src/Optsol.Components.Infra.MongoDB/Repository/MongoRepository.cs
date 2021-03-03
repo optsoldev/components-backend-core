@@ -36,7 +36,7 @@ namespace Optsol.Components.Infra.MongoDB.Repository
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{id:{ id }}} ) Retorno: type { typeof(TEntity).Name }");
 
             var entity = await Set.FindAsync(Builders<TEntity>.Filter.Eq("_id", id));
-
+            
             return entity.SingleOrDefault();
         }
 

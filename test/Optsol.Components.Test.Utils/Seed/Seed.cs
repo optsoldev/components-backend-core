@@ -160,6 +160,23 @@ namespace Optsol.Components.Test.Utils.Seed
             return provider;
         }
 
+        public static ServiceProvider CreateTestEntitySeedInMongoContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestEntity>> afterInsert = null)
+        {
+            var context = provider.GetRequiredService<MongoContext>();
+            var entities = TestEntityList().Take(take);
+
+            var set = context.GetCollection<TestEntity>(typeof(TestEntity).Name);
+            set.Database.DropCollection(typeof(TestEntity).Name);
+
+            afterInsert?.Invoke(entities);
+
+            set.InsertMany(entities);
+
+            context.SaveChangesAsync().GetAwaiter().GetResult();
+
+            return provider;
+        }
+
         public static ServiceProvider CreateDeletableTestEntitySeedInContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestDeletableEntity>> afterInsert = null)
         {
             var context = provider.GetRequiredService<DeletableContext>();

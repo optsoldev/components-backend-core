@@ -20,27 +20,28 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
         public void Deve_Registrar_Logs_No_Repositorio_MongoDB()
         {
             //Given
+            var dataBaseName = "mongo-auto-create";
             var entity = new AggregateRoot();
 
             var mongoSettings = new MongoSettings
             {
-                DatabaseName = $"Mongo{Guid.NewGuid()}",
+                DatabaseName = dataBaseName,
                 ConnectionString = "mongodb://127.0.0.1:27017"
             };
 
             var setMock = new Mock<IMongoCollection<AggregateRoot>>();
-            var mongoContext = new Mock<MongoContext>(mongoSettings);
-            var logger = new XunitLogger<MongoRepository<AggregateRoot, Guid>>();
-            var repository = new MongoRepository<AggregateRoot, Guid>(mongoContext.Object, logger);
-
+            var mongoContextMock = new Mock<MongoContext>(mongoSettings);
+            var loggerMock = new XunitLogger<MongoRepository<AggregateRoot, Guid>>();
+            var repositoryMock = new MongoRepository<AggregateRoot, Guid>(mongoContextMock.Object, loggerMock);
+            
             //When
-            repository.GetByIdAsync(entity.Id).ConfigureAwait(false);
-            repository.GetAllAsync();
-            repository.InsertAsync(entity);
-            repository.UpdateAsync(entity);
-            repository.DeleteAsync(entity);
-            repository.DeleteAsync(entity.Id).ConfigureAwait(false);
-            repository.SaveChangesAsync();
+            repositoryMock.GetByIdAsync(entity.Id).ConfigureAwait(false);
+            repositoryMock.GetAllAsync();
+            repositoryMock.InsertAsync(entity);
+            repositoryMock.UpdateAsync(entity);
+            repositoryMock.DeleteAsync(entity);
+            repositoryMock.DeleteAsync(entity.Id).ConfigureAwait(false);
+            repositoryMock.SaveChangesAsync();
 
             //Then
             var msgContructor = "Inicializando MongoRepository<AggregateRoot, Guid>";
@@ -52,15 +53,18 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
             var msgDeleteNotFoundAsync = $"Método: DeleteAsync( {{id:{ entity.Id }}} ) Registro não encontrado";
             var msgSaveChanges = "Método: SaveChangesAsync()";
 
-            logger.Logs.Should().HaveCount(9);
-            logger.Logs.Any(a => a.Equals(msgGetById)).Should().BeTrue();
-            logger.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
-            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
-            logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
-            logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
-            logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
-            logger.Logs.Any(a => a.Equals(msgDeleteNotFoundAsync)).Should().BeTrue();
-            logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();
+            loggerMock.Logs.Should().HaveCount(9);
+            loggerMock.Logs.Any(a => a.Equals(msgGetById)).Should().BeTrue();
+            loggerMock.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
+            loggerMock.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
+            loggerMock.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
+            loggerMock.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
+            loggerMock.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
+            loggerMock.Logs.Any(a => a.Equals(msgDeleteNotFoundAsync)).Should().BeTrue();
+            loggerMock.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();
+
+            mongoContextMock.Object.MongoClient.DropDatabase(dataBaseName);
+            mongoContextMock.Object.Dispose();
         }
     }
 }

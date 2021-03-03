@@ -1,7 +1,10 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Data.Contexts;
+using Optsol.Components.Test.Utils.Provider;
 using Optsol.Components.Test.Utils.Repositories.Core;
 using System;
 using Xunit;
@@ -77,6 +80,23 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
 
             Action action = () => provider.GetRequiredService<ITestReadRepository>();
             action.Should().Throw<InvalidOperationException>();
+        }
+
+        [Trait("Configuração IoC", "Repository")]
+        [Fact(DisplayName = "Deve configurar o Context MultiTenant e Provider na injeção de dependencia")]
+        public void Deve_Configurar_Context_MultiTenant_Provider_Injecao_Dependencia()
+        {
+            //Given
+            var services = new ServiceCollection();
+
+            //When
+            services.AddTenantContext<TenantDbContext, DataBaseTenantProvider>(new ContextOptionsBuilder());
+
+            //Then                
+            var provider = services.BuildServiceProvider();
+            provider.GetRequiredService<TenantDbContext>().Should().NotBeNull();
+            provider.GetRequiredService<IHttpContextAccessor>().Should().NotBeNull();
+            provider.GetRequiredService<ITenantProvider>().Should().NotBeNull();
         }
     }
 }

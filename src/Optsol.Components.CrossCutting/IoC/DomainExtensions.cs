@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddDomainNotifications(this IServiceCollection services)
         {
-            services.AddTransient<NotificationContext>();
+            services.AddScoped<NotificationContext>();
 
             return services;
         }

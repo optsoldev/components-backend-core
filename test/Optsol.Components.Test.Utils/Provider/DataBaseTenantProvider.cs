@@ -12,9 +12,11 @@ namespace Optsol.Components.Test.Utils.Provider
 
         public DataBaseTenantProvider(TenantDbContext context, IHttpContextAccessor httpContextAccessor)
         {
-            var host = httpContextAccessor.HttpContext.Request.Host.Value;
-
-            _tenantId = context.Tenants.First(f => f.Host.Equals(host)).Id;             
+            var host = httpContextAccessor.HttpContext?.Request.Host.Value;
+            if (!string.IsNullOrEmpty(host))
+            {
+                _tenantId = context.Tenants.First(f => f.Host.Equals(host)).Id;
+            }
         }
 
         public Guid GetTenantId()

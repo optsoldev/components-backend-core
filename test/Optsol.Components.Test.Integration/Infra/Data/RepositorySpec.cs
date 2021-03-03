@@ -32,7 +32,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddContext<Utils.Data.Contexts.Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
             return services.BuildServiceProvider();
@@ -335,9 +335,11 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
             //Then
             var entityResult = await testReadRepository.GetByIdAsync(entity.Id);
-            entityResult.Invalid.Should().BeFalse();
-            entityResult.Notifications.Should().HaveCount(0);
             entityResult.Should().NotBeNull();
+
+            entityResult.Invalid.Should().BeFalse();
+            entityResult.Notifications.Should().BeEmpty();
+
             entityResult.Nome.ToString().Should().Be(updateEntity.Nome.ToString());
             entityResult.Email.ToString().Should().Be(updateEntity.Email.ToString());
             entityResult.Ativo.Should().BeFalse();
@@ -432,16 +434,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             context.Dispose();
         }
 
-        public class TestTenantInsertEmptyTenantIdParameters : IEnumerable<object[]>
-        {
-            public IEnumerator<object[]> GetEnumerator()
-            {
-                yield return new object[] { };
-            }
-
-            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        }
-
         [Trait("Infraestrutura", "Repositório Leitura MultiTenant")]
         [Fact(DisplayName = "Não deve inserir registro sem informar o id do tenant")]
         public async Task Nao_Deve_Inserir_Registro_Sem_Tenant()
@@ -469,6 +461,93 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
             var result = await testReadRepository.GetByIdAsync(tenantId);
             result.Should().BeNull();
+        }
+
+        public class TestTenantInsertParameters : IEnumerable<object[]>
+        {
+            public IEnumerator<object[]> GetEnumerator()
+            {
+                var tenants = Seed.TenantEntityList();
+
+                yield return new object[]
+                {
+                    new []
+                    {
+                        new TestTenantEntity (Guid.Empty, new NomeValueObject("Armand", "Villarreal"), new EmailValueObject("lorem.tristique@posuerevulputatelacus.ca"))
+                    },
+                    tenants[0].Host,
+                    1,
+                };
+                yield return new object[]
+                {
+                    new []
+                    {
+                        new TestTenantEntity (Guid.Empty, new NomeValueObject("Tarik", "Oneal"), new EmailValueObject("semper.pretium.neque@malesuada.net")),
+                        new TestTenantEntity (Guid.Empty, new NomeValueObject("Baxter", "Sexton"), new EmailValueObject("lacus@Aliquamgravida.co.uk"))
+                    },
+                    tenants[1].Host,
+                    2
+                };
+                yield return new object[]
+                {
+                    new []
+                    {
+                        new TestTenantEntity (Guid.Empty, new NomeValueObject("Tarik", "Oneal"), new EmailValueObject("semper.pretium.neque@malesuada.net")),
+                        new TestTenantEntity (Guid.Empty, new NomeValueObject("Baxter", "Sexton"), new EmailValueObject("lacus@Aliquamgravida.co.uk")),
+                        new TestTenantEntity (Guid.Empty, new NomeValueObject("Armand", "Villarreal"), new EmailValueObject("lorem.tristique@posuerevulputatelacus.ca")),
+                    },
+                    tenants[2].Host,
+                    3
+                };
+                yield return new object[] //Invalido
+                {
+                    new []
+                    {
+                        new TestTenantEntity (Guid.NewGuid(), new NomeValueObject("Tarik", "Oneal"), new EmailValueObject("semper.pretium.neque@malesuada.net")),
+                        new TestTenantEntity (Guid.NewGuid(), new NomeValueObject("Baxter", "Sexton"), new EmailValueObject("lacus@Aliquamgravida.co.uk"))
+                    },
+                    tenants[2].Host,
+                    0 //expectedEntityInTenant
+                };
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        [Trait("Infraestrutura", "Repositório Leitura MultiTenant")]
+        [Theory(DisplayName = "Deve inserir registro no tenant correto")]
+        [ClassData(typeof(TestTenantInsertParameters))]
+        public async Task Deve_Inserir_Registro_No_Tenant_Correto(TestTenantEntity[] entities, string tenantHost, int expectedEntityInTenant)
+        {
+            //Given
+            var provider = GetProviderConfiguredServicesFromTenantContext(tenantHost)
+                .CreateTenantTestEntitySeedInContext(0, (testTenantEntityList, tenantEntityList) =>
+                {
+                    foreach (var entity in entities)
+                    {
+                        if (expectedEntityInTenant != 0)
+                            entity.SetTenantId(tenantEntityList.First(f => f.Host == tenantHost).Id);
+                        else
+                            entity.SetTenantId(tenantEntityList.First(f => f.Host != tenantHost).Id);
+                    }
+                });
+
+            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
+            var testWriteRepository = provider.GetRequiredService<ITestTenantWriteRepository>();
+            var testReadRepository = provider.GetRequiredService<ITestTenantReadRepository>();
+
+            //When
+            var tasks = new List<Task>();
+            foreach (var entity in entities)
+            {
+                tasks.Add(testWriteRepository.InsertAsync(entity));
+            }
+            await Task.WhenAll(tasks);
+            await unitOfWork.CommitAsync();
+
+            //Then
+            var result = await testReadRepository.GetAllAsync();
+            result.Should().HaveCount(expectedEntityInTenant);
         }
     }
 }
