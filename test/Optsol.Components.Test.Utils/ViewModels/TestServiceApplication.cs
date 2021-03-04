@@ -13,7 +13,7 @@ namespace Optsol.Components.Test.Utils.ViewModels
     {
         public TestServiceApplication(
             IMapper mapper,
-            ILogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>> logger,
+            ILoggerFactory logger,
             IUnitOfWork unitOfWork,
             IReadRepository<TestEntity, Guid> readRepository,
             IWriteRepository<TestEntity, Guid> writeRepository,

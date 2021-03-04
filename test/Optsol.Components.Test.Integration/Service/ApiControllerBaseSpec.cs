@@ -54,7 +54,7 @@ namespace Optsol.Components.Test.Integration.Service
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -120,7 +120,7 @@ namespace Optsol.Components.Test.Integration.Service
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -159,8 +159,6 @@ namespace Optsol.Components.Test.Integration.Service
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
 
-            var searchDto = new TestSearchDto();
-
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
@@ -172,7 +170,7 @@ namespace Optsol.Components.Test.Integration.Service
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -198,8 +196,6 @@ namespace Optsol.Components.Test.Integration.Service
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
 
-            var searchDto = new TestSearchDto();
-
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
@@ -212,7 +208,7 @@ namespace Optsol.Components.Test.Integration.Service
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -255,8 +251,6 @@ namespace Optsol.Components.Test.Integration.Service
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
 
-            var searchDto = new TestSearchDto();
-
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
@@ -269,7 +263,7 @@ namespace Optsol.Components.Test.Integration.Service
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 

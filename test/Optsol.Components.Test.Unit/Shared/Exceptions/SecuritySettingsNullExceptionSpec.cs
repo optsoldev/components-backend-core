@@ -1,4 +1,6 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Test.Shared.Logger;
 using System.Linq;
@@ -27,11 +29,13 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
         {
             //Given
             var logger = new XunitLogger<SecuritySettingNullException>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
             SecuritySettingNullException exception;
 
             //When
-            exception = new SecuritySettingNullException(logger);
+            exception = new SecuritySettingNullException(loggerFactoryMock.Object);
 
             //Then
             var msg = "A configuração de segurança não foi encontrada no appsettings";

@@ -19,7 +19,7 @@ namespace Optsol.Playground.Api.Controllers
         public readonly IClienteServiceApplication _clienteServiceApplication;
 
         public ClienteController(
-            ILogger<ApiControllerBase<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel, ClienteSearchDto>> logger,
+            ILoggerFactory logger,
             IResponseFactory responseFactory,
             IClienteServiceApplication clienteServiceApplication)
             : base(logger, clienteServiceApplication, responseFactory)

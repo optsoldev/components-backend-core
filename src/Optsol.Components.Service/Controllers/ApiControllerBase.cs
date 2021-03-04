@@ -80,16 +80,16 @@ namespace Optsol.Components.Service.Controllers
         where TUpdateData : BaseDataTransferObject
         where TSearch : class, ISearch<TEntity>
     {
-        protected readonly ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>> _logger;
+        protected readonly ILogger _logger;
         protected readonly IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> _serviceApplication;
 
 
         public ApiControllerBase(
-            ILogger<ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>> logger,
+            ILoggerFactory logger,
             IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> serviceApplication,
             IResponseFactory responseFactory) : base(responseFactory)
         {
-            _logger = logger;
+            _logger = logger.CreateLogger(nameof(ApiControllerBase));
             _logger?.LogInformation($"Inicializando Controller Base<{ typeof(TEntity).Name }, Guid>");
 
             _serviceApplication = serviceApplication;

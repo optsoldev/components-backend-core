@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Service.Controllers;
@@ -46,6 +47,8 @@ namespace Optsol.Components.Test.Unit.Service
                 , InsertTestViewModel
                 , UpdateTestViewModel
                 , TestSearchDto>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
             Mock<IMapper> mapperMock = new Mock<IMapper>();
             mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(model);
@@ -59,7 +62,7 @@ namespace Optsol.Components.Test.Unit.Service
             mockResponseFactory.Setup(setup => setup.Create(It.IsAny<IEnumerable<TestViewModel>>())).Returns(new ResponseList<TestViewModel>(new[] { model }, true));
             mockResponseFactory.Setup(setup => setup.Create(It.IsAny<SearchResult<TestViewModel>>())).Returns(new ResponseSearch<TestViewModel>(new SearchResult<TestViewModel>(1, 10) { Items = new[] { model } }, true));
 
-            var controller = new TestController(logger, mockApplicationService.Object, mockResponseFactory.Object);
+            var controller = new TestController(loggerFactoryMock.Object, mockApplicationService.Object, mockResponseFactory.Object);
 
             //When
             await controller.GetAllAsync();

@@ -7,7 +7,7 @@ namespace Optsol.Components.Test.Utils.Repositories.Tenant
 {
     public class TestTenantWriteRepository : Repository<TestTenantEntity, Guid>, ITestTenantWriteRepository
     {
-        public TestTenantWriteRepository(CoreContext context, ILogger<Repository<TestTenantEntity, Guid>> logger) 
+        public TestTenantWriteRepository(CoreContext context, ILoggerFactory logger) 
             : base(context, logger)
         {
         }

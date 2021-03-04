@@ -1,4 +1,6 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Test.Shared.Logger;
 using System.Linq;
@@ -12,10 +14,10 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
         public void Deve_Inicializar_Com_Mensagem_Erro()
         {
             //Given
-            CorsSettingsNullException exception;;  
+            ILoggerFactory logger = null;
 
             //When
-            exception = new CorsSettingsNullException(null);
+            var exception = new CorsSettingsNullException(logger);
 
             //Then
             var msg = "A configuração do CORS não foi encontrada no appsettings";
@@ -27,11 +29,12 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
         {
             //Given
             var logger = new XunitLogger<CorsSettingsNullException>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
-            CorsSettingsNullException exception;
 
             //When
-            exception = new CorsSettingsNullException(logger);
+            var exception = new CorsSettingsNullException(loggerFactoryMock.Object);
 
             //Then
             var msg = "A configuração do CORS não foi encontrada no appsettings";

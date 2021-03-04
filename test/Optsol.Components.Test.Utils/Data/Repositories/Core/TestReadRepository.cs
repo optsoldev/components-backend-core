@@ -7,7 +7,7 @@ namespace Optsol.Components.Test.Utils.Repositories.Core
 {
     public class TestReadRepository : Repository<TestEntity, Guid>, ITestReadRepository
     {
-        public TestReadRepository(CoreContext context, ILogger<Repository<TestEntity, Guid>> logger) 
+        public TestReadRepository(CoreContext context, ILoggerFactory logger) 
             : base(context, logger)
         {
         }

@@ -32,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var servicesProvider = services.BuildServiceProvider();
 
             var storageSettings = configuration.GetSection(nameof(StorageSettings)).Get<StorageSettings>()
-                ?? throw new StorageSettingsNullException(servicesProvider.GetRequiredService<ILogger<StorageSettingsNullException>>());
+                ?? throw new StorageSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
             storageSettings.Validate();
 
             services.AddSingleton(storageSettings);

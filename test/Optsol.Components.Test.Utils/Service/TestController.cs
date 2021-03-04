@@ -14,7 +14,7 @@ namespace Optsol.Components.Test.Utils.Service
         IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>
     {
         public TestController(
-            ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>> logger, 
+            ILoggerFactory logger, 
             IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel> serviceApplication,
             IResponseFactory responseFactory) : base(logger, serviceApplication, responseFactory)
         {

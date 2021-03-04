@@ -8,7 +8,7 @@ namespace Optsol.Components.Test.Utils.Data.Repositories.Mongo
 {
     public class TestMongoReadRepository : MongoRepository<TestEntity, Guid>, ITestMongoReadRepository
     {
-        public TestMongoReadRepository(MongoContext context, ILogger<MongoRepository<TestEntity, Guid>> logger) 
+        public TestMongoReadRepository(MongoContext context, ILoggerFactory logger) 
             : base(context, logger)
         {
         }

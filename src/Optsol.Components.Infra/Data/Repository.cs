@@ -20,9 +20,9 @@ namespace Optsol.Components.Infra.Data
 
         public DbSet<TEntity> Set { get; protected set; }
 
-        public Repository(CoreContext context, ILogger<Repository<TEntity, TKey>> logger)
+        public Repository(CoreContext context, ILoggerFactory logger)
         {
-            _logger = logger;
+            _logger = logger.CreateLogger(nameof(Repository<TEntity, TKey>));
             _logger?.LogInformation($"Inicializando Repository<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");
 
             Context = context ?? throw new DbContextNullException();

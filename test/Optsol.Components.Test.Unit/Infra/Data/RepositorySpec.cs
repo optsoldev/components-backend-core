@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Extensions;
@@ -33,8 +34,12 @@ namespace Optsol.Components.Test.Unit.Infra.Data
 
             var coreContextMock = new Mock<CoreContext>();
             coreContextMock.Setup(context => context.Set<TestEntity>()).Returns(setMock.Object);
+
             var logger = new XunitLogger<Repository<TestEntity, Guid>>();
-            var repositoryMock = new Repository<TestEntity, Guid>(coreContextMock.Object, logger);
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var repositoryMock = new Repository<TestEntity, Guid>(coreContextMock.Object, loggerFactoryMock.Object);
 
             //When
             repositoryMock.GetByIdAsync(entity.Id);

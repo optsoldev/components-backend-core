@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Moq;
 using Optsol.Components.Domain.Entities;
@@ -31,8 +32,12 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
 
             var setMock = new Mock<IMongoCollection<AggregateRoot>>();
             var mongoContextMock = new Mock<MongoContext>(mongoSettings);
-            var loggerMock = new XunitLogger<MongoRepository<AggregateRoot, Guid>>();
-            var repositoryMock = new MongoRepository<AggregateRoot, Guid>(mongoContextMock.Object, loggerMock);
+            
+            var logger = new XunitLogger<MongoRepository<AggregateRoot, Guid>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var repositoryMock = new MongoRepository<AggregateRoot, Guid>(mongoContextMock.Object, loggerFactoryMock.Object);
             
             //When
             repositoryMock.GetByIdAsync(entity.Id).ConfigureAwait(false);
@@ -53,15 +58,15 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
             var msgDeleteNotFoundAsync = $"Método: DeleteAsync( {{id:{ entity.Id }}} ) Registro não encontrado";
             var msgSaveChanges = "Método: SaveChangesAsync()";
 
-            loggerMock.Logs.Should().HaveCount(9);
-            loggerMock.Logs.Any(a => a.Equals(msgGetById)).Should().BeTrue();
-            loggerMock.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
-            loggerMock.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
-            loggerMock.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
-            loggerMock.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
-            loggerMock.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
-            loggerMock.Logs.Any(a => a.Equals(msgDeleteNotFoundAsync)).Should().BeTrue();
-            loggerMock.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();
+            logger.Logs.Should().HaveCount(9);
+            logger.Logs.Any(a => a.Equals(msgGetById)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgDeleteNotFoundAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();
 
             mongoContextMock.Object.MongoClient.DropDatabase(dataBaseName);
             mongoContextMock.Object.Dispose();

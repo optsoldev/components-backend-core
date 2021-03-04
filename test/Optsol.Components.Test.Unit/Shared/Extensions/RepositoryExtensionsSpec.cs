@@ -11,6 +11,7 @@ using Optsol.Components.Test.Shared.Logger;
 using Xunit;
 using System.Linq;
 using static Optsol.Components.Test.Utils.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace Optsol.Components.Test.Unit.Shared.Extensions
 {
@@ -26,15 +27,17 @@ namespace Optsol.Components.Test.Unit.Shared.Extensions
             //Given
             var entitiesAsync = GetAllAggregateRootAsyncEnumerable(entity, entity2);
 
-            Mock<DbSet<AggregateRoot>> setMock = new Mock<DbSet<AggregateRoot>>();
-            
+            var setMock = new Mock<DbSet<AggregateRoot>>();
             setMock.Setup(set => set.AsAsyncEnumerable()).Returns(entitiesAsync);
             
             var coreContextMock = new Mock<CoreContext>();
             coreContextMock.Setup(context => context.Set<AggregateRoot>()).Returns(setMock.Object);
             
             var logger = new XunitLogger<Repository<AggregateRoot, Guid>>();
-            var repository = new Repository<AggregateRoot, Guid>(coreContextMock.Object, logger);
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var repository = new Repository<AggregateRoot, Guid>(coreContextMock.Object, loggerFactoryMock.Object);
 
             //When
             var entities = await repository.GetAllAsync();

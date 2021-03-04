@@ -22,21 +22,21 @@ namespace Optsol.Components.Infra.MongoDB.Repository
 
         public IMongoCollection<TEntity> Set { get; protected set; }
 
-        public MongoRepository(MongoContext context, ILogger<MongoRepository<TEntity, TKey>> logger)
+        public MongoRepository(MongoContext context, ILoggerFactory logger)
         {
-            _logger = logger;
+            _logger = logger?.CreateLogger(nameof(MongoRepository<TEntity, TKey>));
             _logger?.LogInformation($"Inicializando MongoRepository<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");
 
             Context = context ?? throw new MongoContextNullException();
             Set = Context.GetCollection<TEntity>(typeof(TEntity).Name);
         }
-        
+
         public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{id:{ id }}} ) Retorno: type { typeof(TEntity).Name }");
 
             var entity = await Set.FindAsync(Builders<TEntity>.Filter.Eq("_id", id));
-            
+
             return entity.SingleOrDefault();
         }
 
