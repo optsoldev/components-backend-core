@@ -32,7 +32,7 @@ namespace Optsol.Components.Test.Integration.Application
             return services.BuildServiceProvider();
         }
 
-        [Trait("Aplicação", "Serviço de Aplicação")]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
         [Fact(DisplayName = "Deve obter todos os registros pelo serviço da aplicação")]
         public async Task Deve_Obter_Todos_Registro_Pelo_Servico()
         {
@@ -52,7 +52,7 @@ namespace Optsol.Components.Test.Integration.Application
             viewModels.Any(w => w.Invalid).Should().BeFalse();
         }
 
-        [Trait("Aplicação", "Serviço de Aplicação")]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
         [Fact(DisplayName = "Deve obter todos os registros pelo serviço da aplicação")]
         public async Task Deve_Obter_Registro_Por_Id_Pelo_Servico()
         {
@@ -117,7 +117,7 @@ namespace Optsol.Components.Test.Integration.Application
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Aplicação", "Serviço de Aplicação")]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
         [Theory(DisplayName = "Deve inserir registro na base de dados")]
         [ClassData(typeof(InserirNovosRegistrosParams))]
         public void Deve_Inserir_Registro_Pelo_Servico(InsertTestViewModel viewmModel)
@@ -138,7 +138,7 @@ namespace Optsol.Components.Test.Integration.Application
             notificationContext.Notifications.Should().HaveCount(0);
         }
 
-        [Trait("Aplicação", "Serviço de Aplicação")]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
         [Fact(DisplayName = "Deve atualizar registro obtido na base de dados")]
         public async Task Deve_Atualizar_Registro_Pelo_Servico()
         {
@@ -179,7 +179,7 @@ namespace Optsol.Components.Test.Integration.Application
             viewModelResult.Contato.Should().Be(updateModel.Contato);
         }
 
-        [Trait("Aplicação", "Serviço de Aplicação")]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
         [Fact(DisplayName = "Deve remover registro obtido na base de dados")]
         public async Task Deve_Remover_Registro_Pelo_Id_Pelo_Servico()
         {
@@ -259,7 +259,7 @@ namespace Optsol.Components.Test.Integration.Application
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Aplicação", "Serviço de Aplicação")]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
         [Theory(DisplayName = "Não deve inserir registro na base de dados")]
         [ClassData(typeof(InserirNovosRegistrosComFalhasParams))]
         public void Nao_Deve_Inserir_Registro_Pelo_Servico(InsertTestViewModel viewModel, string[] expectedErrorProperty, int expectedErrosCount)
@@ -332,7 +332,7 @@ namespace Optsol.Components.Test.Integration.Application
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Aplicação", "Serviço de Aplicação")]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
         [Theory(DisplayName = "Não deve atualizar os registros obtidos na base de dados")]
         [ClassData(typeof(AtualizarRegistrosComFalhasParams))]
         public void Nao_Deve_Atualizar_Registro_Pelo_Servico(UpdateTestViewModel viewModel, string[] expectedErrorProperty, int expectedErrosCount)

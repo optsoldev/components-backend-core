@@ -8,9 +8,11 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using Optsol.Components.Test.Utils.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -97,6 +99,75 @@ namespace Optsol.Components.Test.Unit.Application
             logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Contains(msgUpdateAsyncMapper)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
+        }
+
+
+        public class ObterTodosParams : IEnumerable<object[]>
+        {
+            public IEnumerator<object[]> GetEnumerator()
+            {
+                yield return new object[]
+                {
+                    new []
+                    {
+                        new TestEntity (new NomeValueObject("Isaiah", "Sosa"), new EmailValueObject("justo.eu.arcu@Integervitaenibh.net")),
+                        new TestEntity (new NomeValueObject("Hop", "Gross"), new EmailValueObject("Integer@magna.co.uk")),
+                        new TestEntity (new NomeValueObject("Armand", "Villarreal"), new EmailValueObject("lorem.tristique@posuerevulputatelacus.ca")),
+                    },
+                    new []
+                    {
+                         new TestViewModel() { Nome = "Isaiah Sosa", Contato = "justo.eu.arcu@Integervitaenibh.net" },
+                         new TestViewModel() { Nome = "Hop Gross", Contato = "Integer@magna.co.uk" },
+                         new TestViewModel() { Nome = "Armand Villarreal", Contato = "lorem.tristique@posuerevulputatelacus.ca" }
+                    }
+                };
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        [Trait("Serviço de Aplicação", "Log de Ocorrências")]
+        [Theory(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
+        [ClassData(typeof(ObterTodosParams))]
+        public void Deve_Registrar_Logs_No_Servico_Ao_Obter_Todos_Registros(IEnumerable<TestEntity> entities, IEnumerable<TestViewModel> viewModels)
+        {
+            //Given
+            var mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(mapper => mapper.Map<IEnumerable<TestViewModel>>(It.IsAny<TestEntity>())).Returns(viewModels);
+
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(1);
+
+            var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
+            readRepository.Setup(setup => setup.GetAllAsync()).ReturnsAsync(entities);
+
+            var writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
+
+            var notificationContextMock = new Mock<NotificationContext>();
+
+            var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
+                mapperMock.Object,
+                loggerFactoryMock.Object,
+                unitOfWork.Object,
+                readRepository.Object,
+                writeRepository.Object,
+                notificationContextMock.Object);
+
+            //When
+            service.GetAllAsync().ConfigureAwait(false);
+
+            //Then
+            var msgConstructor = $"Inicializando Application Service<{ nameof(TestEntity) }, Guid>";
+            var msgGetAllAsync = $"Método: GetAllAsync() Retorno: IEnumerable<{ nameof(TestViewModel) }>";
+            
+
+            logger.Logs.Should().HaveCount(3);
+            logger.Logs.Any(a => a.Equals(msgConstructor)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
         }
     }
 }
