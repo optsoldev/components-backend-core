@@ -17,7 +17,7 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
 {
     public class MongoRepositorySpec
     {
-        [Fact]
+        [Fact(Skip ="mongo local docker test")]
         public void Deve_Registrar_Logs_No_Repositorio_MongoDB()
         {
             //Given
