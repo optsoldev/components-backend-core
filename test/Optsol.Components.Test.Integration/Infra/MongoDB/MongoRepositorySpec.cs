@@ -42,7 +42,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         }
 
         [Trait("Infraestrutura", "MongoDB Respositório de Leitura")]
-        [Fact(DisplayName = "Deve obter todos registros pelo repositório")]
+        [Fact(DisplayName = "Deve obter todos registros pelo repositório", Skip = "mongo local docker test")]
         public async Task Deve_obter_Todos_Pelo_Repositorio()
         {
             //Given
@@ -60,7 +60,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         }
 
         [Trait("Infraestrutura", "MongoDB Respositório de Leitura")]
-        [Fact(DisplayName = "Deve obter o registro pelo id")]
+        [Fact(DisplayName = "Deve obter o registro pelo id", Skip = "mongo local docker test")]
         public async Task Deve_obter_Por_Id_Pelo_Repositorio()
         {
             //Given
@@ -97,8 +97,8 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Infraestrutura", "MongoDB Repositório Escrita")]
-        [Theory(DisplayName = "Deve inserir o registro na base de dados")]
+        [Trait("Infraestrutura", "MongoDB Repositório de Escrita")]
+        [Theory(DisplayName = "Deve inserir o registro na base de dados", Skip = "mongo local docker test")]
         [ClassData(typeof(InserirNovosRegistrosParams))]
         public async Task Deve_Inserir_Registro_Pelo_Repositorio(TestEntity entity)
         {
@@ -123,7 +123,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         }
 
         [Trait("Infraestrutura", "MongoDB Respositório de Escrita")]
-        [Theory(DisplayName = "Deve atualizar o registro obtido da base de dados")]
+        [Theory(DisplayName = "Deve atualizar o registro obtido da base de dados", Skip = "mongo local docker test")]
         [ClassData(typeof(InserirNovosRegistrosParams))]
         public async Task Deve_Atualizar_Registro_Pelo_Repositorio(TestEntity entity)
         {
