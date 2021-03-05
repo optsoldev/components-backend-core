@@ -20,7 +20,7 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
         {
             //Given
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.cors.json")
+                .AddJsonFile(@"Settings/appsettings.cors.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -41,7 +41,7 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
         {
             //Given
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.mongo.json")
+                .AddJsonFile(@"Settings/appsettings.mongo.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -60,7 +60,7 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
         {
             //Given
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.cors.json")
+                .AddJsonFile(@"Settings/appsettings.cors.json")
                 .Build();
 
             var services = new ServiceCollection();
@@ -81,7 +81,7 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
         {
             //Given
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.cors.json")
+                .AddJsonFile(@"Settings/appsettings.cors.json")
                 .Build();
             
             var services = new ServiceCollection();
@@ -103,7 +103,7 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
         {
             //Given
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile(@"Settings\appsettings.mongo.json")
+                .AddJsonFile(@"Settings/appsettings.mongo.json")
                 .Build();
 
             var services = new ServiceCollection();
