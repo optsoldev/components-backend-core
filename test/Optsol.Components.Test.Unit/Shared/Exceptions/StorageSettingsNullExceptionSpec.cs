@@ -1,4 +1,6 @@
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Test.Shared.Logger;
 using System.Linq;
@@ -12,10 +14,10 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
         public void Deve_Inicializar_Com_Mensagem_Erro()
         {
             //Given
-            StorageSettingsNullException exception; ;
+            ILoggerFactory logger = null;
 
             //When
-            exception = new StorageSettingsNullException(null);
+            var exception = new StorageSettingsNullException(logger);
 
             //Then
             var msg = "A configuração do Storage não foi encontrada no appsettings";
@@ -27,11 +29,11 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
         {
             //Given
             var logger = new XunitLogger<StorageSettingsNullException>();
-
-            StorageSettingsNullException exception;
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
             //When
-            exception = new StorageSettingsNullException(logger);
+            var exception = new StorageSettingsNullException(loggerFactoryMock.Object);
 
             //Then
             var msg = "A configuração do Storage não foi encontrada no appsettings";

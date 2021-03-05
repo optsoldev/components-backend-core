@@ -1,6 +1,6 @@
 using AutoMapper;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.ViewModels;
 
 namespace Optsol.Components.Test.Utils.Mapper
 {

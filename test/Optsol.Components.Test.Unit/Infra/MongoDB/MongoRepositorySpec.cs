@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Moq;
 using Optsol.Components.Domain.Entities;
@@ -16,31 +17,36 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
 {
     public class MongoRepositorySpec
     {
-        [Fact(Skip = "Integração com mongodb somente local")]
+        [Fact(Skip ="mongo local docker test")]
         public void Deve_Registrar_Logs_No_Repositorio_MongoDB()
         {
             //Given
+            var dataBaseName = "mongo-auto-create";
             var entity = new AggregateRoot();
 
             var mongoSettings = new MongoSettings
             {
-                DatabaseName = $"Mongo{Guid.NewGuid()}",
+                DatabaseName = dataBaseName,
                 ConnectionString = "mongodb://127.0.0.1:27017"
             };
 
             var setMock = new Mock<IMongoCollection<AggregateRoot>>();
-            var mongoContext = new Mock<MongoContext>(mongoSettings);
+            var mongoContextMock = new Mock<MongoContext>(mongoSettings);
+            
             var logger = new XunitLogger<MongoRepository<AggregateRoot, Guid>>();
-            var repository = new MongoRepository<AggregateRoot, Guid>(mongoContext.Object, logger);
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
+            var repositoryMock = new MongoRepository<AggregateRoot, Guid>(mongoContextMock.Object, loggerFactoryMock.Object);
+            
             //When
-            repository.GetByIdAsync(entity.Id).ConfigureAwait(false);
-            repository.GetAllAsync();
-            repository.InsertAsync(entity);
-            repository.UpdateAsync(entity);
-            repository.DeleteAsync(entity);
-            repository.DeleteAsync(entity.Id).ConfigureAwait(false);
-            repository.SaveChangesAsync();
+            repositoryMock.GetByIdAsync(entity.Id).ConfigureAwait(false);
+            repositoryMock.GetAllAsync();
+            repositoryMock.InsertAsync(entity);
+            repositoryMock.UpdateAsync(entity);
+            repositoryMock.DeleteAsync(entity);
+            repositoryMock.DeleteAsync(entity.Id).ConfigureAwait(false);
+            repositoryMock.SaveChangesAsync();
 
             //Then
             var msgContructor = "Inicializando MongoRepository<AggregateRoot, Guid>";
@@ -61,6 +67,9 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
             logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgDeleteNotFoundAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();
+
+            mongoContextMock.Object.MongoClient.DropDatabase(dataBaseName);
+            mongoContextMock.Object.Dispose();
         }
     }
 }

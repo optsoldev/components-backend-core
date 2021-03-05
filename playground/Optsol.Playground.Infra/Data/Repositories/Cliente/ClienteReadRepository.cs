@@ -11,7 +11,8 @@ namespace Optsol.Playground.Infra.Data.Repositories.Cliente
 {
     public class ClienteReadRepository : Repository<ClienteEntity, Guid>, IClienteReadRepository
     {
-        public ClienteReadRepository(CoreContext context, ILogger<Repository<ClienteEntity, Guid>> logger) : base(context, logger)
+        public ClienteReadRepository(CoreContext context, ILoggerFactory logger) 
+            : base(context, logger)
         {
         }
 

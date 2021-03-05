@@ -14,7 +14,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
     public class BlobStorageSpec
     {
 
-        [Fact(Skip = "Integração com storage somente local")]
+        [Fact(Skip = "azurite local docker test")]
         public void Deve_Registrar_Serico_Storage_Na_Injecao_De_Dependencia()
         {
             //Given 
@@ -25,10 +25,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddStorage(configuration, options =>
-            {
-                options.DisableQueue();
-            });
+            services.AddStorage(configuration);
 
             var provider = services.BuildServiceProvider();
 
@@ -39,7 +36,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             blobStorage.Should().NotThrow();
         }
 
-        [Fact(Skip = "Integração com storage somente local")]
+        [Fact(Skip = "azurite local docker test")]
         public async Task Deve_Criar_Container_Blob_No_Azure_Storage()
         {
             //Given 
@@ -50,10 +47,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddStorage(configuration, options =>
-            {
-                options.DisableQueue();
-            });
+            services.AddStorage(configuration);
 
             var provider = services.BuildServiceProvider();
             var blobSettings = provider.GetRequiredService<StorageSettings>();
@@ -71,7 +65,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             containerExiteNoAzureStorage.Value.Should().BeTrue();
         }
 
-        [Fact(Skip = "Integração com storage somente local")]
+        [Fact(Skip = "azurite local docker test")]
         public void Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Stream()
         {
             //Given 
@@ -79,13 +73,10 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
                 .AddJsonFile(@"Settings/appsettings.storage.json")
                 .Build();
 
-            var services = new ServiceCollection(); 
+            var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddStorage(configuration, options =>
-            {
-                options.DisableQueue();
-            });
+            services.AddStorage(configuration);
 
             var provider = services.BuildServiceProvider();
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();
@@ -102,7 +93,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
-        [Fact(Skip = "Integração com storage somente local")]
+        [Fact(Skip = "azurite local docker test")]
         public void Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Path()
         {
             //Given 
@@ -113,10 +104,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddStorage(configuration, options =>
-            {
-                options.DisableQueue();
-            });
+            services.AddStorage(configuration);
 
             var provider = services.BuildServiceProvider();
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();
@@ -130,7 +118,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
-        [Fact(Skip = "Integração com storage somente local")]
+        [Fact(Skip = "azurite local docker test")]
         public async Task Deve_Apagar_Arquivo_No_Blob_Pelo_Nome()
         {
             //Given 
@@ -141,10 +129,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddStorage(configuration, options =>
-            {
-                options.DisableQueue();
-            });
+            services.AddStorage(configuration);
 
             var provider = services.BuildServiceProvider();
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();
@@ -161,7 +146,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
-        [Fact(Skip = "Integração com storage somente local")]
+        [Fact(Skip = "azurite local docker test")]
         public async Task Deve_Fazer_Download_Do_Arquivo_No_Blob_Pelo_Nome()
         {
             //Given 
@@ -172,10 +157,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddStorage(configuration, options =>
-            {
-                options.DisableQueue();
-            });
+            services.AddStorage(configuration);
 
             var provider = services.BuildServiceProvider();
             var blobStorage = (BlobStorage)provider.GetRequiredService<IBlobStorage>();

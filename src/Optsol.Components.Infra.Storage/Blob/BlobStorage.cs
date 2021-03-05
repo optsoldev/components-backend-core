@@ -20,12 +20,12 @@ namespace Optsol.Components.Infra.Storage.Blob
 
         private readonly StorageSettings _storageSettings;
 
-        public BlobStorage(StorageSettings settings, ILogger<BlobStorage> logger, ILogger<StorageSettingsNullException> loggerException)
+        public BlobStorage(StorageSettings settings, ILoggerFactory logger)
         {
-            _storageSettings = settings ?? throw new StorageSettingsNullException(loggerException);
-            _storageSettings.Validate();
+            _logger = logger.CreateLogger(nameof(BlobStorage));
 
-            _logger = logger;
+            _storageSettings = settings ?? throw new StorageSettingsNullException(logger);
+            _storageSettings.Validate();
         }
 
         public virtual async Task<IEnumerable<Page<BlobItem>>> GetAllAsync()

@@ -6,10 +6,11 @@ namespace Optsol.Components.Shared.Exceptions
     public class StorageSettingsNullException : Exception
     {
 
-        public StorageSettingsNullException(ILogger<StorageSettingsNullException> logger = null)
+        public StorageSettingsNullException(ILoggerFactory logger)
             : base("A configuração do Storage não foi encontrada no appsettings")
         {
-            logger?.LogCritical(
+            var _logger = logger?.CreateLogger(nameof(StorageSettingsNullException));
+            _logger?.LogCritical(
 @$"{nameof(StorageSettingsNullException)}:
 ""StorageSettings"": {{
     {{

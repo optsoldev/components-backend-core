@@ -81,10 +81,11 @@ namespace Optsol.Components.Service.Responses
     public class ResponseSearch<TData> : ResponseList<TData>
         where TData : BaseDataTransferObject
     {
-
         public int Page { get; set; }
 
         public int? PageSize { get; set; }
+
+        public long Total { get; set; }
 
         public ResponseSearch()
         {
@@ -106,6 +107,7 @@ namespace Optsol.Components.Service.Responses
         {
             Page = (int)data.Page;
             PageSize = (int?)data.PageSize;
+            Total = data.TotalItems;
         }
     }
 }

@@ -16,10 +16,10 @@ namespace Optsol.Components.Service.Filters
 
         public AuthorizeCheckOperationFilter(
             SwaggerSettings swaggerSettings, 
-            SecuritySettings securitySettings, 
-            ILogger<SwaggerSettingsNullException> loggerSwagger)
+            SecuritySettings securitySettings,
+            ILoggerFactory logger)
         {
-            _swaggerSettings = swaggerSettings ?? throw new SwaggerSettingsNullException(loggerSwagger);
+            _swaggerSettings = swaggerSettings ?? throw new SwaggerSettingsNullException(logger);
             _swaggerSettings.Validate();
             _swaggerSettings.Security.Validate();
 

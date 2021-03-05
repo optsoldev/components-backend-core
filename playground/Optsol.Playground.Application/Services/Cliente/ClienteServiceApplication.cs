@@ -20,7 +20,7 @@ namespace Optsol.Playground.Application.Services.Cliente
 
         public ClienteServiceApplication(
             IMapper mapper,
-            ILogger<BaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>> logger,
+            ILoggerFactory logger,
             IUnitOfWork unitOfWork,
             IClienteWriteRepository clienteWriteRepository,
             IClienteReadRepository clienteReadRepository,

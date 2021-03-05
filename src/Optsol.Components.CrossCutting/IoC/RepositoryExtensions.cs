@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Infra.UoW;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -6,8 +8,8 @@ namespace Microsoft.Extensions.DependencyInjection
     public static class RepositoryExtensions
     {
         public static IServiceCollection AddContext<TContext>(this IServiceCollection services, ContextOptionsBuilder options)
-            where TContext: CoreContext
-        {         
+            where TContext : CoreContext
+        {
             services.AddDbContext<TContext>(options.Builder());
             services.AddScoped<CoreContext, TContext>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -18,7 +20,19 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddRepository<TInterface, TImplementation>(this IServiceCollection services,  params string[] namespaces)
+        public static IServiceCollection AddTenantContext<TContext, TProvider>(this IServiceCollection services, ContextOptionsBuilder options)
+            where TContext : TenantContext
+            where TProvider : class, ITenantProvider
+        {
+            services.AddDbContext<TContext>(options.Builder());
+            services.AddScoped<TContext>();
+            services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<ITenantProvider, TProvider>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddRepository<TInterface, TImplementation>(this IServiceCollection services, params string[] namespaces)
         {
             return services.RegisterScoped<TInterface, TImplementation>(namespaces);
         }

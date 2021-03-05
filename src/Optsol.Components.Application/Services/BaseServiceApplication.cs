@@ -21,9 +21,9 @@ namespace Optsol.Components.Application.Services
 
         protected readonly NotificationContext _notificationContext;
 
-        public BaseServiceApplication(IMapper mapper, ILogger logger, NotificationContext notificationContext)
+        public BaseServiceApplication(IMapper mapper, ILoggerFactory logger, NotificationContext notificationContext)
         {
-            _logger = logger;
+            _logger = logger.CreateLogger(nameof(BaseServiceApplication));
             _logger?.LogInformation($"Inicializando Application Service");
 
             _mapper = mapper ?? throw new AutoMapperNullException();
@@ -49,7 +49,7 @@ namespace Optsol.Components.Application.Services
 
         public BaseServiceApplication(
             IMapper mapper,
-            ILogger<BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>> logger,
+            ILoggerFactory logger,
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, Guid> readRepository,
             IWriteRepository<TEntity, Guid> writeRepository,
@@ -83,7 +83,7 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
         }
 
-        public virtual async Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(RequestSearch<TSearch> requestSearch)
+        public virtual async Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch)
             where TSearch : class
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");

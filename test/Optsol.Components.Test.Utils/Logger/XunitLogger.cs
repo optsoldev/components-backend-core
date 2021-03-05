@@ -27,4 +27,6 @@ namespace Optsol.Components.Test.Shared.Logger
             Logs.Add(state.ToString());
         }
     }
+
+    
 }

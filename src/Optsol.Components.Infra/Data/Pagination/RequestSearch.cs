@@ -2,7 +2,7 @@ using System;
 
 namespace Optsol.Components.Infra.Data
 {
-    public class RequestSearch<TSearch>
+    public class SearchRequest<TSearch>
         where TSearch : class
     {
         private uint _page;

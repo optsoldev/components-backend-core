@@ -1,12 +1,16 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Contexts;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.Repositories.Core;
+using Optsol.Components.Test.Utils.Seed;
+using Optsol.Components.Test.Utils.ViewModels;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,123 +19,117 @@ namespace Optsol.Components.Test.Integration.Application
 {
     public class BaseServiceApplicationSpec
     {
-
-        [Fact]
-        public async Task Deve_Testar_A_Configuracao_Do_Servico()
+        private static ServiceProvider GetProviderConfiguredServicesFromContext()
         {
-            //Given
             var services = new ServiceCollection();
-            var entity = new TestEntity(
-                new NomeValueObject("Weslley", "Carneiro")
-                , new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
-            var provider = services.BuildServiceProvider();
-            ITestWriteRepository writeRepository = provider.GetRequiredService<ITestWriteRepository>();
-            IUnitOfWork unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
-
-            await writeRepository.InsertAsync(entity);
-            await unitOfWork.CommitAsync();
-
-            //When
-            var viewModels = await serviceApplication.GetAllAsync();
-
-            //Then            
-            viewModels.Should().HaveCount(1);
-            viewModels.First().Nome.Should().Be(entity.Nome.ToString());
-            viewModels.First().Contato.Should().Be(entity.Email.ToString());
+            return services.BuildServiceProvider();
         }
 
-        [Fact]
-        public async Task Deve_Buscar_Todos_Registro_Pelo_Servico()
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Fact(DisplayName = "Deve obter todos os registros pelo serviço da aplicação")]
+        public async Task Deve_Obter_Todos_Registro_Pelo_Servico()
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            var numberItems = 4;
+            var provider = GetProviderConfiguredServicesFromContext()
+                .CreateTestEntitySeedInContext(numberItems);
 
-            var services = new ServiceCollection();
-            services.AddLogging();
-            services.AddAutoMapper(typeof(TestViewModel));
-            services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-
-            var provider = services.BuildServiceProvider();
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
+            var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            await serviceApplication.InsertAsync(model);
-            await serviceApplication.InsertAsync(model);
-            await serviceApplication.InsertAsync(model);
-
             var viewModels = await serviceApplication.GetAllAsync();
 
             //Then
-            viewModels.Should().HaveCount(3);
-            viewModels.Where(w => w.Nome.Equals(model.Nome)).Should().HaveCount(3);
-            viewModels.Where(w => w.Contato.Equals(model.Contato)).Should().HaveCount(3);
+            viewModels.Should().NotBeEmpty();
+            viewModels.Should().HaveCount(numberItems);
+            viewModels.Any(w => w.Invalid).Should().BeFalse();
         }
 
-        [Fact]
-        public async Task Deve_Buscar_Registro_Por_Id_Pelo_Servico()
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Fact(DisplayName = "Deve obter todos os registros pelo serviço da aplicação")]
+        public async Task Deve_Obter_Registro_Por_Id_Pelo_Servico()
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            var numberItems = 4;
+            var entity = default(TestEntity);
 
-            var services = new ServiceCollection();
-            services.AddLogging();
-            services.AddAutoMapper(typeof(TestViewModel));
-            services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            var provider = GetProviderConfiguredServicesFromContext()
+                .CreateTestEntitySeedInContext(numberItems, (testEntityList) =>
+                {
+                    entity = testEntityList.First();
+                });
 
-            var provider = services.BuildServiceProvider();
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
-
-            await serviceApplication.InsertAsync(model);
-
-            var findId = (await serviceApplication.GetAllAsync()).First().Id;
+            var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            var viewModel = await serviceApplication.GetByIdAsync(findId);
+            var viewModel = await serviceApplication.GetByIdAsync(entity.Id);
 
             //Then
             viewModel.Should().NotBeNull();
-            viewModel.Nome.Should().Be(model.Nome);
-            viewModel.Contato.Should().Be(model.Contato);
+            viewModel.Nome.Should().Be(entity.Nome.ToString());
+            viewModel.Contato.Should().Be(entity.Email.ToString());
+
+            viewModel.Validate();
+            viewModel.Invalid.Should().BeFalse();
+            viewModel.Valid.Should().BeTrue();
+            viewModel.Notifications.Should().BeEmpty();
         }
 
-        [Fact]
-        public void Deve_Inserir_Registro_Pelo_Servico()
+        private class InserirNovosRegistrosParams : IEnumerable<object[]>
+        {
+            public IEnumerator<object[]> GetEnumerator()
+            {
+                yield return new object[]
+                {
+                    new InsertTestViewModel()
+                    {
+                        Nome = "Weslley Carneiro",
+                        Contato = "weslley.carneiro@optsol.com.br"
+                    }
+                };
+
+                yield return new object[]
+                {
+                    new InsertTestViewModel()
+                    {
+                        Nome = "Felipe Carvalho",
+                        Contato = "felipe.carvalho@optsol.com.br"
+                    }
+                };
+
+                yield return new object[]
+                {
+                    new InsertTestViewModel()
+                    {
+                        Nome = "Romulo Louzada",
+                        Contato = "romulo.louzada@optsol.com.br"
+                    }
+                };
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Theory(DisplayName = "Deve inserir registro na base de dados")]
+        [ClassData(typeof(InserirNovosRegistrosParams))]
+        public void Deve_Inserir_Registro_Pelo_Servico(InsertTestViewModel viewmModel)
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            var provider = GetProviderConfiguredServicesFromContext();
 
-            var services = new ServiceCollection();
-            services.AddLogging();
-            services.AddAutoMapper(typeof(TestViewModel));
-            services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-
-            var provider = services.BuildServiceProvider();
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
-            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
+            var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
+            var notificationContext = provider.GetRequiredService<NotificationContext>();
 
             //When
-            Action action = () => serviceApplication.InsertAsync(model);
+            Action action = () => serviceApplication.InsertAsync(viewmModel);
 
             //Then
             action.Should().NotThrow();
@@ -140,33 +138,26 @@ namespace Optsol.Components.Test.Integration.Application
             notificationContext.Notifications.Should().HaveCount(0);
         }
 
-        [Fact]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Fact(DisplayName = "Deve atualizar registro obtido na base de dados")]
         public async Task Deve_Atualizar_Registro_Pelo_Servico()
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            var entity = default(TestEntity);
 
-            var services = new ServiceCollection();
-            services.AddLogging();
-            services.AddAutoMapper(typeof(TestViewModel));
-            services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            var provider = GetProviderConfiguredServicesFromContext()
+                .CreateTestEntitySeedInContext(afterInsert: (testEntityList) =>
+                {
+                    entity = testEntityList.First();
+                });
 
-            var provider = services.BuildServiceProvider();
+            var notificationContext = provider.GetRequiredService<NotificationContext>();
+            var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
-            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
-
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
-            await serviceApplication.InsertAsync(model);
-
-            var data = (await serviceApplication.GetAllAsync()).Single();
             var updateModel = new UpdateTestViewModel();
-            updateModel.Id = data.Id;
-            updateModel.Nome = $"Weslley Alterado";
-            updateModel.Contato = model.Contato;
+            updateModel.Id = entity.Id;
+            updateModel.Nome = $"{entity.Nome.Nome} Alterado";
+            updateModel.Contato = entity.Email.ToString();
 
             //When
             Action action = () => serviceApplication.UpdateAsync(updateModel);
@@ -176,111 +167,196 @@ namespace Optsol.Components.Test.Integration.Application
 
             notificationContext.HasNotifications.Should().BeFalse();
             notificationContext.Notifications.Should().HaveCount(0);
+
+            var viewModelResult = await serviceApplication.GetByIdAsync(updateModel.Id);
+            viewModelResult.Should().NotBeNull();
+
+            viewModelResult.Invalid.Should().BeFalse();
+            viewModelResult.Notifications.Should().BeEmpty();
+
+            viewModelResult.Id.Should().Be(updateModel.Id);
+            viewModelResult.Nome.Should().Be(updateModel.Nome);
+            viewModelResult.Contato.Should().Be(updateModel.Contato);
         }
 
-        [Fact]
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Fact(DisplayName = "Deve remover registro obtido na base de dados")]
         public async Task Deve_Remover_Registro_Pelo_Id_Pelo_Servico()
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            var entity = default(TestEntity);
 
-            var services = new ServiceCollection();
-            services.AddLogging();
-            services.AddAutoMapper(typeof(TestViewModel));
-            services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            var provider = GetProviderConfiguredServicesFromContext()
+                .CreateTestEntitySeedInContext(afterInsert: (testEntityList) =>
+                {
+                    entity = testEntityList.First();
+                });
 
-            var provider = services.BuildServiceProvider();
-
-            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
-
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
-            await serviceApplication.InsertAsync(model);
-
-            var data = (await serviceApplication.GetAllAsync()).Single();
+            var notificationContext = provider.GetRequiredService<NotificationContext>();
+            var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            Action action = () => serviceApplication.DeleteAsync(data.Id);
+            Action action = () => serviceApplication.DeleteAsync(entity.Id);
 
             //Then
             action.Should().NotThrow();
 
             notificationContext.HasNotifications.Should().BeFalse();
-            notificationContext.Notifications.Should().HaveCount(0);
+            notificationContext.Notifications.Should().BeEmpty();
+
+            var viewModelResult = await serviceApplication.GetByIdAsync(entity.Id);
+            viewModelResult.Should().BeNull();
         }
 
-        [Fact]
-        public void Nao_Deve_Inserir_Registro_Pelo_Servico()
+        private class InserirNovosRegistrosComFalhasParams : IEnumerable<object[]>
+        {
+            public IEnumerator<object[]> GetEnumerator()
+            {
+                yield return new object[]
+                {
+                    new InsertTestViewModel()
+                    {
+                        Nome = "",
+                        Contato = "weslley.carneiro@optsol.com.br"
+                    },
+                    new [] //expectedErrorProperty
+                    {
+                        nameof(InsertTestViewModel.Nome)
+                    },
+                    2 //expectedErrosCount
+                };
+
+                yield return new object[]
+                {
+                    new InsertTestViewModel()
+                    {
+                        Nome = "Felipe Carvalho",
+                        Contato = ""
+                    },
+                    new [] //expectedErrorProperty
+                    {
+                        nameof(InsertTestViewModel.Contato)
+                    },
+                    1 //expectedErrosCount
+                };
+
+                yield return new object[]
+                {
+                    new InsertTestViewModel()
+                    {
+                        Nome = "",
+                        Contato = "mail.invalido"
+                    },
+                    new [] //expectedErrorProperty
+                    {
+                        nameof(InsertTestViewModel.Nome),
+                        nameof(InsertTestViewModel.Contato)
+                    },
+                    3 //expectedErrosCount
+                };
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Theory(DisplayName = "Não deve inserir registro na base de dados")]
+        [ClassData(typeof(InserirNovosRegistrosComFalhasParams))]
+        public void Nao_Deve_Inserir_Registro_Pelo_Servico(InsertTestViewModel viewModel, string[] expectedErrorProperty, int expectedErrosCount)
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "";
-            model.Contato = "weslley.carneiro";
+            var provider = GetProviderConfiguredServicesFromContext();
 
-            var services = new ServiceCollection();
-            services.AddLogging();
-            services.AddAutoMapper(typeof(TestViewModel));
-            services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-
-            var provider = services.BuildServiceProvider();
-
-            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
-
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
+            var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
+            var notificationContext = provider.GetRequiredService<NotificationContext>();
 
             //When
-            Action action = () => serviceApplication.InsertAsync(model);
+            Action action = () => serviceApplication.InsertAsync(viewModel);
 
             //Then
             action.Should().NotThrow();
 
             notificationContext.HasNotifications.Should().BeTrue();
-            notificationContext.Notifications.Should().HaveCount(3);
+            notificationContext.Notifications.Should().HaveCount(expectedErrosCount);
+            notificationContext.Notifications.Any(a => expectedErrorProperty.Contains(a.Property)).Should().BeTrue();
         }
 
-        [Fact]
-        public async Task Nao_Deve_Atualizar_Registro_Pelo_Servico()
+        private class AtualizarRegistrosComFalhasParams : IEnumerable<object[]>
+        {
+            public IEnumerator<object[]> GetEnumerator()
+            {
+                yield return new object[]
+                {
+                    new UpdateTestViewModel()
+                    {
+                        Nome = "",
+                        Contato = "weslley.carneiro@optsol.com.br"
+                    },
+                    new [] //expectedErrorProperty
+                    {
+                        nameof(UpdateTestViewModel.Nome)
+                    },
+                    2 //expectedErrosCount
+                };
+
+                yield return new object[]
+                {
+                    new UpdateTestViewModel()
+                    {
+                        Nome = "Felipe Carvalho",
+                        Contato = ""
+                    },
+                    new [] //expectedErrorProperty
+                    {
+                        nameof(UpdateTestViewModel.Contato)
+                    },
+                    1 //expectedErrosCount
+                };
+
+                yield return new object[]
+                {
+                    new UpdateTestViewModel()
+                    {
+                        Nome = "",
+                        Contato = "mail.invalido"
+                    },
+                    new [] //expectedErrorProperty
+                    {
+                        nameof(UpdateTestViewModel.Nome),
+                        nameof(UpdateTestViewModel.Contato)
+                    },
+                    3 //expectedErrosCount
+                };
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Theory(DisplayName = "Não deve atualizar os registros obtidos na base de dados")]
+        [ClassData(typeof(AtualizarRegistrosComFalhasParams))]
+        public void Nao_Deve_Atualizar_Registro_Pelo_Servico(UpdateTestViewModel viewModel, string[] expectedErrorProperty, int expectedErrosCount)
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            var provider = GetProviderConfiguredServicesFromContext()
+                .CreateTestEntitySeedInContext(afterInsert: (testEntityList) =>
+                {   
+                    viewModel.Id = testEntityList.First().Id;
+                });
 
-            var services = new ServiceCollection();
-            services.AddLogging();
-            services.AddAutoMapper(typeof(TestViewModel));
-            services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
-
-            var provider = services.BuildServiceProvider();
-
-            NotificationContext notificationContext = provider.GetRequiredService<NotificationContext>();
-
-            ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
-
-            await serviceApplication.InsertAsync(model);
-
-            var data = (await serviceApplication.GetAllAsync()).Single();
-
-            var updateModel = new UpdateTestViewModel();
-            updateModel.Id = data.Id;
-            updateModel.Nome = "";
-            updateModel.Contato = "weslley.carneiro";
+            var notificationContext = provider.GetRequiredService<NotificationContext>();
+            var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            Action action = () => serviceApplication.UpdateAsync(updateModel);
+            Action action = () => serviceApplication.UpdateAsync(viewModel);
 
+            //Then
             //Then
             action.Should().NotThrow();
 
             notificationContext.HasNotifications.Should().BeTrue();
-            notificationContext.Notifications.Should().HaveCount(3);
+            notificationContext.Notifications.Should().HaveCount(expectedErrosCount);
+            notificationContext.Notifications.Any(a => expectedErrorProperty.Contains(a.Property)).Should().BeTrue();
         }
     }
 }
