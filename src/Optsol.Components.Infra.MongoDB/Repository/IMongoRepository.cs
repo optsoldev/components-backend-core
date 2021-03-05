@@ -6,8 +6,8 @@ using Optsol.Components.Infra.MongoDB.Context;
 namespace Optsol.Components.Infra.MongoDB.Repository
 {
     public interface IMongoRepository<TEntity, TKey> :
-        IReadRepository<TEntity, TKey>,
-        IWriteRepository<TEntity, TKey>
+        IReadBaseRepository<TEntity, TKey>,
+        IWriteBaseRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
         MongoContext Context { get; }

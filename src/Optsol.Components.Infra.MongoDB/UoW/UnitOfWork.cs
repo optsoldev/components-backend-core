@@ -12,9 +12,9 @@ namespace Optsol.Components.Infra.MongoDB.UoW
 
         public MongoContext Context { get; protected set; }
 
-        public MongoUnitOfWork(MongoContext context, ILogger<MongoUnitOfWork> logger)
+        public MongoUnitOfWork(MongoContext context, ILoggerFactory logger)
         {
-            _logger = logger;
+            _logger = logger?.CreateLogger(nameof(MongoContext));
             _logger?.LogInformation("Inicializando UnitOfWork");
 
             Context = context;

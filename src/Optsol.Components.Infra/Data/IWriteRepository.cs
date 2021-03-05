@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Data
 {
-    public interface IWriteRepository<TEntity, TKey> : IDisposable
+    public interface IWriteBaseRepository<TEntity, TKey> : IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
         Task InsertAsync(TEntity entity);
@@ -12,5 +12,11 @@ namespace Optsol.Components.Infra.Data
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(TKey id);
         Task<int> SaveChangesAsync();
+    }
+
+    public interface IWriteRepository<TEntity, TKey> : IWriteBaseRepository<TEntity, TKey>
+        where TEntity : class, IAggregateRoot<TKey>
+    {
+
     }
 }

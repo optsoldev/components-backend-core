@@ -1,17 +1,19 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Optsol.Components.Application.Services;
+using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Extensions;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Contexts;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.Repositories.Core;
+using Optsol.Components.Test.Utils.ViewModels;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -43,7 +45,7 @@ namespace Optsol.Components.Test.Integration.Service
 
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddDomainNotifications();
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
@@ -52,7 +54,7 @@ namespace Optsol.Components.Test.Integration.Service
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -110,7 +112,7 @@ namespace Optsol.Components.Test.Integration.Service
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             services.AddApplicationServices<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>, TestServiceApplication>("Optsol.Components.Test.Utils");
             services.AddApiServices();
@@ -118,7 +120,7 @@ namespace Optsol.Components.Test.Integration.Service
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -157,20 +159,18 @@ namespace Optsol.Components.Test.Integration.Service
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
 
-            var searchDto = new TestSearchDto();
-
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>, TestServiceApplication>("Optsol.Components.Test.Utils");
             services.AddApiServices();
 
             var provider = services.BuildServiceProvider();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -196,13 +196,11 @@ namespace Optsol.Components.Test.Integration.Service
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
 
-            var searchDto = new TestSearchDto();
-
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
             services.AddApiServices();
 
@@ -210,7 +208,7 @@ namespace Optsol.Components.Test.Integration.Service
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 
@@ -253,13 +251,11 @@ namespace Optsol.Components.Test.Integration.Service
             model.Nome = "Weslley Carneiro";
             model.Contato = "weslley.carneiro@optsol.com.br";
 
-            var searchDto = new TestSearchDto();
-
             var services = new ServiceCollection();
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<TestContext>(new ContextOptionsBuilder());
+            services.AddContext<Context>(new ContextOptionsBuilder());
             services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
             services.AddApiServices();
 
@@ -267,7 +263,7 @@ namespace Optsol.Components.Test.Integration.Service
             ITestServiceApplication serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
             IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto> controllerBase =
                 new ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>(
-                    provider.GetRequiredService<ILogger<ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>>>(),
+                    provider.GetRequiredService<ILoggerFactory>(),
                     provider.GetRequiredService<IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>(),
                     provider.GetRequiredService<IResponseFactory>());
 

@@ -12,9 +12,9 @@ namespace Optsol.Components.Infra.UoW
 
         public CoreContext Context { get; protected set; }
 
-        public UnitOfWork(CoreContext context, ILogger<UnitOfWork> logger)
+        public UnitOfWork(CoreContext context, ILoggerFactory logger)
         {
-            _logger = logger;
+            _logger = logger?.CreateLogger(nameof(UnitOfWork));
             _logger?.LogInformation("Inicializando UnitOfWork");
 
             Context = context;

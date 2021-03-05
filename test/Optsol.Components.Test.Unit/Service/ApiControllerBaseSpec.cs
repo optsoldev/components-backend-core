@@ -1,15 +1,16 @@
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
 using Optsol.Components.Test.Utils.Service;
+using Optsol.Components.Test.Utils.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Optsol.Components.Test.Unit.Service
             var testSearchDto = new TestSearchDto();
             testSearchDto.Nome = "Nome";
             testSearchDto.SobreNome = "Sobrenome";
-            var searchDto = new RequestSearch<TestSearchDto>();
+            var searchDto = new SearchRequest<TestSearchDto>();
             searchDto.Search = testSearchDto;
 
             var entity = new TestEntity(
@@ -46,6 +47,8 @@ namespace Optsol.Components.Test.Unit.Service
                 , InsertTestViewModel
                 , UpdateTestViewModel
                 , TestSearchDto>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
             Mock<IMapper> mapperMock = new Mock<IMapper>();
             mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(model);
@@ -59,7 +62,7 @@ namespace Optsol.Components.Test.Unit.Service
             mockResponseFactory.Setup(setup => setup.Create(It.IsAny<IEnumerable<TestViewModel>>())).Returns(new ResponseList<TestViewModel>(new[] { model }, true));
             mockResponseFactory.Setup(setup => setup.Create(It.IsAny<SearchResult<TestViewModel>>())).Returns(new ResponseSearch<TestViewModel>(new SearchResult<TestViewModel>(1, 10) { Items = new[] { model } }, true));
 
-            var controller = new TestController(logger, mockApplicationService.Object, mockResponseFactory.Object);
+            var controller = new TestController(loggerFactoryMock.Object, mockApplicationService.Object, mockResponseFactory.Object);
 
             //When
             await controller.GetAllAsync();

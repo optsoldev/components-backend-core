@@ -18,7 +18,7 @@ namespace Optsol.Components.Service.Controllers
         where TSearch : class, ISearch<TEntity>
     {
         Task<IActionResult> GetAllAsync();
-        Task<IActionResult> GetAllAsync(RequestSearch<TSearch> search);
+        Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search);
         Task<IActionResult> GetByIdAsync(Guid id);
         Task<IActionResult> InsertAsync(TInsertData data);
         Task<IActionResult> UpdateAsync(TUpdateData data);

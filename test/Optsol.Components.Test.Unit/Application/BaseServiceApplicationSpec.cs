@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Notifications;
@@ -7,13 +8,14 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
-using Optsol.Components.Test.Utils.Application;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using Optsol.Components.Test.Utils.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
-using static Optsol.Components.Test.Utils.Utils;
 
 namespace Optsol.Components.Test.Unit.Application
 {
@@ -42,27 +44,30 @@ namespace Optsol.Components.Test.Unit.Application
             updateModel.Nome = "Weslley Carneiro";
             updateModel.Contato = "weslley.carneiro@optsol.com.br";
 
-            Mock<IMapper> mapperMock = new Mock<IMapper>();
+            var mapperMock = new Mock<IMapper>();
             mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(model);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestViewModel>())).Returns(entity);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<InsertTestViewModel>())).Returns(entity);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<UpdateTestViewModel>())).Returns(entity);
 
-            Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
+            var unitOfWork = new Mock<IUnitOfWork>();
             unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(1);
 
-            Mock<IReadRepository<TestEntity, Guid>> readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
+            var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
             readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
             readRepository.Setup(repository => repository.GetAllAsync()).ReturnsAsync(new List<TestEntity> { entity, entity2 });
 
-            Mock<IWriteRepository<TestEntity, Guid>> writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
+            var writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
 
-            Mock<NotificationContext> notificationContextMock = new Mock<NotificationContext>();
+            var notificationContextMock = new Mock<NotificationContext>();
 
             var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
             var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
                 mapperMock.Object,
-                logger,
+                loggerFactoryMock.Object,
                 unitOfWork.Object,
                 readRepository.Object,
                 writeRepository.Object,
@@ -94,6 +99,75 @@ namespace Optsol.Components.Test.Unit.Application
             logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
             logger.Logs.Any(a => a.Contains(msgUpdateAsyncMapper)).Should().BeTrue();
             logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
+        }
+
+
+        public class ObterTodosParams : IEnumerable<object[]>
+        {
+            public IEnumerator<object[]> GetEnumerator()
+            {
+                yield return new object[]
+                {
+                    new []
+                    {
+                        new TestEntity (new NomeValueObject("Isaiah", "Sosa"), new EmailValueObject("justo.eu.arcu@Integervitaenibh.net")),
+                        new TestEntity (new NomeValueObject("Hop", "Gross"), new EmailValueObject("Integer@magna.co.uk")),
+                        new TestEntity (new NomeValueObject("Armand", "Villarreal"), new EmailValueObject("lorem.tristique@posuerevulputatelacus.ca")),
+                    },
+                    new []
+                    {
+                         new TestViewModel() { Nome = "Isaiah Sosa", Contato = "justo.eu.arcu@Integervitaenibh.net" },
+                         new TestViewModel() { Nome = "Hop Gross", Contato = "Integer@magna.co.uk" },
+                         new TestViewModel() { Nome = "Armand Villarreal", Contato = "lorem.tristique@posuerevulputatelacus.ca" }
+                    }
+                };
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        [Trait("Serviço de Aplicação", "Log de Ocorrências")]
+        [Theory(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
+        [ClassData(typeof(ObterTodosParams))]
+        public void Deve_Registrar_Logs_No_Servico_Ao_Obter_Todos_Registros(IEnumerable<TestEntity> entities, IEnumerable<TestViewModel> viewModels)
+        {
+            //Given
+            var mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(mapper => mapper.Map<IEnumerable<TestViewModel>>(It.IsAny<TestEntity>())).Returns(viewModels);
+
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(1);
+
+            var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
+            readRepository.Setup(setup => setup.GetAllAsync()).ReturnsAsync(entities);
+
+            var writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
+
+            var notificationContextMock = new Mock<NotificationContext>();
+
+            var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
+                mapperMock.Object,
+                loggerFactoryMock.Object,
+                unitOfWork.Object,
+                readRepository.Object,
+                writeRepository.Object,
+                notificationContextMock.Object);
+
+            //When
+            service.GetAllAsync().ConfigureAwait(false);
+
+            //Then
+            var msgConstructor = $"Inicializando Application Service<{ nameof(TestEntity) }, Guid>";
+            var msgGetAllAsync = $"Método: GetAllAsync() Retorno: IEnumerable<{ nameof(TestViewModel) }>";
+            
+
+            logger.Logs.Should().HaveCount(3);
+            logger.Logs.Any(a => a.Equals(msgConstructor)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
         }
     }
 }

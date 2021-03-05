@@ -1,0 +1,47 @@
+using Microsoft.EntityFrameworkCore;
+using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Provider;
+using Optsol.Components.Test.Utils.Data.Configurations;
+using Optsol.Components.Test.Utils.Data.Entities;
+using System.Collections.Generic;
+
+namespace Optsol.Components.Test.Utils.Data.Contexts
+{
+
+    public class TenantDbContext : TenantContext
+    {
+        public TenantDbContext(DbContextOptions<TenantDbContext> options)
+            : base(options)
+        {
+        }
+
+        public DbSet<TenantEntity> Tenants { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new TenantConfiguration());
+                        
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+
+    public class MultiTenantContext : CoreContext
+    {
+        private readonly ITenantProvider _tenantProvider;
+
+        public MultiTenantContext(DbContextOptions options, ITenantProvider tenantProvider)
+            : base(options)
+        {
+            _tenantProvider = tenantProvider;
+        }
+
+        public DbSet<TestTenantEntity> Test { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new TestTenantConfiguration(_tenantProvider));
+
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+}

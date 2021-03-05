@@ -1,12 +1,17 @@
-﻿using Optsol.Components.Test.Utils.Data;
-using Optsol.Components.Test.Utils.Entity;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Optsol.Components.Test.Utils.Data.Contexts;
+using Optsol.Components.Test.Utils.Data.Entities;
+using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
+using Optsol.Components.Test.Utils.Entity.Entities;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Optsol.Components.Test.Utils.Seed
 {
     public static class Seed
     {
-        public static List<TestEntity> ObterListaEntidade()
+        public static List<TestEntity> TestEntityList()
         {
             return new List<TestEntity>
             {
@@ -110,8 +115,97 @@ namespace Optsol.Components.Test.Utils.Seed
                 new TestEntity (new NomeValueObject("Beau", "Herman"), new EmailValueObject("Sed.nunc.est@acfeugiatnon.net")),
                 new TestEntity (new NomeValueObject("Beau", "Harmon"), new EmailValueObject("gravida@elit.org")),
                 new TestEntity (new NomeValueObject("Ignatius", "Decker"), new EmailValueObject("Donec.porttitor.tellus@risusDonec.ca"))
-
             };
+        }
+
+        public static List<TestDeletableEntity> TestDeletableEntityList()
+        {
+            return TestEntityList()
+                .Select(entity => new TestDeletableEntity(entity.Id, entity.Nome, entity.Email))
+                .ToList();
+        }
+
+        public static List<TestTenantEntity> TestTenantEntityList(List<TenantEntity> tenants)
+        {
+            var result = new List<TestTenantEntity>();
+
+            result.AddRange(TestEntityList().Take(94).Select(entity => new TestTenantEntity(entity.Id, tenants[0].Id, entity.Nome, entity.Email)));
+            result.AddRange(TestEntityList().Skip(94).Take(1).Select(entity => new TestTenantEntity(entity.Id, tenants[1].Id, entity.Nome, entity.Email)));
+            result.AddRange(TestEntityList().Take(95).Take(5).Select(entity => new TestTenantEntity(entity.Id, tenants[2].Id, entity.Nome, entity.Email)));
+
+            return result;
+        }
+
+        public static List<TenantEntity> TenantEntityList()
+        {
+            return new List<TenantEntity>
+            {
+                new TenantEntity ("http://domain.tenant.one.com", "one"),
+                new TenantEntity ("http://domain.tenant.two.com", "two"),
+                new TenantEntity ("http://domain.tenant.three.com", "three"),
+                new TenantEntity ("http://domain.tenant.four.com", "four")
+            };
+        }
+
+        public static ServiceProvider CreateTestEntitySeedInContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestEntity>> afterInsert = null)
+        {
+            var context = provider.GetRequiredService<Context>();
+            var entities = TestEntityList().Take(take);
+
+            afterInsert?.Invoke(entities);
+
+            context.AddRange(entities);
+            context.SaveChanges();
+
+            return provider;
+        }
+
+        public static ServiceProvider CreateTestEntitySeedInMongoContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestEntity>> afterInsert = null)
+        {
+            var context = provider.GetRequiredService<MongoContext>();
+            var entities = TestEntityList().Take(take);
+
+            var set = context.GetCollection<TestEntity>(typeof(TestEntity).Name);
+            set.Database.DropCollection(typeof(TestEntity).Name);
+
+            afterInsert?.Invoke(entities);
+
+            set.InsertMany(entities);
+
+            context.SaveChangesAsync().GetAwaiter().GetResult();
+
+            return provider;
+        }
+
+        public static ServiceProvider CreateDeletableTestEntitySeedInContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestDeletableEntity>> afterInsert = null)
+        {
+            var context = provider.GetRequiredService<DeletableContext>();
+            var entities = TestDeletableEntityList().Take(take);
+
+            afterInsert?.Invoke(entities);
+
+            context.AddRange(entities);
+            context.SaveChanges();
+
+            return provider;
+        }
+
+        public static ServiceProvider CreateTenantTestEntitySeedInContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestTenantEntity>, IEnumerable<TenantEntity>> afterInsert = null)
+        {
+            var tenants = TenantEntityList();
+            var entities = TestTenantEntityList(tenants).Take(take);
+
+            afterInsert?.Invoke(entities, tenants);
+
+            var tenantContext = provider.GetRequiredService<TenantDbContext>();
+            tenantContext.AddRange(tenants);
+            tenantContext.SaveChanges();
+
+            var context = provider.GetRequiredService<MultiTenantContext>();
+            context.AddRange(entities);
+            context.SaveChanges();
+
+            return provider;
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var servicesProvider = services.BuildServiceProvider();
 
             var corsSettings = configuration.GetSection(nameof(CorsSettings)).Get<CorsSettings>()
-                ?? throw new CorsSettingsNullException(servicesProvider.GetRequiredService<ILogger<CorsSettingsNullException>>());
+                ?? throw new CorsSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
 
             services.AddCors(options =>
             {
@@ -50,7 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var servicesProvider = app.ApplicationServices;
 
             var corsSettings = configuration.GetSection(nameof(CorsSettings)).Get<CorsSettings>()
-                ?? throw new CorsSettingsNullException(servicesProvider.GetRequiredService<ILogger<CorsSettingsNullException>>());
+                ?? throw new CorsSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
 
             app.UseCors(corsSettings.DefaultPolicy);
 

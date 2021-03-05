@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Storage.Queue
 {
-    public abstract class QueueStorage : IQueueStorage
+    public class QueueStorage : IQueueStorage
     {
         private QueueClient _queueClient;
 
@@ -18,12 +18,12 @@ namespace Optsol.Components.Infra.Storage.Queue
 
         private readonly StorageSettings _storageSettings;
 
-        public QueueStorage(StorageSettings settings, ILogger<QueueStorage> logger, ILogger<StorageSettingsNullException> loggerException)
+        public QueueStorage(StorageSettings settings, ILoggerFactory logger)
         {
-            _storageSettings = settings ?? throw new StorageSettingsNullException(loggerException);
+            _storageSettings = settings ?? throw new StorageSettingsNullException(logger);
             _storageSettings.Validate();
 
-            _logger = logger;
+            _logger = logger?.CreateLogger(nameof(QueueStorage));
         }
 
         public async Task<Response<SendReceipt>> SendMessageAsync<TData>(SendMessageModel<TData> message)

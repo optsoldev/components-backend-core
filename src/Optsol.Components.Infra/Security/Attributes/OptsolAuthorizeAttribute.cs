@@ -34,7 +34,7 @@ namespace Optsol.Components.Infra.Security.Attributes
 
         public OptsolAuthorizeFilter(UserManager<ApplicationUser> userManager,
             SecuritySettings securitySettings,
-            ILogger<SecuritySettingNullException> logger,
+            ILoggerFactory logger,
             string claim)
         {
             _claim = claim;

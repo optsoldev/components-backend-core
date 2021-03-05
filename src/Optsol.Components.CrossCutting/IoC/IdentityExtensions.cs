@@ -22,14 +22,15 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
         {
             var servicesProvider = services.BuildServiceProvider();
+            var logger = servicesProvider.GetRequiredService<ILoggerFactory>();
 
             var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>()
-                ?? throw new SecuritySettingNullException(servicesProvider.GetRequiredService<ILogger<SecuritySettingNullException>>());
+                ?? throw new SecuritySettingNullException(logger);
 
             securitySettings.Validate();
 
             var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>()
-                ?? throw new ConnectionStringNullException(servicesProvider.GetRequiredService<ILogger<ConnectionStringNullException>>());
+                ?? throw new ConnectionStringNullException(logger);
 
             connectionStrings.Validate();
 
@@ -61,7 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var servicesProvider = services.BuildServiceProvider();
 
             var connectionStrings = configuration.GetSection(nameof(ConnectionStrings)).Get<ConnectionStrings>()
-                ?? throw new ConnectionStringNullException(servicesProvider.GetRequiredService<ILogger<ConnectionStringNullException>>());
+                ?? throw new ConnectionStringNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
             connectionStrings.Validate();
 
             var migrationAssemblyIsNullOrEmpty = string.IsNullOrEmpty(migrationAssembly);
@@ -98,9 +99,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IApplicationBuilder UseSecurity(this IApplicationBuilder app, IConfiguration configuration)
         {
-            var logger = app.ApplicationServices.GetRequiredService<ILogger<SecuritySettingNullException>>();
+            var loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger(nameof(UseSecurity));
 
-            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>() ?? throw new SecuritySettingNullException(logger);
+            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>() ?? throw new SecuritySettingNullException(loggerFactory);
 
             securitySettings.Validate();
 

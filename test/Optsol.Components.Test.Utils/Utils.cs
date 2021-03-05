@@ -1,5 +1,5 @@
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Test.Utils.Entity;
+using Optsol.Components.Test.Utils.Entity.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
