@@ -50,6 +50,7 @@ namespace Optsol.Components.Infra.Data
 
                 builder.Property(entity => ((IDeletable)entity).DeletedDate);
 
+                //TODO: Mover para extensions
                 var member = Expression.Property(parametrer, "IsDeleted");
                 var constant = Expression.Constant(false);
                 var body = Expression.Equal(member, constant);
@@ -67,14 +68,15 @@ namespace Optsol.Components.Infra.Data
                     .Property(entity => ((ITenant<TKey>)entity).TenantId)
                     .IsRequired();
 
+                var indexName = $"IX_{typeof(TEntity).Name}_TenantId";
                 builder
-                    .HasIndex("TenantId")
-                    .IsUnique()
-                    .HasDatabaseName($"{typeof(TEntity).Name}TenantIndex");
+                    .HasIndex(nameof(ITenant<TKey>.TenantId))
+                    .HasDatabaseName(indexName);
 
                 var tenantProviderNotIsNull = _tenantProvider != null;
                 if (tenantProviderNotIsNull)
                 {
+                    //TODO: Mover para extensions
                     var member = Expression.Property(parametrer, "TenantId");
                     var constant = Expression.Constant(_tenantProvider.GetTenantId());
                     var body = Expression.Equal(member, constant);
