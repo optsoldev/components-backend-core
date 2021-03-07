@@ -7,4 +7,8 @@ namespace Optsol.Components.Test.Utils.Repositories.Tenant
     public interface ITestTenantReadRepository: IReadRepository<TestTenantEntity, Guid>
     {
     }
+
+    public interface ITestTenantDeletableReadRepository : IReadRepository<TestTenantDeletableEntity, Guid>
+    {
+    }
 }

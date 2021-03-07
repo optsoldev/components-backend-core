@@ -37,9 +37,12 @@ namespace Optsol.Components.Test.Utils.Data.Contexts
 
         public DbSet<TestTenantEntity> Test { get; set; }
 
+        public DbSet<TestTenantDeletableEntity> TestDeletable { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new TestTenantConfiguration(_tenantProvider));
+            modelBuilder.ApplyConfiguration(new TestTenantDeletableConfiguration(_tenantProvider));
 
             base.OnModelCreating(modelBuilder);
         }

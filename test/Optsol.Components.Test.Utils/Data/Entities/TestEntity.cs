@@ -8,7 +8,9 @@ namespace Optsol.Components.Test.Utils.Entity.Entities
     public class TestEntity : AggregateRoot
     {
         public NomeValueObject Nome { get; private set; }
+
         public EmailValueObject Email { get; private set; }
+        
         public bool Ativo { get; private set; }
 
         public TestEntity()

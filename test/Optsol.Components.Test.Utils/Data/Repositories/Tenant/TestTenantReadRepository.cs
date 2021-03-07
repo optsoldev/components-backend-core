@@ -13,5 +13,11 @@ namespace Optsol.Components.Test.Utils.Repositories.Tenant
         }
     }
 
-    
+    public class TestTenantDeletableReadRepository : Repository<TestTenantDeletableEntity, Guid>, ITestTenantDeletableReadRepository
+    {
+        public TestTenantDeletableReadRepository(CoreContext context, ILoggerFactory logger)
+            : base(context, logger)
+        {
+        }
+    }
 }

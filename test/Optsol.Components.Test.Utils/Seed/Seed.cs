@@ -125,6 +125,17 @@ namespace Optsol.Components.Test.Utils.Seed
                 .ToList();
         }
 
+        public static List<TestTenantDeletableEntity> TestTenantDeletableEntityList(List<TenantEntity> tenants)
+        {
+            var result = new List<TestTenantDeletableEntity>();
+
+            result.AddRange(TestEntityList().Take(94).Select(entity => new TestTenantDeletableEntity(entity.Id, tenants[0].Id, entity.Nome, entity.Email)));
+            result.AddRange(TestEntityList().Skip(94).Take(1).Select(entity => new TestTenantDeletableEntity(entity.Id, tenants[1].Id, entity.Nome, entity.Email)));
+            result.AddRange(TestEntityList().Take(95).Take(5).Select(entity => new TestTenantDeletableEntity(entity.Id, tenants[2].Id, entity.Nome, entity.Email)));
+
+            return result;
+        }
+
         public static List<TestTenantEntity> TestTenantEntityList(List<TenantEntity> tenants)
         {
             var result = new List<TestTenantEntity>();
@@ -194,6 +205,24 @@ namespace Optsol.Components.Test.Utils.Seed
         {
             var tenants = TenantEntityList();
             var entities = TestTenantEntityList(tenants).Take(take);
+
+            afterInsert?.Invoke(entities, tenants);
+
+            var tenantContext = provider.GetRequiredService<TenantDbContext>();
+            tenantContext.AddRange(tenants);
+            tenantContext.SaveChanges();
+
+            var context = provider.GetRequiredService<MultiTenantContext>();
+            context.AddRange(entities);
+            context.SaveChanges();
+
+            return provider;
+        }
+
+        public static ServiceProvider CreateTenantDeletableTestEntitySeedInContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestTenantDeletableEntity>, IEnumerable<TenantEntity>> afterInsert = null)
+        {
+            var tenants = TenantEntityList();
+            var entities = TestTenantDeletableEntityList(tenants).Take(take);
 
             afterInsert?.Invoke(entities, tenants);
 
