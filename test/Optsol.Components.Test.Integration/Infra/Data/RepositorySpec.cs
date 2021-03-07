@@ -252,8 +252,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             var numberItems = 3;
             var numberDeletable = 2;
 
-            var entity = default(TestDeletableEntity);
-
             var provider = GetProviderConfiguredServicesFromDeletableContext()
                 .CreateDeletableTestEntitySeedInContext(numberItems, (entityList) =>
                 {
@@ -261,7 +259,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
                     {
                         delete.Delete();
                     }
-                    entity = entityList.Last();
                 });
 
             var testDeletableReadRepository = provider.GetRequiredService<ITestDeletableReadRepository>();
