@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -10,6 +12,8 @@ using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using System;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Security.Attributes
 {
@@ -28,18 +32,11 @@ namespace Optsol.Components.Infra.Security.Attributes
     {
         private string _claim;
 
-        private readonly UserManager<ApplicationUser> _userManager;
-
         private readonly SecuritySettings _securitySettings;
 
-        public OptsolAuthorizeFilter(UserManager<ApplicationUser> userManager,
-            SecuritySettings securitySettings,
-            ILoggerFactory logger,
-            string claim)
+        public OptsolAuthorizeFilter(SecuritySettings securitySettings, ILoggerFactory logger, string claim)
         {
             _claim = claim;
-
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
 
             _securitySettings = securitySettings ?? throw new SecuritySettingNullException(logger);
 
@@ -61,10 +58,10 @@ namespace Optsol.Components.Infra.Security.Attributes
         private void ContextLocalSecurity(AuthorizationFilterContext context)
         {
             var contextUser = context.HttpContext.User;
-            var userAuthenticateHasClaim = contextUser.Claims.Any(w => w.Type.Equals("optsol") 
+            var userAuthenticateHasClaim = contextUser.Claims.Any(w => w.Type.Equals("optsol")
                 && w.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
 
-            if(userAuthenticateHasClaim)
+            if (userAuthenticateHasClaim)
             {
                 return;
             }
@@ -74,18 +71,23 @@ namespace Optsol.Components.Infra.Security.Attributes
 
         private void ContextRemoteSecurity(AuthorizationFilterContext context)
         {
-            var contextUser = context.HttpContext.User;
-            var nameUserForFilterNormalizedName = contextUser.FindFirst(SecurityClaimTypes.UserName).Value;
-
-            var applicationUser = _userManager.Users
-                .Include(x => x.Claims)
-                .SingleAsync(x => x.NormalizedUserName == nameUserForFilterNormalizedName)
+            var accessToken = context.HttpContext.GetTokenAsync("Bearer", "access_token")
                 .GetAwaiter()
                 .GetResult();
 
-            var userAuthenticateHasClaim = contextUser.Identity.IsAuthenticated
-                && applicationUser.Claims.Any(c => c.ClaimType.Equals("optsol")
-                && c.ClaimValue.Equals(_claim, StringComparison.OrdinalIgnoreCase));
+            var client = new HttpClient();
+            client.SetBearerToken(accessToken);
+
+            var response = client
+                .GetUserInfoAsync(new UserInfoRequest
+                {
+                    Address = $"{_securitySettings.Authority}/connect/userinfo",
+                    Token = accessToken
+                })
+                .GetAwaiter()
+                .GetResult();
+
+            var userAuthenticateHasClaim = response.Claims.Any(c => c.Type.Equals("optsol") && c.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
 
             if (userAuthenticateHasClaim)
             {

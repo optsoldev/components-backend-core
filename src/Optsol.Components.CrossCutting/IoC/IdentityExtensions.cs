@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -46,11 +47,6 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             services.AddSingleton(connectionStrings);
-
-            services.AddUserStore(options =>
-            {
-                options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection);
-            });
 
             return services;
         }
@@ -234,14 +230,27 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IServiceCollection ConfigureRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
         {
+
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.SignInScheme = "Cookies";
+                    options.Authority = securitySettings.Authority;
+                    options.RequireHttpsMetadata = false;
+
+                    options.ClientId = securitySettings.ApiName;
+                    options.SaveTokens = true;
+                })
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
                     options.ApiName = securitySettings.ApiName;
                     options.Authority = securitySettings.Authority;
-                })
-                .AddCookie();
+                    options.SaveToken = true;
+                });
 
             return services;
 

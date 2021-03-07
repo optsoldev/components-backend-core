@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using Optsol.Components.Infra.Security.Data;
 using Optsol.Components.Infra.Security.Services;
@@ -23,10 +24,10 @@ namespace Optsol.Security.Identity.Data
                         "write",
                         "read"
                     }
-                }
+                },
             };
         }
-
+              
         public IList<Client> GetClientsConfig()
         {
             return new List<Client>
@@ -37,13 +38,21 @@ namespace Optsol.Security.Identity.Data
                     ClientName = "Swagger UI for components optsol",
                     ClientSecrets = {new Secret("secret".Sha256())},
 
+                    AllowOfflineAccess = true,
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
 
                     RedirectUris = {"https://localhost:5001/swagger/oauth2-redirect.html"},
                     AllowedCorsOrigins = {"https://localhost:5001"},
-                    AllowedScopes = { "webapi", "write", "read" }
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "webapi",
+                        "write",
+                        "read"
+                    }
                 }
             };
         }
@@ -53,7 +62,8 @@ namespace Optsol.Security.Identity.Data
             return new List<ApiScope>
             {
                 new ApiScope("read"),
-                new ApiScope("write")
+                new ApiScope("write"),
+                new ApiScope(IdentityServerConstants.StandardScopes.OpenId)
             };
         }
 
@@ -75,9 +85,9 @@ namespace Optsol.Security.Identity.Data
                      Claims = new List<IdentityUserClaim<Guid>>
                      {
                          new IdentityUserClaim<Guid> { ClaimType = "sub", ClaimValue = "1" },
-                         new IdentityUserClaim<Guid> { ClaimType = "optsol", ClaimValue = "crud.buscar.id" },
-                         new IdentityUserClaim<Guid> { ClaimType = "optsol", ClaimValue = "cliente.buscar.id" },
-                         new IdentityUserClaim<Guid> { ClaimType = "optsol", ClaimValue = "cliente.buscar.todos" }
+                         new IdentityUserClaim<Guid> { ClaimType = "gestor", ClaimValue = "cliente.inserir" },
+                         new IdentityUserClaim<Guid> { ClaimType = "gestor", ClaimValue = "cliente.obter.id" },
+                         new IdentityUserClaim<Guid> { ClaimType = "gestor", ClaimValue = "cliente.obter.todos" }
                      },
                  },
                  new ApplicationUser

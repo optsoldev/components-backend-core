@@ -36,7 +36,7 @@ namespace Optsol.Playground.Security.Identity
             {
                 options.AddSecurityDataService<SecurityDataService>();
 
-                options.AddProfileService<ProfileService>();
+                //options.AddProfileService<ProfileService>();
             });
         }
 
