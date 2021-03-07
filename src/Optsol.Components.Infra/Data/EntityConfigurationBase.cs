@@ -81,9 +81,9 @@ namespace Optsol.Components.Infra.Data
                     var constant = Expression.Constant(_tenantProvider.GetTenantId());
                     var body = Expression.Equal(member, constant);
 
-                    var deletableExpression = Expression.Lambda<Func<TEntity, bool>>(body, parametrer);
+                    var tenantExpression = Expression.Lambda<Func<TEntity, bool>>(body, parametrer);
 
-                    expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, deletableExpression.Body), deletableExpression.Parameters);
+                    expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
                 }
             }
 
