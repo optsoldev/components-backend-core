@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -84,7 +83,10 @@ namespace Microsoft.Extensions.DependencyInjection
                 })
                 .AddUserStore(options =>
                 {
-                    options.ConfigureDbContext = context => context.UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly));
+                    options.ConfigureDbContext = context => context
+                        .UseSqlServer(connectionStrings.IdentityConnection, sql => sql.MigrationsAssembly(migrationAssembly))
+                        .UseLazyLoadingProxies()
+                        .EnableSensitiveDataLogging(isDevelopment);
                 });
 
 
@@ -180,7 +182,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 new Claim("http://schemas.microsoft.com/claims/authnmethodsreferences", "password"),
                 new Claim("auth_time", "1449516934"),
                 new Claim("http://schemas.microsoft.com/identity/claims/identityprovider", "devtest"),
-                new Claim("optsol", "crud.buscar.id")
+                new Claim("optsol", "cliente.buscar"),
+                new Claim("optsol", "cliente.inserir")
             };
         }
 
@@ -208,7 +211,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                             {
                                 var loggerFactory = context.HttpContext.RequestServices
-                                                    .GetRequiredService<ILoggerFactory>();
+                                    .GetRequiredService<ILoggerFactory>();
 
                                 var logger = loggerFactory.CreateLogger("Startup");
 
@@ -230,27 +233,31 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static IServiceCollection ConfigureRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
         {
-
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie("Cookies")
-                .AddOpenIdConnect("oidc", options =>
+                .AddJwtBearer(options =>
                 {
-                    options.SignInScheme = "Cookies";
                     options.Authority = securitySettings.Authority;
-                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        NameClaimType = ClaimTypes.Name,
+                        RoleClaimType = ClaimTypes.Role
+                    };
 
-                    options.ClientId = securitySettings.ApiName;
-                    options.SaveTokens = true;
-                })
-                .AddIdentityServerAuthentication("Bearer", options =>
-                {
-                    options.ApiName = securitySettings.ApiName;
-                    options.Authority = securitySettings.Authority;
-                    options.SaveToken = true;
+                    
                 });
+
+                //.AddIdentityServerAuthentication("Bearer", options =>
+                //{
+                //    options.ApiName = securitySettings.ApiName;
+                //    options.Authority = securitySettings.Authority;
+                //    options.SaveToken = true;
+                //    options.NameClaimType = JwtClaimTypes.Subject;
+                //});
 
             return services;
 

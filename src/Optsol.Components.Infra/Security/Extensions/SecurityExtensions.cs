@@ -30,5 +30,11 @@ namespace Optsol.Components.Infra.Security.Data
             foreach (var client in clients)
                 yield return client.ToEntity();
         }
+
+        public static IEnumerable<Entities.IdentityResource> ToEntity(this IList<IdentityResource> clients)
+        {
+            foreach (var client in clients)
+                yield return client.ToEntity();
+        }
     }
 }

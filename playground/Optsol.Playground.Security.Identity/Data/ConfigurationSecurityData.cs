@@ -1,6 +1,7 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
+using Optsol.Components.Infra.Security.Constants;
 using Optsol.Components.Infra.Security.Data;
 using Optsol.Components.Infra.Security.Services;
 using System;
@@ -10,24 +11,23 @@ namespace Optsol.Security.Identity.Data
 {
     public class SecurityDataService : ISecurityDataService
     {
+        public IList<ApiScope> GetScopesConfig()
+        {
+            return new List<ApiScope>
+            {
+                new ApiScope("webapi", "Scopes Web API"),
+                new ApiScope(IdentityServerConstants.StandardScopes.OpenId)
+            };
+        }
 
         public IList<ApiResource> GetApiResourcesConfig()
         {
             return new List<ApiResource>
             {
-                new ApiResource
-                {
-                    Name = "webapi",
-                    DisplayName = "API Security",
-                    Scopes = new List<string>
-                    {
-                        "write",
-                        "read"
-                    }
-                },
+                new ApiResource("webapi",  "Client Web API")
             };
         }
-              
+
         public IList<Client> GetClientsConfig()
         {
             return new List<Client>
@@ -47,23 +47,10 @@ namespace Optsol.Security.Identity.Data
                     AllowedCorsOrigins = {"https://localhost:5001"},
                     AllowedScopes =
                     {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
                         "webapi",
-                        "write",
-                        "read"
+                        IdentityServerConstants.StandardScopes.OpenId
                     }
                 }
-            };
-        }
-
-        public IList<ApiScope> GetScopesConfig()
-        {
-            return new List<ApiScope>
-            {
-                new ApiScope("read"),
-                new ApiScope("write"),
-                new ApiScope(IdentityServerConstants.StandardScopes.OpenId)
             };
         }
 
@@ -72,35 +59,36 @@ namespace Optsol.Security.Identity.Data
             var password = new PasswordHasher<ApplicationUser>();
             Func<ApplicationUser, string> setPassword = (user) => password.HashPassword(user, "secret");
 
+            var optsolSubject = Guid.NewGuid();
+            var basicSubject = Guid.NewGuid();
+
             var users = new List<ApplicationUser>
             {
                  new ApplicationUser
                  {
-                     Id = Guid.NewGuid(),
+                     Id = optsolSubject,
                      UserName = "optsol",
                      NormalizedUserName = "optsol",
-                     ExternalId = Guid.NewGuid(),
                      IsEnabled = true,
                      SecurityStamp = Guid.NewGuid().ToString(),
                      Claims = new List<IdentityUserClaim<Guid>>
                      {
-                         new IdentityUserClaim<Guid> { ClaimType = "sub", ClaimValue = "1" },
-                         new IdentityUserClaim<Guid> { ClaimType = "gestor", ClaimValue = "cliente.inserir" },
-                         new IdentityUserClaim<Guid> { ClaimType = "gestor", ClaimValue = "cliente.obter.id" },
-                         new IdentityUserClaim<Guid> { ClaimType = "gestor", ClaimValue = "cliente.obter.todos" }
+                         new IdentityUserClaim<Guid> { ClaimType = "sub", ClaimValue = optsolSubject.ToString() },
+                         new IdentityUserClaim<Guid> { ClaimType = $"{SecurityClaimTypes.Optsol}", ClaimValue = "cliente.buscar" },
+                         new IdentityUserClaim<Guid> { ClaimType = $"{SecurityClaimTypes.Optsol}", ClaimValue = "cliente.inserir" },
+                         new IdentityUserClaim<Guid> { ClaimType = $"{SecurityClaimTypes.Optsol}", ClaimValue = "cliente.remover" }
                      },
                  },
                  new ApplicationUser
                  {
-                     Id = Guid.NewGuid(),
+                     Id = basicSubject,
                      UserName = "basic",
                      NormalizedUserName = "basic",
-                     ExternalId = Guid.NewGuid(),
                      IsEnabled = true,
                      SecurityStamp = Guid.NewGuid().ToString(),
                      Claims = new List<IdentityUserClaim<Guid>>
                      {
-                         new IdentityUserClaim<Guid> { ClaimType = "sub", ClaimValue = "2" }
+                         new IdentityUserClaim<Guid> { ClaimType = "sub", ClaimValue = basicSubject.ToString() }
                      },
                  }
             };

@@ -1,19 +1,14 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Infra.Security.Constants;
-using Optsol.Components.Infra.Security.Data;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using System;
 using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Security.Attributes
 {
@@ -82,13 +77,12 @@ namespace Optsol.Components.Infra.Security.Attributes
                 .GetUserInfoAsync(new UserInfoRequest
                 {
                     Address = $"{_securitySettings.Authority}/connect/userinfo",
-                    Token = accessToken
+                    Token = accessToken,
                 })
                 .GetAwaiter()
                 .GetResult();
 
             var userAuthenticateHasClaim = response.Claims.Any(c => c.Type.Equals("optsol") && c.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
-
             if (userAuthenticateHasClaim)
             {
                 return;

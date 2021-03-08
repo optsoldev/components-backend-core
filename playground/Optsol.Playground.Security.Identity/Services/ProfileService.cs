@@ -1,9 +1,12 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityServer4;
+using IdentityServer4.Extensions;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Identity;
 using Optsol.Components.Infra.Security.Constants;
 using Optsol.Components.Infra.Security.Data;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -20,23 +23,24 @@ namespace Optsol.Playground.Security.Identity.Services
 
         public async Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var user = await _userManager.GetUserAsync(context.Subject);
-
-            //var claims = user.Claims.Select(s => new Claim(s.ClaimType, s.ClaimValue));
-
-            var claims = new List<Claim>
+            var calledFromUserInfoEndpoint = context.Caller == IdentityServerConstants.ProfileDataCallers.UserInfoEndpoint;
+            if(calledFromUserInfoEndpoint)
             {
-                new Claim(SecurityClaimTypes.UserName, user.UserName)
-            };
+                var sub = context.Subject.GetSubjectId();
+                var user = await _userManager.FindByIdAsync(sub);
 
-            context.IssuedClaims.AddRange(claims);
+                var claims = user.Claims.Select(s => new Claim(s.ClaimType, s.ClaimValue));
+
+                context.IssuedClaims.AddRange(claims);
+            }
         }
 
         public async Task IsActiveAsync(IsActiveContext context)
         {
-            var user = await _userManager.GetUserAsync(context.Subject);
+            var sub = context.Subject.GetSubjectId();
+            var user = await _userManager.FindByIdAsync(sub);
 
-            context.IsActive = (user != null) && user.IsEnabled;
+            context.IsActive = user != null && user.IsEnabled;
         }
     }
 }
