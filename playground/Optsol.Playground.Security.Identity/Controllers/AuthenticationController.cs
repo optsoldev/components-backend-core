@@ -64,6 +64,7 @@ namespace Optsol.Playground.Security.Identity.Controllers
                 {
                     IsPersistent = true,
                     ExpiresUtc = DateTimeOffset.UtcNow.Add(TimeSpan.FromDays(30)),
+                    RedirectUri = signIn.ReturnUrl
                 };
             }
 
@@ -73,6 +74,8 @@ namespace Optsol.Playground.Security.Identity.Controllers
             };
 
             await HttpContext.SignInAsync(isuser.CreatePrincipal(), properties: props);
+            //var res = await HttpContext.AuthenticateAsync();
+            //var at = await HttpContext.GetTokenAsync("access_token");
 
             if (_interactionService.IsValidReturnUrl(signIn.ReturnUrl) || Url.IsLocalUrl(signIn.ReturnUrl))
             {
@@ -115,6 +118,11 @@ namespace Optsol.Playground.Security.Identity.Controllers
 
             // Delete local authentication cookie
             await HttpContext.SignOutAsync();
+
+            //Response.Cookies.Delete(".AspNetCore.Identity.Application");
+            //Response.Cookies.Delete("idserv.external");
+            //Response.Cookies.Delete("idserv.session");
+            //Response.Cookies.Delete("Identity.External");
 
             // Raise the logout event
             await _eventService.RaiseAsync(
