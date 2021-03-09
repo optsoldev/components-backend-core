@@ -252,8 +252,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             var numberItems = 3;
             var numberDeletable = 2;
 
-            var entity = default(TestDeletableEntity);
-
             var provider = GetProviderConfiguredServicesFromDeletableContext()
                 .CreateDeletableTestEntitySeedInContext(numberItems, (entityList) =>
                 {
@@ -261,7 +259,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
                     {
                         delete.Delete();
                     }
-                    entity = entityList.Last();
                 });
 
             var testDeletableReadRepository = provider.GetRequiredService<ITestDeletableReadRepository>();
@@ -429,6 +426,36 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
             //Then
             entitiesResult.Should().HaveCount(expected);
+
+            var context = provider.GetRequiredService<MultiTenantContext>();
+            context.Dispose();
+        }
+
+        [Trait("Infraestrutura", "Repositório Leitura MultiTenant")]
+        [Fact(DisplayName = "Deve exluir logicamente os registros por tenant")]
+        public async Task Deve_Excluir_Logicamente_Registro_Por_Tenant()
+        {
+            //Given
+            var numberItems = 3;
+            var numberDeletable = 2;
+
+            var provider = GetProviderConfiguredServicesFromTenantContext()
+                .CreateTenantDeletableTestEntitySeedInContext(numberItems, (entityList, tenantList) =>
+                {
+                    foreach (var delete in entityList.Take(numberDeletable))
+                    {
+                        delete.Delete();
+                    }
+                });
+
+            var testTenantReadRepository = provider.GetRequiredService<ITestTenantDeletableReadRepository>();
+
+            //When
+            var entitiesResult = await testTenantReadRepository.GetAllAsync();
+
+            //Then
+            var totalNotDeletable = numberItems - numberDeletable;
+            entitiesResult.Should().HaveCount(totalNotDeletable);
 
             var context = provider.GetRequiredService<MultiTenantContext>();
             context.Dispose();

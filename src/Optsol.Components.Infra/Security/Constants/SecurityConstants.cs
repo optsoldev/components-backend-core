@@ -2,6 +2,6 @@
 {
     public class SecurityClaimTypes
     {
-        public const string UserName = "username";
+        public const string Optsol = "optsol";
     }
 }
