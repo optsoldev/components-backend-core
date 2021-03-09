@@ -50,6 +50,24 @@ namespace Optsol.Security.Identity.Data
                         "webapi",
                         IdentityServerConstants.StandardScopes.OpenId
                     }
+                },
+                new Client
+                {
+                    ClientId = "playground-ui",
+                    ClientName = "Playground UI",
+                    ClientSecrets = {new Secret("secret".Sha256())},
+
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+
+                    RedirectUris = { "http://localhost:8080/sucesso" },
+                    AllowedCorsOrigins = {"http://localhost:3050/", "https://localhost:3050/"},
+                    AllowedScopes =
+                    {
+                        "webapi",
+                        IdentityServerConstants.StandardScopes.OpenId
+                    }
                 }
             };
         }
