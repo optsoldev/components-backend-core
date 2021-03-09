@@ -73,8 +73,6 @@ namespace Microsoft.Extensions.DependencyInjection
                                     new List<string>()
                                 }
                             });
-
-                            //options.OperationFilter<ApiKeyOperationFilter>();
                         }
                         else
                         {
