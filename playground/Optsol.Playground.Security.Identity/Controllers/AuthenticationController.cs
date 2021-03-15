@@ -3,17 +3,18 @@ using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Optsol.Components.Infra.Security.Data;
-using Optsol.Components.Infra.Security.Services;
 using Optsol.Playground.Security.Identity.Models;
 using System;
 using System.Threading.Tasks;
 
 namespace Optsol.Playground.Security.Identity.Controllers
 {
+    [AllowAnonymous]
     public class AuthenticationController : Controller
     {
         private readonly IIdentityServerInteractionService _interactionService;
@@ -51,13 +52,9 @@ namespace Optsol.Playground.Security.Identity.Controllers
                 return Unauthorized();
             }
 
-            await _eventService.RaiseAsync(new UserLoginSuccessEvent(
-                username: signIn.Username,
-                subjectId: applicationUser.Id.ToString(),
-                name: signIn.Username));
+            await _eventService.RaiseAsync(new UserLoginSuccessEvent(signIn.Username, applicationUser.Id.ToString(), signIn.Username));
 
             AuthenticationProperties props = null;
-
             if (signIn.RememberLogin)
             {
                 props = new AuthenticationProperties
@@ -68,14 +65,9 @@ namespace Optsol.Playground.Security.Identity.Controllers
                 };
             }
 
-            var isuser = new IdentityServerUser(applicationUser.Id.ToString())
-            {
-                DisplayName = signIn.Username
-            };
+            var isuser = new IdentityServerUser(applicationUser.Id.ToString()) { DisplayName = signIn.Username }.CreatePrincipal();
 
-            await HttpContext.SignInAsync(isuser.CreatePrincipal(), properties: props);
-            //var res = await HttpContext.AuthenticateAsync();
-            //var at = await HttpContext.GetTokenAsync("access_token");
+            await HttpContext.SignInAsync(isuser, properties: props);
 
             if (_interactionService.IsValidReturnUrl(signIn.ReturnUrl) || Url.IsLocalUrl(signIn.ReturnUrl))
             {
@@ -115,18 +107,12 @@ namespace Optsol.Playground.Security.Identity.Controllers
             {
                 return Ok();
             }
-
-            // Delete local authentication cookie
+            
             await HttpContext.SignOutAsync();
-
-            //Response.Cookies.Delete(".AspNetCore.Identity.Application");
-            //Response.Cookies.Delete("idserv.external");
-            //Response.Cookies.Delete("idserv.session");
-            //Response.Cookies.Delete("Identity.External");
+            await _signInManager.SignOutAsync();
 
             // Raise the logout event
-            await _eventService.RaiseAsync(
-                new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
+            await _eventService.RaiseAsync(new UserLogoutSuccessEvent(User.GetSubjectId(), User.GetDisplayName()));
 
             return Ok();
         }

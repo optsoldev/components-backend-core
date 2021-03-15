@@ -1,10 +1,10 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Playground.Security.Identity.Services;
 using Optsol.Security.Identity.Data;
 using System.Collections.Generic;
@@ -28,9 +28,11 @@ namespace Optsol.Playground.Security.Identity
         {
             var migrationAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddCors(Configuration);
+            services
+                .AddMvcCore(options => { options.EnableEndpointRouting = false; })
+                .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Latest);
 
-            services.AddMvc(options => { options.EnableEndpointRouting = false; });
+            services.AddCors(Configuration);
 
             services.AddSecurity(Configuration, migrationAssembly, Environment.IsDevelopment(), options =>
             {
