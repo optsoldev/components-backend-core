@@ -44,7 +44,6 @@ namespace Optsol.Security.Identity.Data
                     RequireClientSecret = false,
 
                     RedirectUris = {"https://localhost:5001/swagger/oauth2-redirect.html"},
-                    AllowedCorsOrigins = {"https://localhost:5001"},
                     AllowedScopes =
                     {
                         "webapi",
@@ -57,12 +56,13 @@ namespace Optsol.Security.Identity.Data
                     ClientName = "Playground UI",
                     ClientSecrets = {new Secret("secret".Sha256())},
 
+                    AllowOfflineAccess = true,
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
-
-                    RedirectUris = { "http://localhost:8080/sucesso" },
-                    AllowedCorsOrigins = {"http://localhost:3050/", "https://localhost:3050/"},
+                    
+                    PostLogoutRedirectUris = { "http://localhost:3000"  },
+                    RedirectUris = { "http://localhost:3000/signin-oidc" },
                     AllowedScopes =
                     {
                         "webapi",

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Components.Service.Controllers;
@@ -25,6 +26,7 @@ namespace Optsol.Playground.Api.Controllers
             : base(logger, clienteServiceApplication, responseFactory)
         {
             _clienteServiceApplication = clienteServiceApplication;
+            _clienteServiceApplication.Includes = clientes => clientes.Include(x => x.Cartoes);
         }
 
         [OptsolAuthorize("cliente.buscar")]
