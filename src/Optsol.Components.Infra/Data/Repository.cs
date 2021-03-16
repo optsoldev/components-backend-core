@@ -36,11 +36,41 @@ namespace Optsol.Components.Infra.Data
             return Set.FindAsync(id).AsTask();
         }
 
+        public Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ ids:[{ string.Join(",", ids) }]}} ) Retorno: type { typeof(TEntity).Name }");
+
+            return Set.Where(a => ids.Contains(a.Id)).AsAsyncEnumerable().AsyncEnumerableToEnumerable();
+        }
+
+        public Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ ids:[{ string.Join(",", ids) }]}} ) Retorno: type { typeof(TEntity).Name }");
+
+            var querable = Set.AsQueryable();
+
+            var hasInclude = Includes != null;
+            if (hasInclude)
+            {
+                querable = Includes.Invoke(querable);
+            }
+
+            return querable.Where(a => ids.Contains(a.Id)).AsAsyncEnumerable().AsyncEnumerableToEnumerable();
+        }
+
         public virtual Task<TEntity> GetByIdAsync(TKey id, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ id:{ id } }} ) Retorno: type { typeof(TEntity).Name }");
 
-            return Includes(Set).Where(w => w.Id.Equals(id)).FirstAsync();
+            var querable = Set.AsQueryable();
+            
+            var hasInclude = Includes != null;
+            if (hasInclude)
+            {
+                querable = Includes.Invoke(querable);
+            }
+
+            return querable.Where(w => w.Id.Equals(id)).FirstOrDefaultAsync();
         }
 
         public virtual Task<IEnumerable<TEntity>> GetAllAsync()
@@ -54,7 +84,15 @@ namespace Optsol.Components.Infra.Data
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
 
-            return Includes(Set).AsAsyncEnumerable().AsyncEnumerableToEnumerable();
+            var querable = Set.AsQueryable();
+
+            var hasInclude = Includes != null;
+            if (hasInclude)
+            {
+                querable = Includes.Invoke(querable);
+            }
+
+            return querable.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
         }
 
         public virtual Task<SearchResult<TEntity>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch)

@@ -4,7 +4,7 @@ using Flunt.Validations;
 
 namespace Optsol.Components.Domain.Entities
 {
-    public abstract class Entity : Notifiable, IEntity
+    public abstract class Entity : Notifiable, IEntity, IValidatable
     {
         public DateTime CreatedDate { get; protected set; }
 

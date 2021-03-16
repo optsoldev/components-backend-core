@@ -143,7 +143,7 @@ namespace Optsol.Components.Service.Controllers
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
 
             await _serviceApplication.InsertAsync(data);
-
+                        
             return CreateResult();
         }
 

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Flunt.Notifications;
+using Flunt.Validations;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Entities;
@@ -18,7 +20,6 @@ namespace Optsol.Components.Application.Services
     {
         protected readonly IMapper _mapper;
         protected readonly ILogger _logger;
-
         protected readonly NotificationContext _notificationContext;
 
         public BaseServiceApplication(IMapper mapper, ILoggerFactory logger, NotificationContext notificationContext)
@@ -47,6 +48,8 @@ namespace Optsol.Components.Application.Services
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
         protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
 
+        public Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes { get; set; }
+
         public BaseServiceApplication(
             IMapper mapper,
             ILoggerFactory logger,
@@ -67,18 +70,27 @@ namespace Optsol.Components.Application.Services
 
         public virtual async Task<TGetByIdDto> GetByIdAsync(Guid id)
         {
-            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetAllDto).Name }");
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetByIdDto).Name }");
 
-            var entity = await _readRepository.GetByIdAsync(id);
+            var entity = await _readRepository.GetByIdAsync(id, Includes);
 
             return _mapper.Map<TGetByIdDto>(entity);
+        }
+
+        public virtual async Task<IEnumerable<TGetByIdDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetByIdsAsync) }({{ id:{ ids } }}) Retorno: type { typeof(TGetByIdDto).Name }");
+
+            var entity = await _readRepository.GetByIdsAsync(ids, Includes);
+
+            return _mapper.Map<IEnumerable<TGetByIdDto>>(entity);
         }
 
         public virtual async Task<IEnumerable<TGetAllDto>> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
 
-            var entities = await _readRepository.GetAllAsync();
+            var entities = await _readRepository.GetAllAsync(Includes);
 
             return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
         }
@@ -93,16 +105,11 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<SearchResult<TGetAllDto>>(entities);
         }
 
-        public virtual async Task InsertAsync(TInsertData data)
+        public virtual async Task<TEntity> InsertAsync(TInsertData data)
         {
-            data.Validate();
-            if (data.Invalid)
+            if (CheckInvalidFromNotifiable(data))
             {
-                _notificationContext.AddNotifications(data.Notifications);
-
-                LogNotifications(nameof(InsertAsync));
-
-                return;
+                return default;
             }
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
@@ -111,28 +118,22 @@ namespace Optsol.Components.Application.Services
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TInsertData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
-            entity.Validate();
-
-            _notificationContext.AddNotifications((entity as Entity<Guid>).Notifications);
-
-            LogNotifications(nameof(InsertAsync));
+            if (CheckInvalidFromNotifiable(entity))
+            {
+                return default;
+            }
 
             await _writeRepository.InsertAsync(entity);
-
             await CommitAsync();
 
+            return entity;
         }
 
-        public virtual async Task UpdateAsync(TUpdateData data)
+        public virtual async Task<TEntity> UpdateAsync(TUpdateData data)
         {
-            data.Validate();
-            if (data.Invalid)
+            if (CheckInvalidFromNotifiable(data))
             {
-                _notificationContext.AddNotifications(data.Notifications);
-
-                LogNotifications(nameof(UpdateAsync));
-
-                return;
+                return default;
             }
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
@@ -141,34 +142,34 @@ namespace Optsol.Components.Application.Services
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TUpdateData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
-            var entitySelectForUpdate = await _readRepository.GetByIdAsync(entity.Id);
-
-            var entityNotFound = entitySelectForUpdate == null;
+            var entityNotFound = (await _readRepository.GetByIdAsync(entity.Id)) == null;
             if (entityNotFound)
             {
                 _notificationContext.AddNotification(entity.Id.ToString(), "Registro não foi encontrado.");
             }
 
-            entity.Validate();
-            _notificationContext.AddNotifications(entity.Notifications);
-
-            var hasNotifications = _notificationContext.HasNotifications;
-            if (hasNotifications)
+            if (CheckInvalidFromNotifiable(entity))
             {
-                LogNotifications(nameof(entity));
+                return default;
             }
 
             await _writeRepository.UpdateAsync(entity);
-
             await CommitAsync();
+
+            return entity;
         }
 
         public virtual async Task DeleteAsync(Guid id)
         {
-            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ id:{ id.ToString() } }})");
+            _logger?.LogInformation($"Método: { nameof(DeleteAsync) }({{ id:{ id } }})");
+
+            var entityNotFound = (await _readRepository.GetByIdAsync(id)) == null;
+            if (entityNotFound)
+            {
+                _notificationContext.AddNotification(id.ToString(), "Registro não foi encontrado ou já foi removido.");
+            }
 
             await _writeRepository.DeleteAsync(id);
-
             await CommitAsync();
         }
 
@@ -193,12 +194,17 @@ namespace Optsol.Components.Application.Services
             return true;
         }
 
-        #region private
-
-        private void LogNotifications(string method)
+        public virtual bool CheckInvalidFromNotifiable(Notifiable data)
         {
-            if (_notificationContext.HasNotifications)
-                _logger?.LogInformation($"Método: { method } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
+            ((IValidatable)data).Validate();
+
+            if (data.Notifications.Count == 0) return false;
+
+            this._notificationContext.AddNotifications(data.Notifications);
+
+            _logger?.LogInformation($"Método: { nameof(CheckInvalidFromNotifiable) } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
+
+            return true;
         }
 
         public override void Dispose()
@@ -207,7 +213,5 @@ namespace Optsol.Components.Application.Services
             GC.SuppressFinalize(this);
             _unitOfWork.Dispose();
         }
-
-        #endregion
     }
 }

@@ -21,6 +21,10 @@ namespace Optsol.Components.Infra.Data
     {
         Task<TEntity> GetByIdAsync(TKey id, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes);
 
+        Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids);
+
+        Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes);
+
         Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes);
     }
 }

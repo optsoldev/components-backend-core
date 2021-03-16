@@ -76,7 +76,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
         [Trait("Infraestrutura", "Respositório de Leitura")]
         [Fact(DisplayName = "Deve obter todos registros pelo repositório")]
-        public async Task Deve_obter_Todos_Pelo_Repositorio()
+        public async Task Deve_Obter_Todos_Pelo_Repositorio()
         {
             //Given
             var numberItems = 3;
@@ -94,7 +94,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
         [Trait("Infraestrutura", "Respositório de Leitura")]
         [Fact(DisplayName = "Deve obter o registro pelo id")]
-        public async Task Deve_obter_Por_Id_Pelo_Repositorio()
+        public async Task Deve_Obter_Por_Id_Pelo_Repositorio()
         {
             //Given
             var numberItems = 3;
@@ -115,6 +115,30 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             entityResult.Should().NotBeNull();
             entityResult.Nome.ToString().Should().Be(entity.Nome.ToString());
             entityResult.Email.ToString().Should().Be(entity.Email.ToString());
+        }
+
+        [Trait("Infraestrutura", "Respositório de Leitura")]
+        [Fact(DisplayName = "Deve obter os registros por uma lista de ids")]
+        public async Task Deve_Obter_Por_Lista_Id_Pelo_Repositorio()
+        {
+            //Given
+            var numberItems = 4;
+            Guid[] ids = default;
+
+            var provider = GetProviderConfiguredServicesFromContext()
+                .CreateTestEntitySeedInContext(numberItems, (entityList) =>
+                {
+                    ids = entityList.Select(s => s.Id).ToArray();
+                });
+
+            var testReadRepository = provider.GetRequiredService<ITestReadRepository>();
+
+            //When
+            var entityResult = await testReadRepository.GetByIdsAsync(ids);
+
+            //Then
+            entityResult.Should().NotBeNull();
+            entityResult.Should().HaveCount(numberItems);
         }
 
         public class ObterRegistroPaginadoParams : IEnumerable<object[]>
@@ -246,7 +270,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
         [Trait("Infraestrutura", "Respositório de Leitura")]
         [Fact(DisplayName = "Não deve obter nenhum registro excluído logicamente")]
-        public async Task Nao_Deve_obter_Registros_Excluidos_Logicamente()
+        public async Task Nao_Deve_Obter_Registros_Excluidos_Logicamente()
         {
             //Given
             var numberItems = 3;
