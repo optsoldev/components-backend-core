@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static Optsol.Components.Test.Utils.Seed.Seed;
 
-namespace Optsol.Components.Test.Integration.Infra.Data
+namespace Optsol.Components.Test.Integration.Infra.Data 
 {
     public class RepositorySpec
     {
