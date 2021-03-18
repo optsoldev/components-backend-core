@@ -1,20 +1,10 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using Optsol.Components.Service.Programs;
 
 namespace Optsol.Playground.Api
 {
-    public class Program
+    public class Program : MainProgram
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        public static void Main(string[] args) => 
+            Start<Startup>(args);
     }
 }
