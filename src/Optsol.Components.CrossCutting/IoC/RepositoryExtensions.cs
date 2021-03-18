@@ -134,7 +134,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         public static IServiceCollection AddTenantContext<TContext, TProvider>(this IServiceCollection services, Action<RepositoryOptions> options = null)
-            where TContext : TenantContext
+            where TContext : CoreContext
             where TProvider : class, ITenantProvider
         {
             var repositoryOptions = new RepositoryOptions();
