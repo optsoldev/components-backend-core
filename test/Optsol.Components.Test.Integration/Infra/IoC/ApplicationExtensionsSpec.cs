@@ -126,12 +126,17 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             //Given
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddDomainNotifications();
             services.AddAutoMapper(typeof(TestEntityToViewModel));
 
             //When
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -145,12 +150,17 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
         {
             //Given
             var services = new ServiceCollection();
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddDomainNotifications();
             services.AddAutoMapper(typeof(TestEntityToViewModel));
 
             //When
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -165,11 +175,16 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             //Given
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddDomainNotifications();
 
             //When
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -184,11 +199,16 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             //Given
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddAutoMapper(typeof(TestEntityToViewModel));
 
             //When
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -207,7 +227,7 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             services.AddDomainNotifications();
 
             //When
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             //Then                
             var provider = services.BuildServiceProvider();

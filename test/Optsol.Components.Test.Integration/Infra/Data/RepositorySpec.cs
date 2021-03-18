@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static Optsol.Components.Test.Utils.Seed.Seed;
 
-namespace Optsol.Components.Test.Integration.Infra.Data 
+namespace Optsol.Components.Test.Integration.Infra.Data
 {
     public class RepositorySpec
     {
@@ -32,7 +32,12 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
             return services.BuildServiceProvider();
@@ -43,7 +48,12 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddContext<DeletableContext>(new ContextOptionsBuilder());
+            services.AddContext<DeletableContext>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddRepository<ITestDeletableReadRepository, TestDeletableReadRepository>("Optsol.Components.Test.Utils");
 
             return services.BuildServiceProvider();
@@ -52,10 +62,20 @@ namespace Optsol.Components.Test.Integration.Infra.Data
         private static ServiceProvider GetProviderConfiguredServicesFromTenantContext(string tenantHost = "http://domain.tenant.one.com")
         {
             var services = new ServiceCollection();
+            var options = new RepositoryOptions();
+            options
+                .EnabledInMemory()
+                .EnabledLogging();
 
             services.AddLogging();
-            services.AddDbContext<TenantDbContext>(new ContextOptionsBuilder().Builder());
-            services.AddContext<MultiTenantContext>(new ContextOptionsBuilder());
+            services.AddDbContext<TenantDbContext>(options.Builder());
+            services.AddContext<MultiTenantContext>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
+
             services.AddRepository<ITestTenantReadRepository, TestTenantReadRepository>(new[] { "Optsol.Components.Test.Utils" });
             services.AddSingleton<IHttpContextAccessor>(x => new HttpContextAccessorTest(tenantHost));
             services.AddSingleton<ITenantProvider, DataBaseTenantProvider>();

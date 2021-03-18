@@ -26,22 +26,25 @@ namespace Optsol.Playground.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var stringConnection = this.Configuration.GetSection("ConnectionStrings:DefaultConnection");
+            var connectionString = this.Configuration.GetSection("ConnectionStrings:DefaultConnection");
 
-            services
-                .AddControllers()
-                .ConfigureNewtonsoftJson();
+            services.AddContext<PlaygroundContext>(options =>
+            {
+                options
+                    .ConfigureConnectionString(connectionString.Value)
+                    .ConfigureMigrationsAssemblyName("Optsol.Playground.Infra")
+                    .EnabledLogging();
 
-            services.AddCors(Configuration);
-
-            services.AddContext<PlaygroundContext>(new ContextOptionsBuilder(stringConnection.Value, "Optsol.Playground.Infra", Environment.IsDevelopment()));
+            });
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
-            services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+            services.AddApplications<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
             services.AddDomainNotifications();
-            services.AddApiServices();
+            services.AddServices();
+            
+            services.AddCors(Configuration);
             services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
-
+            
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
         }
 

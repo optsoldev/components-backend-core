@@ -1,4 +1,3 @@
-using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.UoW;
@@ -33,11 +32,16 @@ namespace Optsol.Playground.Test
             var services = new ServiceCollection();
 
             services.AddLogging();
-            services.AddContext<PlaygroundContext>(new ContextOptionsBuilder());
+            services.AddContext<PlaygroundContext>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddDomainNotifications();
             services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
-            services.AddApplicationServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
-            services.AddApiServices();
+            services.AddApplications<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+            services.AddServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
 
             _serviceProvider = services.BuildServiceProvider();

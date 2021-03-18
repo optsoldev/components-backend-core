@@ -1,11 +1,8 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Notifications;
-using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Data.Contexts;
-using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using Optsol.Components.Test.Utils.Entity.Entities;
-using Optsol.Components.Test.Utils.Repositories.Core;
 using Optsol.Components.Test.Utils.Seed;
 using Optsol.Components.Test.Utils.ViewModels;
 using System;
@@ -26,8 +23,13 @@ namespace Optsol.Components.Test.Integration.Application
             services.AddLogging();
             services.AddAutoMapper(typeof(TestViewModel));
             services.AddDomainNotifications();
-            services.AddContext<Context>(new ContextOptionsBuilder());
-            services.AddApplicationServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
+            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
 
             return services.BuildServiceProvider();
         }

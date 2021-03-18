@@ -22,7 +22,12 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
 
             //When
             services.AddLogging();
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -38,7 +43,12 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             var services = new ServiceCollection();
 
             //When
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -56,7 +66,12 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
 
             //When
             services.AddLogging();
-            services.AddContext<Context>(new ContextOptionsBuilder());
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
             services.AddRepository<ITestReadRepository, TestReadRepository>();
 
             //Then                
@@ -90,7 +105,12 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             var services = new ServiceCollection();
 
             //When
-            services.AddTenantContext<TenantDbContext, DataBaseTenantProvider>(new ContextOptionsBuilder());
+            services.AddTenantContext<TenantDbContext, DataBaseTenantProvider>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();
