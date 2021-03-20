@@ -7,36 +7,35 @@ using System;
 
 namespace Optsol.Components.Service.Programs
 {
-    public class MainProgram
+    public class BaseProgram
     {
-        public static IWebHost BuildWebHost<TStartup>(string[] args)
+        public static IHostBuilder CreateHostBuilder<TStartup>(string[] args)
             where TStartup : class
-            => WebHost.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((context, configuration) =>
+            => Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<TStartup>();
+            }).ConfigureAppConfiguration((context, configuration) =>
             {
                 IHostEnvironment env = context.HostingEnvironment;
 
                 configuration
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
 
                 Log.Logger = new LoggerConfiguration()
-                   .ReadFrom.Configuration(configuration.Build())
-                   .WriteTo.Console()
-                   .CreateLogger();
+                        .ReadFrom.Configuration(configuration.Build())
+                        .WriteTo.Console()
+                        .CreateLogger();
+            }).UseSerilog();
 
-            })
-            .UseStartup<TStartup>()
-            .UseSerilog()
-            .UseKestrel()
-            .Build();
-
-        public static void Start<TStatup>(string[] args)
+        public static void Start<TStatup>(IHostBuilder createHostBuilder)
             where TStatup : class
         {
             try
             {
-                BuildWebHost<TStatup>(args).Run();
+                createHostBuilder.Build().Run();
+
                 return;
             }
             catch (Exception ex)
