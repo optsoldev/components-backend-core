@@ -7,7 +7,7 @@ using System;
 
 namespace Optsol.Components.Service.Programs
 {
-    public class MainProgram
+    public class BaseProgram
     {
         public static IWebHost BuildWebHost<TStartup>(string[] args)
             where TStartup : class
