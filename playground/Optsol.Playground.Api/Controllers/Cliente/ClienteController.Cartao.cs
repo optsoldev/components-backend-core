@@ -7,7 +7,7 @@ namespace Optsol.Playground.Api.Controllers
 {
     public partial class ClienteController
     {
-        [HttpGet("{id}/cartaoCredito")]
+        [HttpGet("{id}/cartao-credito")]
         public async Task<IActionResult> GetClienteComCartaoCredito(Guid id)
         {
             var cliente = await _clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
@@ -15,7 +15,7 @@ namespace Optsol.Playground.Api.Controllers
             return CreateResult(cliente);
         }
 
-        [HttpPost("cartaoCredito")]
+        [HttpPost("cartao-credito")]
         public async Task<IActionResult> InserirCartaoNoCliente([FromBody] InsertCartaoCreditoViewModel insertCartaoCreditoViewModel)
         {
             await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);

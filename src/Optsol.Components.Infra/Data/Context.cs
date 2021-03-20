@@ -14,18 +14,4 @@ namespace Optsol.Components.Infra.Data
         {
         }
     }
-
-    public class TenantContext : CoreContext
-    {
-        protected TenantContext()
-            : base()
-        {
-
-        }
-
-        protected TenantContext(DbContextOptions options) 
-            : base(options)
-        {
-        }
-    }
 }
