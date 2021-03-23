@@ -29,9 +29,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddMicrosoftIdentityWebApi(options =>
                 {
                     configuration.GetSection(azureB2C).Bind(options);
-
                     options.TokenValidationParameters.NameClaimType = "name";
-                }, options => { configuration.GetSection(azureB2C).Bind(options); });
+                }, options => 
+                { 
+                    configuration.GetSection(azureB2C).Bind(options); 
+                });
 
             return services;
         }
