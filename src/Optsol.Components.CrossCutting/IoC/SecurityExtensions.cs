@@ -1,76 +1,52 @@
-﻿using IdentityServer4.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Optsol.Components.Infra.Security.Data;
-using Optsol.Components.Infra.Security.Services;
-using System;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Logging;
+using Optsol.Components.Shared.Exceptions;
+using Optsol.Components.Shared.Settings;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public class UserStoreOptions
-    {
-        public Action<DbContextOptionsBuilder> ConfigureDbContext;
-    }
-
-    public class ConfigSecurityOptions
-    {
-        public readonly IServiceCollection ServiceCollection;
-
-        public readonly IIdentityServerBuilder IdentityBuilder;
-
-        public ConfigSecurityOptions(IServiceCollection serviceCollection, IIdentityServerBuilder identityBuilder)
-        {
-            ServiceCollection = serviceCollection;
-            IdentityBuilder = identityBuilder;
-        }
-
-        public IServiceCollection AddUserService<TUserService>()
-            where TUserService : class, IUserService
-        {
-            ServiceCollection.AddTransient<IUserService, TUserService>();
-
-            return ServiceCollection;
-        }
-
-        public IServiceCollection AddSecurityDataService<TSecurityDataService>()
-            where TSecurityDataService : class, ISecurityDataService
-        {
-            ServiceCollection.AddTransient<ISecurityDataService, TSecurityDataService>();
-
-            return ServiceCollection;
-        }
-
-        public IIdentityServerBuilder AddProfileService<TProfileService>()
-            where TProfileService: class, IProfileService
-        {
-            ServiceCollection.AddTransient<IProfileService, TProfileService>();
-            return IdentityBuilder.AddProfileService<TProfileService>();
-        }
-    }
-
     public static class SecurityStoreExtensions
     {
-        public static IServiceCollection AddUserStore(this IServiceCollection services, Action<UserStoreOptions> action)
+        public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
         {
-            var userOptions = new UserStoreOptions();
-            action(userOptions);
+            var provider = services.BuildServiceProvider();
+
+            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>()
+                ?? throw new SecuritySettingNullException(provider.GetRequiredService<ILoggerFactory>());
+
+            securitySettings.Validate();
+
+            services.AddSingleton(securitySettings);
+
+            var azureB2C = $"{nameof(SecuritySettings)}:{nameof(SecuritySettings.AzureB2C)}";
 
             services
-                .AddDbContext<SecurityDbContext>(userOptions.ConfigureDbContext);
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(options =>
+                {
+                    configuration.GetSection(azureB2C).Bind(options);
 
-            services
-                .AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<SecurityDbContext>()
-                .AddDefaultTokenProviders();
+                    options.TokenValidationParameters.NameClaimType = "name";
+                }, options => { configuration.GetSection(azureB2C).Bind(options); });
 
             return services;
         }
 
-        public static IIdentityServerBuilder AddUserStore(this IIdentityServerBuilder builder, Action<UserStoreOptions> action)
+        public static IApplicationBuilder UseSecurity(this IApplicationBuilder app, bool development)
         {
-            builder.Services.AddUserStore(action);
+            if (development)
+            {
+                IdentityModelEventSource.ShowPII = true;
+            }
 
-            return builder;
+            app.UseAuthentication()
+               .UseAuthorization();
+
+            return app;
         }
     }
 }

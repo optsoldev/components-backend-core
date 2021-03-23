@@ -22,9 +22,9 @@ namespace Microsoft.AspNetCore.Builder
                     var enabledSecurity = swaggerSettings.Security?.Enabled ?? false;
                     if (enabledSecurity)
                     {
-                        options.OAuthClientId("optsol-swagger");
+                        options.OAuthClientId("436453d1-adf6-4160-93f9-9e665fc94d65");
                         options.OAuthAppName("Swagger UI for components optsol");
-                        options.OAuthUsePkce();
+                        //options.OAuthUsePkce();
 
                         if (isDevelopment)
                         {
