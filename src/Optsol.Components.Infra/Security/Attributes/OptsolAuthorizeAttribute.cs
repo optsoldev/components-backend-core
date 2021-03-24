@@ -66,27 +66,27 @@ namespace Optsol.Components.Infra.Security.Attributes
 
         private void ContextRemoteSecurity(AuthorizationFilterContext context)
         {
-            var accessToken = context.HttpContext.GetTokenAsync("Bearer", "access_token")
-                .GetAwaiter()
-                .GetResult();
+            //var accessToken = context.HttpContext.GetTokenAsync("Bearer", "access_token")
+            //    .GetAwaiter()
+            //    .GetResult();
 
-            var client = new HttpClient();
-            client.SetBearerToken(accessToken);
+            //var client = new HttpClient();
+            //client.SetBearerToken(accessToken);
 
-            var response = client
-                .GetUserInfoAsync(new UserInfoRequest
-                {
-                    Address = $"{_securitySettings.Authority}/connect/userinfo",
-                    Token = accessToken,
-                })
-                .GetAwaiter()
-                .GetResult();
+            //var response = client
+            //    .GetUserInfoAsync(new UserInfoRequest
+            //    {
+            //        Address = $"{_securitySettings.Authority}/connect/userinfo",
+            //        Token = accessToken,
+            //    })
+            //    .GetAwaiter()
+            //    .GetResult();
 
-            var userAuthenticateHasClaim = response.Claims.Any(c => c.Type.Equals("optsol") && c.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
-            if (userAuthenticateHasClaim)
-            {
-                return;
-            }
+            //var userAuthenticateHasClaim = response.Claims.Any(c => c.Type.Equals("optsol") && c.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
+            //if (userAuthenticateHasClaim)
+            //{
+            //    return;
+            //}
 
             context.Result = new UnauthorizedResult();
         }

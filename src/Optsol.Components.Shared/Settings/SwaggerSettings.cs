@@ -17,7 +17,6 @@ namespace Optsol.Components.Shared.Settings
 
         public SwaggerSecurity Security { get; set; }
 
-
         public override void Validate()
         {
             var titleIsNullOrEmpty = string.IsNullOrEmpty(Title);
