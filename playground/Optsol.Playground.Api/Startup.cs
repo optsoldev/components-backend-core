@@ -59,7 +59,7 @@ namespace Optsol.Playground.Api
             
             app.UseRouting();
 
-            app.UseSecurity(env.IsDevelopment());
+            app.UseSecurity(Configuration);
                         
             app.UseCors(Configuration);
 
