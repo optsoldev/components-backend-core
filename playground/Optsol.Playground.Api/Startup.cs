@@ -55,14 +55,12 @@ namespace Optsol.Playground.Api
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
-
             app.UseHttpsRedirection();
             
             app.UseRouting();
 
             app.UseSecurity(Configuration);
-
+                        
             app.UseCors(Configuration);
 
             app.UseSwagger(Configuration, env.IsDevelopment());
@@ -74,7 +72,7 @@ namespace Optsol.Playground.Api
                     await context.Response.WriteAsync("Playground API Started.");
                 });
 
-                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();
             });
         }
     }

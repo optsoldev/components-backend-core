@@ -12,30 +12,30 @@ namespace Optsol.Components.Service.Filters
     public class AuthorizeCheckOperationFilter : IOperationFilter
     {
         private readonly SwaggerSettings _swaggerSettings;
-        private readonly SecuritySettings _securitySettings;
+        //private readonly SecuritySettings _securitySettings;
 
         public AuthorizeCheckOperationFilter(
-            SwaggerSettings swaggerSettings, 
-            SecuritySettings securitySettings,
+            SwaggerSettings swaggerSettings,
+            //SecuritySettings securitySettings,
             ILoggerFactory logger)
         {
             _swaggerSettings = swaggerSettings ?? throw new SwaggerSettingsNullException(logger);
             _swaggerSettings.Validate();
             _swaggerSettings.Security.Validate();
 
-            _securitySettings = securitySettings;
-            securitySettings?.Validate();
+            //_securitySettings = securitySettings;
+            //securitySettings?.Validate();
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            var notHaveSecurity = _securitySettings == null;
-            if (notHaveSecurity)
-                return;
+            //var notHaveSecurity = _securitySettings == null;
+            //if (notHaveSecurity)
+            //    return;
 
-                var hasAuthorize =
-                context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
-                context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
+            var hasAuthorize =
+            context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
+            context.MethodInfo.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any();
 
             if (hasAuthorize)
             {
@@ -47,7 +47,7 @@ namespace Optsol.Components.Service.Filters
                     new OpenApiSecurityRequirement
                     {
                         [
-                            new OpenApiSecurityScheme 
+                            new OpenApiSecurityScheme
                             {
                                 Reference = new OpenApiReference
                                 {
@@ -55,7 +55,7 @@ namespace Optsol.Components.Service.Filters
                                     Id = _swaggerSettings.Security.Name
                                 }
                             }
-                        ] = new[] { _securitySettings.ApiName }
+                        ] = new[] { "webapi" }
                     }
                 };
 

@@ -6,9 +6,9 @@ namespace Optsol.Components.Shared.Settings
     {
         public string ApiName { get; set; }
 
-        public string Authority { get; set; }
-
         public bool IsDevelopment { get; set; }
+
+        public AzureB2C AzureB2C { get; set; }
 
         public override void Validate()
         {
@@ -18,11 +18,28 @@ namespace Optsol.Components.Shared.Settings
                 throw new ArgumentNullException(nameof(ApiName));
             }
 
-            var authorityIsNullOrEmpty = !IsDevelopment && string.IsNullOrEmpty(Authority);
-            if (authorityIsNullOrEmpty)
+            var azureB2cIsNull = !IsDevelopment && AzureB2C == null;
+            if (azureB2cIsNull)
             {
-                throw new ArgumentNullException(nameof(Authority));
+                throw new ArgumentNullException(nameof(AzureB2C));
             }
         }
+    }
+
+    public class AzureB2C
+    {
+        public string Instance { get; set; }
+
+        public string ClientId { get; set; }
+
+        public string Domain { get; set; }
+
+        public string SignedOutCallbackPath { get; set; }
+
+        public string SignUpSignInPolicyId { get; set; }
+
+        public string ResetPasswordPolicyId { get; set; }
+
+        public string EditProfilePolicyId { get; set; }
     }
 }
