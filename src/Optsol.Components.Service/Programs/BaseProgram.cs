@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Optsol.Components.Shared.Settings;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
 using System;
 
 namespace Optsol.Components.Service.Programs
@@ -21,12 +23,28 @@ namespace Optsol.Components.Service.Programs
 
                 configuration
                     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
 
-                Log.Logger = new LoggerConfiguration()
-                        .ReadFrom.Configuration(configuration.Build())
-                        .WriteTo.Console()
-                        .CreateLogger();
+                var buildConfiguration = configuration.Build();
+
+                var logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(buildConfiguration)
+                    .WriteTo.Console();
+
+                var elasticSearchSettings = buildConfiguration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
+                var elasticSearchSettingsIsValid = elasticSearchSettings != null && !string.IsNullOrEmpty(elasticSearchSettings.Uri);
+                if (elasticSearchSettingsIsValid)
+                {
+                    var indexNameFormat = $"{elasticSearchSettings.IndexName}-logs-{env.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
+
+                    logger = logger.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticSearchSettings.Uri))
+                    {
+                        IndexFormat = indexNameFormat
+                    });
+                }
+
+                Log.Logger = logger.CreateLogger();
+
             }).UseSerilog();
 
         public static void Start<TStatup>(IHostBuilder createHostBuilder)
@@ -48,6 +66,5 @@ namespace Optsol.Components.Service.Programs
                 Log.CloseAndFlush();
             }
         }
-
     }
 }
