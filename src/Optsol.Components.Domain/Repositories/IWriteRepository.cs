@@ -2,7 +2,7 @@ using Optsol.Components.Domain.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace Optsol.Components.Infra.Data
+namespace Optsol.Components.Domain.Data
 {
     public interface IWriteBaseRepository<TEntity, TKey> : IDisposable
         where TEntity : class, IAggregateRoot<TKey>

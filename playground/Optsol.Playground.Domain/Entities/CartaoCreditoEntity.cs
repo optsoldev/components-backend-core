@@ -1,6 +1,7 @@
 using System;
 using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
+using Optsol.Playground.Domain.Validators;
 
 namespace Optsol.Playground.Domain.Entities
 {
@@ -52,13 +53,7 @@ namespace Optsol.Playground.Domain.Entities
         {
             base.Validate();
 
-            AddNotifications(new Contract()
-                .Requires()
-                .IsNotNullOrEmpty(NomeCliente, "NomeCliente", "O Nome do cliente não pode ser nulo")
-                .IsNotNullOrEmpty(Numero, "Numero", "O Numero não pode ser nulo")
-                .IsNotNullOrEmpty(CodigoVerificacao, "CodigoVerificacao", "O Codigo Verificacao do cliente não pode ser nulo")
-                .IsNotEmpty(ClienteId, "ClienteId", "O Nome do cliente não pode ser nulo")
-            );
+            AddNotifications(new CartaoCreditoEntityContract(this));
         }
 
         private bool ObterSituacaoValidade()

@@ -9,13 +9,14 @@ using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Optsol.Components.Test.Integration.Infra.Storage.Table
+namespace Optsol.Components.Test.Integration.Infra.Storage
 {
     public class BlobStorageSpec
     {
 
+        [Trait("Table Storage", "Blob")]
         [Fact(Skip = "azurite local docker test")]
-        public void Deve_Registrar_Serico_Storage_Na_Injecao_De_Dependencia()
+        public void Deve_Registrar_Servico_Storage_Na_Injecao_De_Dependencia()
         {
             //Given 
             var configuration = new ConfigurationBuilder()
@@ -36,6 +37,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             blobStorage.Should().NotThrow();
         }
 
+        [Trait("Table Storage", "Blob")]
         [Fact(Skip = "azurite local docker test")]
         public async Task Deve_Criar_Container_Blob_No_Azure_Storage()
         {
@@ -65,6 +67,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             containerExiteNoAzureStorage.Value.Should().BeTrue();
         }
 
+        [Trait("Table Storage", "Blob")]
         [Fact(Skip = "azurite local docker test")]
         public void Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Stream()
         {
@@ -93,6 +96,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
+        [Trait("Table Storage", "Blob")]
         [Fact(Skip = "azurite local docker test")]
         public void Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Path()
         {
@@ -118,6 +122,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
+        [Trait("Table Storage", "Blob")]
         [Fact(Skip = "azurite local docker test")]
         public async Task Deve_Apagar_Arquivo_No_Blob_Pelo_Nome()
         {
@@ -146,6 +151,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage.Table
             action.Should().NotThrow();
         }
 
+        [Trait("Table Storage", "Blob")]
         [Fact(Skip = "azurite local docker test")]
         public async Task Deve_Fazer_Download_Do_Arquivo_No_Blob_Pelo_Nome()
         {

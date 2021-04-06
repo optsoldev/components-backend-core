@@ -1,6 +1,5 @@
-using Flunt.Validations;
 using Optsol.Components.Domain.ValueObjects;
-using System;
+using Optsol.Playground.Domain.Validators;
 
 namespace Optsol.Playground.Domain.ValueObjects
 {
@@ -25,13 +24,7 @@ namespace Optsol.Playground.Domain.ValueObjects
 
         public override void Validate()
         {
-            AddNotifications(new Contract()
-                .Requires()
-                .HasMinLen(Nome, 3, $"{nameof(NomeValueObject.Nome)}", "O nome deve ter no mínino 3 caracteres")
-                .HasMaxLen(Nome, 35, $"{nameof(NomeValueObject.Nome)}", "O nome deve ter no máximo 35 caracteres")
-                .HasMinLen(SobreNome, 3, $"{nameof(NomeValueObject.SobreNome)}", "O sobrenome deve ter no mínino 3 caracteres")
-                .HasMaxLen(SobreNome, 35, $"{nameof(NomeValueObject.SobreNome)}", "O sobrenome deve ter no máximo 35 caracteres")
-                );
+            AddNotifications(new NomeValueObjectContract(this));
         }
 
         public bool Constains(string nome)

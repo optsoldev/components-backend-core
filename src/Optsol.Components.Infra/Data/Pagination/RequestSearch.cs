@@ -1,9 +1,8 @@
-using System;
+using Optsol.Components.Domain.Pagination;
 
-namespace Optsol.Components.Infra.Data
+namespace Optsol.Components.Infra.Data.Pagination
 {
-    public class SearchRequest<TSearch>
-        where TSearch : class
+    public class SearchRequest<TSearch> : ISearchRequest<TSearch> where TSearch : class
     {
         private uint _page;
 
@@ -24,15 +23,14 @@ namespace Optsol.Components.Infra.Data
 
         public uint? PageSize { get; set; }
 
-        readonly Func<uint, uint> SetPageValue = 
-            (value) =>
+        public uint SetPageValue(uint value)
+        {
+            var isZero = value == 0;
+            if (isZero)
             {
-                var isZero = value == 0;
-                if (isZero)
-                {
-                    return 1;
-                }
-                return value;
-            };
+                return 1;
+            }
+            return value;
+        }
     }
 }

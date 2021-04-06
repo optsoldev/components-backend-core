@@ -1,5 +1,5 @@
 using Optsol.Components.Application.DataTransferObjects;
-using Optsol.Components.Infra.Data;
+using Optsol.Components.Domain.Pagination;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Service.Responses
@@ -14,7 +14,7 @@ namespace Optsol.Components.Service.Responses
         ResponseList<TData> Create<TData>(IEnumerable<TData> serviceResult)
             where TData : BaseDataTransferObject;
 
-        ResponseSearch<TData> Create<TData>(SearchResult<TData> searchResult)
+        ResponseSearch<TData> Create<TData>(ISearchResult<TData> searchResult)
             where TData : BaseDataTransferObject;
     }
 }

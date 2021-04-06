@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data;
 
 namespace Optsol.Components.Service.Responses
@@ -91,19 +92,19 @@ namespace Optsol.Components.Service.Responses
         {
         }
 
-        public ResponseSearch(SearchResult<TData> data, bool success) 
+        public ResponseSearch(ISearchResult<TData> data, bool success) 
             : base(data.Items, success)
         {
             SetPageData(data);
         }
 
-        public ResponseSearch(SearchResult<TData> data, bool success, IEnumerable<string> messages) 
+        public ResponseSearch(ISearchResult<TData> data, bool success, IEnumerable<string> messages) 
             : base(data.Items, success, messages)
         {
             SetPageData(data);
         }
         
-        private void SetPageData(SearchResult<TData> data)
+        private void SetPageData(ISearchResult<TData> data)
         {
             Page = (int)data.Page;
             PageSize = (int?)data.PageSize;

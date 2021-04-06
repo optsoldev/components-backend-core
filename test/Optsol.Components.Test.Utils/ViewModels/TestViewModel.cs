@@ -1,5 +1,6 @@
 using Flunt.Validations;
 using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Test.Utils.Contracts;
 using System;
 
 namespace Optsol.Components.Test.Utils.ViewModels
@@ -16,12 +17,17 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public override void Validate()
         {
-            AddNotifications(new Contract()
-                .Requires()
-                .HasMinLen(Nome, 3, $"{nameof(TestViewModel.Nome)}", "O nome deve ter no mínino 3 caracteres")
-                .HasMaxLen(Nome, 70, $"{nameof(TestViewModel.Nome)}", "O nome deve ter no máximo 35 caracteres")
-                .IsEmail(Contato, $"{nameof(TestViewModel.Contato)}", "O sobrenome deve ter no máximo 35 caracteres")
-                );
+            AddNotifications(new TestViewModelContract(this));
         }
+    }
+
+    public class EnviarWhatsDto
+    {
+        public EnviarWhatsDto()
+        {
+
+        }
+
+        public string Mensagem { get; set; }
     }
 }

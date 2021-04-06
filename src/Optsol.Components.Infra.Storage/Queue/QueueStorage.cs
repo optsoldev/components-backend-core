@@ -6,6 +6,8 @@ using Optsol.Components.Infra.Storage.Queue.Messages;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Storage.Queue
@@ -17,6 +19,8 @@ namespace Optsol.Components.Infra.Storage.Queue
         private readonly ILogger _logger;
 
         private readonly StorageSettings _storageSettings;
+
+        private readonly string[] IgnoredProperties = new[] { "notifications", "invalid", "valid" };
 
         public QueueStorage(StorageSettings settings, ILoggerFactory logger)
         {
@@ -31,7 +35,17 @@ namespace Optsol.Components.Infra.Storage.Queue
         {
             await GetQueueClient(message.QueueName);
 
-            return await _queueClient.SendMessageAsync(message.Data.ToJson());
+            return await _queueClient.SendMessageAsync(message.Data.ToJson(IgnoredProperties));
+        }
+
+        public async Task<Response<SendReceipt>> SendMessageBase64Async<TData>(SendMessageModel<TData> message)
+            where TData : class
+        {
+            await GetQueueClient(message.QueueName);
+
+            var contentBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(message.Data.ToJson(IgnoredProperties)));
+
+            return await _queueClient.SendMessageAsync(contentBase64);
         }
 
         public async Task<Response<UpdateReceipt>> UpdateMessageAsync<TData>(UpdateMessageModel<TData> message)
@@ -39,7 +53,7 @@ namespace Optsol.Components.Infra.Storage.Queue
         {
             await GetQueueClient(message.QueueName);
 
-            return await _queueClient.UpdateMessageAsync(message.Message.MessageId, message.Message.PopReceipt, message.Data.ToJson());
+            return await _queueClient.UpdateMessageAsync(message.Message.MessageId, message.Message.PopReceipt, message.Data.ToJson(IgnoredProperties));
         }
 
         public async Task<Response> DeleteMessageAsync<TData>(DeleteMessageModel message)

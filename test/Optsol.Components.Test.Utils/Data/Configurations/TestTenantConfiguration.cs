@@ -19,13 +19,11 @@ namespace Optsol.Components.Test.Utils.Data.Configurations
         {
             builder.OwnsOne(valueObject => valueObject.Nome)
                .Ignore(nome => nome.Notifications)
-               .Ignore(nome => nome.Invalid)
-               .Ignore(nome => nome.Valid);
+               .Ignore(nome => nome.IsValid);
 
             builder.OwnsOne(valueObject => valueObject.Email)
                 .Ignore(nome => nome.Notifications)
-                .Ignore(nome => nome.Invalid)
-                .Ignore(nome => nome.Valid);
+                .Ignore(nome => nome.IsValid);
 
             builder
                .OwnsOne(valueObject => valueObject.Nome)
@@ -68,13 +66,11 @@ namespace Optsol.Components.Test.Utils.Data.Configurations
         {
             builder.OwnsOne(valueObject => valueObject.Nome)
                .Ignore(nome => nome.Notifications)
-               .Ignore(nome => nome.Invalid)
-               .Ignore(nome => nome.Valid);
+               .Ignore(nome => nome.IsValid);
 
             builder.OwnsOne(valueObject => valueObject.Email)
                 .Ignore(nome => nome.Notifications)
-                .Ignore(nome => nome.Invalid)
-                .Ignore(nome => nome.Valid);
+                .Ignore(nome => nome.IsValid);
 
             builder
                .OwnsOne(valueObject => valueObject.Nome)

@@ -4,8 +4,8 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Infra.Data;
-//using Optsol.Components.Infra.Security.Attributes;
+using Optsol.Components.Domain.Pagination;
+using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Service.Filters;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Exceptions;
@@ -58,7 +58,7 @@ namespace Optsol.Components.Service.Controllers
             return Ok(response);
         }
 
-        protected IActionResult CreateResult<TData>(SearchResult<TData> viewModelsOfResultService)
+        protected IActionResult CreateResult<TData>(ISearchResult<TData> viewModelsOfResultService)
             where TData : BaseDataTransferObject
         {
             var response = _responseFactory.Create(viewModelsOfResultService);
@@ -172,7 +172,7 @@ namespace Optsol.Components.Service.Controllers
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
-        where TSearch : class, ISearch<TEntity>
+        where TSearch : class
     {
         public ApiControllerBase(
             ILoggerFactory logger,
@@ -185,7 +185,7 @@ namespace Optsol.Components.Service.Controllers
         [HttpPost("paginated")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search)
+        public async Task<IActionResult> GetAllAsync(ISearchRequest<TSearch> search)
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }({ search.ToJson() }) Retorno: IActionResult");
 

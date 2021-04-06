@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-//using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Playground.Application.Searchs;
@@ -29,7 +28,6 @@ namespace Optsol.Playground.Api.Controllers
             _clienteServiceApplication.Includes = clientes => clientes.Include(x => x.Cartoes);
         }
 
-        //[OptsolAuthorize("cliente.buscar")]
         public override Task<IActionResult> GetAllAsync()
         {
             return base.GetAllAsync();

@@ -25,8 +25,7 @@ namespace Optsol.Components.Infra.Data
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.Ignore(entity => entity.Notifications);
-            builder.Ignore(entity => entity.Invalid);
-            builder.Ignore(entity => entity.Valid);
+            builder.Ignore(entity => entity.IsValid);
 
             builder.HasKey(entity => entity.Id);
             builder.Property(entity => entity.Id).ValueGeneratedNever();
@@ -50,12 +49,7 @@ namespace Optsol.Components.Infra.Data
 
                 builder.Property(entity => ((IDeletable)entity).DeletedDate);
 
-                //TODO: Mover para extensions
-                var member = Expression.Property(parametrer, "IsDeleted");
-                var constant = Expression.Constant(false);
-                var body = Expression.Equal(member, constant);
-
-                var deletableExpression = Expression.Lambda<Func<TEntity, bool>>(body, parametrer);
+                var deletableExpression = CreateExpression(parametrer, "IsDeleted", false);
 
                 expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, deletableExpression.Body), deletableExpression.Parameters);
             }
@@ -76,12 +70,7 @@ namespace Optsol.Components.Infra.Data
                 var tenantProviderNotIsNull = _tenantProvider != null;
                 if (tenantProviderNotIsNull)
                 {
-                    //TODO: Mover para extensions
-                    var member = Expression.Property(parametrer, "TenantId");
-                    var constant = Expression.Constant(_tenantProvider.GetTenantId());
-                    var body = Expression.Equal(member, constant);
-
-                    var tenantExpression = Expression.Lambda<Func<TEntity, bool>>(body, parametrer);
+                    var tenantExpression = CreateExpression(parametrer, "TenantId", _tenantProvider.GetTenantId());
 
                     expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
                 }
@@ -94,7 +83,16 @@ namespace Optsol.Components.Infra.Data
             }
         }
 
-        private LambdaExpression CreateInitialFilter(LambdaExpression expression)
+        private static Expression<Func<TEntity, bool>> CreateExpression<T>(ParameterExpression parametrer, string propertyName, T value)
+        {
+            var member = Expression.Property(parametrer, propertyName);
+            var constant = Expression.Constant(value);
+            var body = Expression.Equal(member, constant);
+
+            return Expression.Lambda<Func<TEntity, bool>>(body, parametrer);
+        }
+
+        private static LambdaExpression CreateInitialFilter(LambdaExpression expression)
         {
             return expression ?? PredicateBuilder.True<TEntity>();
         }

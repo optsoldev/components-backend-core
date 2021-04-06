@@ -3,8 +3,8 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Application.Services;
+using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Notifications;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
@@ -15,14 +15,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Application
 {
     public class BaseServiceApplicationSpec
     {
-        [Fact]
-        public void Deve_Registrar_Logs_No_Servico()
+        [Trait("Serviço de Aplicação", "Log de Ocorrências")]
+        [Fact(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
+        public async Task Deve_Registrar_Logs_No_Servico()
         {
             //Given
             var entity = new TestEntity();
@@ -74,11 +76,11 @@ namespace Optsol.Components.Test.Unit.Application
                 notificationContextMock.Object);
 
             //When
-            service.GetByIdAsync(entity.Id).ConfigureAwait(false);
-            service.GetAllAsync().ConfigureAwait(false);
-            service.InsertAsync(insertModel).ConfigureAwait(false);
-            service.UpdateAsync(updateModel).ConfigureAwait(false);
-            service.DeleteAsync(entity.Id).ConfigureAwait(false);
+            await service.GetAllAsync();
+            await service.GetByIdAsync(entity.Id);
+            await service.InsertAsync(insertModel);
+            await service.UpdateAsync(updateModel);
+            await service.DeleteAsync(entity.Id);
 
             //Then
             var msgConstructor = $"Inicializando Application Service<{ entity.GetType().Name }, Guid>";
