@@ -345,7 +345,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
             //Then
             var entityResult = await testReadRepository.GetByIdAsync(entity.Id);
-            entityResult.Invalid.Should().BeFalse();
+            entityResult.IsValid.Should().BeTrue();
             entityResult.Notifications.Should().HaveCount(0);
             entityResult.Should().NotBeNull();
             entityResult.Nome.ToString().Should().Be(entity.Nome.ToString());
@@ -378,7 +378,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             var entityResult = await testReadRepository.GetByIdAsync(entity.Id);
             entityResult.Should().NotBeNull();
 
-            entityResult.Invalid.Should().BeFalse();
+            entityResult.IsValid.Should().BeTrue();
             entityResult.Notifications.Should().BeEmpty();
 
             entityResult.Nome.ToString().Should().Be(updateEntity.Nome.ToString());
@@ -527,7 +527,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             await unitOfWork.CommitAsync();
 
             //Then
-            entity.Valid.Should().BeFalse();
+            entity.IsValid.Should().BeFalse();
             entity.Notifications.Should().NotBeEmpty();
 
             var result = await testReadRepository.GetByIdAsync(tenantId);

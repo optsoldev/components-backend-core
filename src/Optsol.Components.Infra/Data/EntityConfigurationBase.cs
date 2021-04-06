@@ -25,8 +25,7 @@ namespace Optsol.Components.Infra.Data
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
             builder.Ignore(entity => entity.Notifications);
-            builder.Ignore(entity => entity.Invalid);
-            builder.Ignore(entity => entity.Valid);
+            builder.Ignore(entity => entity.IsValid);
 
             builder.HasKey(entity => entity.Id);
             builder.Property(entity => entity.Id).ValueGeneratedNever();

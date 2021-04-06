@@ -1,10 +1,10 @@
-using System;
 using Flunt.Notifications;
-using Flunt.Validations;
+using Optsol.Components.Domain.Notifications.Contracts;
+using System;
 
 namespace Optsol.Components.Domain.Entities
 {
-    public abstract class Entity : Notifiable, IEntity, IValidatable
+    public abstract class Entity : Notifiable<Notification>, IEntity
     {
         public DateTime CreatedDate { get; protected set; }
 
@@ -17,9 +17,7 @@ namespace Optsol.Components.Domain.Entities
 
         public override void Validate()
         {
-            AddNotifications(new Contract()
-                .Requires()
-                .IsLowerThan(CreatedDate, DateTime.Now, "CreationDate", "A Data de criação não pode ser maior que a data atual"));
+            AddNotifications(new EntityContract(this));
         }
     }
 
@@ -27,8 +25,8 @@ namespace Optsol.Components.Domain.Entities
     {
         public EntityGuid() : base()
         {
-            base.CreatedDate = DateTime.Now;
-            base.Id = Guid.NewGuid();
+            CreatedDate = DateTime.Now;
+            Id = Guid.NewGuid();
         }
     }
 }

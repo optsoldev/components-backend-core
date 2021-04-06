@@ -84,8 +84,7 @@ namespace Optsol.Components.Test.Integration.Service
             resultObj.Failure.Should().BeFalse();
             resultObj.Messages.Should().BeEmpty();
             resultObj.Data.Should().NotBeNull();
-            resultObj.Data.All(a => a.Valid).Should().BeTrue();
-            resultObj.Data.All(a => a.Invalid).Should().BeFalse();
+            resultObj.Data.All(a => a.IsValid).Should().BeTrue();
             resultObj.Data.SelectMany(s => s.Notifications).Should().BeEmpty();
             resultObj.Data.Should().HaveCount(3);
             resultObj.Data.Any(a => a.Id == entity.Id).Should().BeTrue();

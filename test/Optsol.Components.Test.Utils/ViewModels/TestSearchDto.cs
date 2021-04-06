@@ -1,7 +1,7 @@
-using Flunt.Validations;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Shared.Extensions;
+using Optsol.Components.Test.Utils.Contracts;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using System;
 using System.Linq;
@@ -48,11 +48,7 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public override void Validate()
         {
-            AddNotifications(new Contract()
-                .Requires()
-                .IsNotNull(Nome, nameof(Nome), "O nome do cliente não pode ser nulo")
-                .IsNullOrEmpty(SobreNome, nameof(SobreNome), "O sobrenome do cliente não pode ser nulo")
-                );
+            AddNotifications(new TestSearchDtoContract(this));
         }
     }
 
@@ -83,11 +79,7 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public override void Validate()
         {
-            AddNotifications(new Contract()
-                .Requires()
-                .IsNotNull(Nome, nameof(Nome), "O nome do cliente não pode ser nulo")
-                .IsNullOrEmpty(SobreNome, nameof(SobreNome), "O sobrenome do cliente não pode ser nulo")
-                );
+            AddNotifications(new TestSearchOnlyDtoContract(this));
         }
     }
 }

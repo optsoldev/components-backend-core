@@ -37,7 +37,7 @@ namespace Optsol.Components.Service.Responses
             return new ResponseList<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
-        public ResponseSearch<TData> Create<TData>(ISearchResult<TData> data) 
+        public ResponseSearch<TData> Create<TData>(ISearchResult<TData> data)
             where TData : BaseDataTransferObject
         {
             var responseSuccess = !_notificationContext.HasNotifications;
@@ -51,14 +51,14 @@ namespace Optsol.Components.Service.Responses
         }
 
 
-        readonly Func<IReadOnlyCollection<Notification>, List<string>> MessageResolver = (notifications) =>
+        private List<string> MessageResolver(IReadOnlyCollection<Notification> notifications)
         {
             var messages = new List<string>();
 
             foreach (var notify in notifications)
-                messages.Add($"{notify.Property}:{notify.Message}");
+                messages.Add($"{notify.Key}:{notify.Message}");
 
             return messages;
-        };
+        }
     }
 }

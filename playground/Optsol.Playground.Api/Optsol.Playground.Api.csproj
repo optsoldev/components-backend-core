@@ -13,7 +13,7 @@
     <ProjectReference Include="..\Optsol.Playground.Infra\Optsol.Playground.Infra.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="1.0.5" />
+    <PackageReference Include="Flunt" Version="2.0.3" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">

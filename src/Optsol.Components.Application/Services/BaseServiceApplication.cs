@@ -110,6 +110,7 @@ namespace Optsol.Components.Application.Services
         public virtual async Task<TCustom> InsertAsync<TCustom>(TInsertData data)
             where TCustom: BaseDataTransferObject
         {
+            data.Validate();
             if (CheckInvalidFromNotifiable(data))
             {
                 return default;
@@ -118,9 +119,9 @@ namespace Optsol.Components.Application.Services
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
 
             var entity = _mapper.Map<TEntity>(data);
-
             _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TInsertData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
+            entity.Validate();
             if (CheckInvalidFromNotifiable(entity))
             {
                 return default;
@@ -140,6 +141,7 @@ namespace Optsol.Components.Application.Services
         public virtual async Task<TCustom> UpdateAsync<TCustom>(TUpdateData data)
             where TCustom : BaseDataTransferObject
         {
+            data.Validate();
             if (CheckInvalidFromNotifiable(data))
             {
                 return default;
@@ -157,6 +159,7 @@ namespace Optsol.Components.Application.Services
                 _notificationContext.AddNotification(entity.Id.ToString(), "Registro não foi encontrado.");
             }
 
+            entity.Validate();
             if (CheckInvalidFromNotifiable(entity))
             {
                 return default;
@@ -208,13 +211,11 @@ namespace Optsol.Components.Application.Services
             return true;
         }
 
-        public virtual bool CheckInvalidFromNotifiable(Notifiable data)
+        public virtual bool CheckInvalidFromNotifiable(Notifiable<Notification> data)
         {
-            ((IValidatable)data).Validate();
-
             if (data.Notifications.Count == 0) return false;
 
-            this._notificationContext.AddNotifications(data.Notifications);
+            _notificationContext.AddNotifications(data.Notifications);
 
             _logger?.LogInformation($"Método: { nameof(CheckInvalidFromNotifiable) } Invalid: { _notificationContext.HasNotifications } Notifications: { _notificationContext.Notifications.ToJson() }");
 

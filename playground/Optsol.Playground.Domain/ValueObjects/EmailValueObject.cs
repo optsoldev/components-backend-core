@@ -1,5 +1,5 @@
-using Flunt.Validations;
 using Optsol.Components.Domain.ValueObjects;
+using Optsol.Playground.Domain.Validators;
 
 namespace Optsol.Playground.Domain.ValueObjects
 {
@@ -21,10 +21,7 @@ namespace Optsol.Playground.Domain.ValueObjects
 
         public override void Validate()
         {
-            AddNotifications(new Contract()
-               .Requires()
-               .IsEmail(Email, $"{nameof(EmailValueObject.Email)}", "E-mail inválido")
-           );
+            AddNotifications(new EmailValueObjectContract(this));
         }
     }
 }

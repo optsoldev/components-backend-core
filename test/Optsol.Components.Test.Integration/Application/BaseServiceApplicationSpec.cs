@@ -51,7 +51,7 @@ namespace Optsol.Components.Test.Integration.Application
             //Then
             viewModels.Should().NotBeEmpty();
             viewModels.Should().HaveCount(numberItems);
-            viewModels.Any(w => w.Invalid).Should().BeFalse();
+            viewModels.Any(w => w.IsValid).Should().BeTrue();
         }
 
         [Trait("Serviço de Aplicação", "Execução dos Serviços")]
@@ -79,8 +79,8 @@ namespace Optsol.Components.Test.Integration.Application
             viewModel.Contato.Should().Be(entity.Email.ToString());
 
             viewModel.Validate();
-            viewModel.Invalid.Should().BeFalse();
-            viewModel.Valid.Should().BeTrue();
+            //viewModel.Invalid.Should().BeFalse();
+            viewModel.IsValid.Should().BeTrue();
             viewModel.Notifications.Should().BeEmpty();
         }
 
@@ -173,7 +173,7 @@ namespace Optsol.Components.Test.Integration.Application
             var viewModelResult = await serviceApplication.GetByIdAsync(updateModel.Id);
             viewModelResult.Should().NotBeNull();
 
-            viewModelResult.Invalid.Should().BeFalse();
+            viewModelResult.IsValid.Should().BeTrue();
             viewModelResult.Notifications.Should().BeEmpty();
 
             viewModelResult.Id.Should().Be(updateModel.Id);
@@ -225,7 +225,7 @@ namespace Optsol.Components.Test.Integration.Application
                     {
                         nameof(InsertTestViewModel.Nome)
                     },
-                    2 //expectedErrosCount
+                    1 //expectedErrosCount
                 };
 
                 yield return new object[]
@@ -254,7 +254,7 @@ namespace Optsol.Components.Test.Integration.Application
                         nameof(InsertTestViewModel.Nome),
                         nameof(InsertTestViewModel.Contato)
                     },
-                    3 //expectedErrosCount
+                    2 //expectedErrosCount
                 };
             }
 
@@ -280,7 +280,7 @@ namespace Optsol.Components.Test.Integration.Application
 
             notificationContext.HasNotifications.Should().BeTrue();
             notificationContext.Notifications.Should().HaveCount(expectedErrosCount);
-            notificationContext.Notifications.Any(a => expectedErrorProperty.Contains(a.Property)).Should().BeTrue();
+            notificationContext.Notifications.Any(a => expectedErrorProperty.Contains(a.Key)).Should().BeTrue();
         }
 
         private class AtualizarRegistrosComFalhasParams : IEnumerable<object[]>
@@ -298,7 +298,7 @@ namespace Optsol.Components.Test.Integration.Application
                     {
                         nameof(UpdateTestViewModel.Nome)
                     },
-                    2 //expectedErrosCount
+                    1 //expectedErrosCount
                 };
 
                 yield return new object[]
@@ -327,7 +327,7 @@ namespace Optsol.Components.Test.Integration.Application
                         nameof(UpdateTestViewModel.Nome),
                         nameof(UpdateTestViewModel.Contato)
                     },
-                    3 //expectedErrosCount
+                    2 //expectedErrosCount
                 };
             }
 
@@ -353,12 +353,11 @@ namespace Optsol.Components.Test.Integration.Application
             Action action = () => serviceApplication.UpdateAsync(viewModel);
 
             //Then
-            //Then
             action.Should().NotThrow();
 
             notificationContext.HasNotifications.Should().BeTrue();
             notificationContext.Notifications.Should().HaveCount(expectedErrosCount);
-            notificationContext.Notifications.Any(a => expectedErrorProperty.Contains(a.Property)).Should().BeTrue();
+            notificationContext.Notifications.Any(a => expectedErrorProperty.Contains(a.Key)).Should().BeTrue();
         }
     }
 }

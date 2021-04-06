@@ -1,4 +1,3 @@
-using Flunt.Validations;
 using Optsol.Components.Application.DataTransferObjects;
 using System;
 
@@ -14,7 +13,7 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
 
         public override void Validate()
         {
-            AddNotifications(new Contract());
+            
         }
     }
 }

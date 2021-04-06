@@ -15,14 +15,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Application
 {
     public class BaseServiceApplicationSpec
     {
-        [Fact]
-        public void Deve_Registrar_Logs_No_Servico()
+        [Trait("Serviço de Aplicação", "Log de Ocorrências")]
+        [Fact(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
+        public async Task Deve_Registrar_Logs_No_Servico()
         {
             //Given
             var entity = new TestEntity();
@@ -74,11 +76,11 @@ namespace Optsol.Components.Test.Unit.Application
                 notificationContextMock.Object);
 
             //When
-            service.GetByIdAsync(entity.Id).ConfigureAwait(false);
-            service.GetAllAsync().ConfigureAwait(false);
-            service.InsertAsync(insertModel).ConfigureAwait(false);
-            service.UpdateAsync(updateModel).ConfigureAwait(false);
-            service.DeleteAsync(entity.Id).ConfigureAwait(false);
+            await service.GetAllAsync();
+            await service.GetByIdAsync(entity.Id);
+            await service.InsertAsync(insertModel);
+            await service.UpdateAsync(updateModel);
+            await service.DeleteAsync(entity.Id);
 
             //Then
             var msgConstructor = $"Inicializando Application Service<{ entity.GetType().Name }, Guid>";

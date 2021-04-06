@@ -1,6 +1,5 @@
-using System;
-using Flunt.Validations;
 using Optsol.Components.Application.DataTransferObjects;
+using System;
 
 namespace Optsol.Playground.Application.ViewModels.CartaoCredito
 {
@@ -15,7 +14,7 @@ namespace Optsol.Playground.Application.ViewModels.CartaoCredito
 
         public override void Validate()
         {
-            AddNotifications(new Contract());
+            
         }
     }
 }
