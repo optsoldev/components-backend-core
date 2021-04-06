@@ -27,9 +27,13 @@ namespace Optsol.Components.Application.Services
 
         Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch) where TSearch : class;
 
-        Task<TEntity> InsertAsync(TInsertData data);
+        Task<TInsertData> InsertAsync(TInsertData data);
 
-        Task<TEntity> UpdateAsync(TUpdateData data);
+        Task<TCustom> InsertAsync<TCustom>(TInsertData data) where TCustom : BaseDataTransferObject;
+
+        Task<TUpdateData> UpdateAsync(TUpdateData data);
+
+        Task<TCustom> UpdateAsync<TCustom>(TUpdateData data) where TCustom : BaseDataTransferObject;
 
         Task DeleteAsync(Guid id);
     }

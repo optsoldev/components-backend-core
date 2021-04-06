@@ -105,7 +105,8 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<SearchResult<TGetAllDto>>(entities);
         }
 
-        public virtual async Task<TEntity> InsertAsync(TInsertData data)
+        public virtual async Task<TCustom> InsertAsync<TCustom>(TInsertData data)
+            where TCustom: BaseDataTransferObject
         {
             if (CheckInvalidFromNotifiable(data))
             {
@@ -126,10 +127,16 @@ namespace Optsol.Components.Application.Services
             await _writeRepository.InsertAsync(entity);
             await CommitAsync();
 
-            return entity;
+            return _mapper.Map<TCustom>(entity);
         }
 
-        public virtual async Task<TEntity> UpdateAsync(TUpdateData data)
+        public virtual Task<TInsertData> InsertAsync(TInsertData data)
+        {
+            return InsertAsync<TInsertData>(data);
+        }
+
+        public virtual async Task<TCustom> UpdateAsync<TCustom>(TUpdateData data)
+            where TCustom : BaseDataTransferObject
         {
             if (CheckInvalidFromNotifiable(data))
             {
@@ -156,7 +163,12 @@ namespace Optsol.Components.Application.Services
             await _writeRepository.UpdateAsync(entity);
             await CommitAsync();
 
-            return entity;
+            return _mapper.Map<TCustom>(entity);
+        }
+
+        public virtual Task<TUpdateData> UpdateAsync(TUpdateData data)
+        {
+            return UpdateAsync<TUpdateData>(data);
         }
 
         public virtual async Task DeleteAsync(Guid id)

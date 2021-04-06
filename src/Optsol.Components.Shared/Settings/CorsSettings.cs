@@ -7,7 +7,7 @@ namespace Optsol.Components.Shared.Settings
     {
         public string DefaultPolicy { get; set; }
 
-        public IEnumerable<Policy> Policies { get; set; }
+        public IEnumerable<CorsPolicy> Policies { get; set; }
 
         public override void Validate()
         {
@@ -19,7 +19,7 @@ namespace Optsol.Components.Shared.Settings
         }
     }
 
-    public class Policy : BaseSettings
+    public class CorsPolicy : BaseSettings
     {
         public string Name { get; set; }
 

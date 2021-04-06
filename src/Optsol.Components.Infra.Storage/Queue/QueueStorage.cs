@@ -31,7 +31,7 @@ namespace Optsol.Components.Infra.Storage.Queue
         {
             await GetQueueClient(message.QueueName);
 
-            return await _queueClient.SendMessageAsync(message.Data.ToJson());
+            return await _queueClient.SendMessageAsync(message.Data.ToJson(new[] { "notifications", "invalid", "valid" }));
         }
 
         public async Task<Response<UpdateReceipt>> UpdateMessageAsync<TData>(UpdateMessageModel<TData> message)

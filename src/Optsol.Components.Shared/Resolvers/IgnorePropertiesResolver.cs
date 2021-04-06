@@ -3,7 +3,7 @@ using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Optsol.Components.Service.Resolver
+namespace Optsol.Components.Shared.Resolvers
 {
     public class IgnorePropertiesResolver : DefaultContractResolver
     {

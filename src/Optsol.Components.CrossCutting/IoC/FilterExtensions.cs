@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json.Serialization;
-using Optsol.Components.Service.Resolver;
+using Optsol.Components.Shared.Resolvers;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
