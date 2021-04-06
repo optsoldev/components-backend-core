@@ -19,6 +19,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 
         private readonly ILogger _logger;
         private readonly IRabbitMQConnection _connection;
+        private readonly string[] IgnoredProperties = new[] { "notifications", "invalid", "valid" };
 
         public EventBusRabbitMQ(ILoggerFactory logger, IRabbitMQConnection connection)
         {
@@ -59,7 +60,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
                             exchange: EXCHANGE_NAME,
                             routingKey: eventName,
                             basicProperties: null,
-                            body: @event.ToJson().ToBytes()
+                            body: @event.ToJson(IgnoredProperties).ToBytes()
                         );
                 });
             }

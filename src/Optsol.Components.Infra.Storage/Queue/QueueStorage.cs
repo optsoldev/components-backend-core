@@ -18,6 +18,8 @@ namespace Optsol.Components.Infra.Storage.Queue
 
         private readonly StorageSettings _storageSettings;
 
+        private readonly string[] IgnoredProperties = new[] { "notifications", "invalid", "valid" };
+
         public QueueStorage(StorageSettings settings, ILoggerFactory logger)
         {
             _storageSettings = settings ?? throw new StorageSettingsNullException(logger);
@@ -31,7 +33,7 @@ namespace Optsol.Components.Infra.Storage.Queue
         {
             await GetQueueClient(message.QueueName);
 
-            return await _queueClient.SendMessageAsync(message.Data.ToJson(new[] { "notifications", "invalid", "valid" }));
+            return await _queueClient.SendMessageAsync(message.Data.ToJson(IgnoredProperties));
         }
 
         public async Task<Response<UpdateReceipt>> UpdateMessageAsync<TData>(UpdateMessageModel<TData> message)
@@ -39,7 +41,7 @@ namespace Optsol.Components.Infra.Storage.Queue
         {
             await GetQueueClient(message.QueueName);
 
-            return await _queueClient.UpdateMessageAsync(message.Message.MessageId, message.Message.PopReceipt, message.Data.ToJson());
+            return await _queueClient.UpdateMessageAsync(message.Message.MessageId, message.Message.PopReceipt, message.Data.ToJson(IgnoredProperties));
         }
 
         public async Task<Response> DeleteMessageAsync<TData>(DeleteMessageModel message)
