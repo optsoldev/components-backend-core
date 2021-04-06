@@ -65,7 +65,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
                 });
             }
         }
-                
+
         public void Subscribe<TEvent>(ReceivedMessage received)
             where TEvent : IEvent
         {
