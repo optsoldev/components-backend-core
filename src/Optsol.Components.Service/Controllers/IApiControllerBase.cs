@@ -1,9 +1,10 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Infra.Data;
+using Optsol.Components.Domain.Pagination;
+using Optsol.Components.Infra.Data.Pagination;
+using System;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Service.Controllers
 {
@@ -17,9 +18,13 @@ namespace Optsol.Components.Service.Controllers
         where TUpdateData : BaseDataTransferObject
     {
         Task<IActionResult> GetAllAsync();
+
         Task<IActionResult> GetByIdAsync(Guid id);
+
         Task<IActionResult> InsertAsync(TInsertData data);
+
         Task<IActionResult> UpdateAsync(TUpdateData data);
+
         Task<IActionResult> DeleteAsync(Guid id);
     }
 
@@ -30,8 +35,8 @@ namespace Optsol.Components.Service.Controllers
         where TGetAllDto : BaseDataTransferObject
         where TInsertData : BaseDataTransferObject
         where TUpdateData : BaseDataTransferObject
-        where TSearch : class, ISearch<TEntity>
+        where TSearch : class
     {
-        Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search);
+        Task<IActionResult> GetAllAsync(ISearchRequest<TSearch> search);
     }
 }

@@ -6,4 +6,7 @@
   <ItemGroup>
     <PackageReference Include="Flunt" Version="1.0.5" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Searches\" />
+  </ItemGroup>
 </Project>

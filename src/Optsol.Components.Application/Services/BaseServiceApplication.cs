@@ -3,8 +3,10 @@ using Flunt.Notifications;
 using Flunt.Validations;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Notifications;
+using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Exceptions;
@@ -95,7 +97,7 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
         }
 
-        public virtual async Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch)
+        public virtual async Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(ISearchRequest<TSearch> requestSearch)
             where TSearch : class
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");

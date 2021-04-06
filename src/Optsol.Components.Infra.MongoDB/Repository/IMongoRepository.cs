@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
+using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.MongoDB.Context;
 
 namespace Optsol.Components.Infra.MongoDB.Repository

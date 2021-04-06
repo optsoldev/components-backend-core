@@ -1,6 +1,6 @@
 using Flunt.Validations;
 using Optsol.Components.Application.DataTransferObjects;
-using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using System;

@@ -1,6 +1,7 @@
 using Flunt.Notifications;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Notifications;
+using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data;
 using System;
 using System.Collections.Generic;
@@ -36,15 +37,13 @@ namespace Optsol.Components.Service.Responses
             return new ResponseList<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
-        public ResponseSearch<TData> Create<TData>(SearchResult<TData> data) 
+        public ResponseSearch<TData> Create<TData>(ISearchResult<TData> data) 
             where TData : BaseDataTransferObject
         {
             var responseSuccess = !_notificationContext.HasNotifications;
 
             return new ResponseSearch<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
-
-        #region private
 
         private bool ResponseSuccess()
         {
@@ -61,7 +60,5 @@ namespace Optsol.Components.Service.Responses
 
             return messages;
         };
-
-        #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿using Optsol.Components.Infra.Data;
+﻿using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Playground.Domain.Entities;
 using System;

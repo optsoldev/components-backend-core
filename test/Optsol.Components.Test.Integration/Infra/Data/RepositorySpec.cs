@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static Optsol.Components.Test.Utils.Seed.Seed;
 
-namespace Optsol.Components.Test.Integration.Infra.Data 
+namespace Optsol.Components.Test.Integration.Infra.Data
 {
     public class RepositorySpec
     {

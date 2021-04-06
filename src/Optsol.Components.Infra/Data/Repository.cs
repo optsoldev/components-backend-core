@@ -8,6 +8,9 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
+using Optsol.Components.Domain.Pagination;
+using Optsol.Components.Domain.Data;
+using Optsol.Components.Infra.Data.Pagination;
 
 namespace Optsol.Components.Infra.Data
 {
@@ -95,7 +98,7 @@ namespace Optsol.Components.Infra.Data
             return querable.AsAsyncEnumerable().AsyncEnumerableToEnumerable();
         }
 
-        public virtual Task<SearchResult<TEntity>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch)
+        public virtual Task<ISearchResult<TEntity>> GetAllAsync<TSearch>(ISearchRequest<TSearch> requestSearch)
             where TSearch : class
         {
             var search = requestSearch.Search as ISearch<TEntity>;
@@ -182,9 +185,7 @@ namespace Optsol.Components.Infra.Data
             GC.SuppressFinalize(this);
         }
 
-        #region private 
-
-        private async Task<SearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
+        private async Task<ISearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
             var searchResult = new SearchResult<TEntity>(page, pageSize);
 
@@ -244,7 +245,5 @@ namespace Optsol.Components.Infra.Data
 
             return query;
         }
-
-        #endregion
     }
 }

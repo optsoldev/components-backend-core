@@ -1,5 +1,6 @@
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Optsol.Components.Application.Services
 
         Task<IEnumerable<TGetAllDto>> GetAllAsync();
 
-        Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch) where TSearch : class;
+        Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(ISearchRequest<TSearch> requestSearch) where TSearch : class;
 
         Task<TInsertData> InsertAsync(TInsertData data);
 
