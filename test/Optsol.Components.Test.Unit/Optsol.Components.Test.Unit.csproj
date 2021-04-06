@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Infra.RabbitMQ\Optsol.Components.Infra.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />
     <ProjectReference Include="..\Optsol.Components.Test.Utils\Optsol.Components.Test.Utils.csproj" />
