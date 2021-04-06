@@ -38,7 +38,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
 
         [Trait("Table Storage", "Queue")]
         [Fact(DisplayName = "Deve enviar uma mensagem para fila", Skip = "azurite local docker test")]
-        public async Task Deve_Criar_Container_Blob_No_Azure_Storage()
+        public async Task Deve_Enviar_Mensagem_Queue_No_Azure_Storage()
         {
             //Given 
             var configuration = new ConfigurationBuilder()
@@ -58,6 +58,9 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             var blobSettings = provider.GetRequiredService<StorageSettings>();
             var queueStorage = provider.GetRequiredService<IQueueStorage>();
 
+            var mensagemGerada = string.Format("Olá {0}. Sua consulta foi agendada para o dia {1:dd/MM/yyyy 'às' HH:mm:ss}, quando chegar o dia acesse o portal através deste link: {2}", "Weslley Carneiro", DateTime.Now, "https://wwww.optsol.com.br");
+            viewModel.Nome = mensagemGerada;
+
             var messageModel = new SendMessageModel<TestViewModel>
             {
                 QueueName = "teste-queue",
@@ -65,7 +68,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             };
 
             //When 
-            var containerExiteNoAzureStorage = await queueStorage.SendMessageAsync(messageModel);
+            var containerExiteNoAzureStorage = await queueStorage.SendMessageBase64Async(messageModel);
 
             //Then
             blobSettings.Should().NotBeNull();

@@ -20,4 +20,14 @@ namespace Optsol.Components.Test.Utils.ViewModels
             AddNotifications(new TestViewModelContract(this));
         }
     }
+
+    public class EnviarWhatsDto
+    {
+        public EnviarWhatsDto()
+        {
+
+        }
+
+        public string Mensagem { get; set; }
+    }
 }

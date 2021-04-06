@@ -26,5 +26,6 @@ namespace Optsol.Components.Shared.Extensions
 
             return JsonConvert.SerializeObject(source, Formatting.Indented, settings);
         }
+
     }
 }

@@ -12,6 +12,9 @@ namespace Optsol.Components.Infra.Storage.Queue
         Task<Response<SendReceipt>> SendMessageAsync<TData>(SendMessageModel<TData> message) 
             where TData : class;
 
+        Task<Response<SendReceipt>> SendMessageBase64Async<TData>(SendMessageModel<TData> message)
+            where TData : class;
+
         Task<Response<UpdateReceipt>> UpdateMessageAsync<TData>(UpdateMessageModel<TData> message)
             where TData : class;
 
