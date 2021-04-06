@@ -15,7 +15,7 @@ namespace Optsol.Components.Test.Unit.Infra.Bus
     public class EventBusRabbitMQSpec
     {
         [Trait("Bus", "RabbitMQ")]
-        [Fact(DisplayName = "Deve Testar")]
+        [Fact(DisplayName = "Deve Testar", Skip = "Teste")]
         public void DeveTestar()
         {
             //Given
