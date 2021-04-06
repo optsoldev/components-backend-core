@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.MongoDB.Context;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
@@ -40,15 +39,22 @@ namespace Optsol.Components.Infra.MongoDB.Repository
             return entity.SingleOrDefault();
         }
 
-        public virtual Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ids:[{ string.Join(",", ids) }}}]) Retorno: type { typeof(TEntity).Name }");
+
+            var entity = await Set.FindAsync(Builders<TEntity>.Filter.All("_id", ids));
+
+            return await entity.ToListAsync().AsyncCursorToAsyncEnumerable();
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IAsyncEnumerable<{ typeof(TEntity).Name }>");
 
-            var entities = Set.FindAsync(Builders<TEntity>.Filter.Empty)
-                .GetAwaiter()
-                .GetResult();
+            var entities = await Set.FindAsync(Builders<TEntity>.Filter.Empty);
 
-            return entities.ToListAsync().AsyncCursorToAsyncEnumerable();
+            return await entities.ToListAsync().AsyncCursorToAsyncEnumerable();
         }
 
         public virtual Task InsertAsync(TEntity entity)
@@ -103,11 +109,6 @@ namespace Optsol.Components.Infra.MongoDB.Repository
         {
             Context.Dispose();
             GC.SuppressFinalize(this);
-        }
-
-        public Task<SearchResult<TEntity>> GetAllAsync<TSearch>(SearchRequest<TSearch> requestSearch) where TSearch : class
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,9 @@
-using System.Linq;
+using Optsol.Components.Domain.Entities;
+using Optsol.Playground.Domain.Validators;
+using Optsol.Playground.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;
-using Flunt.Validations;
-using Optsol.Components.Domain.Entities;
-using Optsol.Playground.Domain.ValueObjects;
+using System.Linq;
 
 namespace Optsol.Playground.Domain.Entities
 {
@@ -15,10 +15,10 @@ namespace Optsol.Playground.Domain.Entities
 
         public bool Ativo { get; private set; }
 
-        public bool PossuiCartao 
-        { 
-            get 
-            { 
+        public bool PossuiCartao
+        {
+            get
+            {
                 return ExisteCartoesValidos();
             }
         }
@@ -47,21 +47,18 @@ namespace Optsol.Playground.Domain.Entities
 
         public override void Validate()
         {
-            base.Validate();
-
-            AddNotifications(new Contract()
-                .Requires()
-                .IsNotNull(Nome, "Nome", "O Nome não pode ser nulo")
-                .IsNotNull(Email, "Email", "O Email não pode ser nulo"));
+            AddNotifications(new ClienteEntityContract(this));
 
             AddNotifications(Nome, Email);
+            
+            base.Validate();
         }
 
         public ClienteEntity AdicionarCartao(CartaoCreditoEntity cartaoCreditoEntity)
         {
             cartaoCreditoEntity.Validate();
-            if(cartaoCreditoEntity.Valid)
-                this.Cartoes.Add(cartaoCreditoEntity);
+            if (cartaoCreditoEntity.IsValid)
+                Cartoes.Add(cartaoCreditoEntity);
 
             AddNotifications(cartaoCreditoEntity);
 

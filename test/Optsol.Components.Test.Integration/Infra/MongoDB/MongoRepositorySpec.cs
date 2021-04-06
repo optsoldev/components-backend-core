@@ -114,7 +114,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
 
             //Then
             var entityResult = await readRepository.GetByIdAsync(entity.Id);
-            entityResult.Invalid.Should().BeFalse();
+            entityResult.IsValid.Should().BeTrue();
             entityResult.Notifications.Should().HaveCount(0);
             entityResult.Should().NotBeNull();
             entityResult.Nome.ToString().Should().Be(entity.Nome.ToString());
@@ -152,7 +152,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             var entityResult = await testReadRepository.GetByIdAsync(entity.Id);
             entityResult.Should().NotBeNull();
 
-            entityResult.Invalid.Should().BeFalse();
+            entityResult.IsValid.Should().BeTrue();
             entityResult.Notifications.Should().BeEmpty();
 
             entityResult.Nome.ToString().Should().Be(updateEntity.Nome.ToString());

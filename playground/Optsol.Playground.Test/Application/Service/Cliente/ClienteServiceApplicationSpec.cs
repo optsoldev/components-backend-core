@@ -72,7 +72,7 @@ namespace Optsol.Playground.Test
             cliente.Email.Email.Should().Be(insertClienteViewModel.Email);
             cliente.PossuiCartao.Should().BeFalse();
             cliente.Ativo.Should().BeFalse();
-            cliente.Valid.Should().BeTrue();
+            cliente.IsValid.Should().BeTrue();
 
         }
 
@@ -115,7 +115,7 @@ namespace Optsol.Playground.Test
             cartao.CodigoVerificacao.Should().Be(insertCartaoCreditoViewModel.CodigoVerificacao);
             cartao.Validade.Should().Be(insertCartaoCreditoViewModel.Validade);
             cartao.Valido.Should().BeTrue();
-            cartao.Valid.Should().BeTrue();
+            cartao.IsValid.Should().BeTrue();
         }
     }
 }

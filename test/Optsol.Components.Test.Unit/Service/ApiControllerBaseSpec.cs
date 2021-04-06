@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Shared.Extensions;

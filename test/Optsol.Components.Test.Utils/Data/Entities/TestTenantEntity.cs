@@ -1,5 +1,6 @@
 ﻿using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Test.Utils.Contracts;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using System;
 
@@ -44,23 +45,11 @@ namespace Optsol.Components.Test.Utils.Data.Entities
 
         public override void Validate()
         {
-            base.Validate();
-
-            AddNotifications(new Contract()
-                .Requires()
-                .IsNotNull(Nome, "Nome", "O Nome não pode ser nulo")
-                .IsNotNull(Email, "Email", "O Email não pode ser nulo")
-                );
-
-            var tenantIdIsNullOrEmpty = TenantId == Guid.Empty;
-            if (tenantIdIsNullOrEmpty)
-                AddNotification(nameof(TenantId), "O Tenant Id não pode ser nulo");
-
-            if (Invalid)
-                return;
+            AddNotifications(new TestTenantEntityContract(this));
 
             AddNotifications(Nome, Email);
 
+            base.Validate();
         }
 
         public void SetTenantId(Guid tenantId)

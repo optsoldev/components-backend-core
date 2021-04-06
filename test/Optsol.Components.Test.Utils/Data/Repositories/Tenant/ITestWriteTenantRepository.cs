@@ -1,4 +1,4 @@
-﻿using Optsol.Components.Infra.Data;
+﻿using Optsol.Components.Domain.Data;
 using Optsol.Components.Test.Utils.Data.Entities;
 using System;
 

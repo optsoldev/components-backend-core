@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 using Xunit;
 using static Optsol.Components.Test.Utils.Seed.Seed;
 
-namespace Optsol.Components.Test.Integration.Infra.Data 
+namespace Optsol.Components.Test.Integration.Infra.Data
 {
     public class RepositorySpec
     {
@@ -345,7 +345,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
             //Then
             var entityResult = await testReadRepository.GetByIdAsync(entity.Id);
-            entityResult.Invalid.Should().BeFalse();
+            entityResult.IsValid.Should().BeTrue();
             entityResult.Notifications.Should().HaveCount(0);
             entityResult.Should().NotBeNull();
             entityResult.Nome.ToString().Should().Be(entity.Nome.ToString());
@@ -378,7 +378,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             var entityResult = await testReadRepository.GetByIdAsync(entity.Id);
             entityResult.Should().NotBeNull();
 
-            entityResult.Invalid.Should().BeFalse();
+            entityResult.IsValid.Should().BeTrue();
             entityResult.Notifications.Should().BeEmpty();
 
             entityResult.Nome.ToString().Should().Be(updateEntity.Nome.ToString());
@@ -527,7 +527,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             await unitOfWork.CommitAsync();
 
             //Then
-            entity.Valid.Should().BeFalse();
+            entity.IsValid.Should().BeFalse();
             entity.Notifications.Should().NotBeEmpty();
 
             var result = await testReadRepository.GetByIdAsync(tenantId);

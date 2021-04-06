@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Optsol.Components.Application.Services;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
@@ -85,8 +84,7 @@ namespace Optsol.Components.Test.Integration.Service
             resultObj.Failure.Should().BeFalse();
             resultObj.Messages.Should().BeEmpty();
             resultObj.Data.Should().NotBeNull();
-            resultObj.Data.All(a => a.Valid).Should().BeTrue();
-            resultObj.Data.All(a => a.Invalid).Should().BeFalse();
+            resultObj.Data.All(a => a.IsValid).Should().BeTrue();
             resultObj.Data.SelectMany(s => s.Notifications).Should().BeEmpty();
             resultObj.Data.Should().HaveCount(3);
             resultObj.Data.Any(a => a.Id == entity.Id).Should().BeTrue();

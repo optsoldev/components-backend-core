@@ -1,8 +1,8 @@
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.Services;
+using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Notifications;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using System;

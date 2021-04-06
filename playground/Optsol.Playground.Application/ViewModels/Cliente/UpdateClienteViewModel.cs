@@ -1,6 +1,6 @@
-using System;
-using Flunt.Validations;
 using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Playground.Application.Validators;
+using System;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
 {
@@ -18,14 +18,7 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
 
         public override void Validate()
         {
-            AddNotifications(new Contract()
-                .Requires()
-                .HasMinLen(Nome, 3, $"{nameof(UpdateClienteViewModel.Nome)}", "O nome deve ter no mínino 3 caracteres")
-                .HasMaxLen(Nome, 70, $"{nameof(UpdateClienteViewModel.Nome)}", "O nome deve ter no máximo 35 caracteres")
-                .HasMinLen(SobreNome, 3, $"{nameof(UpdateClienteViewModel.SobreNome)}", "O sobrenome deve ter no mínino 3 caracteres")
-                .HasMaxLen(SobreNome, 70, $"{nameof(UpdateClienteViewModel.SobreNome)}", "O sobrenome deve ter no máximo 35 caracteres")
-                .IsEmail(Email, $"{nameof(UpdateClienteViewModel.Email)}", "O campo email deve ser do tipo email")
-            );
+            AddNotifications(new UpdateClienteViewModelContract(this));
         }
 
     }

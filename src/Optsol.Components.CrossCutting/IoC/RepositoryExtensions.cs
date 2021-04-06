@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Optsol.Components.Domain.Data;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Infra.UoW;
