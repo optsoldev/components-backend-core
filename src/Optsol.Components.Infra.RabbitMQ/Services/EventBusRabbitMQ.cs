@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Flunt.Notifications;
+using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Bus.Delegates;
 using Optsol.Components.Infra.Bus.Events;
 using Optsol.Components.Infra.Bus.Services;
@@ -19,7 +20,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 
         private readonly ILogger _logger;
         private readonly IRabbitMQConnection _connection;
-        private readonly string[] IgnoredProperties = new[] { "notifications", "invalid", "valid" };
+        private readonly string[] IgnoredProperties = new[] { "notifications", "isvalid" };
 
         public EventBusRabbitMQ(ILoggerFactory logger, IRabbitMQConnection connection)
         {
