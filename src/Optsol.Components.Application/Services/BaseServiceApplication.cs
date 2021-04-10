@@ -133,9 +133,9 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<TCustom>(entity);
         }
 
-        public virtual Task<TInsertData> InsertAsync(TInsertData data)
+        public virtual Task<BaseDataTransferObject> InsertAsync(TInsertData data)
         {
-            return InsertAsync<TInsertData>(data);
+            return InsertAsync<BaseDataTransferObject>(data);
         }
 
         public virtual async Task<TCustom> UpdateAsync<TCustom>(TUpdateData data)
@@ -171,9 +171,9 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<TCustom>(entity);
         }
 
-        public virtual Task<TUpdateData> UpdateAsync(TUpdateData data)
+        public virtual Task<BaseDataTransferObject> UpdateAsync(TUpdateData data)
         {
-            return UpdateAsync<TUpdateData>(data);
+            return UpdateAsync<BaseDataTransferObject>(data);
         }
 
         public virtual async Task DeleteAsync(Guid id)
