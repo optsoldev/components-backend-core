@@ -64,7 +64,7 @@ namespace Optsol.Components.Application.Services
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
         }
 
-        public async Task<TGetByIdDto> GetByIdAsync<TGetByIdDto>(Guid id) 
+        public virtual async Task<TGetByIdDto> GetByIdAsync<TGetByIdDto>(Guid id)
             where TGetByIdDto : BaseDataTransferObject
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetByIdDto).Name }");
