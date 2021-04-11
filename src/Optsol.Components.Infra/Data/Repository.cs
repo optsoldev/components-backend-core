@@ -11,25 +11,53 @@ using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Domain.Data;
 using Optsol.Components.Infra.Data.Pagination;
+using Optsol.Components.Infra.Data.Provider;
+using System.Reflection;
 
 namespace Optsol.Components.Infra.Data
 {
     public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>, IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
-        private ILogger _logger;
+        private readonly ILogger _logger;
+
+        private readonly ITenantProvider<TKey> _tenantProvider;
 
         public CoreContext Context { get; protected set; }
 
         public DbSet<TEntity> Set { get; protected set; }
 
-        public Repository(CoreContext context, ILoggerFactory logger)
+        public Repository(CoreContext context, ILoggerFactory logger, ITenantProvider<TKey> tenantProvider = null)
         {
             _logger = logger.CreateLogger(nameof(Repository<TEntity, TKey>));
             _logger?.LogInformation($"Inicializando Repository<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");
 
             Context = context ?? throw new DbContextNullException();
             this.Set = context.Set<TEntity>();
+
+
+            _tenantProvider = tenantProvider;
+            ValidateTentatProvider();
+        }
+
+        private void ValidateTentatProvider()
+        {
+            TypeFilter filter = new(InterfaceFilter);
+
+            var fullName = $"{typeof(ITenant<TKey>).Namespace}.{typeof(ITenant<TKey>).Name}";
+            var tentantProviderInvalid = typeof(TEntity).FindInterfaces(filter, fullName).Any() && _tenantProvider == null;
+            if (tentantProviderInvalid)
+            {
+                throw new ArgumentNullException(nameof(_tenantProvider));
+            }
+        }
+
+        private static bool InterfaceFilter(Type typeObj, Object criteriaObj)
+        {
+            if (typeObj.ToString() == criteriaObj.ToString())
+                return true;
+            else
+                return false;
         }
 
         public virtual Task<TEntity> GetByIdAsync(TKey id)
@@ -39,14 +67,14 @@ namespace Optsol.Components.Infra.Data
             return Set.FindAsync(id).AsTask();
         }
 
-        public Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids)
+        public virtual Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ ids:[{ string.Join(",", ids) }]}} ) Retorno: type { typeof(TEntity).Name }");
 
             return Set.Where(a => ids.Contains(a.Id)).AsAsyncEnumerable().AsyncEnumerableToEnumerable();
         }
 
-        public Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes)
+        public virtual Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ ids:[{ string.Join(",", ids) }]}} ) Retorno: type { typeof(TEntity).Name }");
 
@@ -66,7 +94,7 @@ namespace Optsol.Components.Infra.Data
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ id:{ id } }} ) Retorno: type { typeof(TEntity).Name }");
 
             var querable = Set.AsQueryable();
-            
+
             var hasInclude = Includes != null;
             if (hasInclude)
             {
@@ -119,6 +147,12 @@ namespace Optsol.Components.Infra.Data
         public virtual Task InsertAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }( {{entity:{ entity.ToJson() }}} )");
+
+            var entityIsITenant = entity is ITenant<TKey>;
+            if (entityIsITenant)
+            {
+                ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
+            }
 
             return Set.AddAsync(entity).AsTask();
         }
@@ -179,17 +213,18 @@ namespace Optsol.Components.Infra.Data
             return Context.SaveChangesAsync();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Context.Dispose();
             GC.SuppressFinalize(this);
         }
 
-        private async Task<ISearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
+        private static async Task<ISearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
-            var searchResult = new SearchResult<TEntity>(page, pageSize);
-
-            searchResult.Total = await query.CountAsync();
+            var searchResult = new SearchResult<TEntity>(page, pageSize)
+            {
+                Total = await query.CountAsync()
+            };
 
             query = ApplyPagination(query, page, pageSize);
 
@@ -199,7 +234,7 @@ namespace Optsol.Components.Infra.Data
             return searchResult;
         }
 
-        private IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize)
+        private static IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize)
         {
             var skip = --page * (pageSize ?? 0);
 
@@ -213,7 +248,7 @@ namespace Optsol.Components.Infra.Data
             return query;
         }
 
-        private IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> search = null)
+        private static IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> search = null)
         {
             var searchIsNotNull = search != null;
             if (searchIsNotNull)
@@ -224,7 +259,7 @@ namespace Optsol.Components.Infra.Data
             return query;
         }
 
-        private IQueryable<TEntity> ApplyInclude(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
+        private static IQueryable<TEntity> ApplyInclude(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
             var includesIsNotNull = includes != null;
             if (includesIsNotNull)
@@ -235,7 +270,7 @@ namespace Optsol.Components.Infra.Data
             return query;
         }
 
-        private IQueryable<TEntity> ApplyOrderBy(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        private static IQueryable<TEntity> ApplyOrderBy(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             var orderByIsNotNull = orderBy != null;
             if (orderByIsNotNull)
