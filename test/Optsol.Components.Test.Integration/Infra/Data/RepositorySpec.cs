@@ -570,16 +570,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
                     tenants[2].Host,
                     3
                 };
-                yield return new object[] //Invalido
-                {
-                    new []
-                    {
-                        new TestTenantEntity (Guid.NewGuid(), new NomeValueObject("Tarik", "Oneal"), new EmailValueObject("semper.pretium.neque@malesuada.net")),
-                        new TestTenantEntity (Guid.NewGuid(), new NomeValueObject("Baxter", "Sexton"), new EmailValueObject("lacus@Aliquamgravida.co.uk"))
-                    },
-                    tenants[2].Host,
-                    0 //expectedEntityInTenant
-                };
             }
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -592,16 +582,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
         {
             //Given
             var provider = GetProviderConfiguredServicesFromTenantContext(tenantHost)
-                .CreateTenantTestEntitySeedInContext(0, (testTenantEntityList, tenantEntityList) =>
-                {
-                    foreach (var entity in entities)
-                    {
-                        if (expectedEntityInTenant != 0)
-                            entity.SetTenantId(tenantEntityList.First(f => f.Host == tenantHost).Id);
-                        else
-                            entity.SetTenantId(tenantEntityList.First(f => f.Host != tenantHost).Id);
-                    }
-                });
+                .CreateTenantTestEntitySeedInContext(0);
 
             var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
             var testWriteRepository = provider.GetRequiredService<ITestTenantWriteRepository>();

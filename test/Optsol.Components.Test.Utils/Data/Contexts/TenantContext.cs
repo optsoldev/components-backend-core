@@ -3,6 +3,7 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Test.Utils.Data.Configurations;
 using Optsol.Components.Test.Utils.Data.Entities;
+using System;
 
 namespace Optsol.Components.Test.Utils.Data.Contexts
 {
