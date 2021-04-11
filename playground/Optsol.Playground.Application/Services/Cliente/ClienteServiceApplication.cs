@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Playground.Application.Services.Cliente
 {
-    public class ClienteServiceApplication : BaseServiceApplication<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel>, IClienteServiceApplication
+    public class ClienteServiceApplication : BaseServiceApplication<ClienteEntity>, IClienteServiceApplication
     {
         protected readonly IClienteReadRepository _clienteReadRepository;
         protected readonly IClienteWriteRepository _clienteWriteRepository;

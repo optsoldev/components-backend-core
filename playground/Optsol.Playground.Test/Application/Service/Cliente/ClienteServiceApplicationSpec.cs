@@ -59,7 +59,7 @@ namespace Optsol.Playground.Test
             insertClienteViewModel.Email = "weslley@outlook.com";
 
             //When
-            await clienteServiceApplication.InsertAsync(insertClienteViewModel);
+            await clienteServiceApplication.InsertAsync<InsertClienteViewModel, InsertClienteViewModel>(insertClienteViewModel);
 
             //Then
             var clienteReadRepository = _serviceProvider.GetRequiredService<IClienteReadRepository>();

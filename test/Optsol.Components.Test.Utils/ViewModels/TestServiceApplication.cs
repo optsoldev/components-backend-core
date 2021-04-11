@@ -9,7 +9,7 @@ using System;
 
 namespace Optsol.Components.Test.Utils.ViewModels
 {
-    public class TestServiceApplication : BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>, ITestServiceApplication
+    public class TestServiceApplication : BaseServiceApplication<TestEntity>, ITestServiceApplication
     {
         public TestServiceApplication(
             IMapper mapper,

@@ -37,14 +37,8 @@ namespace Optsol.Components.Application.Services
         public virtual void Dispose() { }
     }
 
-    public class BaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> : BaseServiceApplication,
-        IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+    public class BaseServiceApplication<TEntity> : BaseServiceApplication, IBaseServiceApplication<TEntity>
         where TEntity : AggregateRoot
-        where TGetByIdDto : BaseDataTransferObject
-        where TGetAllDto : BaseDataTransferObject
-        where TInsertData : BaseDataTransferObject
-        where TUpdateData : BaseDataTransferObject
-
     {
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
@@ -70,7 +64,8 @@ namespace Optsol.Components.Application.Services
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
         }
 
-        public virtual async Task<TGetByIdDto> GetByIdAsync(Guid id)
+        public async Task<TGetByIdDto> GetByIdAsync<TGetByIdDto>(Guid id) 
+            where TGetByIdDto : BaseDataTransferObject
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetByIdDto).Name }");
 
@@ -79,7 +74,8 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<TGetByIdDto>(entity);
         }
 
-        public virtual async Task<IEnumerable<TGetByIdDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+        public virtual async Task<IEnumerable<TGetByIdDto>> GetByIdsAsync<TGetByIdDto>(IEnumerable<Guid> ids)
+            where TGetByIdDto : BaseDataTransferObject
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdsAsync) }({{ id:{ ids } }}) Retorno: type { typeof(TGetByIdDto).Name }");
 
@@ -88,7 +84,8 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<IEnumerable<TGetByIdDto>>(entity);
         }
 
-        public virtual async Task<IEnumerable<TGetAllDto>> GetAllAsync()
+        public virtual async Task<IEnumerable<TGetAllDto>> GetAllAsync<TGetAllDto>()
+            where TGetAllDto : BaseDataTransferObject
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
 
@@ -97,8 +94,9 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
         }
 
-        public virtual async Task<SearchResult<TGetAllDto>> GetAllAsync<TSearch>(ISearchRequest<TSearch> requestSearch)
+        public virtual async Task<ISearchResult<TGetAllDto>> GetAllAsync<TGetAllDto, TSearch>(ISearchRequest<TSearch> requestSearch)
             where TSearch : class
+            where TGetAllDto : BaseDataTransferObject
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
 
@@ -107,8 +105,9 @@ namespace Optsol.Components.Application.Services
             return _mapper.Map<SearchResult<TGetAllDto>>(entities);
         }
 
-        public virtual async Task<TCustom> InsertAsync<TCustom>(TInsertData data)
-            where TCustom: BaseDataTransferObject
+        public async virtual Task<TResponseInsertData> InsertAsync<TInsertData, TResponseInsertData>(TInsertData data)
+            where TInsertData : BaseDataTransferObject
+            where TResponseInsertData : class
         {
             data.Validate();
             if (CheckInvalidFromNotifiable(data))
@@ -130,16 +129,12 @@ namespace Optsol.Components.Application.Services
             await _writeRepository.InsertAsync(entity);
             await CommitAsync();
 
-            return _mapper.Map<TCustom>(entity);
+            return _mapper.Map<TResponseInsertData>(entity);
         }
 
-        public virtual Task<BaseDataTransferObject> InsertAsync(TInsertData data)
-        {
-            return InsertAsync<BaseDataTransferObject>(data);
-        }
-
-        public virtual async Task<TCustom> UpdateAsync<TCustom>(TUpdateData data)
-            where TCustom : BaseDataTransferObject
+        public async virtual Task<TResponseUpdateData> UpdateAsync<TUpdateData, TResponseUpdateData>(TUpdateData data)
+            where TUpdateData : BaseDataTransferObject
+            where TResponseUpdateData : class
         {
             data.Validate();
             if (CheckInvalidFromNotifiable(data))
@@ -168,12 +163,7 @@ namespace Optsol.Components.Application.Services
             await _writeRepository.UpdateAsync(entity);
             await CommitAsync();
 
-            return _mapper.Map<TCustom>(entity);
-        }
-
-        public virtual Task<BaseDataTransferObject> UpdateAsync(TUpdateData data)
-        {
-            return UpdateAsync<BaseDataTransferObject>(data);
+            return _mapper.Map<TResponseUpdateData>(entity);
         }
 
         public virtual async Task DeleteAsync(Guid id)

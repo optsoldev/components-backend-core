@@ -14,7 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddApplications<TInterface, TImplementation>(this IServiceCollection services, params string[] namespaces)
         {
             services.RegisterScoped<TInterface, TImplementation>(namespaces);
-            services.AddScoped(typeof(IBaseServiceApplication<,,,,>), typeof(BaseServiceApplication<,,,,>));
+            services.AddScoped(typeof(IBaseServiceApplication<>), typeof(BaseServiceApplication<>));
 
             return services;
         }

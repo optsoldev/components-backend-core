@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data.Pagination;
 using System;
 using System.Threading.Tasks;
@@ -37,6 +36,18 @@ namespace Optsol.Components.Service.Controllers
         where TUpdateData : BaseDataTransferObject
         where TSearch : class
     {
-        Task<IActionResult> GetAllAsync(ISearchRequest<TSearch> search);
+        Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search);
+    }
+
+    public interface IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TResponseInsertData, TUpdateData, TResponseUpdateData> :
+        IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+        where TEntity : AggregateRoot
+        where TGetByIdDto : BaseDataTransferObject
+        where TGetAllDto : BaseDataTransferObject
+        where TInsertData : BaseDataTransferObject
+        where TResponseInsertData : BaseDataTransferObject
+        where TUpdateData : BaseDataTransferObject
+        where TResponseUpdateData : BaseDataTransferObject
+    {
     }
 }
