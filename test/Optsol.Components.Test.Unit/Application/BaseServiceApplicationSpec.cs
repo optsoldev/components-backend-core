@@ -63,11 +63,11 @@ namespace Optsol.Components.Test.Unit.Application
 
             var notificationContextMock = new Mock<NotificationContext>();
 
-            var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
+            var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
             var loggerFactoryMock = new Mock<ILoggerFactory>();
             loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
-            var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
+            var service = new BaseServiceApplication<TestEntity>(
                 mapperMock.Object,
                 loggerFactoryMock.Object,
                 unitOfWork.Object,
@@ -76,10 +76,10 @@ namespace Optsol.Components.Test.Unit.Application
                 notificationContextMock.Object);
 
             //When
-            await service.GetAllAsync();
-            await service.GetByIdAsync(entity.Id);
-            await service.InsertAsync(insertModel);
-            await service.UpdateAsync(updateModel);
+            await service.GetAllAsync<TestViewModel>();
+            await service.GetByIdAsync<TestViewModel>(entity.Id);
+            await service.InsertAsync<InsertTestViewModel, InsertTestViewModel>(insertModel);
+            await service.UpdateAsync<UpdateTestViewModel, UpdateTestViewModel>(updateModel);
             await service.DeleteAsync(entity.Id);
 
             //Then
@@ -131,7 +131,7 @@ namespace Optsol.Components.Test.Unit.Application
         [Trait("Serviço de Aplicação", "Log de Ocorrências")]
         [Theory(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
         [ClassData(typeof(ObterTodosParams))]
-        public void Deve_Registrar_Logs_No_Servico_Ao_Obter_Todos_Registros(IEnumerable<TestEntity> entities, IEnumerable<TestViewModel> viewModels)
+        public async Task Deve_Registrar_Logs_No_Servico_Ao_Obter_Todos_Registros(IEnumerable<TestEntity> entities, IEnumerable<TestViewModel> viewModels)
         {
             //Given
             var mapperMock = new Mock<IMapper>();
@@ -147,11 +147,11 @@ namespace Optsol.Components.Test.Unit.Application
 
             var notificationContextMock = new Mock<NotificationContext>();
 
-            var logger = new XunitLogger<BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>>();
+            var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
             var loggerFactoryMock = new Mock<ILoggerFactory>();
             loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
-            var service = new BaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel>(
+            var service = new BaseServiceApplication<TestEntity>(
                 mapperMock.Object,
                 loggerFactoryMock.Object,
                 unitOfWork.Object,
@@ -160,7 +160,7 @@ namespace Optsol.Components.Test.Unit.Application
                 notificationContextMock.Object);
 
             //When
-            service.GetAllAsync().ConfigureAwait(false);
+            await service.GetAllAsync<TestViewModel>();
 
             //Then
             var msgConstructor = $"Inicializando Application Service<{ nameof(TestEntity) }, Guid>";

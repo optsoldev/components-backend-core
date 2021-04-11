@@ -15,7 +15,7 @@ namespace Optsol.Components.Test.Utils.Service
     {
         public TestController(
             ILoggerFactory logger, 
-            IBaseServiceApplication<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel> serviceApplication,
+            IBaseServiceApplication<TestEntity> serviceApplication,
             IResponseFactory responseFactory) : base(logger, serviceApplication, responseFactory)
         {
         }

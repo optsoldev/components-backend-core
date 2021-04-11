@@ -80,11 +80,11 @@ namespace Optsol.Components.Service.Controllers
         where TUpdateData : BaseDataTransferObject
     {
         protected readonly ILogger _logger;
-        protected readonly IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> _serviceApplication;
+        protected readonly IBaseServiceApplication<TEntity> _serviceApplication;
 
         public ApiControllerBase(
             ILoggerFactory logger,
-            IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> serviceApplication,
+            IBaseServiceApplication<TEntity> serviceApplication,
             IResponseFactory responseFactory) : base(responseFactory)
         {
             _logger = logger.CreateLogger(nameof(ApiControllerBase));
@@ -100,7 +100,7 @@ namespace Optsol.Components.Service.Controllers
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }})");
 
-            var viewModelOfResultService = await _serviceApplication.GetByIdAsync(id);
+            var viewModelOfResultService = await _serviceApplication.GetByIdAsync<TGetByIdDto>(id);
 
             return CreateResult(viewModelOfResultService);
         }
@@ -112,7 +112,7 @@ namespace Optsol.Components.Service.Controllers
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IActionResult");
 
-            var viewModelsOfResultService = await _serviceApplication.GetAllAsync();
+            var viewModelsOfResultService = await _serviceApplication.GetAllAsync<TGetAllDto>();
 
             return CreateResult(viewModelsOfResultService);
         }
@@ -128,7 +128,7 @@ namespace Optsol.Components.Service.Controllers
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
 
-            await _serviceApplication.InsertAsync(data);
+            await _serviceApplication.InsertAsync<TInsertData, TInsertData>(data);
 
             return CreateResult();
         }
@@ -144,7 +144,7 @@ namespace Optsol.Components.Service.Controllers
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
 
-            await _serviceApplication.UpdateAsync(data);
+            await _serviceApplication.UpdateAsync<TUpdateData, TUpdateData>(data);
 
             return CreateResult();
 
@@ -164,7 +164,7 @@ namespace Optsol.Components.Service.Controllers
     }
 
     [ValidationModel]
-    public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> : 
+    public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> :
         ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>,
         IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>
         where TEntity : AggregateRoot
@@ -176,7 +176,41 @@ namespace Optsol.Components.Service.Controllers
     {
         public ApiControllerBase(
             ILoggerFactory logger,
-            IBaseServiceApplication<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> serviceApplication,
+            IBaseServiceApplication<TEntity> serviceApplication,
+            IResponseFactory responseFactory) : base(logger, serviceApplication, responseFactory)
+        {
+
+        }
+
+        [HttpPost("paginated")]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [ProducesResponseType(200)]
+        public virtual async Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search)
+        {
+            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }({ search.ToJson() }) Retorno: IActionResult");
+
+            var viewModelsOfResultService = await _serviceApplication.GetAllAsync<TGetAllDto, TSearch>(search);
+
+            return CreateResult(viewModelsOfResultService);
+        }
+    }
+
+    [ValidationModel]
+    public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TResponseInsertData, TUpdateData, TResponseUpdateData, TSearch> :
+        ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>,
+        IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+        where TEntity : AggregateRoot
+        where TGetByIdDto : BaseDataTransferObject
+        where TGetAllDto : BaseDataTransferObject
+        where TInsertData : BaseDataTransferObject
+        where TResponseInsertData : BaseDataTransferObject
+        where TUpdateData : BaseDataTransferObject
+        where TResponseUpdateData : BaseDataTransferObject
+        where TSearch : class
+    {
+        public ApiControllerBase(
+            ILoggerFactory logger,
+            IBaseServiceApplication<TEntity> serviceApplication,
             IResponseFactory responseFactory) : base(logger, serviceApplication, responseFactory)
         {
 
@@ -189,9 +223,35 @@ namespace Optsol.Components.Service.Controllers
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }({ search.ToJson() }) Retorno: IActionResult");
 
-            var viewModelsOfResultService = await _serviceApplication.GetAllAsync(search);
+            var viewModelsOfResultService = await _serviceApplication.GetAllAsync<TGetAllDto, TSearch>(search);
 
             return CreateResult(viewModelsOfResultService);
+        }
+
+
+        public override async Task<IActionResult> InsertAsync([FromBody] TInsertData data)
+        {
+            if (data == null)
+                return NoContent();
+
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
+
+            await _serviceApplication.InsertAsync<TInsertData, TResponseInsertData>(data);
+
+            return CreateResult();
+        }
+
+
+        public override async Task<IActionResult> UpdateAsync([FromBody] TUpdateData data)
+        {
+            if (data == null)
+                return NoContent();
+
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
+
+            await _serviceApplication.UpdateAsync<TUpdateData, TResponseUpdateData>(data);
+
+            return CreateResult();
         }
     }
 }

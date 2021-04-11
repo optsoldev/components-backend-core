@@ -46,7 +46,7 @@ namespace Optsol.Components.Test.Integration.Application
             var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            var viewModels = await serviceApplication.GetAllAsync();
+            var viewModels = await serviceApplication.GetAllAsync<TestViewModel>();
 
             //Then
             viewModels.Should().NotBeEmpty();
@@ -71,7 +71,7 @@ namespace Optsol.Components.Test.Integration.Application
             var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            var viewModel = await serviceApplication.GetByIdAsync(entity.Id);
+            var viewModel = await serviceApplication.GetByIdAsync<TestViewModel>(entity.Id);
 
             //Then
             viewModel.Should().NotBeNull();
@@ -131,7 +131,7 @@ namespace Optsol.Components.Test.Integration.Application
             var notificationContext = provider.GetRequiredService<NotificationContext>();
 
             //When
-            Action action = () => serviceApplication.InsertAsync(viewmModel);
+            Action action = () => serviceApplication.InsertAsync<InsertTestViewModel, InsertTestViewModel>(viewmModel);
 
             //Then
             action.Should().NotThrow();
@@ -162,7 +162,7 @@ namespace Optsol.Components.Test.Integration.Application
             updateModel.Contato = entity.Email.ToString();
 
             //When
-            Action action = () => serviceApplication.UpdateAsync(updateModel);
+            Action action = () => serviceApplication.UpdateAsync<UpdateTestViewModel, UpdateTestViewModel>(updateModel);
 
             //Then
             action.Should().NotThrow();
@@ -170,7 +170,7 @@ namespace Optsol.Components.Test.Integration.Application
             notificationContext.HasNotifications.Should().BeFalse();
             notificationContext.Notifications.Should().HaveCount(0);
 
-            var viewModelResult = await serviceApplication.GetByIdAsync(updateModel.Id);
+            var viewModelResult = await serviceApplication.GetByIdAsync<TestViewModel>(updateModel.Id);
             viewModelResult.Should().NotBeNull();
 
             viewModelResult.IsValid.Should().BeTrue();
@@ -206,7 +206,7 @@ namespace Optsol.Components.Test.Integration.Application
             notificationContext.HasNotifications.Should().BeFalse();
             notificationContext.Notifications.Should().BeEmpty();
 
-            var viewModelResult = await serviceApplication.GetByIdAsync(entity.Id);
+            var viewModelResult = await serviceApplication.GetByIdAsync<TestViewModel>(entity.Id);
             viewModelResult.Should().BeNull();
         }
 
@@ -273,7 +273,7 @@ namespace Optsol.Components.Test.Integration.Application
             var notificationContext = provider.GetRequiredService<NotificationContext>();
 
             //When
-            Action action = () => serviceApplication.InsertAsync(viewModel);
+            Action action = () => serviceApplication.InsertAsync<InsertTestViewModel, InsertTestViewModel>(viewModel);
 
             //Then
             action.Should().NotThrow();
@@ -342,7 +342,7 @@ namespace Optsol.Components.Test.Integration.Application
             //Given
             var provider = GetProviderConfiguredServicesFromContext()
                 .CreateTestEntitySeedInContext(afterInsert: (testEntityList) =>
-                {   
+                {
                     viewModel.Id = testEntityList.First().Id;
                 });
 
@@ -350,7 +350,7 @@ namespace Optsol.Components.Test.Integration.Application
             var serviceApplication = provider.GetRequiredService<ITestServiceApplication>();
 
             //When
-            Action action = () => serviceApplication.UpdateAsync(viewModel);
+            Action action = () => serviceApplication.UpdateAsync<UpdateTestViewModel, UpdateTestViewModel>(viewModel);
 
             //Then
             action.Should().NotThrow();

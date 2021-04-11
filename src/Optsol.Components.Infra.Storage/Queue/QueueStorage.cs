@@ -15,12 +15,9 @@ namespace Optsol.Components.Infra.Storage.Queue
     public class QueueStorage : IQueueStorage
     {
         private QueueClient _queueClient;
-
         private readonly ILogger _logger;
-
         private readonly StorageSettings _storageSettings;
-
-        private readonly string[] IgnoredProperties = new[] { "notifications", "invalid", "valid" };
+        private readonly string[] IgnoredProperties = new[] { "notifications", "isvalid" };
 
         public QueueStorage(StorageSettings settings, ILoggerFactory logger)
         {

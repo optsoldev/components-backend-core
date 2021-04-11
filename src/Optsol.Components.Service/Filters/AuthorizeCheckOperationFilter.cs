@@ -12,26 +12,26 @@ namespace Optsol.Components.Service.Filters
     public class AuthorizeCheckOperationFilter : IOperationFilter
     {
         private readonly SwaggerSettings _swaggerSettings;
-        //private readonly SecuritySettings _securitySettings;
+        private readonly SecuritySettings _securitySettings;
 
         public AuthorizeCheckOperationFilter(
             SwaggerSettings swaggerSettings,
-            //SecuritySettings securitySettings,
+            SecuritySettings securitySettings,
             ILoggerFactory logger)
         {
             _swaggerSettings = swaggerSettings ?? throw new SwaggerSettingsNullException(logger);
             _swaggerSettings.Validate();
             _swaggerSettings.Security.Validate();
 
-            //_securitySettings = securitySettings;
-            //securitySettings?.Validate();
+            _securitySettings = securitySettings;
+            securitySettings?.Validate();
         }
 
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
-            //var notHaveSecurity = _securitySettings == null;
-            //if (notHaveSecurity)
-            //    return;
+            var notHaveSecurity = _securitySettings == null;
+            if (notHaveSecurity)
+                return;
 
             var hasAuthorize =
             context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<AuthorizeAttribute>().Any() ||
