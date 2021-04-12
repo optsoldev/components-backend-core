@@ -42,12 +42,10 @@ namespace Optsol.Components.Infra.Data
             var type = this.GetType();
 
             var @interface = $"{typeof(ITenant<TKey>).Namespace}.{typeof(ITenant<TKey>).Name.Replace("`1", "")}";
-            var baseType = $"{typeof(TenantRepository<TEntity, TKey>).Name}";
-
-            var repositoryInvalid = typeof(TEntity).FindInterfaces(filter, @interface).Any() && !this.GetType().BaseType.Name.Equals(baseType);
+            var repositoryInvalid = typeof(TEntity).FindInterfaces(filter, @interface).Any() && !this.GetType().BaseType.Name.Contains("TenantRepository");
             if (repositoryInvalid)
             {
-                _logger?.LogError($"Este reposiório deve herdar de TenantRepository");
+                _logger?.LogError($"Este repositório deve implementar o TenantRepository por conta da Entidade");
                 throw new InvalidRepositoryException();
             }
         }
@@ -277,7 +275,7 @@ namespace Optsol.Components.Infra.Data
     }
 
     public class TenantRepository<TEntity, TKey> : Repository<TEntity, TKey>, IRepository<TEntity, TKey>, IDisposable
-        where TEntity : class, IAggregateRoot<TKey>
+        where TEntity : class, IAggregateRoot<TKey>, ITenant<TKey>
     {
         private readonly ITenantProvider<TKey> _tenantProvider;
 
@@ -295,7 +293,7 @@ namespace Optsol.Components.Infra.Data
             if (entityIsITenant)
             {
                 _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em InsertAsync");
-                ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
+                entity.SetTenantId(_tenantProvider.GetTenantId());
             }
             return base.InsertAsync(entity);
         }
@@ -306,7 +304,7 @@ namespace Optsol.Components.Infra.Data
             if (entityIsITenant)
             {
                 _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em UpdateAsync");
-                ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
+                entity.SetTenantId(_tenantProvider.GetTenantId());
             }
 
             return base.UpdateAsync(entity);
