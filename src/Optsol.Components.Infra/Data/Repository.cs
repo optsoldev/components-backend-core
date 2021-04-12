@@ -35,6 +35,7 @@ namespace Optsol.Components.Infra.Data
 
             ValidateTentatProvider();
         }
+
         private void ValidateTentatProvider()
         {
             TypeFilter filter = new(InterfaceFilter);
