@@ -21,7 +21,8 @@ namespace Optsol.Components.Test.Unit.Service
 {
     public class ApiControllerBaseSpec
     {
-        [Fact]
+        [Trait("Api Controllers", "Log de Ocorrências")]
+        [Fact(DisplayName = "Deve registrar os logs na controller da api")]
         public async Task Deve_Registrar_Logs_No_ApiController()
         {
             //Given
@@ -56,12 +57,17 @@ namespace Optsol.Components.Test.Unit.Service
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestViewModel>())).Returns(entity);
 
             var mockApplicationService = new Mock<ITestServiceApplication>();
+            mockApplicationService.Setup(setup => setup.InsertAsync<InsertTestViewModel, InsertTestViewModel>(It.IsAny<InsertTestViewModel>())).ReturnsAsync(insertViewModel);
+            mockApplicationService.Setup(setup => setup.UpdateAsync<UpdateTestViewModel, UpdateTestViewModel>(It.IsAny<UpdateTestViewModel>())).ReturnsAsync(updateViewModel);
 
             var mockResponseFactory = new Mock<IResponseFactory>();
             mockResponseFactory.Setup(setup => setup.Create()).Returns(new Response());
             mockResponseFactory.Setup(setup => setup.Create(It.IsAny<TestViewModel>())).Returns(new Response<TestViewModel>(model, true));
             mockResponseFactory.Setup(setup => setup.Create(It.IsAny<IEnumerable<TestViewModel>>())).Returns(new ResponseList<TestViewModel>(new[] { model }, true));
             mockResponseFactory.Setup(setup => setup.Create(It.IsAny<SearchResult<TestViewModel>>())).Returns(new ResponseSearch<TestViewModel>(new SearchResult<TestViewModel>(1, 10) { Items = new[] { model } }, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<InsertTestViewModel>())).Returns(new Response<InsertTestViewModel>(insertViewModel, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<UpdateTestViewModel>())).Returns(new Response<UpdateTestViewModel>(updateViewModel, true));
+
 
             var controller = new TestController(loggerFactoryMock.Object, mockApplicationService.Object, mockResponseFactory.Object);
 
