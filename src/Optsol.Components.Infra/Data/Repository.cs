@@ -48,7 +48,7 @@ namespace Optsol.Components.Infra.Data
             var repositoryInvalid = typeof(TEntity).FindInterfaces(filter, @interface).Any() && _tenantProvider == null;
             if (repositoryInvalid)
             {
-                _logger?.LogError($"Essa entidade herda de ITenant, o ITentantProvider deve ser injetado.");
+                _logger?.LogError($"Essa entidade implementa ITenant, o ITentantProvider deve ser injetado.");
                 throw new InvalidRepositoryException();
             }
         }
