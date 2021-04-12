@@ -19,15 +19,13 @@ namespace Optsol.Components.Infra.Data
     public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>, IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
-        private readonly ILogger _logger;
-
-        private readonly ITenantProvider<TKey> _tenantProvider;
+        internal readonly ILogger _logger;
 
         public CoreContext Context { get; protected set; }
 
         public DbSet<TEntity> Set { get; protected set; }
 
-        public Repository(CoreContext context, ILoggerFactory logger, ITenantProvider<TKey> tenantProvider = null)
+        public Repository(CoreContext context, ILoggerFactory logger)
         {
             _logger = logger.CreateLogger(nameof(Repository<TEntity, TKey>));
             _logger?.LogInformation($"Inicializando Repository<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");
@@ -35,20 +33,22 @@ namespace Optsol.Components.Infra.Data
             Context = context ?? throw new DbContextNullException();
             this.Set = context.Set<TEntity>();
 
-
-            _tenantProvider = tenantProvider;
             ValidateTentatProvider();
         }
-
         private void ValidateTentatProvider()
         {
             TypeFilter filter = new(InterfaceFilter);
 
-            var fullName = $"{typeof(ITenant<TKey>).Namespace}.{typeof(ITenant<TKey>).Name}";
-            var tentantProviderInvalid = typeof(TEntity).FindInterfaces(filter, fullName).Any() && _tenantProvider == null;
-            if (tentantProviderInvalid)
+            var type = this.GetType();
+
+            var @interface = $"{typeof(ITenant<TKey>).Namespace}.{typeof(ITenant<TKey>).Name.Replace("`1", "")}";
+            var baseType = $"{typeof(TenantRepository<TEntity, TKey>).Name}";
+
+            var repositoryInvalid = typeof(TEntity).FindInterfaces(filter, @interface).Any() && !this.GetType().BaseType.Name.Equals(baseType);
+            if (repositoryInvalid)
             {
-                throw new ArgumentNullException(nameof(_tenantProvider));
+                _logger?.LogError($"Este reposiório deve herdar de TenantRepository");
+                throw new InvalidRepositoryException();
             }
         }
 
@@ -147,12 +147,6 @@ namespace Optsol.Components.Infra.Data
         public virtual Task InsertAsync(TEntity entity)
         {
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }( {{entity:{ entity.ToJson() }}} )");
-
-            var entityIsITenant = entity is ITenant<TKey>;
-            if (entityIsITenant)
-            {
-                ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
-            }
 
             return Set.AddAsync(entity).AsTask();
         }
@@ -279,6 +273,43 @@ namespace Optsol.Components.Infra.Data
             }
 
             return query;
+        }
+    }
+
+    public class TenantRepository<TEntity, TKey> : Repository<TEntity, TKey>, IRepository<TEntity, TKey>, IDisposable
+        where TEntity : class, IAggregateRoot<TKey>
+    {
+        private readonly ITenantProvider<TKey> _tenantProvider;
+
+        public TenantRepository(CoreContext context, ILoggerFactory logger, ITenantProvider<TKey> tenantProvider)
+            : base(context, logger)
+        {
+            _logger?.LogInformation($"Iniciando TenantRepository");
+
+            _tenantProvider = tenantProvider ?? throw new ArgumentNullException(nameof(_tenantProvider));
+        }
+
+        public override Task InsertAsync(TEntity entity)
+        {
+            var entityIsITenant = entity is ITenant<TKey>;
+            if (entityIsITenant)
+            {
+                _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em InsertAsync");
+                ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
+            }
+            return base.InsertAsync(entity);
+        }
+
+        public override Task UpdateAsync(TEntity entity)
+        {
+            var entityIsITenant = entity is ITenant<TKey>;
+            if (entityIsITenant)
+            {
+                _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em UpdateAsync");
+                ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
+            }
+
+            return base.UpdateAsync(entity);
         }
     }
 }

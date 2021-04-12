@@ -128,9 +128,7 @@ namespace Optsol.Components.Service.Controllers
 
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
 
-            await _serviceApplication.InsertAsync<TInsertData, TInsertData>(data);
-
-            return CreateResult();
+            return CreateResult(await _serviceApplication.InsertAsync<TInsertData, TInsertData>(data));
         }
 
         [HttpPut]
@@ -144,9 +142,7 @@ namespace Optsol.Components.Service.Controllers
 
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
 
-            await _serviceApplication.UpdateAsync<TUpdateData, TUpdateData>(data);
-
-            return CreateResult();
+            return CreateResult(await _serviceApplication.UpdateAsync<TUpdateData, TUpdateData>(data));
 
         }
 
