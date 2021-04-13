@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Optsol.Components.Domain.Data;
 using Optsol.Components.Infra.MongoDB.Context;
-using Optsol.Components.Infra.MongoDB.Repository;
+using Optsol.Components.Infra.MongoDB.Repositories;
 using Optsol.Components.Infra.MongoDB.UoW;
 using Optsol.Components.Shared.Settings;
 

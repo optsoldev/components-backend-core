@@ -17,7 +17,7 @@ namespace Optsol.Components.Infra.MongoDB.Context
 
         public IClientSessionHandle Session { get; set; }
 
-        public MongoClient MongoClient { get; set; }
+        public MongoClient MongoClient { get; protected set; }
 
         public MongoContext(MongoSettings mongoSettings)
         {

@@ -5,10 +5,14 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Settings\appsettings.cors.json" />
+    <None Remove="Settings\appsettings.elastic.json" />
     <None Remove="Settings\appsettings.mongo.json" />
     <None Remove="Settings\appsettings.storage.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Settings\appsettings.elastic.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Settings\appsettings.cors.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -38,6 +42,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Infra.ElasticSearch\Optsol.Components.Infra.ElasticSearch.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra.Storage\Optsol.Components.Infra.Storage.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Service\Optsol.Components.Service.csproj" />

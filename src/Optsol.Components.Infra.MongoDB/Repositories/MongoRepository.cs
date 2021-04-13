@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Optsol.Components.Infra.MongoDB.Repository
+namespace Optsol.Components.Infra.MongoDB.Repositories
 {
     public class MongoRepository<TEntity, TKey>
         : IMongoRepository<TEntity, TKey>, IDisposable
@@ -43,9 +43,9 @@ namespace Optsol.Components.Infra.MongoDB.Repository
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ids:[{ string.Join(",", ids) }}}]) Retorno: type { typeof(TEntity).Name }");
 
-            var entity = await Set.FindAsync(Builders<TEntity>.Filter.All("_id", ids));
+            var entities = await Set.FindAsync(Builders<TEntity>.Filter.All("_id", ids));
 
-            return await entity.ToListAsync().AsyncCursorToAsyncEnumerable();
+            return await entities.ToListAsync().AsyncCursorToAsyncEnumerable();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()

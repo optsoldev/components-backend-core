@@ -4,7 +4,7 @@ using MongoDB.Driver;
 using Moq;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.MongoDB.Context;
-using Optsol.Components.Infra.MongoDB.Repository;
+using Optsol.Components.Infra.MongoDB.Repositories;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
 using Optsol.Components.Test.Shared.Logger;
