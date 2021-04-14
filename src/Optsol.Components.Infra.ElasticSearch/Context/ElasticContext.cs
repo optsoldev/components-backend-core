@@ -23,7 +23,6 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
             ConfigureClient();
         }
 
-
         public async Task<int> SaveChangesAsync()
         {
             var countSaveTasks = 0;
@@ -55,9 +54,19 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
             var clientIsNull = ElasticClient == null;
             if (clientIsNull)
             {
+                var settings = new ConnectionSettings(new Uri(_elasticSearchSettings.Uri));
 
-                var settings = new ConnectionSettings(new Uri(_elasticSearchSettings.Uri))
-                    .DefaultIndex(_elasticSearchSettings.IndexName);
+                var hasIndexName = _elasticSearchSettings.IndexName != null;
+                if (hasIndexName)
+                {
+                    settings = settings.DefaultIndex(_elasticSearchSettings.IndexName);
+                }
+
+                var hasUserNamePassword = string.IsNullOrEmpty(_elasticSearchSettings.UserName) && string.IsNullOrEmpty(_elasticSearchSettings.Password);
+                if(hasUserNamePassword)
+                {
+                    settings = settings.BasicAuthentication(_elasticSearchSettings.UserName, _elasticSearchSettings.Password);
+                }
 
                 ElasticClient = new ElasticClient(settings);
             }
