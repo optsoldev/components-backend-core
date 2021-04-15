@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.MongoDB.Context;
-using Optsol.Components.Infra.MongoDB.Repository;
+using Optsol.Components.Infra.MongoDB.Repositories;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using System;
 

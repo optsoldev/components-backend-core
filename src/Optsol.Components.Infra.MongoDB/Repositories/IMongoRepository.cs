@@ -3,7 +3,7 @@ using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.MongoDB.Context;
 
-namespace Optsol.Components.Infra.MongoDB.Repository
+namespace Optsol.Components.Infra.MongoDB.Repositories
 {
     public interface IMongoRepository<TEntity, TKey> :
         IReadBaseRepository<TEntity, TKey>,
