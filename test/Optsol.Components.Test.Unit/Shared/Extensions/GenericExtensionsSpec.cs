@@ -1,22 +1,22 @@
-using Xunit;
-using Optsol.Components.Domain.Entities;
-using Optsol.Components.Shared.Extensions;
 using FluentAssertions;
+using Optsol.Components.Domain.Entities;
+using System;
+using Xunit;
 
 namespace Optsol.Components.Test.Unit.Shared
 {
-    public class JsonExtensionsSpec
+    public class GenericExtensionsSpec
     {
-
-        [Fact]
-        public void DeveConverterObjetoEmJson()
+        [Trait("Extensions", "GenericExtensions")]
+        [Fact(DisplayName = "Deve Converter um objeto em Json")]
+        public void Deve_Converter_Objeto_Json()
         {
             //Given
-            AggregateRoot aggregateRoot = new AggregateRoot();
+            var aggregateRoot = new AggregateRoot();
 
             //When
             var aggregateRootJson = aggregateRoot.ToJson();
-            
+
             //Then
             aggregateRootJson.StartsWith("{").Should().BeTrue();
             aggregateRootJson.EndsWith("}").Should().BeTrue();

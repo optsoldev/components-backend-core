@@ -11,15 +11,16 @@ namespace Optsol.Components.Shared.Exceptions
             var _logger = logger?.CreateLogger(nameof(CorsSettingsNullException));
             _logger?.LogCritical(
 @$"{nameof(CorsSettingsNullException)}:
-""CorsSettings"": [
-    {{
-        ""Policy"": ""_nomePolicy"",
+""CorsSettings"": {{
+    ""DefaultPolicy"": ""_corsPolicyDefaultName"",
+    ""Policies"": [{{
+        ""Name"": ""_corsPolicyName"",
         ""Origins"": {{
-            ""ReactFrontHttp"": ""http://example:port"",
-            ""ReactFrontHttps"": ""http://example:port""
+            ""FrontHttp"": ""http://domain..."",
+            ""FrontHttps"": ""https://domain...""
         }}
-    }}
-]"
+    }}]
+}}"
             );
         }
     }

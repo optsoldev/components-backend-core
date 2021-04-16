@@ -1,23 +1,23 @@
-using System;
-using System.Linq;
 using FluentAssertions;
 using Optsol.Playground.Domain.Entities;
 using Optsol.Playground.Domain.ValueObjects;
+using System;
+using System.Linq;
 using Xunit;
 
 namespace Optsol.Playground.Test.Domain.Entities
 {
     public class CartaoCreditoEntitySpec
     {
-         [Fact]
+        [Fact]
         public void Deve_Inserir_Cartao_No_Cliente()
         {
             //Given
-            ClienteEntity clienteEntity = new ClienteEntity(
+            var clienteEntity = new ClienteEntity(
                 new NomeValueObject("Weslley", "Carneiro"),
                 new EmailValueObject("weslley@outlook.com")
             );
-            CartaoCreditoEntity cartaoCreditoEntity = new CartaoCreditoEntity(
+            var cartaoCreditoEntity = new CartaoCreditoEntity(
                 "Weslley B. Carneiro",
                 "1326554545455",
                 "985",
@@ -37,12 +37,12 @@ namespace Optsol.Playground.Test.Domain.Entities
         {
             //Given
             var clienteId = Guid.NewGuid();
-            ClienteEntity clienteEntity = new ClienteEntity(
+            var clienteEntity = new ClienteEntity(
                 clienteId,
                 new NomeValueObject("Weslley", "Carneiro"),
                 new EmailValueObject("weslley@outlook.com")
             );
-            CartaoCreditoEntity cartaoCreditoEntity = new CartaoCreditoEntity(
+            var cartaoCreditoEntity = new CartaoCreditoEntity(
                 Guid.NewGuid(),
                 "Weslley B. Carneiro",
                 "1326554545455",

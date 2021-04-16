@@ -6,8 +6,9 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
     public class ElasticContextNullExceptionSpec
     {
-        [Fact]
-        public void DeveInicializarComMensagemDeErro()
+        [Trait("Exceptions", "NullException")]
+        [Fact(DisplayName = "Deve inicializar o ElasticContextNullException com mensagem de erro")]
+        public void Deve_Inicializar_Com_Mensagem_Erro()
         {
             //Given
             ElasticContextNullException exception;

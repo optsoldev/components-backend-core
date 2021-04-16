@@ -3,9 +3,9 @@ using Newtonsoft.Json.Serialization;
 using Optsol.Components.Shared.Resolvers;
 using System.Linq;
 
-namespace Optsol.Components.Shared.Extensions
+namespace System
 {
-    public static class JsonExtensions
+    public static class GenericExtensions
     {
         public static string ToJson<T>(this T source, params string[] ignoredProps)
         {

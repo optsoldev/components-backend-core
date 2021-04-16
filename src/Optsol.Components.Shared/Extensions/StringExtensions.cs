@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System.Text;
 
-namespace Optsol.Components.Shared.Extensions
+namespace System
 {
     public static class StringExtensions
     {
@@ -12,6 +13,11 @@ namespace Optsol.Components.Shared.Extensions
             }
 
             return JsonConvert.DeserializeObject<T>(source);
+        }
+
+        public static byte[] ToBytes(this string source)
+        {
+            return Encoding.UTF8.GetBytes(source);
         }
     }
 }

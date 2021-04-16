@@ -6,8 +6,9 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
     public class AutoMapperNullExceptionSpec
     {
-        [Fact]
-        public void DeveInicializarComMensagemDeErro()
+        [Trait("Exceptions", "NullException")]
+        [Fact(DisplayName = "Deve inicializar o AutoMapperNullException com mensagem de erro")]
+        public void Deve_Inicializar_Com_Mensagem_De_Erro()
         {
             //Given
             AutoMapperNullException exception;;  

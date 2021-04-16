@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.MongoDB.Context;
 using Optsol.Components.Shared.Exceptions;
-using Optsol.Components.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

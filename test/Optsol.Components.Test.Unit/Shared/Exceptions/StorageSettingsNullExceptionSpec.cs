@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Shared.Exceptions;
+using Optsol.Components.Shared.Settings;
 using Optsol.Components.Test.Shared.Logger;
 using System.Linq;
 using Xunit;
@@ -10,7 +11,8 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
 {
     public class StorageSettingsNullExceptionSpec
     {
-        [Fact]
+        [Trait("Exceptions", "NullException")]
+        [Fact(DisplayName = "Deve inicializar o StorageSettingsNullException com mensagem de erro")]
         public void Deve_Inicializar_Com_Mensagem_Erro()
         {
             //Given
@@ -24,7 +26,8 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception.Message.Should().Be(msg);
         }
 
-        [Fact]
+        [Trait("Exceptions", "NullException")]
+        [Fact(DisplayName = "Deve logar informação referente a falta do settings do StorageSettingsNullException")]
         public void Deve_Logar_Informacao_Referente_Falta_Settings()
         {
             //Given
@@ -40,9 +43,9 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             exception.Message.Should().Be(msg);
 
             logger.Logs.Should().NotBeEmpty();
-            logger.Logs.Any(a => a.Contains("StorageSettings")).Should().BeTrue();
-            logger.Logs.Any(a => a.Contains("ConnectionString")).Should().BeTrue();
-            logger.Logs.Any(a => a.Contains("Blob")).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(nameof(StorageSettings.ConnectionString))).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(nameof(StorageSettings.Blob))).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(nameof(StorageSettings.Blob.ContainerName))).Should().BeTrue();
         }
     }
 }

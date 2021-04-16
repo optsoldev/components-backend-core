@@ -1,6 +1,6 @@
 using System;
 
-namespace Optsol.Components.Shared.Extensions
+namespace System
 {
     public static class UintExtensions
     {
