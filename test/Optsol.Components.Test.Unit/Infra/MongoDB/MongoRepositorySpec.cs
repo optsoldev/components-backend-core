@@ -5,7 +5,6 @@ using Moq;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.MongoDB.Context;
 using Optsol.Components.Infra.MongoDB.Repositories;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
 using Optsol.Components.Test.Shared.Logger;
 using System;
@@ -17,8 +16,9 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
 {
     public class MongoRepositorySpec
     {
-        [Fact(Skip ="mongo local docker test")]
-        public void Deve_Registrar_Logs_No_Repositorio_MongoDB()
+        [Trait("Repository", "Log de Ocorrências")]
+        [Fact(DisplayName = "Deve registrar logs no repositório do MongoDB", Skip = "mongo local docker test")]
+        public async Task Deve_Registrar_Logs_No_Repositorio_MongoDB()
         {
             //Given
             var dataBaseName = "mongo-auto-create";
@@ -40,13 +40,13 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
             var repositoryMock = new MongoRepository<AggregateRoot, Guid>(mongoContextMock.Object, loggerFactoryMock.Object);
             
             //When
-            repositoryMock.GetByIdAsync(entity.Id).ConfigureAwait(false);
-            repositoryMock.GetAllAsync();
-            repositoryMock.InsertAsync(entity);
-            repositoryMock.UpdateAsync(entity);
-            repositoryMock.DeleteAsync(entity);
-            repositoryMock.DeleteAsync(entity.Id).ConfigureAwait(false);
-            repositoryMock.SaveChangesAsync();
+            await repositoryMock.GetByIdAsync(entity.Id);
+            await repositoryMock.GetAllAsync();
+            await repositoryMock.InsertAsync(entity);
+            await repositoryMock.UpdateAsync(entity);
+            await repositoryMock.DeleteAsync(entity);
+            await repositoryMock.DeleteAsync(entity.Id);
+            await repositoryMock.SaveChangesAsync();
 
             //Then
             var msgContructor = "Inicializando MongoRepository<AggregateRoot, Guid>";
