@@ -28,7 +28,8 @@ namespace Optsol.Components.Test.Integration.Infra.Redis
             return provider;
         }
 
-        [Fact]
+        [Trait("Infraestrutura", "Redis")]
+        [Fact(DisplayName = "Deve salvar o registro no cache", Skip = "redis local docker test")]
         public async Task DeveTestar()
         {
             var provider = GetProviderConfiguredServicesFromContext();
