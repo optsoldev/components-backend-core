@@ -7,9 +7,13 @@
     <None Remove="Settings\appsettings.cors.json" />
     <None Remove="Settings\appsettings.elastic.json" />
     <None Remove="Settings\appsettings.mongo.json" />
+    <None Remove="Settings\appsettings.redis.json" />
     <None Remove="Settings\appsettings.storage.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Settings\appsettings.redis.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Settings\appsettings.elastic.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
