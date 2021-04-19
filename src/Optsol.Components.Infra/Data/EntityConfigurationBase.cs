@@ -14,7 +14,6 @@ namespace Optsol.Components.Infra.Data
         IEntityTypeConfiguration<TEntity>
         where TEntity : Entity<TKey>
     {
-
         protected readonly ITenantProvider<TKey> _tenantProvider;
 
         public EntityConfigurationBase(ITenantProvider<TKey> tenantProvider = null)
