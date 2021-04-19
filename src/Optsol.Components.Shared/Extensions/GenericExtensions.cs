@@ -18,14 +18,10 @@ namespace System
 
             if (ignoredProps.Any())
             {
-                settings.ContractResolver = new IgnorePropertiesResolver(ignoredProps)
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                };
+                settings.ContractResolver = new IgnorePropertiesResolver(ignoredProps);
             }
 
             return JsonConvert.SerializeObject(source, Formatting.Indented, settings);
         }
-
     }
 }

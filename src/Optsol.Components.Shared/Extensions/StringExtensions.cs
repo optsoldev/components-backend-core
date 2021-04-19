@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Optsol.Components.Shared.Resolvers;
 using System.Text;
 
 namespace System
@@ -12,7 +13,10 @@ namespace System
                 return default;
             }
 
-            return JsonConvert.DeserializeObject<T>(source);
+            return JsonConvert.DeserializeObject<T>(source, new JsonSerializerSettings
+            {
+                ContractResolver = new PrivateSetterContractResolver()
+            });
         }
 
         public static byte[] ToBytes(this string source)

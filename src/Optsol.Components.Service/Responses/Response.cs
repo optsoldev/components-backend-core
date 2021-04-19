@@ -92,23 +92,23 @@ namespace Optsol.Components.Service.Responses
         {
         }
 
-        public ResponseSearch(ISearchResult<TData> data, bool success) 
+        public ResponseSearch(ISearchResult<TData> data, bool success)
             : base(data.Items, success)
         {
             SetPageData(data);
         }
 
-        public ResponseSearch(ISearchResult<TData> data, bool success, IEnumerable<string> messages) 
+        public ResponseSearch(ISearchResult<TData> data, bool success, IEnumerable<string> messages)
             : base(data.Items, success, messages)
         {
             SetPageData(data);
         }
-        
+
         private void SetPageData(ISearchResult<TData> data)
         {
             Page = (int)data.Page;
             PageSize = (int?)data.PageSize;
-            Total = data.TotalItems;
+            Total = data.Total;
         }
     }
 }
