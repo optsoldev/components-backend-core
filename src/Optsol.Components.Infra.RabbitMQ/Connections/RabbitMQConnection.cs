@@ -127,10 +127,17 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
                 var connectionFactory = new ConnectionFactory()
                 {
                     HostName = _rabbitMQSettings.HostName,
-                    Port = _rabbitMQSettings.Port,
-                    UserName = _rabbitMQSettings.UserName,
-                    Password = _rabbitMQSettings.Password,
+                    Port = _rabbitMQSettings.Port
                 };
+
+                var userValidPasswordValid = !string.IsNullOrEmpty(_rabbitMQSettings.UserName) && !string.IsNullOrEmpty(_rabbitMQSettings.Password);
+                if (userValidPasswordValid)
+                {
+
+                    connectionFactory.UserName = _rabbitMQSettings.UserName;
+                    connectionFactory.Password = _rabbitMQSettings.Password;
+                }
+
 
                 _connection = connectionFactory.CreateConnection();
 

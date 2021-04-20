@@ -31,7 +31,7 @@ namespace Optsol.Components.Test.Integration.Infra.ElasticSearch
             return provider;
         }
 
-        [Fact]
+        [Fact(Skip ="Teste Local")]
         public async Task DeveTestar()
         {
             var provider = GetProviderConfiguredServicesFromContext();

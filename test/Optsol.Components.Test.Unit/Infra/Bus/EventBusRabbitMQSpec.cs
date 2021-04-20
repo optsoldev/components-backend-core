@@ -24,7 +24,8 @@ namespace Optsol.Components.Test.Unit.Infra.Bus
                 HostName = "localhost",
                 Port = 5672,
                 UserName = "guest",
-                Password = "guest"
+                Password = "guest",
+                ExchangeName = "playgroung_event_bus"
             };
 
             var logger = new XunitLogger<EventBusRabbitMQ>();
@@ -33,7 +34,7 @@ namespace Optsol.Components.Test.Unit.Infra.Bus
 
             var rabbitMQConnectionMock = new Mock<RabbitMQConnection>(loggerFactoryMock.Object, settings);
 
-            var eventBusRabbitMQ = new EventBusRabbitMQ(loggerFactoryMock.Object, rabbitMQConnectionMock.Object);
+            var eventBusRabbitMQ = new EventBusRabbitMQ(settings, loggerFactoryMock.Object, rabbitMQConnectionMock.Object);
             var teste = new Teste
             {
                 Nome = Guid.NewGuid().ToString()
