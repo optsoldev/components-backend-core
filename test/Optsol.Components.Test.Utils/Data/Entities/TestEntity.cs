@@ -1,12 +1,13 @@
 using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Infra.Bus.Events;
 using Optsol.Components.Test.Utils.Contracts;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using System;
 
 namespace Optsol.Components.Test.Utils.Entity.Entities
 {
-    public class TestEntity : AggregateRoot
+    public class TestEntity : AggregateRoot, IEvent
     {
         public NomeValueObject Nome { get; private set; }
 

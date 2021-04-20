@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Infra.Data;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using System;
@@ -15,7 +14,8 @@ namespace Optsol.Components.Test.Unit.Infra.Data
 {
     public class RepositorySpec
     {
-        [Fact]
+        [Trait("Repository", "Log de Ocorrências")]
+        [Fact(DisplayName = "Deve registrar logs no repositório")]
         public void Deve_Registrar_Logs_No_Repositorio()
         {
             //Given

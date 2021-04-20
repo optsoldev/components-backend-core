@@ -1,10 +1,9 @@
-﻿using Flunt.Notifications;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Bus.Delegates;
 using Optsol.Components.Infra.Bus.Events;
 using Optsol.Components.Infra.Bus.Services;
 using Optsol.Components.Infra.RabbitMQ.Connections;
-using Optsol.Components.Shared.Extensions;
+using Optsol.Components.Shared.Settings;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -16,23 +15,26 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 {
     public class EventBusRabbitMQ : IEventBus
     {
-        public const string EXCHANGE_NAME = "playgroung_event_bus";
-
         private readonly ILogger _logger;
         private readonly IRabbitMQConnection _connection;
+        private readonly RabbitMQSettings _rabbitMQSettings;
         private readonly string[] IgnoredProperties = new[] { "notifications", "isvalid" };
 
-        public EventBusRabbitMQ(ILoggerFactory logger, IRabbitMQConnection connection)
+        public EventBusRabbitMQ(RabbitMQSettings rabbitMQSettings, ILoggerFactory logger, IRabbitMQConnection connection)
         {
             _logger = logger?.CreateLogger<EventBusRabbitMQ>();
+            _logger?.LogInformation("Inicializando EventBusRabbitMQ");
+
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
+
+            _rabbitMQSettings = rabbitMQSettings ?? throw new ArgumentException(nameof(rabbitMQSettings));
         }
 
         public void Publish(IEvent @event)
         {
             var eventName = @event.GetType().Name;
 
-            _logger.LogInformation($"Executando { nameof(Publish) }({eventName})");
+            _logger?.LogInformation($"Executando { nameof(Publish) }({eventName})");
 
             if (_connection.Disconnected)
             {
@@ -43,7 +45,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
                 .Or<SocketException>()
                 .WaitAndRetry(3, attemp => TimeSpan.FromSeconds(Math.Pow(2, attemp)), (ex, time) =>
                 {
-                    _logger.LogWarning("Não foi possível publicar a '{EventName}': ({ExceptionMessage})", eventName, ex.Message);
+                    _logger?.LogWarning("Não foi possível publicar a '{EventName}': ({ExceptionMessage})", eventName, ex.Message);
                 });
 
 
@@ -55,10 +57,10 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 
                 policy.Execute(() =>
                 {
-                    _logger.LogInformation("Publicando '{EventName}': {Event}", eventName, @event.ToJson());
+                    _logger?.LogInformation("Publicando '{EventName}': {Event}", eventName, @event.ToJson());
 
                     channel.BasicPublish(
-                            exchange: EXCHANGE_NAME,
+                            exchange: _rabbitMQSettings.ExchangeName,
                             routingKey: eventName,
                             basicProperties: null,
                             body: @event.ToJson(IgnoredProperties).ToBytes()
@@ -72,7 +74,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
         {
             var eventName = typeof(TEvent).Name;
 
-            _logger.LogInformation($"Executando { nameof(Subscribe) }");
+            _logger?.LogInformation($"Executando { nameof(Subscribe) }");
 
             if (_connection.Disconnected)
             {
@@ -97,7 +99,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 
                     received?.Invoke(new ReceivedMessageEventArgs(@event));
 
-                    _logger.LogInformation("Mensagem recebida pela fila {QueueName}: {Message}", eventName, message);
+                    _logger?.LogInformation("Mensagem recebida pela fila {QueueName}: {Message}", eventName, message);
                 };
 
                 channel.BasicConsume(
@@ -109,7 +111,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 
         private void DeclareQueueAndBind(string eventName, IModel channel)
         {
-            _logger.LogInformation("Declarando Queue: '{QueueName}'", eventName);
+            _logger?.LogInformation("Declarando Queue: '{QueueName}'", eventName);
 
             channel.QueueDeclare(
                 queue: eventName,
@@ -121,17 +123,17 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 
             channel.QueueBind(
                 queue: eventName,
-                exchange: EXCHANGE_NAME,
+                exchange: _rabbitMQSettings.ExchangeName,
                 routingKey: eventName
             );
         }
 
         private void DeclareExchange(IModel channel)
         {
-            _logger.LogInformation("Declarando Exchange: '{ExchangeName}'", EXCHANGE_NAME);
+            _logger?.LogInformation("Declarando Exchange: '{ExchangeName}'", _rabbitMQSettings.ExchangeName);
 
             channel.ExchangeDeclare(
-                exchange: EXCHANGE_NAME,
+                exchange: _rabbitMQSettings.ExchangeName,
                 type: "direct",
                 durable: false,
                 autoDelete: false,

@@ -19,8 +19,6 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
 {
     public class MongoRepositorySpec
     {
-        public static MongoContext _mongoContext;
-
         private static ServiceProvider GetProviderConfiguredServicesFromContext()
         {
             var configuration = new ConfigurationBuilder()
@@ -35,8 +33,6 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             services.AddMongoRepository<ITestMongoReadRepository, TestMongoReadRepository>("Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
-
-            _mongoContext = provider.GetRequiredService<MongoContext>();
 
             return provider;
         }

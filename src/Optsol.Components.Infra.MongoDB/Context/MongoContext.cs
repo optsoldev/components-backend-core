@@ -17,11 +17,11 @@ namespace Optsol.Components.Infra.MongoDB.Context
 
         public IClientSessionHandle Session { get; set; }
 
-        public MongoClient MongoClient { get; set; }
+        public MongoClient MongoClient { get; protected set; }
 
         public MongoContext(MongoSettings mongoSettings)
         {
-            _mongoSettings = mongoSettings;
+            _mongoSettings = mongoSettings ?? throw new ArgumentNullException(nameof(mongoSettings));
 
             _commands = new List<Func<Task>>();
 
@@ -72,8 +72,8 @@ namespace Optsol.Components.Infra.MongoDB.Context
 
         private void Configure()
         {
-            var mongoClintIsNull = MongoClient != null;
-            if (mongoClintIsNull)
+            var mongoClintNotNull = MongoClient != null;
+            if (mongoClintNotNull)
             {
                 return;
             }

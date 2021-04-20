@@ -2,10 +2,9 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.Extensions.Logging;
+using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Exceptions;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;

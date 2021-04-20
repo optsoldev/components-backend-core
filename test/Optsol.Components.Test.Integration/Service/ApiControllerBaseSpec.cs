@@ -7,12 +7,12 @@ using Optsol.Components.Application.Services;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Utils.Data.Contexts;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using Optsol.Components.Test.Utils.Repositories.Core;
 using Optsol.Components.Test.Utils.ViewModels;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -163,9 +163,11 @@ namespace Optsol.Components.Test.Integration.Service
         public async Task Deve_Inserir_Registro_Pelo_Servico()
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            InsertTestViewModel model = new()
+            {
+                Nome = "Weslley Carneiro",
+                Contato = "weslley.carneiro@optsol.com.br"
+            };
 
             var services = new ServiceCollection();
             services.AddLogging();
@@ -205,9 +207,11 @@ namespace Optsol.Components.Test.Integration.Service
         public async Task Deve_Atualizar_Registro_Pelo_Servico()
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            InsertTestViewModel model = new()
+            {
+                Nome = "Weslley Carneiro",
+                Contato = "weslley.carneiro@optsol.com.br"
+            };
 
             var services = new ServiceCollection();
             services.AddLogging();
@@ -234,10 +238,12 @@ namespace Optsol.Components.Test.Integration.Service
 
             var data = (await serviceApplication.GetAllAsync<TestViewModel>()).Single();
 
-            var updateModel = new UpdateTestViewModel();
-            updateModel.Id = data.Id;
-            updateModel.Nome = $"Weslley Alterado";
-            updateModel.Contato = model.Contato;
+            var updateModel = new UpdateTestViewModel
+            {
+                Id = data.Id,
+                Nome = $"Weslley Alterado",
+                Contato = model.Contato
+            };
 
             //When
             var actionResult = await controllerBase.UpdateAsync(updateModel);
@@ -265,9 +271,11 @@ namespace Optsol.Components.Test.Integration.Service
         public async Task Deve_Remover_Registro_Pelo_Id_Pelo_Servico()
         {
             //Given
-            InsertTestViewModel model = new InsertTestViewModel();
-            model.Nome = "Weslley Carneiro";
-            model.Contato = "weslley.carneiro@optsol.com.br";
+            InsertTestViewModel model = new()
+            {
+                Nome = "Weslley Carneiro",
+                Contato = "weslley.carneiro@optsol.com.br"
+            };
 
             var services = new ServiceCollection();
             services.AddLogging();

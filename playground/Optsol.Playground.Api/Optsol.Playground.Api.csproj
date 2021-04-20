@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>dc49c63a-2ff2-4c0c-bc45-75d20767851d</UserSecretsId>
+    
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />

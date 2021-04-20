@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Playground.Application.Mappers.Cliente;
@@ -20,7 +21,7 @@ namespace Optsol.Playground.Test
 {
     public class ClienteServiceApplicationSpec
     {
-        protected IServiceProvider _serviceProvider { get; private set; }
+        protected IServiceProvider _serviceProvider;
 
         public ClienteServiceApplicationSpec()
         {
@@ -53,10 +54,12 @@ namespace Optsol.Playground.Test
             //Given
             var clienteServiceApplication = _serviceProvider.GetRequiredService<IClienteServiceApplication>();
 
-            var insertClienteViewModel = new InsertClienteViewModel();
-            insertClienteViewModel.Nome = "Weslley";
-            insertClienteViewModel.SobreNome = "Bruno";
-            insertClienteViewModel.Email = "weslley@outlook.com";
+            InsertClienteViewModel insertClienteViewModel = new()
+            {
+                Nome = "Weslley",
+                SobreNome = "Bruno",
+                Email = "weslley@outlook.com"
+            };
 
             //When
             await clienteServiceApplication.InsertAsync<InsertClienteViewModel, InsertClienteViewModel>(insertClienteViewModel);
@@ -86,12 +89,14 @@ namespace Optsol.Playground.Test
 
             var clienteEntity = new ClienteEntity(new NomeValueObject("Weslley", "Bruno"), new EmailValueObject("weslley@outlook.com.br"));
 
-            var insertCartaoCreditoViewModel = new InsertCartaoCreditoViewModel();
-            insertCartaoCreditoViewModel.ClienteId = clienteEntity.Id;
-            insertCartaoCreditoViewModel.NomeCliente = "Weslley B. Carneiro";
-            insertCartaoCreditoViewModel.Numero = "12345687415241548";
-            insertCartaoCreditoViewModel.CodigoVerificacao = "854";
-            insertCartaoCreditoViewModel.Validade = new DateTime(2030, 11, 30);
+            InsertCartaoCreditoViewModel insertCartaoCreditoViewModel = new()
+            {
+                ClienteId = clienteEntity.Id,
+                NomeCliente = "Weslley B. Carneiro",
+                Numero = "12345687415241548",
+                CodigoVerificacao = "854",
+                Validade = new DateTime(2030, 11, 30)
+            };
 
             //When
             await clienteWriteRepository.InsertAsync(clienteEntity);

@@ -1,25 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Data;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
-using Xunit;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
 using static Optsol.Components.Test.Utils.Utils;
-using Microsoft.Extensions.Logging;
 
 namespace Optsol.Components.Test.Unit.Shared.Extensions
 {
     public class RepositoryExtensionsSpec
     {
 
-        [Fact]
-        public async Task DeveConverterIAsyncEnumerableEmIEnumerable()
+        [Trait("Extensions", "RepositoryExtensions")]
+        [Fact(DisplayName = "Deve converter IAsyncEnumerable em IEnumerable")]
+        public async Task Deve_Converter_IAsyncEnumerable_IEnumerable()
         {
             var entity = new AggregateRoot();
             var entity2 = new AggregateRoot();

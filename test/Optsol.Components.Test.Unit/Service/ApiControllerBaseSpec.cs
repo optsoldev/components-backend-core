@@ -6,12 +6,12 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using Optsol.Components.Test.Utils.Service;
 using Optsol.Components.Test.Utils.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,11 +30,15 @@ namespace Optsol.Components.Test.Unit.Service
             var insertViewModel = new InsertTestViewModel();
             var updateViewModel = new UpdateTestViewModel();
 
-            var testSearchDto = new TestSearchDto();
-            testSearchDto.Nome = "Nome";
-            testSearchDto.SobreNome = "Sobrenome";
-            var searchDto = new SearchRequest<TestSearchDto>();
-            searchDto.Search = testSearchDto;
+            var testSearchDto = new TestSearchDto
+            {
+                Nome = "Nome",
+                SobreNome = "Sobrenome"
+            };
+            var searchDto = new SearchRequest<TestSearchDto>
+            {
+                Search = testSearchDto
+            };
 
             var entity = new TestEntity(
                 new NomeValueObject("Weslley", "Carneiro"),
@@ -52,7 +56,7 @@ namespace Optsol.Components.Test.Unit.Service
             var loggerFactoryMock = new Mock<ILoggerFactory>();
             loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
-            Mock<IMapper> mapperMock = new Mock<IMapper>();
+            var mapperMock = new Mock<IMapper>();
             mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(model);
             mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestViewModel>())).Returns(entity);
 
