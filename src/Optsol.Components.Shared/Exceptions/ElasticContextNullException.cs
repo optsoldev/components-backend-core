@@ -2,6 +2,7 @@
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class ElasticContextNullException : Exception
     {
         public ElasticContextNullException()

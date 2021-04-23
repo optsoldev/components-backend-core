@@ -42,11 +42,30 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
         {
             _commands.Add(command);
         }
+        
+        public void CreateIndex(string indexName)
+        {
+            var indexNotExists = !ElasticClient.Indices.Exists(indexName.ToLower()).Exists;
+            if (indexNotExists)
+            {
+                ElasticClient.Indices.Create(indexName.ToLower());
+            }
+        }
 
         public void Dispose()
         {
-            ElasticClient = null;
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if(disposing)
+            {
+                return;
+            }
+
+            ElasticClient = null;
         }
 
         private void ConfigureClient()
@@ -63,21 +82,12 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
                 }
 
                 var hasUserNamePassword = string.IsNullOrEmpty(_elasticSearchSettings.UserName) && string.IsNullOrEmpty(_elasticSearchSettings.Password);
-                if(hasUserNamePassword)
+                if (hasUserNamePassword)
                 {
                     settings = settings.BasicAuthentication(_elasticSearchSettings.UserName, _elasticSearchSettings.Password);
                 }
 
                 ElasticClient = new ElasticClient(settings);
-            }
-        }
-
-        public void CreateIndex(string indexName)
-        {
-            var indexNotExists = !ElasticClient.Indices.Exists(indexName.ToLower()).Exists;
-            if (indexNotExists)
-            {
-                ElasticClient.Indices.Create(indexName.ToLower());
             }
         }
     }

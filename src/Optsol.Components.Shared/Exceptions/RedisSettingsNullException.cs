@@ -3,6 +3,7 @@ using System;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class RedisSettingsNullException : Exception
     {
         public RedisSettingsNullException(ILoggerFactory logger = null)

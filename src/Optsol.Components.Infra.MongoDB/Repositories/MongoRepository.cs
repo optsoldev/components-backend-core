@@ -15,6 +15,8 @@ namespace Optsol.Components.Infra.MongoDB.Repositories
         : IMongoRepository<TEntity, TKey>, IDisposable
         where TEntity : class, IAggregateRoot<TKey>
     {
+        private bool _disposed = false;
+
         private readonly ILogger _logger;
 
         public MongoContext Context { get; protected set; }
@@ -105,10 +107,21 @@ namespace Optsol.Components.Infra.MongoDB.Repositories
             return Context.SaveChangesAsync();
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            Context.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
+
+            if (!_disposed && disposing)
+            {
+                Context.Dispose();
+            }
+            _disposed = true;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Optsol.Components.Infra.Security.Policies
 {
     public class ScopesRequirement : AuthorizationHandler<ScopesRequirement>, IAuthorizationRequirement
     {
-        string[] _acceptedScopes;
+        private readonly string[] _acceptedScopes;
 
         public ScopesRequirement(params string[] acceptedScopes)
         {

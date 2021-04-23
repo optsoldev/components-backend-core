@@ -2,6 +2,7 @@ using System;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class DbContextNullException : Exception
     {  
         public DbContextNullException()

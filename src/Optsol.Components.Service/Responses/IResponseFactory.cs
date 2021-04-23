@@ -8,10 +8,9 @@ namespace Optsol.Components.Service.Responses
     {
         Response Create();
 
-        Response<TData> Create<TData>(TData serviceResult)
-            where TData : BaseDataTransferObject;
+        Response<TData> Create<TData>(TData data) where TData : BaseDataTransferObject;
 
-        ResponseList<TData> Create<TData>(IEnumerable<TData> serviceResult)
+        ResponseList<TData> Create<TData>(IEnumerable<TData> dataList)
             where TData : BaseDataTransferObject;
 
         ResponseSearch<TData> Create<TData>(ISearchResult<TData> searchResult)

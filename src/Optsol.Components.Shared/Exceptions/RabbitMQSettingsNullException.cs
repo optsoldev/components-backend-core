@@ -3,6 +3,7 @@ using System;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class RabbitMQSettingsNullException : Exception
     {
         public RabbitMQSettingsNullException(ILoggerFactory logger = null)

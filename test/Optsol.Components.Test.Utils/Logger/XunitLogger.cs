@@ -6,7 +6,9 @@ namespace Optsol.Components.Test.Shared.Logger
 {
     public class XunitLogger<T> : ILogger<T>, IDisposable
     {
-        public List<string> Logs = new List<string>();
+        private bool _disposed = false;
+
+        public readonly List<string> Logs = new();
 
         public IDisposable BeginScope<TState>(TState state)
         {
@@ -15,6 +17,14 @@ namespace Optsol.Components.Test.Shared.Logger
 
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            _disposed = disposing;
+            Console.WriteLine(_disposed);
         }
 
         public bool IsEnabled(LogLevel logLevel)
@@ -28,5 +38,5 @@ namespace Optsol.Components.Test.Shared.Logger
         }
     }
 
-    
+
 }

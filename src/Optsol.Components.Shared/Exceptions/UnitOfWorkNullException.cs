@@ -2,6 +2,7 @@ using System;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class UnitOfWorkNullException: Exception
     {  
         public UnitOfWorkNullException()

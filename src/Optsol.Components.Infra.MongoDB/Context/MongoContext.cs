@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using Optsol.Components.Shared.Settings;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,10 @@ namespace Optsol.Components.Infra.MongoDB.Context
 {
     public class MongoContext : IDisposable
     {
+        private bool _disposed = false;
+
+        private readonly ILogger _logger;
+
         protected IMongoDatabase _database;
 
         protected readonly List<Func<Task>> _commands;
@@ -19,8 +24,11 @@ namespace Optsol.Components.Infra.MongoDB.Context
 
         public MongoClient MongoClient { get; protected set; }
 
-        public MongoContext(MongoSettings mongoSettings)
+        public MongoContext(MongoSettings mongoSettings, ILoggerFactory logger)
         {
+            _logger = logger?.CreateLogger(nameof(MongoContext));
+            _logger?.LogInformation("Inicializando MongoContext");
+
             _mongoSettings = mongoSettings ?? throw new ArgumentNullException(nameof(mongoSettings));
 
             _commands = new List<Func<Task>>();
@@ -66,8 +74,19 @@ namespace Optsol.Components.Infra.MongoDB.Context
         
         public void Dispose()
         {
-            Session?.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
+
+            if (!_disposed && disposing)
+            {
+                Session?.Dispose();
+            }
+            _disposed = true;
         }
 
         private void Configure()

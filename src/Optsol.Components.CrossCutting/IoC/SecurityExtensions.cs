@@ -148,9 +148,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
         internal static class LocalSecuritySettings
         {
-            public static string Issuer = "issuer";
-            public static string Audience = "audience";
-            public static string Key = "optsol-security-key";
+            public readonly static string Issuer = "issuer";
+            public readonly static string Audience = "audience";
+            public readonly static string Key = "optsol-security-key";
 
             public static SymmetricSecurityKey GetSymmetricSecurityKey()
             {

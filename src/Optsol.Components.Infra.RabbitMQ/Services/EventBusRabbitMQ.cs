@@ -27,7 +27,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Services
 
             _connection = connection ?? throw new ArgumentNullException(nameof(connection));
 
-            _rabbitMQSettings = rabbitMQSettings ?? throw new ArgumentException(nameof(rabbitMQSettings));
+            _rabbitMQSettings = rabbitMQSettings ?? throw new ArgumentNullException(nameof(rabbitMQSettings));
         }
 
         public void Publish(IEvent @event)

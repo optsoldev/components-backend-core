@@ -16,12 +16,12 @@ namespace Optsol.Components.Shared.Settings
         {
             if (string.IsNullOrEmpty(Uri))
             {
-                throw new ArgumentNullException(nameof(Uri));
+                throw new NullReferenceException(nameof(Uri));
             }
 
             if (string.IsNullOrEmpty(IndexName))
             {
-                throw new ArgumentNullException(nameof(IndexName));
+                throw new NullReferenceException(nameof(IndexName));
             }
         }
     }

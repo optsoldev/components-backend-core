@@ -1,6 +1,4 @@
-﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -8,7 +6,6 @@ using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using System;
 using System.Linq;
-using System.Net.Http;
 
 namespace Optsol.Components.Infra.Security.Attributes
 {
@@ -16,20 +13,20 @@ namespace Optsol.Components.Infra.Security.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class OptsolAuthorizeAttribute : TypeFilterAttribute
     {
-        public OptsolAuthorizeAttribute(string claim) : base(typeof(OptsolAuthorizeFilter))
+        public OptsolAuthorizeAttribute(string claim) : base(typeof(OptsolAuthorizeFilterAttribute))
         {
             Arguments = new object[] { claim };
 
         }
     }
 
-    public class OptsolAuthorizeFilter : AuthorizeAttribute, IAuthorizationFilter
+    public class OptsolAuthorizeFilterAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private string _claim;
+        private readonly string _claim;
 
         private readonly SecuritySettings _securitySettings;
 
-        public OptsolAuthorizeFilter(SecuritySettings securitySettings, ILoggerFactory logger, string claim)
+        public OptsolAuthorizeFilterAttribute(SecuritySettings securitySettings, ILoggerFactory logger, string claim)
         {
             _claim = claim;
 
@@ -64,29 +61,9 @@ namespace Optsol.Components.Infra.Security.Attributes
             context.Result = new UnauthorizedResult();
         }
 
-        private void ContextRemoteSecurity(AuthorizationFilterContext context)
+        private static void ContextRemoteSecurity(AuthorizationFilterContext context)
         {
-            //var accessToken = context.HttpContext.GetTokenAsync("Bearer", "access_token")
-            //    .GetAwaiter()
-            //    .GetResult();
-
-            //var client = new HttpClient();
-            //client.SetBearerToken(accessToken);
-
-            //var response = client
-            //    .GetUserInfoAsync(new UserInfoRequest
-            //    {
-            //        Address = $"{_securitySettings.Authority}/connect/userinfo",
-            //        Token = accessToken,
-            //    })
-            //    .GetAwaiter()
-            //    .GetResult();
-
-            //var userAuthenticateHasClaim = response.Claims.Any(c => c.Type.Equals("optsol") && c.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
-            //if (userAuthenticateHasClaim)
-            //{
-            //    return;
-            //}
+            //TODO: Validar com o SSO.
 
             context.Result = new UnauthorizedResult();
         }

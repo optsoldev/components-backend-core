@@ -12,18 +12,18 @@ namespace Optsol.Components.Service.Filters
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public class ValidationModelAttribute : TypeFilterAttribute
     {
-        public ValidationModelAttribute() : base(typeof(ValidationModelFilter))
+        public ValidationModelAttribute() : base(typeof(ValidationModelFilterAttribute))
         {
 
         }
     }
 
-    public class ValidationModelFilter : ActionFilterAttribute
+    public class ValidationModelFilterAttribute : ActionFilterAttribute
     {
         protected readonly IResponseFactory _responseFactory;
         protected readonly NotificationContext _notificationContext;
 
-        public ValidationModelFilter(IResponseFactory responseFactory, NotificationContext notificationContext)
+        public ValidationModelFilterAttribute(IResponseFactory responseFactory, NotificationContext notificationContext)
         {
             _responseFactory = responseFactory;
             _notificationContext = notificationContext;
@@ -50,11 +50,6 @@ namespace Optsol.Components.Service.Filters
             base.OnActionExecuting(context);
         }
 
-        public override void OnActionExecuted(ActionExecutedContext context)
-        {
-            base.OnActionExecuted(context);
-        }
-
         private Response GetResponseFromBaseDataTransferObject(List<BaseDataTransferObject> listOfBaseDataTransferObject)
         {
             foreach (var baseDataTransferObject in listOfBaseDataTransferObject)
@@ -66,20 +61,19 @@ namespace Optsol.Components.Service.Filters
             return _responseFactory.Create();
         }
 
-        private readonly Func<IDictionary<string, object>, List<BaseDataTransferObject>> ResolverBaseDataTransferObject
-            = (actionArguments) =>
+        private List<BaseDataTransferObject> ResolverBaseDataTransferObject(IDictionary<string, object> actionArguments)
+        {
+            var listOfBaseDataTransferObject = new List<BaseDataTransferObject>();
+
+            var argumentsBaseDataTransfers = actionArguments.Where(args => args.Value.GetType().BaseType.Equals(typeof(BaseDataTransferObject)));
+            foreach (var argumentDataTransfer in argumentsBaseDataTransfers)
             {
-                List<BaseDataTransferObject> listOfBaseDataTransferObject = new List<BaseDataTransferObject>();
+                var baseDataTransferObject = argumentDataTransfer.Value as BaseDataTransferObject;
+                listOfBaseDataTransferObject.Add(baseDataTransferObject);
+            }
 
-                var argumentsBaseDataTransfers = actionArguments.Where(args => args.Value.GetType().BaseType.Equals(typeof(BaseDataTransferObject)));
-                foreach (var argumentDataTransfer in argumentsBaseDataTransfers)
-                {
-                    var baseDataTransferObject = argumentDataTransfer.Value as BaseDataTransferObject;
-                    listOfBaseDataTransferObject.Add(baseDataTransferObject);
-                }
-
-                return listOfBaseDataTransferObject;
-            };
+            return listOfBaseDataTransferObject;
+        }
 
     }
 }

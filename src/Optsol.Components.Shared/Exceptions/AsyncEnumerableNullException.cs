@@ -2,6 +2,7 @@ using System;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class AsyncEnumerableNullException: Exception
     {  
         public AsyncEnumerableNullException()

@@ -3,6 +3,7 @@ using System;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class SwaggerSettingsNullException : Exception
     {
         public SwaggerSettingsNullException(ILoggerFactory logger = null)
