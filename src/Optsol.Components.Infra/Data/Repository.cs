@@ -48,7 +48,7 @@ namespace Optsol.Components.Infra.Data
             var repositoryInvalid = typeof(TEntity).FindInterfaces(filter, @interface).Any() && _tenantProvider == null;
             if (repositoryInvalid)
             {
-                _logger?.LogError($"Essa entidade implementa ITenant, o ITentantProvider deve ser injetado.");
+                _logger?.LogError($"Essa entidade implementa ITenant, o ITenantProvider deve ser injetado.");
                 throw new InvalidRepositoryException();
             }
         }
@@ -228,7 +228,7 @@ namespace Optsol.Components.Infra.Data
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             _logger?.LogInformation($"Método: { nameof(Dispose) }()");
 

@@ -4,7 +4,7 @@ using System;
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public class CorsSettingsNullException : Exception
+    public sealed class CorsSettingsNullException : Exception
     {
         public CorsSettingsNullException(ILoggerFactory logger = null)
             : base("A configuração do CORS não foi encontrada no appsettings")

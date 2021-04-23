@@ -13,13 +13,13 @@ namespace Optsol.Components.Shared.Settings
             var connectionStringIsNullOrEmpty = string.IsNullOrEmpty(ConnectionString);
             if (connectionStringIsNullOrEmpty)
             {
-                throw new NullReferenceException(nameof(ConnectionString));
+                throw new ApplicationException(nameof(ConnectionString));
             }
 
             var databaseNameIsNullOrEmpty = string.IsNullOrEmpty(DatabaseName);
             if (databaseNameIsNullOrEmpty)
             {
-                throw new NullReferenceException(nameof(DatabaseName));
+                throw new ApplicationException(nameof(DatabaseName));
             }
         }
     }

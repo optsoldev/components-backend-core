@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using Microsoft.Extensions.Logging;
+using Nest;
 using Optsol.Components.Shared.Settings;
 using System;
 using System.Collections.Generic;
@@ -9,13 +10,21 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
 {
     public class ElasticContext : IDisposable
     {
+        private bool _disposed = false;
+
+        private readonly ILogger _logger;
+
         public ElasticClient ElasticClient { get; protected set; }
 
         protected readonly ElasticSearchSettings _elasticSearchSettings;
+
         protected readonly List<Func<Task>> _commands;
 
-        public ElasticContext(ElasticSearchSettings elasticSearchSettings)
+        public ElasticContext(ElasticSearchSettings elasticSearchSettings, ILoggerFactory logger)
         {
+            _logger = logger?.CreateLogger(nameof(ElasticContext));
+            _logger?.LogInformation("Inicializando ElasticContext");
+
             _elasticSearchSettings = elasticSearchSettings ?? throw new ArgumentNullException(nameof(elasticSearchSettings));
 
             _commands = new List<Func<Task>>();
@@ -25,6 +34,8 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
 
         public async Task<int> SaveChangesAsync()
         {
+            _logger?.LogInformation($"Método: { nameof(SaveChangesAsync) }() Retorno: Task<int>");
+
             var countSaveTasks = 0;
 
             var commandsTasks = _commands.Select(execute => execute());
@@ -40,11 +51,15 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
 
         public void AddCommand(Func<Task> command)
         {
+            _logger?.LogInformation($"Método: { nameof(AddCommand) }()");
+
             _commands.Add(command);
         }
         
         public void CreateIndex(string indexName)
         {
+            _logger?.LogInformation($"Método: { nameof(CreateIndex) }()");
+
             var indexNotExists = !ElasticClient.Indices.Exists(indexName.ToLower()).Exists;
             if (indexNotExists)
             {
@@ -58,18 +73,21 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
-            if(disposing)
-            {
-                return;
-            }
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
 
-            ElasticClient = null;
+            if (!_disposed && disposing)
+            {
+                ElasticClient = null;
+            }
+            _disposed = true;
         }
 
         private void ConfigureClient()
         {
+            _logger?.LogInformation($"Método: { nameof(ConfigureClient) }()");
+
             var clientIsNull = ElasticClient == null;
             if (clientIsNull)
             {

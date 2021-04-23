@@ -216,7 +216,7 @@ namespace Optsol.Components.Application.Services
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             _logger?.LogInformation($"Método: { nameof(Dispose) }()");
 

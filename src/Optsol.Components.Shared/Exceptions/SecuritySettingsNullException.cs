@@ -4,7 +4,7 @@ using System;
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public class SecuritySettingNullException: Exception
+    public sealed class SecuritySettingNullException: Exception
     {
         public SecuritySettingNullException(ILoggerFactory logger)
             : base("A configuração de segurança não foi encontrada no appsettings")

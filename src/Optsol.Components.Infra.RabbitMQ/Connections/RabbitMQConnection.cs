@@ -26,7 +26,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
             _logger = logger?.CreateLogger<RabbitMQConnection>();
             _logger?.LogInformation("Inicializando RabbitMQConnection");
 
-            _rabbitMQSettings = rabbitMQSettings ?? throw new ArgumentNullException(nameof(RabbitMQSettings));
+            _rabbitMQSettings = rabbitMQSettings ?? throw new ArgumentNullException(nameof(rabbitMQSettings));
 
             CreateConnection();
         }
@@ -118,7 +118,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             _logger?.LogInformation($"Método: { nameof(Dispose) }()");
 

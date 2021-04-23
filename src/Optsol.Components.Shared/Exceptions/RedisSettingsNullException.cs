@@ -4,7 +4,7 @@ using System;
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public class RedisSettingsNullException : Exception
+    public sealed class RedisSettingsNullException : Exception
     {
         public RedisSettingsNullException(ILoggerFactory logger = null)
             : base("A configuração do REDIS não foi encontrada no appsettings")

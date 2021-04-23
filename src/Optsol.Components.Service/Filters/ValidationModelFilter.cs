@@ -61,7 +61,7 @@ namespace Optsol.Components.Service.Filters
             return _responseFactory.Create();
         }
 
-        private List<BaseDataTransferObject> ResolverBaseDataTransferObject(IDictionary<string, object> actionArguments)
+        private static List<BaseDataTransferObject> ResolverBaseDataTransferObject(IDictionary<string, object> actionArguments)
         {
             var listOfBaseDataTransferObject = new List<BaseDataTransferObject>();
 

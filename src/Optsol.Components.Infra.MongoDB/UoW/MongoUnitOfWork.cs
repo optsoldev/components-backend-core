@@ -8,6 +8,7 @@ namespace Optsol.Components.Infra.MongoDB.UoW
     public class MongoUnitOfWork : IMongoUnitOfWork
     {
         private bool _disposed = false;
+
         private readonly ILogger _logger;
 
         public MongoContext Context { get; protected set; }
@@ -33,7 +34,7 @@ namespace Optsol.Components.Infra.MongoDB.UoW
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             _logger?.LogInformation($"Método: { nameof(Dispose) }()");
 

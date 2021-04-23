@@ -34,7 +34,7 @@ namespace Optsol.Components.Infra.UoW
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             _logger?.LogInformation($"Método: { nameof(Dispose) }()");
 

@@ -4,7 +4,7 @@ using System;
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public class RabbitMQSettingsNullException : Exception
+    public sealed class RabbitMQSettingsNullException : Exception
     {
         public RabbitMQSettingsNullException(ILoggerFactory logger = null)
             : base("A configuração do RabbitMQ não foi encontrada no appsettings")

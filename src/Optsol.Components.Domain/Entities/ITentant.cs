@@ -6,7 +6,7 @@ namespace Optsol.Components.Domain.Entities
     {
         TKey TenantId { get; }
 
-        public void SetTenantId(TKey tentantId);
+        public void SetTenantId(TKey tenantId);
     }
 
     public interface ITenant : ITenant<Guid> { }

@@ -14,7 +14,7 @@ namespace Optsol.Components.Shared.Settings
             var defaultPolicyIsNullOrEmpty = string.IsNullOrEmpty(DefaultPolicy);
             if (defaultPolicyIsNullOrEmpty)
             {
-                throw new NullReferenceException(nameof(DefaultPolicy));
+                throw new ApplicationException(nameof(DefaultPolicy));
             }
         }
     }
@@ -30,7 +30,7 @@ namespace Optsol.Components.Shared.Settings
             var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
             if (nameIsNullOrEmpty)
             {
-                throw new NullReferenceException(nameof(Name));
+                throw new ApplicationException(nameof(Name));
             }
         }
     }

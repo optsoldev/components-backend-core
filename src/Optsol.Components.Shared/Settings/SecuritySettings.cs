@@ -15,13 +15,13 @@ namespace Optsol.Components.Shared.Settings
             var apiNameIsNullOrEmpty = !IsDevelopment && string.IsNullOrEmpty(ApiName);
             if (apiNameIsNullOrEmpty)
             {
-                throw new NullReferenceException(nameof(ApiName));
+                throw new ApplicationException(nameof(ApiName));
             }
 
             var azureB2cIsNull = !IsDevelopment && AzureB2C == null;
             if (azureB2cIsNull)
             {
-                throw new NullReferenceException(nameof(AzureB2C));
+                throw new ApplicationException(nameof(AzureB2C));
             }
         }
     }

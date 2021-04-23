@@ -21,7 +21,7 @@ namespace Optsol.Components.Test.Shared.Logger
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             _disposed = disposing;
             Console.WriteLine(_disposed);

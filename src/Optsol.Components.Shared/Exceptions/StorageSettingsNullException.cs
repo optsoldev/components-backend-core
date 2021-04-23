@@ -4,7 +4,7 @@ using System;
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public class StorageSettingsNullException : Exception
+    public sealed class StorageSettingsNullException : Exception
     {
 
         public StorageSettingsNullException(ILoggerFactory logger)

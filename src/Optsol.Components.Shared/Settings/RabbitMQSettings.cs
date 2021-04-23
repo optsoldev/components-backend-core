@@ -18,12 +18,12 @@ namespace Optsol.Components.Shared.Settings
         {
             if (string.IsNullOrEmpty(HostName))
             {
-                throw new NullReferenceException(nameof(HostName));
+                throw new ApplicationException(nameof(HostName));
             }
 
             if (string.IsNullOrEmpty(ExchangeName))
             {
-                throw new NullReferenceException(nameof(ExchangeName));
+                throw new ApplicationException(nameof(ExchangeName));
             }
         }
     }

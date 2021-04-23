@@ -63,9 +63,7 @@ namespace Optsol.Components.Infra.Security.Attributes
 
         private static void ContextRemoteSecurity(AuthorizationFilterContext context)
         {
-            //TODO: Validar com o SSO.
-
-            context.Result = new UnauthorizedResult();
+            throw new NotImplementedException();
         }
     }
 }
