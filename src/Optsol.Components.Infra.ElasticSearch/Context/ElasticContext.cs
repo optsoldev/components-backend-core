@@ -55,7 +55,7 @@ namespace Optsol.Components.Infra.ElasticSearch.Context
 
             _commands.Add(command);
         }
-        
+
         public void CreateIndex(string indexName)
         {
             _logger?.LogInformation($"Método: { nameof(CreateIndex) }()");
