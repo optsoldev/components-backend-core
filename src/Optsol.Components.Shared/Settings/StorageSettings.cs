@@ -13,7 +13,7 @@ namespace Optsol.Components.Shared.Settings
             var connectionIsNull = string.IsNullOrEmpty(ConnectionString);
             if (connectionIsNull)
             {
-                throw new ArgumentNullException(nameof(ConnectionString));
+                throw new ApplicationException(nameof(ConnectionString));
             }
         }
     }
@@ -27,7 +27,7 @@ namespace Optsol.Components.Shared.Settings
             var containerNameIsNull = string.IsNullOrEmpty(ContainerName);
             if (containerNameIsNull)
             {
-                throw new ArgumentNullException(nameof(ContainerName));
+                throw new ApplicationException(nameof(ContainerName));
             }
         }
     }

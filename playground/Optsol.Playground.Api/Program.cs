@@ -5,7 +5,7 @@ namespace Optsol.Playground.Api
 {
     public class Program : BaseProgram
     {
-        public static void Main(string[] args) => Start<Startup>(CreateHostBuilder(args));
+        public static void Main(string[] args) => Start(CreateHostBuilder(args));
 
         public static IHostBuilder CreateHostBuilder(string[] args) => CreateHostBuilder<Startup>(args);
     }

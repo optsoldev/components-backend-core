@@ -11,6 +11,11 @@ namespace Optsol.Components.Service.Programs
 {
     public class BaseProgram
     {
+        protected BaseProgram()
+        {
+
+        }
+
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args)
             where TStartup : class
             => Host.CreateDefaultBuilder(args)
@@ -26,7 +31,7 @@ namespace Optsol.Components.Service.Programs
                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
 
                 var buildConfiguration = configuration.Build();
-
+                                
                 var logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(buildConfiguration)
                     .WriteTo.Console();
@@ -47,8 +52,7 @@ namespace Optsol.Components.Service.Programs
 
             }).UseSerilog();
 
-        public static void Start<TStatup>(IHostBuilder createHostBuilder)
-            where TStatup : class
+        public static void Start(IHostBuilder createHostBuilder)
         {
             try
             {

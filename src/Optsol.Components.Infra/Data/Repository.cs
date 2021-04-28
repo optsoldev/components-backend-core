@@ -1,25 +1,27 @@
-using System.Linq.Expressions;
-using System.Linq;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Domain.Entities;
-using Optsol.Components.Shared.Exceptions;
-using Optsol.Components.Shared.Extensions;
-using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Domain.Data;
+using Optsol.Components.Domain.Entities;
+using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Infra.Data.Provider;
+using Optsol.Components.Shared.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Data
 {
-    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>, IDisposable
+    public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
+        private bool _disposed = false;
+
         private readonly ILogger _logger;
+
         private readonly ITenantProvider<TKey> _tenantProvider;
 
         public CoreContext Context { get; protected set; }
@@ -42,13 +44,11 @@ namespace Optsol.Components.Infra.Data
         {
             TypeFilter filter = new(InterfaceFilter);
 
-            var type = this.GetType();
-
             var @interface = $"{typeof(ITenant<TKey>).Namespace}.{typeof(ITenant<TKey>).Name.Replace("`1", "")}";
             var repositoryInvalid = typeof(TEntity).FindInterfaces(filter, @interface).Any() && _tenantProvider == null;
             if (repositoryInvalid)
             {
-                _logger?.LogError($"Essa entidade implementa ITenant, o ITentantProvider deve ser injetado.");
+                _logger?.LogError($"Essa entidade implementa ITenant, o ITenantProvider deve ser injetado.");
                 throw new InvalidRepositoryException();
             }
         }
@@ -163,7 +163,7 @@ namespace Optsol.Components.Infra.Data
         {
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson() }}} )");
 
-            var localEntity = Context.Set<TEntity>().Local?.Where(w => w.Id.Equals(entity.Id)).FirstOrDefault();
+            var localEntity = Context.Set<TEntity>().Local?.FirstOrDefault(w => w.Id.Equals(entity.Id));
             var inLocal = localEntity != null;
             if (inLocal)
             {
@@ -222,10 +222,21 @@ namespace Optsol.Components.Infra.Data
             return Context.SaveChangesAsync();
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            Context.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
+
+            if (!_disposed && disposing)
+            {
+                Context.Dispose();
+            }
+            _disposed = true;
         }
 
         private static async Task<ISearchResult<TEntity>> CreateSearchResult(IQueryable<TEntity> query, uint page, uint? pageSize)

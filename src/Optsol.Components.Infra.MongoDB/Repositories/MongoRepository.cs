@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.MongoDB.Repositories
 {
-    public class MongoRepository<TEntity, TKey>
-        : IMongoRepository<TEntity, TKey>, IDisposable
+    public class MongoRepository<TEntity, TKey> : IMongoRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
+        private bool _disposed = false;
+
         private readonly ILogger _logger;
 
         public MongoContext Context { get; protected set; }
@@ -105,10 +106,21 @@ namespace Optsol.Components.Infra.MongoDB.Repositories
             return Context.SaveChangesAsync();
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            Context.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
+
+            if (!_disposed && disposing)
+            {
+                Context.Dispose();
+            }
+            _disposed = true;
         }
     }
 }

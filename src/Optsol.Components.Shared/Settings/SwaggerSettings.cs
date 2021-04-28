@@ -22,19 +22,19 @@ namespace Optsol.Components.Shared.Settings
             var titleIsNullOrEmpty = string.IsNullOrEmpty(Title);
             if (titleIsNullOrEmpty)
             {
-                throw new ArgumentNullException(nameof(Title));
+                throw new ApplicationException(nameof(Title));
             }
 
             var versionIsNullOrEmpty = string.IsNullOrEmpty(Version);
             if (versionIsNullOrEmpty)
             {
-                throw new ArgumentNullException(nameof(Version));
+                throw new ApplicationException(nameof(Version));
             }
 
             var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
             if (nameIsNullOrEmpty)
             {
-                throw new ArgumentNullException(nameof(Name));
+                throw new ApplicationException(nameof(Name));
             }
         }
     }
@@ -52,7 +52,7 @@ namespace Optsol.Components.Shared.Settings
             var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
             if (nameIsNullOrEmpty)
             {
-                throw new ArgumentNullException(nameof(Name));
+                throw new ApplicationException(nameof(Name));
             }
         }
     }

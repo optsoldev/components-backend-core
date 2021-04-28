@@ -24,8 +24,7 @@ namespace Microsoft.AspNetCore.Builder
                     {
                         options.OAuthClientId("436453d1-adf6-4160-93f9-9e665fc94d65");
                         options.OAuthAppName("Swagger UI for components optsol");
-                        //options.OAuthUsePkce();
-
+                        
                         if (isDevelopment)
                         {
                             options.OAuthClientSecret("secret".Sha256());

@@ -8,27 +8,27 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Application.Services
 {
-    public interface IBaseServiceApplication : IDisposable { }
+    public interface IBaseServiceApplication { };
 
     public interface IBaseServiceApplication<TEntity> : IBaseServiceApplication
         where TEntity : AggregateRoot
     {
-        Task<TGetByIdDto> GetByIdAsync<TGetByIdDto>(Guid id) 
+        Task<TGetByIdDto> GetByIdAsync<TGetByIdDto>(Guid id)
             where TGetByIdDto : BaseDataTransferObject;
 
         Task<IEnumerable<TGetByIdDto>> GetByIdsAsync<TGetByIdDto>(IEnumerable<Guid> ids)
             where TGetByIdDto : BaseDataTransferObject;
 
-        Task<IEnumerable<TGetAllDto>> GetAllAsync<TGetAllDto>() 
+        Task<IEnumerable<TGetAllDto>> GetAllAsync<TGetAllDto>()
             where TGetAllDto : BaseDataTransferObject;
-                
+
         Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes { get; set; }
-        
-        Task<ISearchResult<TGetAllDto>> GetAllAsync<TGetAllDto, TSearch>(ISearchRequest<TSearch> requestSearch) 
+
+        Task<ISearchResult<TGetAllDto>> GetAllAsync<TGetAllDto, TSearch>(ISearchRequest<TSearch> requestSearch)
             where TSearch : class
             where TGetAllDto : BaseDataTransferObject;
 
-        Task<TResponseInsertData> InsertAsync<TInsertData, TResponseInsertData>(TInsertData data) 
+        Task<TResponseInsertData> InsertAsync<TInsertData, TResponseInsertData>(TInsertData data)
             where TInsertData : BaseDataTransferObject
             where TResponseInsertData : class;
 

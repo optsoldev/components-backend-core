@@ -19,9 +19,7 @@ namespace Optsol.Components.Service.Responses
 
         public Response Create()
         {
-            var responseSuccess = !_notificationContext.HasNotifications;
-
-            return new Response(responseSuccess, MessageResolver(_notificationContext.Notifications));
+            return new Response(ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
         public Response<TData> Create<TData>(TData data)
@@ -30,19 +28,15 @@ namespace Optsol.Components.Service.Responses
             return new Response<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
-        public ResponseList<TData> Create<TData>(IEnumerable<TData> data) where TData : BaseDataTransferObject
+        public ResponseList<TData> Create<TData>(IEnumerable<TData> dataList) where TData : BaseDataTransferObject
         {
-            var responseSuccess = !_notificationContext.HasNotifications;
-
-            return new ResponseList<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
+            return new ResponseList<TData>(dataList, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
-        public ResponseSearch<TData> Create<TData>(ISearchResult<TData> data)
+        public ResponseSearch<TData> Create<TData>(ISearchResult<TData> searchResult)
             where TData : BaseDataTransferObject
         {
-            var responseSuccess = !_notificationContext.HasNotifications;
-
-            return new ResponseSearch<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
+            return new ResponseSearch<TData>(searchResult, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
         private bool ResponseSuccess()
@@ -50,13 +44,14 @@ namespace Optsol.Components.Service.Responses
             return !_notificationContext.HasNotifications;
         }
 
-
-        private List<string> MessageResolver(IReadOnlyCollection<Notification> notifications)
+        private static List<string> MessageResolver(IReadOnlyCollection<Notification> notifications)
         {
             var messages = new List<string>();
 
             foreach (var notify in notifications)
+            {
                 messages.Add($"{notify.Key}:{notify.Message}");
+            }
 
             return messages;
         }

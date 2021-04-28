@@ -2,7 +2,7 @@
 
 namespace Optsol.Components.Infra.Data.Provider
 {
-    public interface ITenantProvider<TKey>
+    public interface ITenantProvider<out TKey>
     {
         TKey GetTenantId();
     }

@@ -10,7 +10,7 @@ namespace Optsol.Components.Shared.Settings
         {
             if (string.IsNullOrEmpty(ConnectionString))
             {
-                throw new ArgumentNullException(nameof(ConnectionString));
+                throw new ApplicationException(nameof(ConnectionString));
             }
         }
     }

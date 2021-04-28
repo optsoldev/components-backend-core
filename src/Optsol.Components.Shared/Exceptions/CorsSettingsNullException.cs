@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.Serialization;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class CorsSettingsNullException : Exception
     {
         public CorsSettingsNullException(ILoggerFactory logger = null)
@@ -22,6 +24,10 @@ namespace Optsol.Components.Shared.Exceptions
     }}]
 }}"
             );
+        }
+
+        protected CorsSettingsNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

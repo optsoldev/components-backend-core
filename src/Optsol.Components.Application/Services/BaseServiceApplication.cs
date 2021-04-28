@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Flunt.Notifications;
-using Flunt.Validations;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Data;
@@ -10,7 +9,6 @@ using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Exceptions;
-using Optsol.Components.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +22,7 @@ namespace Optsol.Components.Application.Services
         protected readonly ILogger _logger;
         protected readonly NotificationContext _notificationContext;
 
-        public BaseServiceApplication(IMapper mapper, ILoggerFactory logger, NotificationContext notificationContext)
+        protected BaseServiceApplication(IMapper mapper, ILoggerFactory logger, NotificationContext notificationContext)
         {
             _logger = logger.CreateLogger(nameof(BaseServiceApplication));
             _logger?.LogInformation($"Inicializando Application Service");
@@ -33,16 +31,13 @@ namespace Optsol.Components.Application.Services
 
             _notificationContext = notificationContext ?? throw new NotificationContextException();
         }
-
-        public virtual void Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
     }
 
-    public class BaseServiceApplication<TEntity> : BaseServiceApplication, IBaseServiceApplication<TEntity>
+    public class BaseServiceApplication<TEntity> : BaseServiceApplication, IDisposable, IBaseServiceApplication<TEntity>
         where TEntity : AggregateRoot
     {
+        private bool _disposed = false;
+
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
         protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
@@ -215,11 +210,22 @@ namespace Optsol.Components.Application.Services
             return true;
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
-
+            Dispose(true);
             GC.SuppressFinalize(this);
-            _unitOfWork.Dispose();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
+
+            if (!_disposed && disposing)
+            {
+                _unitOfWork.Dispose();
+            }
+
+            _disposed = true;
         }
     }
 }

@@ -11,20 +11,22 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
 {
     public class RabbitMQConnection : IRabbitMQConnection, IDisposable
     {
+        private bool _disposed = false;
+
         private readonly RabbitMQSettings _rabbitMQSettings;
 
         private readonly ILogger _logger;
 
         private IConnection _connection;
 
-        private bool _disposed;
+        private readonly object _lock = new();
 
-        object @lock = new();
-
-        public RabbitMQConnection(ILoggerFactory logger, RabbitMQSettings rabbitMQSettings)
+        public RabbitMQConnection(RabbitMQSettings rabbitMQSettings, ILoggerFactory logger)
         {
-            _rabbitMQSettings = rabbitMQSettings;
             _logger = logger?.CreateLogger<RabbitMQConnection>();
+            _logger?.LogInformation("Inicializando RabbitMQConnection");
+
+            _rabbitMQSettings = rabbitMQSettings ?? throw new ArgumentNullException(nameof(rabbitMQSettings));
 
             CreateConnection();
         }
@@ -48,15 +50,15 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
 
         public void Connect()
         {
-            _logger.LogInformation("Conectando client ao RabbitMQ");
+            _logger?.LogInformation("Conectando client ao RabbitMQ");
 
-            lock (@lock)
+            lock (_lock)
             {
                 var policy = Policy.Handle<BrokerUnreachableException>()
                     .Or<SocketException>()
                     .WaitAndRetry(3, attemp => TimeSpan.FromSeconds(Math.Pow(2, attemp)), (ex, time) =>
                     {
-                        _logger.LogWarning("Não foi possível se conectar  tentativa após: {TimeOut}s {ExceptionMessage}", $"{time.TotalSeconds:n1}", ex.Message);
+                        _logger?.LogWarning("Não foi possível se conectar  tentativa após: {TimeOut}s {ExceptionMessage}", $"{time.TotalSeconds:n1}", ex.Message);
                     });
 
                 policy.Execute(() =>
@@ -70,7 +72,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
                     {
                         if (_disposed) return;
 
-                        _logger.LogWarning("Tentando reconexão...");
+                        _logger?.LogWarning("Tentando reconexão...");
 
                         Connect();
                     };
@@ -79,7 +81,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
                     {
                         if (_disposed) return;
 
-                        _logger.LogWarning("Tentando reconexão...");
+                        _logger?.LogWarning("Tentando reconexão...");
 
                         Connect();
                     };
@@ -88,14 +90,14 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
                     {
                         if (_disposed) return;
 
-                        _logger.LogWarning("Tentando reconexão...");
+                        _logger?.LogWarning("Tentando reconexão...");
 
                         Connect();
                     };
                 }
                 else
                 {
-                    _logger.LogCritical("FATAL ERRO: Não foi possível se conectar ao RabbitMQ");
+                    _logger?.LogCritical("FATAL ERRO: Não foi possível se conectar ao RabbitMQ");
                 }
             }
         }
@@ -112,12 +114,19 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
 
         public void Dispose()
         {
-            if (_disposed) return;
-
-            _disposed = true;
-
-            _connection.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
+
+            if (!_disposed && disposing)
+            {
+                _connection.Dispose();
+            }
+            _disposed = true;
         }
 
         private void CreateConnection()
@@ -144,7 +153,7 @@ namespace Optsol.Components.Infra.RabbitMQ.Connections
             }
             catch (Exception ex)
             {
-                _logger.LogError("Não foi possível criar a conexão com o RabbitMQ: {ExceptionMessage}", ex.Message);
+                _logger?.LogError("Não foi possível criar a conexão com o RabbitMQ: {ExceptionMessage}", ex.Message);
             }
         }
     }

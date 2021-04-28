@@ -2,7 +2,6 @@
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.ElasticSearch.Context;
 using Optsol.Components.Shared.Exceptions;
-using Optsol.Components.Shared.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.ElasticSearch.Repositories
 {
-    public class ElasticRepository<TEntity, TKey> : 
+    public class ElasticRepository<TEntity, TKey> :
         IElasticRepository<TEntity, TKey>
         where TEntity : class, IAggregateRoot<TKey>
     {
+        private bool _disposed = false;
 
         private readonly ILogger _logger;
 
@@ -107,10 +107,22 @@ namespace Optsol.Components.Infra.ElasticSearch.Repositories
             return Context.SaveChangesAsync();
         }
 
-        public virtual void Dispose()
+        public void Dispose()
         {
-            Context.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
+
+            if (!_disposed && disposing)
+            {
+                Context.Dispose();
+            }
+
+            _disposed = true;
         }
     }
 }

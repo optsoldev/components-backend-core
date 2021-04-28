@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.Serialization;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class SwaggerSettingsNullException : Exception
     {
         public SwaggerSettingsNullException(ILoggerFactory logger = null)
@@ -26,6 +28,10 @@ namespace Optsol.Components.Shared.Exceptions
     }}""
   }}
 ");
+        }
+
+        protected SwaggerSettingsNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

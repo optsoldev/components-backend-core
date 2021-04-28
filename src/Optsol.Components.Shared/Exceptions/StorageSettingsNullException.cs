@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.Serialization;
 
 namespace Optsol.Components.Shared.Exceptions
 {
+    [Serializable]
     public class StorageSettingsNullException : Exception
     {
 
@@ -22,6 +24,10 @@ namespace Optsol.Components.Shared.Exceptions
 }}
 "
             );
+        }
+
+        protected StorageSettingsNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }
