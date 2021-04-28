@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.Serialization;
 
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public sealed class StorageSettingsNullException : Exception
+    public class StorageSettingsNullException : Exception
     {
 
         public StorageSettingsNullException(ILoggerFactory logger)
@@ -23,6 +24,10 @@ namespace Optsol.Components.Shared.Exceptions
 }}
 "
             );
+        }
+
+        protected StorageSettingsNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

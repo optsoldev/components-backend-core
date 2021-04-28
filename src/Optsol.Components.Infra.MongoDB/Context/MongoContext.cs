@@ -4,6 +4,7 @@ using Optsol.Components.Shared.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.MongoDB.Context
@@ -66,12 +67,12 @@ namespace Optsol.Components.Infra.MongoDB.Context
 
             return countSaveTasks;
         }
-        
+
         public void AddCommand(Func<Task> command)
         {
             _commands.Add(command);
         }
-        
+
         public void Dispose()
         {
             Dispose(true);
@@ -97,7 +98,16 @@ namespace Optsol.Components.Infra.MongoDB.Context
                 return;
             }
 
-            MongoClient = new MongoClient(_mongoSettings.ConnectionString);
+            MongoClientSettings settings = MongoClientSettings.FromUrl(
+              new MongoUrl(_mongoSettings.ConnectionString)
+            );
+
+            if (settings.UseTls)
+            {
+                settings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+            }
+
+            MongoClient = new MongoClient(settings);
 
             _database = MongoClient.GetDatabase(_mongoSettings.DatabaseName);
         }

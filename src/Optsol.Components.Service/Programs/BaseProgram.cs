@@ -31,7 +31,7 @@ namespace Optsol.Components.Service.Programs
                     .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
 
                 var buildConfiguration = configuration.Build();
-
+                                
                 var logger = new LoggerConfiguration()
                     .ReadFrom.Configuration(buildConfiguration)
                     .WriteTo.Console();

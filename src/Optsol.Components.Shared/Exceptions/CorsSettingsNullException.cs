@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.Serialization;
 
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public sealed class CorsSettingsNullException : Exception
+    public class CorsSettingsNullException : Exception
     {
         public CorsSettingsNullException(ILoggerFactory logger = null)
             : base("A configuração do CORS não foi encontrada no appsettings")
@@ -23,6 +24,10 @@ namespace Optsol.Components.Shared.Exceptions
     }}]
 }}"
             );
+        }
+
+        protected CorsSettingsNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

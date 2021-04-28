@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.Serialization;
 
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public sealed class SecuritySettingNullException: Exception
+    public class SecuritySettingNullException: Exception
     {
         public SecuritySettingNullException(ILoggerFactory logger)
             : base("A configuração de segurança não foi encontrada no appsettings")
@@ -28,6 +29,10 @@ namespace Optsol.Components.Shared.Exceptions
 }}
 "
             );
+        }
+
+        protected SecuritySettingNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Runtime.Serialization;
 
 namespace Optsol.Components.Shared.Exceptions
 {
     [Serializable]
-    public sealed class RabbitMQSettingsNullException : Exception
+    public class RabbitMQSettingsNullException : Exception
     {
         public RabbitMQSettingsNullException(ILoggerFactory logger = null)
             : base("A configuração do RabbitMQ não foi encontrada no appsettings")
@@ -19,6 +20,10 @@ namespace Optsol.Components.Shared.Exceptions
     ""Password"": ""{{Password}}""
 }}"
             );
+        }
+
+        protected RabbitMQSettingsNullException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         }
 
         [Trait("Infraestrutura", "MongoDB Respositório de Leitura")]
-        [Fact(DisplayName = "Deve obter todos registros pelo repositório", Skip = "mongo local docker test")]
+        [Fact(DisplayName = "Deve obter todos registros pelo repositório")]
         public async Task Deve_obter_Todos_Pelo_Repositorio()
         {
             //Given
