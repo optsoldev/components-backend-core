@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Optsol.Components.Shared.Settings;
 using Serilog;
@@ -8,7 +9,7 @@ using System;
 
 namespace Optsol.Components.Service.Programs
 {
-    public static class BaseProgram
+    public class BaseProgram
     {
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args)
             where TStartup : class
@@ -20,27 +21,20 @@ namespace Optsol.Components.Service.Programs
                       webBuilder.UseStartup<TStartup>();
                   }).ConfigureAppConfiguration((context, configuration) =>
                   {
-                      var env = context.HostingEnvironment;
                       var buildConfiguration = configuration.Build();
 
                       var logger = new LoggerConfiguration()
                           .ReadFrom.Configuration(buildConfiguration)
                           .WriteTo.Console();
 
-                      var elasticSearchSettings = buildConfiguration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
-                      var elasticSearchSettingsIsValid = elasticSearchSettings != null && !string.IsNullOrEmpty(elasticSearchSettings.Uri);
-                      if (elasticSearchSettingsIsValid)
-                      {
-                          var indexNameFormat = $"{elasticSearchSettings.IndexName}-logs-{env.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
-
-                          logger = logger.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticSearchSettings.Uri))
-                          {
-                              IndexFormat = indexNameFormat
-                          });
-                      }
+                      logger.ConfigureLogElasticStack(context.HostingEnvironment, buildConfiguration);
 
                       Log.Logger = logger.CreateLogger();
 
+                  })
+                  .ConfigureServices(services =>
+                  {
+                      services.AddApplicationInsightsTelemetry();
                   })
                   .UseSerilog();
         }
@@ -62,6 +56,26 @@ namespace Optsol.Components.Service.Programs
             {
                 Log.CloseAndFlush();
             }
+        }
+    }
+
+    public static class BaseProgramExtensions
+    {
+        public static LoggerConfiguration ConfigureLogElasticStack(this LoggerConfiguration logger, IHostEnvironment env, IConfigurationRoot buildConfiguration)
+        {
+            var elasticSearchSettings = buildConfiguration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
+            var elasticSearchSettingsIsValid = elasticSearchSettings != null && !string.IsNullOrEmpty(elasticSearchSettings.Uri);
+            if (elasticSearchSettingsIsValid)
+            {
+                var indexNameFormat = $"{elasticSearchSettings.IndexName}-logs-{env.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
+
+                logger = logger.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticSearchSettings.Uri))
+                {
+                    IndexFormat = indexNameFormat
+                });
+            }
+
+            return logger;
         }
     }
 }
