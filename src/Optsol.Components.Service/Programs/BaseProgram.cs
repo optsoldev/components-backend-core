@@ -11,6 +11,11 @@ namespace Optsol.Components.Service.Programs
 {
     public class BaseProgram
     {
+        protected BaseProgram()
+        {
+
+        }
+
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args)
             where TStartup : class
         {
