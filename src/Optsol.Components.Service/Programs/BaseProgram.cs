@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Optsol.Components.Shared.Settings;
 using Serilog;
@@ -18,39 +18,31 @@ namespace Optsol.Components.Service.Programs
 
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args)
             where TStartup : class
-            => Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<TStartup>();
-            }).ConfigureAppConfiguration((context, configuration) =>
-            {
-                IHostEnvironment env = context.HostingEnvironment;
+        {
+            return Host
+                  .CreateDefaultBuilder(args)
+                  .ConfigureWebHostDefaults(webBuilder =>
+                  {
+                      webBuilder.UseStartup<TStartup>();
+                  }).ConfigureAppConfiguration((context, configuration) =>
+                  {
+                      var buildConfiguration = configuration.Build();
 
-                configuration
-                    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true);
+                      var logger = new LoggerConfiguration()
+                          .ReadFrom.Configuration(buildConfiguration)
+                          .WriteTo.Console();
 
-                var buildConfiguration = configuration.Build();
-                                
-                var logger = new LoggerConfiguration()
-                    .ReadFrom.Configuration(buildConfiguration)
-                    .WriteTo.Console();
+                      logger.ConfigureLogElasticStack(context.HostingEnvironment, buildConfiguration);
 
-                var elasticSearchSettings = buildConfiguration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
-                var elasticSearchSettingsIsValid = elasticSearchSettings != null && !string.IsNullOrEmpty(elasticSearchSettings.Uri);
-                if (elasticSearchSettingsIsValid)
-                {
-                    var indexNameFormat = $"{elasticSearchSettings.IndexName}-logs-{env.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
+                      Log.Logger = logger.CreateLogger();
 
-                    logger = logger.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticSearchSettings.Uri))
-                    {
-                        IndexFormat = indexNameFormat
-                    });
-                }
-
-                Log.Logger = logger.CreateLogger();
-
-            }).UseSerilog();
+                  })
+                  .ConfigureServices(services =>
+                  {
+                      services.AddApplicationInsightsTelemetry();
+                  })
+                  .UseSerilog();
+        }
 
         public static void Start(IHostBuilder createHostBuilder)
         {
@@ -69,6 +61,26 @@ namespace Optsol.Components.Service.Programs
             {
                 Log.CloseAndFlush();
             }
+        }
+    }
+
+    public static class BaseProgramExtensions
+    {
+        public static LoggerConfiguration ConfigureLogElasticStack(this LoggerConfiguration logger, IHostEnvironment env, IConfigurationRoot buildConfiguration)
+        {
+            var elasticSearchSettings = buildConfiguration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
+            var elasticSearchSettingsIsValid = elasticSearchSettings != null && !string.IsNullOrEmpty(elasticSearchSettings.Uri);
+            if (elasticSearchSettingsIsValid)
+            {
+                var indexNameFormat = $"{elasticSearchSettings.IndexName}-logs-{env.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
+
+                logger = logger.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticSearchSettings.Uri))
+                {
+                    IndexFormat = indexNameFormat
+                });
+            }
+
+            return logger;
         }
     }
 }
