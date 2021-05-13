@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Optsol.Playground.Application.Mappers.CartaoCredito;
 using Optsol.Playground.Application.Services.Cliente;
-using Optsol.Playground.Application.Validators;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
