@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Optsol.Components.Application.Mappers;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
@@ -14,7 +15,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddApplications<TInterface, TImplementation>(this IServiceCollection services, params string[] namespaces)
         {
             services.RegisterScoped<TInterface, TImplementation>(namespaces);
+            
             services.AddScoped(typeof(IBaseServiceApplication<>), typeof(BaseServiceApplication<>));
+
+            services.AddAutoMapper(typeof(BaseProfile));
 
             return services;
         }
