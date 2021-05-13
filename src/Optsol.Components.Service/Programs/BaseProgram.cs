@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Optsol.Components.Shared.Settings;
 using Serilog;
@@ -11,10 +11,7 @@ namespace Optsol.Components.Service.Programs
 {
     public class BaseProgram
     {
-        protected BaseProgram()
-        {
-
-        }
+        protected BaseProgram() { }
 
         public static IHostBuilder CreateHostBuilder<TStartup>(string[] args)
             where TStartup : class
@@ -34,12 +31,10 @@ namespace Optsol.Components.Service.Programs
 
                       logger.ConfigureLogElasticStack(context.HostingEnvironment, buildConfiguration);
 
+                      logger.ConfigureLogApplicationInsights(buildConfiguration);
+
                       Log.Logger = logger.CreateLogger();
 
-                  })
-                  .ConfigureServices(services =>
-                  {
-                      services.AddApplicationInsightsTelemetry();
                   })
                   .UseSerilog();
         }
@@ -66,10 +61,26 @@ namespace Optsol.Components.Service.Programs
 
     public static class BaseProgramExtensions
     {
-        public static LoggerConfiguration ConfigureLogElasticStack(this LoggerConfiguration logger, IHostEnvironment env, IConfigurationRoot buildConfiguration)
+        public static LoggerConfiguration ConfigureLogApplicationInsights(this LoggerConfiguration logger, IConfigurationRoot configuration)
         {
-            var elasticSearchSettings = buildConfiguration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
-            var elasticSearchSettingsIsValid = elasticSearchSettings != null && !string.IsNullOrEmpty(elasticSearchSettings.Uri);
+            var applicationInsightsSettings = configuration.GetSection(nameof(ApplicationInsightsSettings)).Get<ApplicationInsightsSettings>();
+            applicationInsightsSettings?.Validate();
+
+            var applicationInsightsSettingsIsValid = !string.IsNullOrEmpty(applicationInsightsSettings?.InstrumentationKey);
+            if (applicationInsightsSettingsIsValid)
+            {
+                logger.WriteTo.ApplicationInsights(new TelemetryConfiguration(applicationInsightsSettings.InstrumentationKey), TelemetryConverter.Traces);
+            }
+
+            return logger;
+        }
+
+        public static LoggerConfiguration ConfigureLogElasticStack(this LoggerConfiguration logger, IHostEnvironment env, IConfigurationRoot configuration)
+        {
+            var elasticSearchSettings = configuration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
+            elasticSearchSettings?.Validate();
+
+            var elasticSearchSettingsIsValid = !string.IsNullOrEmpty(elasticSearchSettings?.Uri);
             if (elasticSearchSettingsIsValid)
             {
                 var indexNameFormat = $"{elasticSearchSettings.IndexName}-logs-{env.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
