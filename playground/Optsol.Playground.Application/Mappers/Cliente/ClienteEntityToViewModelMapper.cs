@@ -1,4 +1,5 @@
 using AutoMapper;
+using Optsol.Components.Infra.Data;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
 
@@ -18,6 +19,8 @@ namespace Optsol.Playground.Application.Mappers.Cliente
                 .ForMember(item => item.Nome, item => item.MapFrom(src => src.Nome.Nome))
                 .ForMember(item => item.SobreNome, item => item.MapFrom(src => src.Nome.SobreNome))
                 .ForMember(item => item.Email, item => item.MapFrom(src => src.Email.ToString()));
+
+            CreateMap<SearchResult<ClienteEntity>, SearchResult<ClienteViewModel>>();
         }
     }
 }

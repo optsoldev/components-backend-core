@@ -1,5 +1,4 @@
 ﻿using Optsol.Components.Infra.Data.Pagination;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Playground.Domain.Entities;
 using System;
 using System.Linq;
@@ -8,7 +7,7 @@ using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
 
 namespace Optsol.Playground.Application.Searchs
 {
-    public class ClienteSearchDto : ISearch<ClienteEntity>, IOrderBy<ClienteEntity>, IInclude<ClienteEntity>
+    public class ClienteSearchDto : ISearch<ClienteEntity>, IOrderBy<ClienteEntity>
     {
         public string Nome { get; set; }
 
@@ -16,15 +15,11 @@ namespace Optsol.Playground.Application.Searchs
         {
             var expression = PredicateBuilder.True<ClienteEntity>();
 
-            expression = expression.And(_ => _.Nome.Constains(Nome));
+            expression = expression
+                .And(_ => _.Nome.Nome.Contains(Nome) || _.Nome.SobreNome.Contains(Nome));
 
             return expression;
             
-        }
-
-        public Func<IQueryable<ClienteEntity>, IQueryable<ClienteEntity>> GetInclude()
-        {
-            throw new NotImplementedException();
         }
 
         public Func<IQueryable<ClienteEntity>, IOrderedQueryable<ClienteEntity>> GetOrderBy()

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Optsol.Playground.Application.Mappers.CartaoCredito;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
@@ -41,6 +42,7 @@ namespace Optsol.Playground.Api
             services.AddApplications(options =>
             {
                 options
+                    .ConfigureAutoMapper<CartaoCreditoEntityToViewModelMapper>()
                     .ConfigureServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
             });
             services.AddDomainNotifications();
