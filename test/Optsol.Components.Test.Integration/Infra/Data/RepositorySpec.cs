@@ -37,8 +37,10 @@ namespace Optsol.Components.Test.Integration.Infra.Data
                 options
                     .EnabledInMemory()
                     .EnabledLogging();
+
+                options
+                    .ConfigureRepositories<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             });
-            services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
 
             return services.BuildServiceProvider();
         }
@@ -53,8 +55,10 @@ namespace Optsol.Components.Test.Integration.Infra.Data
                 options
                     .EnabledInMemory()
                     .EnabledLogging();
+
+                options
+                    .ConfigureRepositories<ITestDeletableReadRepository, TestDeletableReadRepository>("Optsol.Components.Test.Utils");
             });
-            services.AddRepository<ITestDeletableReadRepository, TestDeletableReadRepository>("Optsol.Components.Test.Utils");
 
             return services.BuildServiceProvider();
         }
@@ -62,7 +66,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
         private static ServiceProvider GetProviderConfiguredServicesFromTenantContext(string tenantHost = "http://domain.tenant.one.com")
         {
             var services = new ServiceCollection();
-            var options = new RepositoryOptions();
+            var options = new RepositoryOptions(services);
             options
                 .EnabledInMemory()
                 .EnabledLogging();
@@ -74,9 +78,11 @@ namespace Optsol.Components.Test.Integration.Infra.Data
                 options
                     .EnabledInMemory()
                     .EnabledLogging();
+
+                options
+                    .ConfigureRepositories<ITestTenantReadRepository, TestTenantReadRepository>("Optsol.Components.Test.Utils");
             });
 
-            services.AddRepository<ITestTenantReadRepository, TestTenantReadRepository>(new[] { "Optsol.Components.Test.Utils" });
             services.AddSingleton<IHttpContextAccessor>(x => new HttpContextAccessorTest(tenantHost));
             services.AddSingleton<ITenantProvider, DataBaseTenantProvider>();
 

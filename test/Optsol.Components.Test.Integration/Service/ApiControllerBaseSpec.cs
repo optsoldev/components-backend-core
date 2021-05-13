@@ -49,10 +49,15 @@ namespace Optsol.Components.Test.Integration.Service
                 options
                     .EnabledInMemory()
                     .EnabledLogging();
+
+                options
+                    .ConfigureRepositories<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             });
             services.AddDomainNotifications();
-            services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options.ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
             services.AddServices();
 
             var provider = services.BuildServiceProvider();
@@ -120,9 +125,15 @@ namespace Optsol.Components.Test.Integration.Service
                 options
                     .EnabledInMemory()
                     .EnabledLogging();
+
+                options
+                    .ConfigureRepositories<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
             });
-            services.AddRepository<ITestReadRepository, TestReadRepository>("Optsol.Components.Test.Utils");
-            services.AddApplications<IBaseServiceApplication<TestEntity>, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options
+                    .ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
             services.AddServices();
 
             var provider = services.BuildServiceProvider();
@@ -179,7 +190,11 @@ namespace Optsol.Components.Test.Integration.Service
                     .EnabledInMemory()
                     .EnabledLogging();
             });
-            services.AddApplications<IBaseServiceApplication<TestEntity>, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options
+                    .ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
             services.AddServices();
 
             var provider = services.BuildServiceProvider();
@@ -223,7 +238,11 @@ namespace Optsol.Components.Test.Integration.Service
                     .EnabledInMemory()
                     .EnabledLogging();
             });
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options
+                    .ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
             services.AddServices();
 
             var provider = services.BuildServiceProvider();
@@ -287,7 +306,11 @@ namespace Optsol.Components.Test.Integration.Service
                     .EnabledInMemory()
                     .EnabledLogging();
             });
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options
+                    .ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
             services.AddServices();
 
             var provider = services.BuildServiceProvider();

@@ -38,10 +38,16 @@ namespace Optsol.Playground.Test
                 options
                     .EnabledInMemory()
                     .EnabledLogging();
+
+                options
+                    .ConfigureRepositories<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             });
             services.AddDomainNotifications();
-            services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
-            services.AddApplications<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+            services.AddApplications(options =>
+            {
+                options
+                    .ConfigureServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+            });
             services.AddServices();
             services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
 
