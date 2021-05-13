@@ -29,7 +29,11 @@ namespace Optsol.Components.Test.Integration.Application
                     .EnabledInMemory()
                     .EnabledLogging();
             });
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options
+                    .ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
 
             return services.BuildServiceProvider();
         }

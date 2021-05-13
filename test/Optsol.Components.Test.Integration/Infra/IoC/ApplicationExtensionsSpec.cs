@@ -83,7 +83,7 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile(@"Settings/appsettings.cors.json")
                 .Build();
-            
+
             var services = new ServiceCollection();
             services.AddCors(configuration);
             var provider = services.BuildServiceProvider();
@@ -91,8 +91,8 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             var appBuilder = new ApplicationBuilder(provider);
 
             //When
-            Action action = () => appBuilder.UseCors(configuration); 
-            
+            Action action = () => appBuilder.UseCors(configuration);
+
             //Then                
             action.Should().NotThrow();
         }
@@ -136,7 +136,10 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             services.AddAutoMapper(typeof(TestEntityToViewModel));
 
             //When
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options.ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -160,7 +163,10 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             services.AddAutoMapper(typeof(TestEntityToViewModel));
 
             //When
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options.ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -184,7 +190,10 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             services.AddDomainNotifications();
 
             //When
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options.ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -208,7 +217,10 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             services.AddAutoMapper(typeof(TestEntityToViewModel));
 
             //When
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options.ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -227,7 +239,10 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             services.AddDomainNotifications();
 
             //When
-            services.AddApplications<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            services.AddApplications(options =>
+            {
+                options.ConfigureServices<ITestServiceApplication, TestServiceApplication>("Optsol.Components.Test.Utils");
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Optsol.Playground.Application.Mappers.Cliente;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Infra.Data.Context;
@@ -35,17 +34,21 @@ namespace Optsol.Playground.Api
                     .ConfigureMigrationsAssemblyName("Optsol.Playground.Infra")
                     .EnabledLogging();
 
+                options
+                    .ConfigureRepositories<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
+
             });
-            services.AddRepository<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
-            services.AddApplications<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+            services.AddApplications(options =>
+            {
+                options
+                    .ConfigureServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
+            });
             services.AddDomainNotifications();
             services.AddServices();
             
             services.AddCors(Configuration);
             services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
-            
-            services.AddAutoMapper(typeof(ClienteViewModelToEntityMapper));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

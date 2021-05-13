@@ -71,8 +71,10 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
                 options
                     .EnabledInMemory()
                     .EnabledLogging();
+
+                options
+                    .ConfigureRepositories<ITestReadRepository, TestReadRepository>();
             });
-            services.AddRepository<ITestReadRepository, TestReadRepository>();
 
             //Then                
             var provider = services.BuildServiceProvider();
@@ -88,7 +90,12 @@ namespace Optsol.Components.Test.Unit.Infra.IoC
             var services = new ServiceCollection();
 
             //When
-            services.AddRepository<ITestReadRepository, TestReadRepository>();
+            services.AddContext<Context>(options =>
+            {
+                options
+                    .EnabledInMemory()
+                    .EnabledLogging();
+            });
 
             //Then                
             var provider = services.BuildServiceProvider();

@@ -13,9 +13,16 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public class RepositoryOptions
     {
+        private readonly IServiceCollection services;
+
         internal bool InMemoryEnabled { get; private set; } = false;
 
         internal bool LoggingEnabled { get; private set; } = false;
+
+        public RepositoryOptions(IServiceCollection services)
+        {
+            this.services = services;
+        }
 
         internal string MigrationsAssemblyName { get; private set; }
 
@@ -57,6 +64,13 @@ namespace Microsoft.Extensions.DependencyInjection
             }
 
             ConnectionString = connectionString;
+
+            return this;
+        }
+
+        public RepositoryOptions ConfigureRepositories<TInterface, TImplementation>(params string[] namespaces)
+        {
+            services.RegisterScoped<TInterface, TImplementation>(namespaces);
 
             return this;
         }
@@ -120,7 +134,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddContext<TContext>(this IServiceCollection services, Action<RepositoryOptions> options = null)
             where TContext : CoreContext
         {
-            var repositoryOptions = new RepositoryOptions();
+            var repositoryOptions = new RepositoryOptions(services);
             options?.Invoke(repositoryOptions);
 
             services.AddDbContext<TContext>(repositoryOptions.Builder());
@@ -138,7 +152,7 @@ namespace Microsoft.Extensions.DependencyInjection
             where TContext : CoreContext
             where TProvider : class, ITenantProvider
         {
-            var repositoryOptions = new RepositoryOptions();
+            var repositoryOptions = new RepositoryOptions(services);
             options?.Invoke(repositoryOptions);
 
             services.AddDbContext<TContext>(repositoryOptions.Builder());
@@ -148,11 +162,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ITenantProvider, TProvider>();
 
             return services;
-        }
-
-        public static IServiceCollection AddRepository<TInterface, TImplementation>(this IServiceCollection services, params string[] namespaces)
-        {
-            return services.RegisterScoped<TInterface, TImplementation>(namespaces);
         }
     }
 }
