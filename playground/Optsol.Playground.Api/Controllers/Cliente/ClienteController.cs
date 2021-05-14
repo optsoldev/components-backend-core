@@ -28,12 +28,5 @@ namespace Optsol.Playground.Api.Controllers
             _clienteServiceApplication = clienteServiceApplication;
             _clienteServiceApplication.Includes = clientes => clientes.Include(x => x.Cartoes);
         }
-
-        public override Task<IActionResult> GetAllAsync()
-        {
-            throw new ArgumentNullException("CU");
-
-            return base.GetAllAsync();
-        }
     }
 }
