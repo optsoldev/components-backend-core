@@ -37,8 +37,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public static class ApplicationExtensions
     {
-
-
         public static IServiceCollection AddApplications(this IServiceCollection services, Action<ApplicationOptions> options)
         {
             var applicationOptions = new ApplicationOptions(services);
@@ -47,44 +45,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped(typeof(IBaseServiceApplication<>), typeof(BaseServiceApplication<>));
 
             return services;
-        }
-
-        public static IServiceCollection AddCors(this IServiceCollection services, IConfiguration configuration)
-        {
-            var servicesProvider = services.BuildServiceProvider();
-
-            var corsSettings = configuration.GetSection(nameof(CorsSettings)).Get<CorsSettings>()
-                ?? throw new CorsSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
-
-            services.AddCors(options =>
-            {
-                foreach (var cors in corsSettings.Policies)
-                {
-                    options.AddPolicy(cors.Name, _ =>
-                    {
-                        _.AllowAnyHeader()
-                         .AllowAnyMethod()
-                         .AllowCredentials()
-                         .WithOrigins(cors.Origins.Select(o => o.Value).ToArray());
-                    });
-                    cors.Validate();
-
-                }
-            });
-
-            return services;
-        }
-
-        public static IApplicationBuilder UseCors(this IApplicationBuilder app, IConfiguration configuration)
-        {
-            var servicesProvider = app.ApplicationServices;
-
-            var corsSettings = configuration.GetSection(nameof(CorsSettings)).Get<CorsSettings>()
-                ?? throw new CorsSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
-
-            app.UseCors(corsSettings.DefaultPolicy);
-
-            return app;
         }
     }
 }

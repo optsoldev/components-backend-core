@@ -7,6 +7,7 @@ using Optsol.Playground.Application.Searchs;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
+using System;
 using System.Threading.Tasks;
 
 namespace Optsol.Playground.Api.Controllers
@@ -26,6 +27,13 @@ namespace Optsol.Playground.Api.Controllers
         {
             _clienteServiceApplication = clienteServiceApplication;
             _clienteServiceApplication.Includes = clientes => clientes.Include(x => x.Cartoes);
+        }
+
+        public override Task<IActionResult> GetAllAsync()
+        {
+            throw new ArgumentNullException("CU");
+
+            return base.GetAllAsync();
         }
     }
 }
