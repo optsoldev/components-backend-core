@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Optsol.Playground.Application.Mappers.CartaoCredito;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Domain.Repositories.Cliente;
@@ -47,25 +48,22 @@ namespace Optsol.Playground.Api
             });
             services.AddDomainNotifications();
             services.AddServices();
-            
+
             services.AddCors(Configuration);
             services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseException(loggerFactory, env.IsDevelopment());
 
             app.UseHttpsRedirection();
-            
+
             app.UseRouting();
 
             app.UseSecurity(Configuration);
-                        
+
             app.UseCors(Configuration);
 
             app.UseSwagger(Configuration, env.IsDevelopment());
