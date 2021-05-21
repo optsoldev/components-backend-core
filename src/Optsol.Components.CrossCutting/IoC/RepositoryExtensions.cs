@@ -157,7 +157,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddDbContext<TContext>(repositoryOptions.Builder());
 
-            services.AddScoped<TContext>();
             services.AddHttpContextAccessor();
             services.AddScoped<ITenantProvider, TProvider>();
 
