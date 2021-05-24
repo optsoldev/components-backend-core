@@ -69,6 +69,9 @@ namespace Optsol.Components.Service.Filters
             foreach (var argumentDataTransfer in argumentsBaseDataTransfers)
             {
                 var baseDataTransferObject = argumentDataTransfer.Value as BaseDataTransferObject;
+                
+                baseDataTransferObject.Validate();
+
                 listOfBaseDataTransferObject.Add(baseDataTransferObject);
             }
 

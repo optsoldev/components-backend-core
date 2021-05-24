@@ -22,7 +22,7 @@ namespace Optsol.Components.Infra.Storage.Blob
         public BlobStorage(StorageSettings settings, ILoggerFactory logger)
         {
             _logger = logger.CreateLogger(nameof(BlobStorage));
-
+                        
             _storageSettings = settings ?? throw new StorageSettingsNullException(logger);
             _storageSettings.Validate();
         }
@@ -36,7 +36,7 @@ namespace Optsol.Components.Infra.Storage.Blob
             return await _blobContainerClient.GetBlobsAsync().AsPages().AsyncEnumerableToEnumerable();
         }
 
-        public virtual Task UploadAsync(string name, string path)
+        public virtual Task<Response<BlobContentInfo>> UploadAsync(string name, string path)
         {
             StartConnection();
 
@@ -47,7 +47,7 @@ namespace Optsol.Components.Infra.Storage.Blob
             return blob.UploadAsync(path, overwrite: true);
         }
 
-        public virtual Task UploadAsync(string name, Stream stream)
+        public virtual Task<Response<BlobContentInfo>> UploadAsync(string name, Stream stream)
         {
             StartConnection();
 
@@ -90,7 +90,7 @@ namespace Optsol.Components.Infra.Storage.Blob
 
         private void StartConnection()
         {
-            var containerClientCreated = _blobContainerClient == null;
+            var containerClientCreated = _blobContainerClient != null;
             if (containerClientCreated)
             {
                 return;

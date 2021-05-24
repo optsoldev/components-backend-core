@@ -10,9 +10,9 @@ namespace Optsol.Components.Infra.Storage.Blob
     {
         Task<IEnumerable<Page<BlobItem>>> GetAllAsync();
 
-        Task UploadAsync(string name, Stream stream);
+        Task<Response<BlobContentInfo>> UploadAsync(string name, Stream stream);
 
-        Task UploadAsync(string name, string path);
+        Task<Response<BlobContentInfo>> UploadAsync(string name, string path);
 
         Task DeleteAsync(string name);
         
