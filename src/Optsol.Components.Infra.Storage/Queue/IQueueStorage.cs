@@ -7,9 +7,9 @@ namespace Optsol.Components.Infra.Storage.Queue
 {
     public interface IQueueStorage
     {
-        delegate void Subscribe<T>(ReceiveMessageModel<T> messages);
+        string QueueName { get; }
 
-        Task<Response<SendReceipt>> SendMessageAsync<TData>(SendMessageModel<TData> message) 
+        Task<Response<SendReceipt>> SendMessageAsync<TData>(SendMessageModel<TData> message)
             where TData : class;
 
         Task<Response<SendReceipt>> SendMessageBase64Async<TData>(SendMessageModel<TData> message)
@@ -22,5 +22,7 @@ namespace Optsol.Components.Infra.Storage.Queue
             where TData : class;
 
         Task<Response<QueueMessage[]>> ReceiveMessageAsync<TData>(string queueName) where TData : class;
+
+        delegate void Subscribe<T>(ReceiveMessageModel<T> messages);
     }
 }

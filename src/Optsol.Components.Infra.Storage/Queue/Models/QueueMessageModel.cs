@@ -4,25 +4,32 @@ namespace Optsol.Components.Infra.Storage.Queue.Messages
 {
     public class SendMessageModel<TData>
     {
-        public string QueueName { get; set; }
-
         public TData Data { get; set; }
+
+        public QueueMessage Message { get; set; }
+
+        public SendMessageModel(TData data)
+        {
+            Data = data;
+        }
     }
 
     public class UpdateMessageModel<TData> : SendMessageModel<TData>
     {
-        public QueueMessage Message { get; set; }
+        public UpdateMessageModel(TData data) : base(data)
+        {
+        }
     }
 
     public class ReceiveMessageModel<TData> : SendMessageModel<TData>
     {
-        public QueueMessage Message { get; set; }
+        public ReceiveMessageModel(TData data) : base(data)
+        {
+        }
     }
 
     public class DeleteMessageModel
     {
-        public string QueueName { get; set; }
-
         public QueueMessage Message { get; set; }
     }
 }

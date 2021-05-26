@@ -5,27 +5,31 @@ using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Storage.Blob
 {
-    public class BlobStorage : IBlobStorage
+    public abstract class BlobStorageBase : IBlobStorage
     {
-        private BlobContainerClient _blobContainerClient;
-
         private readonly ILogger _logger;
-
         private readonly StorageSettings _storageSettings;
 
-        public BlobStorage(StorageSettings settings, ILoggerFactory logger)
+        private BlobContainerClient _blobContainerClient;
+
+        public BlobStorageBase(StorageSettings settings, ILoggerFactory logger)
         {
-            _logger = logger.CreateLogger(nameof(BlobStorage));
-                        
+            _logger = logger.CreateLogger(nameof(BlobStorageBase));
+
             _storageSettings = settings ?? throw new StorageSettingsNullException(logger);
             _storageSettings.Validate();
         }
+
+        public abstract string ContainerName { get; }
+
+        public abstract PublicAccessType AccessPolicy { get; }
 
         public virtual async Task<IEnumerable<Page<BlobItem>>> GetAllAsync()
         {
@@ -70,7 +74,7 @@ namespace Optsol.Components.Infra.Storage.Blob
             return blob.DeleteIfExistsAsync();
         }
 
-        public virtual Task<Response<BlobDownloadInfo>> DowloadAsync(string name)
+        public virtual Task<Response<BlobDownloadInfo>> DownloadAsync(string name)
         {
             StartConnection();
 
@@ -79,6 +83,17 @@ namespace Optsol.Components.Infra.Storage.Blob
             var blob = _blobContainerClient.GetBlobClient(name);
 
             return blob.DownloadAsync();
+        }
+
+        public virtual Task<Uri> GetUriAsync(string name)
+        {
+            StartConnection();
+
+            string path = $"{_blobContainerClient.Uri}/{name}";
+            
+            var uri = new Uri(path);
+
+            return Task.FromResult(uri);
         }
 
         public virtual Task<Response<bool>> ContainerExistsAsync()
@@ -96,9 +111,11 @@ namespace Optsol.Components.Infra.Storage.Blob
                 return;
             }
 
-            var blobContainerClient = new BlobContainerClient(_storageSettings.ConnectionString, _storageSettings.Blob.ContainerName);
+            var blobContainerClient = new BlobContainerClient(_storageSettings.ConnectionString, ContainerName);
 
             blobContainerClient.CreateIfNotExists();
+
+            blobContainerClient.SetAccessPolicy(AccessPolicy);
 
             _blobContainerClient = blobContainerClient;
         }

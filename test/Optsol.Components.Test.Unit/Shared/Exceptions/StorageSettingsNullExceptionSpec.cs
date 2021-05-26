@@ -44,8 +44,6 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
 
             logger.Logs.Should().NotBeEmpty();
             logger.Logs.Any(a => a.Contains(nameof(StorageSettings.ConnectionString))).Should().BeTrue();
-            logger.Logs.Any(a => a.Contains(nameof(StorageSettings.Blob))).Should().BeTrue();
-            logger.Logs.Any(a => a.Contains(nameof(StorageSettings.Blob.ContainerName))).Should().BeTrue();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services.Register<TInterface, TImplementation>(namespaces, services.AddScoped);
         }
 
-        public static IServiceCollection RegisterTransinente<TInterface, TImplementation>(this IServiceCollection services, string[] namespaces)
+        public static IServiceCollection RegisterTransient<TInterface, TImplementation>(this IServiceCollection services, string[] namespaces)
         {
             return services.Register<TInterface, TImplementation>(namespaces, services.AddTransient);
         }
