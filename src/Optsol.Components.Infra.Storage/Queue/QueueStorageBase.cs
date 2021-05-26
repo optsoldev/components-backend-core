@@ -12,25 +12,28 @@ using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Storage.Queue
 {
-    public class QueueStorage : IQueueStorage
+    public abstract class QueueStorageBase : IQueueStorage
     {
-        private QueueClient _queueClient;
         private readonly ILogger _logger;
         private readonly StorageSettings _storageSettings;
         private readonly string[] IgnoredProperties = new[] { "notifications", "isvalid" };
 
-        public QueueStorage(StorageSettings settings, ILoggerFactory logger)
+        private QueueClient _queueClient;
+
+        public abstract string QueueName { get; }
+
+        public QueueStorageBase(StorageSettings settings, ILoggerFactory logger)
         {
             _storageSettings = settings ?? throw new StorageSettingsNullException(logger);
             _storageSettings.Validate();
 
-            _logger = logger?.CreateLogger(nameof(QueueStorage));
+            _logger = logger?.CreateLogger(nameof(QueueStorageBase));
         }
 
         public async Task<Response<SendReceipt>> SendMessageAsync<TData>(SendMessageModel<TData> message)
             where TData : class
         {
-            await GetQueueClient(message.QueueName);
+            await GetQueueClient();
 
             return await _queueClient.SendMessageAsync(message.Data.ToJson(IgnoredProperties));
         }
@@ -38,7 +41,7 @@ namespace Optsol.Components.Infra.Storage.Queue
         public async Task<Response<SendReceipt>> SendMessageBase64Async<TData>(SendMessageModel<TData> message)
             where TData : class
         {
-            await GetQueueClient(message.QueueName);
+            await GetQueueClient();
 
             var contentBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(message.Data.ToJson(IgnoredProperties)));
 
@@ -48,7 +51,7 @@ namespace Optsol.Components.Infra.Storage.Queue
         public async Task<Response<UpdateReceipt>> UpdateMessageAsync<TData>(UpdateMessageModel<TData> message)
             where TData : class
         {
-            await GetQueueClient(message.QueueName);
+            await GetQueueClient();
 
             return await _queueClient.UpdateMessageAsync(message.Message.MessageId, message.Message.PopReceipt, message.Data.ToJson(IgnoredProperties));
         }
@@ -56,7 +59,7 @@ namespace Optsol.Components.Infra.Storage.Queue
         public async Task<Response> DeleteMessageAsync<TData>(DeleteMessageModel message)
             where TData : class
         {
-            await GetQueueClient(message.QueueName);
+            await GetQueueClient();
 
             return await _queueClient.DeleteMessageAsync(message.Message.MessageId, message.Message.PopReceipt);
         }
@@ -64,14 +67,12 @@ namespace Optsol.Components.Infra.Storage.Queue
         public async Task<Response<QueueMessage[]>> ReceiveMessageAsync<TData>(string queueName)
             where TData : class
         {
-            await GetQueueClient(queueName);
+            await GetQueueClient();
 
             return await _queueClient.ReceiveMessagesAsync();
         }
 
-        #region private
-
-        private async Task GetQueueClient(string queueName)
+        private async Task GetQueueClient()
         {
             _logger.LogInformation($"Executando: {nameof(GetQueueClient)}() Retorno: Task<QueueClient>");
 
@@ -81,11 +82,9 @@ namespace Optsol.Components.Infra.Storage.Queue
                 return;
             }
 
-            _queueClient = new QueueClient(_storageSettings.ConnectionString, queueName);
+            _queueClient = new QueueClient(_storageSettings.ConnectionString, QueueName);
 
             await _queueClient.CreateIfNotExistsAsync();
         }
-
-        #endregion
     }
 }

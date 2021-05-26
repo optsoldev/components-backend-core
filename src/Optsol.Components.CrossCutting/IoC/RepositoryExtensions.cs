@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public class RepositoryOptions
     {
-        private readonly IServiceCollection services;
+        private readonly IServiceCollection _services;
 
         internal bool InMemoryEnabled { get; private set; } = false;
 
@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public RepositoryOptions(IServiceCollection services)
         {
-            this.services = services;
+            _services = services;
         }
 
         internal string MigrationsAssemblyName { get; private set; }
@@ -70,7 +70,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public RepositoryOptions ConfigureRepositories<TInterface, TImplementation>(params string[] namespaces)
         {
-            services.RegisterScoped<TInterface, TImplementation>(namespaces);
+            _services.RegisterScoped<TInterface, TImplementation>(namespaces);
 
             return this;
         }

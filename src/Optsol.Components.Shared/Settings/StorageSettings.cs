@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Optsol.Components.Shared.Settings
 {
     public class StorageSettings : BaseSettings
     {
-        public Blob Blob { get; set; }
-
         public string ConnectionString { get; set; }
 
         public override void Validate()
@@ -14,20 +13,6 @@ namespace Optsol.Components.Shared.Settings
             if (connectionIsNull)
             {
                 throw new ApplicationException(nameof(ConnectionString));
-            }
-        }
-    }
-
-    public class Blob : BaseSettings
-    {
-        public string ContainerName { get; set; }
-
-        public override void Validate()
-        {
-            var containerNameIsNull = string.IsNullOrEmpty(ContainerName);
-            if (containerNameIsNull)
-            {
-                throw new ApplicationException(nameof(ContainerName));
             }
         }
     }

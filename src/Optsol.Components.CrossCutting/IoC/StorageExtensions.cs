@@ -10,24 +10,36 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public class StorageOptions
     {
-        internal bool BlobEnabled { get; set; } = true;
+        private readonly IServiceCollection _services;
 
-        internal bool QueueEnabled { get; set; } = true;
-
-        public void DisableBlob()
+        public StorageOptions(IServiceCollection services)
         {
-            BlobEnabled = false;
+            _services = services;
         }
 
-        public void DisableQueue()
+        public StorageOptions ConfigureBlob<TInterface, TImplementation>(params string[] namespaces)
+            where TInterface: IBlobStorage
+            where TImplementation: BlobStorageBase
+
         {
-            QueueEnabled = false;
+            _services.RegisterTransient<TInterface, TImplementation>(namespaces);
+
+            return this;
+        }
+
+        public StorageOptions ConfigureQueue<TInterface, TImplementation>(params string[] namespaces)
+            where TInterface : IQueueStorage
+            where TImplementation : QueueStorageBase
+        {
+            _services.RegisterTransient<TInterface, TImplementation>(namespaces);
+
+            return this;
         }
     }
 
     public static class StorageExtensions
     {
-        public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration, Action<StorageOptions> action = null)
+        public static IServiceCollection AddStorage(this IServiceCollection services, IConfiguration configuration, Action<StorageOptions> options)
         {
             var servicesProvider = services.BuildServiceProvider();
 
@@ -37,15 +49,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(storageSettings);
 
-            var storageOptions = new StorageOptions();
-            action?.Invoke(storageOptions);
-
-            if (storageOptions.BlobEnabled)
-                services.AddScoped<IBlobStorage, BlobStorage>();
-
-            if (storageOptions.QueueEnabled)
-                services.AddScoped<IQueueStorage, QueueStorage>();
-
+            var storageOptions = new StorageOptions(services);
+            options?.Invoke(storageOptions);
+           
             return services;
         }
     }
