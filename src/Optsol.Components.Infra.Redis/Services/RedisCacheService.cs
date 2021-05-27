@@ -28,7 +28,7 @@ namespace Optsol.Components.Infra.Redis.Services
             var cacheEmpty = !value.HasValue;
             if (cacheEmpty)
             {
-                return default;
+                return Task.FromResult(default(T));
             }
 
             var castTyped = value.ToString().To<T>();
@@ -43,6 +43,18 @@ namespace Optsol.Components.Infra.Redis.Services
             return Task.CompletedTask;
         }
 
+        public Task SaveAsync<T>(KeyValuePair<string, T> data, int expirationInMinutes) where T : class
+        {
+            _database.StringSet(data.Key, data.Value.ToJson(IgnoredProperties), expiry: new TimeSpan(0, expirationInMinutes, 0));
 
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteAsync(string key)
+        {
+            _database.KeyDelete(key);
+
+            return Task.CompletedTask;
+        }
     }
 }
