@@ -12,10 +12,10 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddElasticContext<TContext>(this IServiceCollection services, IConfiguration configuration)
             where TContext : ElasticContext
         {
-            var mongoSettings = configuration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
-            mongoSettings.Validate();
+            var elasticSettings = configuration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
+            elasticSettings.Validate();
 
-            services.AddSingleton(mongoSettings);
+            services.AddSingleton(elasticSettings);
             services.AddScoped<ElasticContext>();
             services.AddScoped<TContext>();
             services.AddScoped<IElasticUnitOfWork, ElasticUnitOfWork>();

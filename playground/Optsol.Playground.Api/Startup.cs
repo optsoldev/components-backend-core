@@ -27,7 +27,9 @@ namespace Optsol.Playground.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = this.Configuration.GetSection("ConnectionStrings:DefaultConnection");
+            var connectionString = Configuration.GetSection("ConnectionStrings:DefaultConnection");
+
+            services.AddHealthChecks(Configuration);
 
             services.AddContext<PlaygroundContext>(options =>
             {
@@ -49,6 +51,7 @@ namespace Optsol.Playground.Api
             services.AddDomainNotifications();
             services.AddServices();
 
+
             services.AddCors(Configuration);
             services.AddSecurity(Configuration);
             services.AddSwagger(Configuration);
@@ -67,6 +70,8 @@ namespace Optsol.Playground.Api
             app.UseCors(Configuration);
 
             app.UseSwagger(Configuration, env.IsDevelopment());
+
+            app.UseHealthChecks(Configuration);
 
             app.UseEndpoints(endpoints =>
             {
