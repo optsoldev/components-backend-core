@@ -1,7 +1,7 @@
 using Optsol.Components.Domain.Pagination;
 using System.Collections.Generic;
 
-namespace Optsol.Components.Infra.Data
+namespace Optsol.Components.Infra.Data.Pagination
 {
     public class SearchResult<TData> : ISearchResult<TData> where TData : class
     {

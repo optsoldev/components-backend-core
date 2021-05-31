@@ -6,7 +6,7 @@ using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Domain.Pagination;
-using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Exceptions;
 using System;
