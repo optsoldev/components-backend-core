@@ -34,7 +34,6 @@ namespace Optsol.Components.Service.Programs
                       logger.ConfigureLogElasticStack(context.HostingEnvironment, buildConfiguration);
 
                       logger.ConfigureLogApplicationInsights(context.HostingEnvironment, buildConfiguration);
-
                   })
                   .UseSerilog();
         }
@@ -63,14 +62,14 @@ namespace Optsol.Components.Service.Programs
     {
         public static LoggerConfiguration ConfigureLogApplicationInsights(this LoggerConfiguration logger, IHostEnvironment hostingEnvironment, IConfigurationRoot configuration)
         {
-            Log.Information($"Configure Application Insights Log: {hostingEnvironment.EnvironmentName}");
-
             if (hostingEnvironment.IsDevelopment())
                 return logger;
 
             var applicationInsightsSettings = configuration.GetSection(nameof(ApplicationInsightsSettings)).Get<ApplicationInsightsSettings>();
             if (applicationInsightsSettings == null)
                 return logger;
+
+            Log.Information($"Configure Application Insights Log: {hostingEnvironment.EnvironmentName}");
 
             applicationInsightsSettings.Validate();
 
@@ -81,14 +80,14 @@ namespace Optsol.Components.Service.Programs
 
         public static LoggerConfiguration ConfigureLogElasticStack(this LoggerConfiguration logger, IHostEnvironment hostingEnvironment, IConfigurationRoot configuration)
         {
-            Log.Information($"Configure Elastic Stack Log: {hostingEnvironment.EnvironmentName}");
-
             if (hostingEnvironment.IsDevelopment())
                 return logger;
 
             var elasticSearchSettings = configuration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
             if (elasticSearchSettings == null)
                 return logger;
+
+            Log.Information($"Configure Elastic Stack Log: {hostingEnvironment.EnvironmentName}");
 
             elasticSearchSettings.Validate();
 
