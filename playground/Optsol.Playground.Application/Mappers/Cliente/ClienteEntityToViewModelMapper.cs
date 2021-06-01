@@ -1,5 +1,5 @@
 using AutoMapper;
-using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
 

@@ -224,7 +224,6 @@ namespace Optsol.Components.Service.Controllers
             return CreateResult(viewModelsOfResultService);
         }
 
-
         public override async Task<IActionResult> InsertAsync([FromBody] TInsertData data)
         {
             if (data == null)
@@ -236,7 +235,6 @@ namespace Optsol.Components.Service.Controllers
 
             return CreateResult();
         }
-
 
         public override async Task<IActionResult> UpdateAsync([FromBody] TUpdateData data)
         {

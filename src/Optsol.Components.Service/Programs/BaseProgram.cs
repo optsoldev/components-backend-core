@@ -29,12 +29,11 @@ namespace Optsol.Components.Service.Programs
                           .ReadFrom.Configuration(buildConfiguration)
                           .WriteTo.Console();
 
-                      logger.ConfigureLogElasticStack(context.HostingEnvironment, buildConfiguration);
-
-                      logger.ConfigureLogApplicationInsights(buildConfiguration);
-
                       Log.Logger = logger.CreateLogger();
 
+                      logger.ConfigureLogElasticStack(context.HostingEnvironment, buildConfiguration);
+
+                      logger.ConfigureLogApplicationInsights(context.HostingEnvironment, buildConfiguration);
                   })
                   .UseSerilog();
         }
@@ -61,35 +60,41 @@ namespace Optsol.Components.Service.Programs
 
     public static class BaseProgramExtensions
     {
-        public static LoggerConfiguration ConfigureLogApplicationInsights(this LoggerConfiguration logger, IConfigurationRoot configuration)
+        public static LoggerConfiguration ConfigureLogApplicationInsights(this LoggerConfiguration logger, IHostEnvironment hostingEnvironment, IConfigurationRoot configuration)
         {
-            var applicationInsightsSettings = configuration.GetSection(nameof(ApplicationInsightsSettings)).Get<ApplicationInsightsSettings>();
-            applicationInsightsSettings?.Validate();
+            if (hostingEnvironment.IsDevelopment())
+                return logger;
 
-            var applicationInsightsSettingsIsValid = !string.IsNullOrEmpty(applicationInsightsSettings?.InstrumentationKey);
-            if (applicationInsightsSettingsIsValid)
-            {
-                logger.WriteTo.ApplicationInsights(new TelemetryConfiguration(applicationInsightsSettings.InstrumentationKey), TelemetryConverter.Traces);
-            }
+            var applicationInsightsSettings = configuration.GetSection(nameof(ApplicationInsightsSettings)).Get<ApplicationInsightsSettings>();
+            if (applicationInsightsSettings == null)
+                return logger;
+
+            Log.Information($"Configure Application Insights Log: {hostingEnvironment.EnvironmentName}");
+
+            applicationInsightsSettings.Validate();
+
+            logger.WriteTo.ApplicationInsights(new TelemetryConfiguration(applicationInsightsSettings.InstrumentationKey), TelemetryConverter.Traces);
 
             return logger;
         }
 
-        public static LoggerConfiguration ConfigureLogElasticStack(this LoggerConfiguration logger, IHostEnvironment env, IConfigurationRoot configuration)
+        public static LoggerConfiguration ConfigureLogElasticStack(this LoggerConfiguration logger, IHostEnvironment hostingEnvironment, IConfigurationRoot configuration)
         {
+            if (hostingEnvironment.IsDevelopment())
+                return logger;
+
             var elasticSearchSettings = configuration.GetSection(nameof(ElasticSearchSettings)).Get<ElasticSearchSettings>();
-            elasticSearchSettings?.Validate();
+            if (elasticSearchSettings == null)
+                return logger;
 
-            var elasticSearchSettingsIsValid = !string.IsNullOrEmpty(elasticSearchSettings?.Uri);
-            if (elasticSearchSettingsIsValid)
+            Log.Information($"Configure Elastic Stack Log: {hostingEnvironment.EnvironmentName}");
+
+            elasticSearchSettings.Validate();
+
+            logger = logger.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticSearchSettings.Uri))
             {
-                var indexNameFormat = $"{elasticSearchSettings.IndexName}-logs-{env.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";
-
-                logger = logger.WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticSearchSettings.Uri))
-                {
-                    IndexFormat = indexNameFormat
-                });
-            }
+                IndexFormat = $"{elasticSearchSettings.IndexName}-logs-{hostingEnvironment.EnvironmentName.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+            });
 
             return logger;
         }

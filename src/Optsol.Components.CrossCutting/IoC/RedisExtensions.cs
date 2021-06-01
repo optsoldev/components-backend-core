@@ -16,6 +16,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var redisSettings = configuration.GetSection(nameof(RedisSettings)).Get<RedisSettings>()
                 ?? throw new RedisSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
 
+            redisSettings.Validate();
+
             services.AddSingleton(redisSettings);
 
             services.AddSingleton<RedisCacheConnection>();
