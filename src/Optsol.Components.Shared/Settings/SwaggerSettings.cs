@@ -7,13 +7,13 @@ namespace Optsol.Components.Shared.Settings
     {
         public string Title { get; set; }
 
-        public bool Enabled { get; set; }
-
         public string Version { get; set; }
 
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public bool Enabled { get; set; }
 
         public SwaggerSecurity Security { get; set; }
 
@@ -43,6 +43,8 @@ namespace Optsol.Components.Shared.Settings
     {
         public string Name { get; set; }
 
+        public string ClientId { get; set; }
+        
         public bool Enabled { get; set; }
 
         public IDictionary<string, string> Scopes { get; set; } = new Dictionary<string, string>();
@@ -53,6 +55,12 @@ namespace Optsol.Components.Shared.Settings
             if (nameIsNullOrEmpty)
             {
                 throw new ApplicationException(nameof(Name));
+            }
+
+            var clientIdIsNullOrEmpty = string.IsNullOrEmpty(ClientId);
+            if (clientIdIsNullOrEmpty)
+            {
+                throw new Exception(nameof(ClientId));
             }
         }
     }

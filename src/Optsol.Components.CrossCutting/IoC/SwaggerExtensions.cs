@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Optsol.Components.Infra.Security.Models;
+using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Service.Filters;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
@@ -10,6 +12,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -46,13 +49,13 @@ namespace Microsoft.Extensions.DependencyInjection
 
                         securitySettings.Validate();
 
-                        if (securitySettings.IsDevelopment)
+                        if (securitySettings.Development)
                         {
                             ConfigureDevelopmentSecurity(options);
                         }
                         else
                         {
-                            ConfigureRemoteSecurity(options, securitySettings, swaggerSettings);
+                            ConfigureRemoteSecurity(provider.GetRequiredService<IAuthorityService>(), swaggerSettings, options);
                         }
 
                     }
@@ -62,14 +65,24 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static void ConfigureRemoteSecurity(SwaggerGenOptions options, SecuritySettings securitySettings, SwaggerSettings swaggerSettings)
+        private static void ConfigureRemoteSecurity(IAuthorityService authorityService, SwaggerSettings swaggerSettings, SwaggerGenOptions options)
         {
+            var clientOauth = authorityService
+                .GetClient(swaggerSettings.Security.ClientId)
+                .GetAwaiter()
+                .GetResult();
+
+            if (clientOauth == null)
+            {
+                return;
+            }
+
             var scopes = swaggerSettings
                 .Security
                 .Scopes
-                .Select(scope => new KeyValuePair<string, string>($"https://{securitySettings.AzureB2C.Domain}/{scope.Key}/{scope.Value}", $"{scope.Key}"));
+                .Select(scope => new KeyValuePair<string, string>($"https://{clientOauth.Domain}/{scope.Key}/{scope.Value}", $"{scope.Key}"));
 
-            var endpointB2C = $"{securitySettings.AzureB2C.Instance}/{securitySettings.AzureB2C.Domain}/{securitySettings.AzureB2C.SignUpSignInPolicyId}/oauth2/v2.0";
+            var endpointB2C = $"{clientOauth.Instance}/{clientOauth.Domain}/{clientOauth.SignUpSignInPolicyId}/oauth2/v2.0";
 
             options.AddSecurityDefinition(swaggerSettings.Security.Name,
                 new OpenApiSecurityScheme
@@ -79,9 +92,9 @@ namespace Microsoft.Extensions.DependencyInjection
                     {
                         Implicit = new OpenApiOAuthFlow()
                         {
-                            Scopes = new Dictionary<string, string>(scopes),
                             AuthorizationUrl = new Uri($"{endpointB2C}/authorize"),
-                            TokenUrl = new Uri($"{endpointB2C}/token")
+                            TokenUrl = new Uri($"{endpointB2C}/token"),
+                            Scopes = new Dictionary<string, string>(scopes)
                         },
                     }
                 });
@@ -137,16 +150,13 @@ namespace Microsoft.Extensions.DependencyInjection
                     var enabledSecurity = swaggerSettings.Security?.Enabled ?? false;
                     if (enabledSecurity)
                     {
-                        options.OAuthClientId("436453d1-adf6-4160-93f9-9e665fc94d65");
-                        options.OAuthAppName("Swagger UI for components optsol");
+                        options.OAuthAppName($"Swagger UI for {swaggerSettings.Security.Name}");
+                        options.OAuthClientId(swaggerSettings.Security.ClientId);
 
                         if (isDevelopment)
                         {
                             options.OAuthClientSecret("secret".Sha256());
-                        }
 
-                        if (isDevelopment)
-                        {
                             app.Use(async (context, next) =>
                             {
                                 context.Response.Headers.Add("Access-Control-Allow-Origin", "*");

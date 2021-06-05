@@ -3,12 +3,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Optsol.Components.Infra.Security.Models;
+using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
+using Refit;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -29,13 +34,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(securitySettings);
 
-            if (securitySettings.IsDevelopment)
+            if (securitySettings.Development)
             {
                 ConfigureLocalSecurity(services);
             }
             else
             {
-                ConfigureRemoteSecurity(services, configuration);
+                services
+                    .AddRefitClient<AuthorityClient>()
+                    .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Url));
+
+                services.AddTransient<IAuthorityService, AuthorityService>();
+
+                ConfigureRemoteSecurity(services, securitySettings);
             }
 
             return services;
@@ -53,7 +64,7 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseAuthentication();
             app.UseAuthorization();
 
-            if (securitySettings.IsDevelopment)
+            if (securitySettings.Development)
             {
                 IdentityModelEventSource.ShowPII = true;
 
@@ -86,19 +97,41 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
 
-        internal static void ConfigureRemoteSecurity(IServiceCollection services, IConfiguration configuration)
+        internal static void ConfigureRemoteSecurity(IServiceCollection services, SecuritySettings securitySettings)
         {
-            var azureB2CSecuritySettings = $"{nameof(SecuritySettings)}:{nameof(SecuritySettings.AzureB2C)}";
+            var provider = services.BuildServiceProvider();
+
+            var clientOauth = provider.GetRequiredService<IAuthorityService>()
+                .GetClient(securitySettings.Authority.ClientId)
+                .GetAwaiter()
+                .GetResult();
+
+            if (clientOauth == null)
+            {
+                return;
+            }
+
+            var config = new ConfigurationBuilder();
+            config.AddInMemoryObject(clientOauth, "AzureAdB2C");
+
+            services.Configure<OauthClient>("AzureAdB2C", configure =>
+            {
+                configure = clientOauth;
+            });
+
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryObject(clientOauth, "AzureAdB2C");
+            var configurationLocal = configBuilder.Build();
 
             services
                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddMicrosoftIdentityWebApi(options =>
                {
-                   configuration.GetSection(azureB2CSecuritySettings).Bind(options);
+                   configurationLocal.GetSection("AzureAdB2C").Bind(options);
                    options.TokenValidationParameters.NameClaimType = "name";
                }, options =>
                {
-                   configuration.GetSection(azureB2CSecuritySettings).Bind(options);
+                   configurationLocal.GetSection("AzureAdB2C").Bind(options);
                });
         }
 
@@ -172,8 +205,28 @@ namespace Microsoft.Extensions.DependencyInjection
                 new Claim("auth_time", "1449516934"),
                 new Claim("http://schemas.microsoft.com/identity/claims/identityprovider", "devtest"),
                 new Claim("optsol", "cliente.buscar"),
+                new Claim("optsol", "cliente.buscar.todos"),
                 new Claim("optsol", "cliente.inserir")
             };
+        }
+    }
+
+    public static class ObjectExtensions
+    {
+        public static IEnumerable<KeyValuePair<string, string>> ToKeyValuePairs(this Object settings, string settingsRoot)
+        {
+            foreach (var property in settings.GetType().GetProperties())
+            {
+                yield return new KeyValuePair<string, string>($"{settingsRoot}:{property.Name}", property.GetValue(settings).ToString());
+            }
+        }
+    }
+
+    public static class ConfigurationBuilderExtensions
+    {
+        public static void AddInMemoryObject(this ConfigurationBuilder configurationBuilder, object settings, string settingsRoot)
+        {
+            configurationBuilder.AddInMemoryCollection(settings.ToKeyValuePairs(settingsRoot));
         }
     }
 }

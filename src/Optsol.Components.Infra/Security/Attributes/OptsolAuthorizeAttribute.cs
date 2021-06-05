@@ -13,22 +13,22 @@ namespace Optsol.Components.Infra.Security.Attributes
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public class OptsolAuthorizeAttribute : TypeFilterAttribute
     {
-        public OptsolAuthorizeAttribute(string claim) : base(typeof(OptsolAuthorizeFilterAttribute))
+        public OptsolAuthorizeAttribute(params string[] claims) : base(typeof(OptsolAuthorizeFilterAttribute))
         {
-            Arguments = new object[] { claim };
+            Arguments = new object[] { claims };
 
         }
     }
 
     public class OptsolAuthorizeFilterAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private readonly string _claim;
+        private readonly string[] _claim;
 
         private readonly SecuritySettings _securitySettings;
 
-        public OptsolAuthorizeFilterAttribute(SecuritySettings securitySettings, ILoggerFactory logger, string claim)
+        public OptsolAuthorizeFilterAttribute(SecuritySettings securitySettings, ILoggerFactory logger, params string[] claims)
         {
-            _claim = claim;
+            _claim = claims;
 
             _securitySettings = securitySettings ?? throw new SecuritySettingNullException(logger);
 
@@ -37,7 +37,7 @@ namespace Optsol.Components.Infra.Security.Attributes
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (_securitySettings.IsDevelopment)
+            if (_securitySettings.Development)
             {
                 ContextLocalSecurity(context);
             }
@@ -50,8 +50,9 @@ namespace Optsol.Components.Infra.Security.Attributes
         private void ContextLocalSecurity(AuthorizationFilterContext context)
         {
             var contextUser = context.HttpContext.User;
-            var userAuthenticateHasClaim = contextUser.Claims.Any(w => w.Type.Equals("optsol")
-                && w.Value.Equals(_claim, StringComparison.OrdinalIgnoreCase));
+            var userAuthenticateHasClaim = contextUser.Claims
+                .Any(w => w.Type.Equals("optsol")
+                    && _claim.Contains(w.Value));
 
             if (userAuthenticateHasClaim)
             {
@@ -61,9 +62,9 @@ namespace Optsol.Components.Infra.Security.Attributes
             context.Result = new UnauthorizedResult();
         }
 
-        private static void ContextRemoteSecurity(AuthorizationFilterContext context)
+        private void ContextRemoteSecurity(AuthorizationFilterContext context)
         {
-            throw new NotImplementedException();
+            //ToDo: Chamar api de claims
         }
     }
 }
