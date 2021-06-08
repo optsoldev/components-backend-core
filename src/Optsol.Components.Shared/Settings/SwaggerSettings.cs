@@ -19,22 +19,19 @@ namespace Optsol.Components.Shared.Settings
 
         public override void Validate()
         {
-            var titleIsNullOrEmpty = string.IsNullOrEmpty(Title);
-            if (titleIsNullOrEmpty)
+            if (Title.IsEmpty())
             {
-                throw new ApplicationException(nameof(Title));
+                ShowingException(nameof(Title));
             }
 
-            var versionIsNullOrEmpty = string.IsNullOrEmpty(Version);
-            if (versionIsNullOrEmpty)
+            if (Version.IsEmpty())
             {
-                throw new ApplicationException(nameof(Version));
+                ShowingException(nameof(Version));
             }
 
-            var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
-            if (nameIsNullOrEmpty)
+            if (Name.IsEmpty())
             {
-                throw new ApplicationException(nameof(Name));
+                ShowingException(nameof(Name));
             }
         }
     }
@@ -51,16 +48,14 @@ namespace Optsol.Components.Shared.Settings
 
         public override void Validate()
         {
-            var nameIsNullOrEmpty = string.IsNullOrEmpty(Name);
-            if (nameIsNullOrEmpty)
+            if (Name.IsEmpty())
             {
-                throw new ApplicationException(nameof(Name));
+                ShowingException(nameof(Name));
             }
 
-            var clientIdIsNullOrEmpty = string.IsNullOrEmpty(ClientId);
-            if (clientIdIsNullOrEmpty)
+            if (ClientId.IsEmpty())
             {
-                throw new Exception(nameof(ClientId));
+                ShowingException(nameof(ClientId));
             }
         }
     }

@@ -1,7 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Optsol.Components.Shared.Settings;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
@@ -21,6 +24,8 @@ namespace Optsol.Components.Infra.MongoDB.Context
 
         protected readonly MongoSettings _mongoSettings;
 
+        private static ConcurrentDictionary<Type, IBsonSerializer> _cache = new ConcurrentDictionary<Type, IBsonSerializer>();
+
         public IClientSessionHandle Session { get; set; }
 
         public MongoClient MongoClient { get; protected set; }
@@ -28,7 +33,7 @@ namespace Optsol.Components.Infra.MongoDB.Context
         public MongoContext(MongoSettings mongoSettings, ILoggerFactory logger)
         {
             _logger = logger?.CreateLogger(nameof(MongoContext));
-            _logger?.LogInformation("Inicializando MongoContext");
+            _logger?.LogInformation("Inicializando MongoContext");  
 
             _mongoSettings = mongoSettings ?? throw new ArgumentNullException(nameof(mongoSettings));
 

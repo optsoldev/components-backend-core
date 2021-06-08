@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Optsol.Components.Infra.Security.Models;
 using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Shared.Exceptions;
+using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
 using Refit;
 using System;
@@ -40,13 +41,17 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             else
             {
-                services
-                    .AddRefitClient<AuthorityClient>()
-                    .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Url));
+                var serverNotIsSecurityHost = !securitySettings.Authority.Url.ToLower().Contains("self");
+                if (serverNotIsSecurityHost)
+                {
+                    ConfigureRemoteSecurity(services, GetRemoteConfiguration(services, securitySettings));
 
-                services.AddTransient<IAuthorityService, AuthorityService>();
+                }
+                else
+                {
+                    ConfigureRemoteSecurity(services, configuration);
+                }
 
-                ConfigureRemoteSecurity(services, securitySettings);
             }
 
             return services;
@@ -97,8 +102,14 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
 
-        internal static void ConfigureRemoteSecurity(IServiceCollection services, SecuritySettings securitySettings)
+        private static IConfiguration GetRemoteConfiguration(IServiceCollection services, SecuritySettings securitySettings)
         {
+            services
+                .AddRefitClient<AuthorityClient>()
+                .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Url));
+
+            services.AddTransient<IAuthorityService, AuthorityService>();
+
             var provider = services.BuildServiceProvider();
 
             var clientOauth = provider.GetRequiredService<IAuthorityService>()
@@ -108,7 +119,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (clientOauth == null)
             {
-                return;
+                return null;
             }
 
             var config = new ConfigurationBuilder();
@@ -121,17 +132,25 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryObject(clientOauth, "AzureAdB2C");
-            var configurationLocal = configBuilder.Build();
+            return configBuilder.Build();
+        }
+
+        internal static void ConfigureRemoteSecurity(IServiceCollection services, IConfiguration configuration)
+        {
+            if(configuration == null)
+            {
+                return;
+            }
 
             services
                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddMicrosoftIdentityWebApi(options =>
                {
-                   configurationLocal.GetSection("AzureAdB2C").Bind(options);
+                   configuration.GetSection("AzureAdB2C").Bind(options);
                    options.TokenValidationParameters.NameClaimType = "name";
                }, options =>
                {
-                   configurationLocal.GetSection("AzureAdB2C").Bind(options);
+                   configuration.GetSection("AzureAdB2C").Bind(options);
                });
         }
 
@@ -208,17 +227,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 new Claim("optsol", "cliente.buscar.todos"),
                 new Claim("optsol", "cliente.inserir")
             };
-        }
-    }
-
-    public static class ObjectExtensions
-    {
-        public static IEnumerable<KeyValuePair<string, string>> ToKeyValuePairs(this Object settings, string settingsRoot)
-        {
-            foreach (var property in settings.GetType().GetProperties())
-            {
-                yield return new KeyValuePair<string, string>($"{settingsRoot}:{property.Name}", property.GetValue(settings).ToString());
-            }
         }
     }
 

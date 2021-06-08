@@ -8,9 +8,9 @@ namespace Optsol.Components.Shared.Exceptions
     public class SwaggerSettingsNullException : Exception
     {
         public SwaggerSettingsNullException(ILoggerFactory logger = null)
-            : base("A configuração de segurança não foi encontrada no appsettings")
+            : base("A configuração de SEGURANÇA não foi encontrada no appsettings")
         {
-            var _logger = logger.CreateLogger(nameof(SwaggerSettingsNullException));
+            var _logger = logger?.CreateLogger(nameof(SwaggerSettingsNullException));
             _logger?.LogCritical(
 @$"{nameof(SwaggerSettingsNullException)}:
 ""SwaggerSettings"": {{
@@ -24,7 +24,7 @@ namespace Optsol.Components.Shared.Exceptions
         ""Enabled"": ""{{true}}"",
         ""Scopes"": ""{{
             {{<key=name scope>}}:{{<value=description>}}
-        }}"",
+        }}""
     }}""
   }}
 ");

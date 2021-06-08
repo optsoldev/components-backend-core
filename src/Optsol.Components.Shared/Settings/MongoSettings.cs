@@ -10,16 +10,14 @@ namespace Optsol.Components.Shared.Settings
 
         public override void Validate()
         {
-            var connectionStringIsNullOrEmpty = string.IsNullOrEmpty(ConnectionString);
-            if (connectionStringIsNullOrEmpty)
+            if (ConnectionString.IsEmpty())
             {
-                throw new ApplicationException(nameof(ConnectionString));
+                ShowingException(nameof(ConnectionString));
             }
 
-            var databaseNameIsNullOrEmpty = string.IsNullOrEmpty(DatabaseName);
-            if (databaseNameIsNullOrEmpty)
+            if (DatabaseName.IsEmpty())
             {
-                throw new ApplicationException(nameof(DatabaseName));
+                ShowingException(nameof(DatabaseName));
             }
         }
     }

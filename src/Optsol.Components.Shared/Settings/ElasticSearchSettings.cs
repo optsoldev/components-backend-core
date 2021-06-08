@@ -7,21 +7,21 @@ namespace Optsol.Components.Shared.Settings
         public string Uri { get; set; }
 
         public string IndexName { get; set; }
-        
+
         public string UserName { get; set; }
 
         public string Password { get; set; }
 
         public override void Validate()
         {
-            if (string.IsNullOrEmpty(Uri))
+            if (Uri.IsEmpty())
             {
-                throw new ApplicationException(nameof(Uri));
+                ShowingException(nameof(Uri));
             }
 
-            if (string.IsNullOrEmpty(IndexName))
+            if (IndexName.IsEmpty())
             {
-                throw new ApplicationException(nameof(IndexName));
+                ShowingException(nameof(IndexName));
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using Optsol.Components.Shared.Extensions;
 using System;
-using System.Text.RegularExpressions;
 
 namespace Optsol.Components.Shared.Settings
 {
@@ -31,22 +30,20 @@ namespace Optsol.Components.Shared.Settings
 
     public class Authority : BaseSettings
     {
-        public string Url { get; set; }
-
         public string ClientId { get; set; }
+        
+        public string Url { get; set; }
 
         public override void Validate()
         {
-            var invalidUrl = Url.EndsWith("/");
-            if (invalidUrl)
+            if (Url.IsValidEndpoint().Not())
             {
-                throw new ApplicationException(nameof(Url));
+                ShowingException(nameof(Url));
             }
 
-            var invalidClient = !Url.IsUrlValid();
-            if (invalidClient)
+            if (ClientId.IsEmpty())
             {
-                throw new ApplicationException(nameof(Url));
+                ShowingException(nameof(ClientId));
             }
         }
     }

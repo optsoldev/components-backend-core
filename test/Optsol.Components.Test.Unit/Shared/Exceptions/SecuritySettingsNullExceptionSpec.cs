@@ -48,14 +48,9 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             logger.Logs.Any(a => a.Contains(nameof(SecuritySettings))).Should().BeTrue();
             logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.ApiName))).Should().BeTrue();
             logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Development))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C.Instance))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C.ClientId))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C.Domain))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C.SignUpSignInPolicyId))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C.SignedOutCallbackPath))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C.ResetPasswordPolicyId))).Should().BeTrue();
-            //logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.AzureB2C.EditProfilePolicyId))).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Authority))).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Authority.ClientId))).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Authority.Url))).Should().BeTrue();
         }
     }
 }

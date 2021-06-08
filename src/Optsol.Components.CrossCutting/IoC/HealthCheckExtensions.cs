@@ -1,5 +1,4 @@
 ﻿using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
@@ -7,12 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Optsol.Components.Shared.Settings;
 using RabbitMQ.Client;
-using System;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Mime;
-using System.Net.NetworkInformation;
-using System.Text.Json;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
