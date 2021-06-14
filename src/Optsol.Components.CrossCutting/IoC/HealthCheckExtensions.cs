@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
 using RabbitMQ.Client;
 using System.Net.Http;
@@ -43,26 +44,29 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 securitySettings.Validate();
 
-                builder
-                    .AddCheck("authority", () =>
-                    {
-                        try
+                if (securitySettings.Development.Not())
+                {
+                    builder
+                        .AddCheck("authority", () =>
                         {
-                            HttpClient client = new HttpClient();
-                            var result = client.GetAsync($"{securitySettings.Authority.Url}/health/ping");
-
-                            if (result.IsCompletedSuccessfully)
+                            try
                             {
-                                return HealthCheckResult.Healthy("Ping is healthy");
-                            }
+                                HttpClient client = new HttpClient();
+                                var result = client.GetAsync($"{securitySettings.Authority.Endpoint}/health/ping");
 
-                            return HealthCheckResult.Unhealthy("Ping is unhealthy");
-                        }
-                        catch
-                        {
-                            return HealthCheckResult.Unhealthy("Ping is unhealthy");
-                        }
-                    });
+                                if (result.IsCompletedSuccessfully)
+                                {
+                                    return HealthCheckResult.Healthy("Ping is healthy");
+                                }
+
+                                return HealthCheckResult.Unhealthy("Ping is unhealthy");
+                            }
+                            catch
+                            {
+                                return HealthCheckResult.Unhealthy("Ping is unhealthy");
+                            }
+                        }, tags: new string[] { "security" });
+                }
             }
 
             return builder;

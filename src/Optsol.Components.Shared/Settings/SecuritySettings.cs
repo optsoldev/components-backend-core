@@ -24,7 +24,7 @@ namespace Optsol.Components.Shared.Settings
                 throw new ApplicationException(nameof(ApiName));
             }
 
-
+            Authority.Validate();
         }
     }
 
@@ -32,13 +32,13 @@ namespace Optsol.Components.Shared.Settings
     {
         public string ClientId { get; set; }
         
-        public string Url { get; set; }
+        public string Endpoint { get; set; }
 
         public override void Validate()
         {
-            if (Url.IsValidEndpoint().Not())
+            if (Endpoint.IsValidEndpoint().Not())
             {
-                ShowingException(nameof(Url));
+                ShowingException(nameof(Endpoint));
             }
 
             if (ClientId.IsEmpty())

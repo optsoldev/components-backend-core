@@ -50,7 +50,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Development))).Should().BeTrue();
             logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Authority))).Should().BeTrue();
             logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Authority.ClientId))).Should().BeTrue();
-            logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Authority.Url))).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(nameof(SecuritySettings.Authority.Endpoint))).Should().BeTrue();
         }
     }
 }

@@ -34,24 +34,16 @@ namespace Microsoft.Extensions.DependencyInjection
             securitySettings.Validate();
 
             services.AddSingleton(securitySettings);
-
+                        
             if (securitySettings.Development)
             {
-                ConfigureLocalSecurity(services);
+                services.ConfigureLocalSecurity();
             }
             else
             {
-                var serverNotIsSecurityHost = !securitySettings.Authority.Url.ToLower().Contains("self");
-                if (serverNotIsSecurityHost)
-                {
-                    ConfigureRemoteSecurity(services, GetRemoteConfiguration(services, securitySettings));
-
-                }
-                else
-                {
-                    ConfigureRemoteSecurity(services, configuration);
-                }
-
+                services.AddRemoteSecurity(securitySettings);
+                var configInMemory = services.GetRemoteConfiguration(securitySettings);
+                services.ConfigureRemoteSecurity(configInMemory);
             }
 
             return services;
@@ -102,14 +94,19 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
 
-        private static IConfiguration GetRemoteConfiguration(IServiceCollection services, SecuritySettings securitySettings)
+        private static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
         {
             services
                 .AddRefitClient<AuthorityClient>()
-                .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Url));
+                .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Endpoint));
 
             services.AddTransient<IAuthorityService, AuthorityService>();
 
+            return services;
+        }
+
+        private static IConfiguration GetRemoteConfiguration(this IServiceCollection services, SecuritySettings securitySettings)
+        {
             var provider = services.BuildServiceProvider();
 
             var clientOauth = provider.GetRequiredService<IAuthorityService>()
@@ -135,9 +132,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return configBuilder.Build();
         }
 
-        internal static void ConfigureRemoteSecurity(IServiceCollection services, IConfiguration configuration)
+        internal static void ConfigureRemoteSecurity(this IServiceCollection services, IConfiguration configuration)
         {
-            if(configuration == null)
+            if (configuration == null)
             {
                 return;
             }
