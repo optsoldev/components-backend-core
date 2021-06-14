@@ -31,7 +31,7 @@ namespace Optsol.Components.Shared.Settings
     public class Authority : BaseSettings
     {
         public string ClientId { get; set; }
-        
+
         public string Endpoint { get; set; }
 
         public override void Validate()

@@ -51,7 +51,6 @@ namespace Microsoft.Extensions.DependencyInjection
                          .WithOrigins(cors.Origins.Select(o => o.Value).ToArray());
                     });
                     cors.Validate();
-
                 }
             });
 
@@ -84,5 +83,4 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
     }
-
 }
