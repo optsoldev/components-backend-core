@@ -22,7 +22,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             var exception = new StorageSettingsNullException(logger);
 
             //Then
-            var msg = "A configuração do Storage não foi encontrada no appsettings";
+            var msg = "A configuração do STORAGE não foi encontrada no appsettings";
             exception.Message.Should().Be(msg);
         }
 
@@ -39,7 +39,7 @@ namespace Optsol.Components.Test.Unit.Shared.Exceptions
             var exception = new StorageSettingsNullException(loggerFactoryMock.Object);
 
             //Then
-            var msg = "A configuração do Storage não foi encontrada no appsettings";
+            var msg = "A configuração do STORAGE não foi encontrada no appsettings";
             exception.Message.Should().Be(msg);
 
             logger.Logs.Should().NotBeEmpty();

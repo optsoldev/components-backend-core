@@ -8,9 +8,9 @@ namespace Optsol.Components.Shared.Settings
 
         public override void Validate()
         {
-            if (string.IsNullOrEmpty(ConnectionString))
+            if (ConnectionString.IsEmpty())
             {
-                throw new ApplicationException(nameof(ConnectionString));
+                ShowingException(nameof(ConnectionString));
             }
         }
     }

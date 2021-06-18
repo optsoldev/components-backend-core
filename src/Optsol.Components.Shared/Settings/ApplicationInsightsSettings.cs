@@ -8,10 +8,9 @@ namespace Optsol.Components.Shared.Settings
 
         public override void Validate()
         {
-            var instrumentationKeyIsNullOrEmpty = string.IsNullOrEmpty(InstrumentationKey);
-            if (instrumentationKeyIsNullOrEmpty)
+            if (InstrumentationKey.IsEmpty())
             {
-                throw new ApplicationException(nameof(InstrumentationKey));
+                ShowingException(nameof(InstrumentationKey));
             }
         }
     }

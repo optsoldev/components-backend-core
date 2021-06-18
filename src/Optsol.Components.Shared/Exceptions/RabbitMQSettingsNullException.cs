@@ -16,8 +16,9 @@ namespace Optsol.Components.Shared.Exceptions
 ""RabbitMQSettings"": {{
     ""HostName"": ""{{host}}"",
     ""Port"": ""{{5672}}"",
-    ""UserName"": ""{{username}}""
-    ""Password"": ""{{Password}}""
+    ""UserName"": ""{{username}}"",
+    ""Password"": ""{{Password}}"",
+    ""ExchangeName"": ""{{exchange-name}}""
 }}"
             );
         }

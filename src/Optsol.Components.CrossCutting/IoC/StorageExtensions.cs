@@ -18,8 +18,8 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         public StorageOptions ConfigureBlob<TInterface, TImplementation>(params string[] namespaces)
-            where TInterface: IBlobStorage
-            where TImplementation: BlobStorageBase
+            where TInterface : IBlobStorage
+            where TImplementation : BlobStorageBase
 
         {
             _services.RegisterTransient<TInterface, TImplementation>(namespaces);
@@ -51,7 +51,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var storageOptions = new StorageOptions(services);
             options?.Invoke(storageOptions);
-           
+
             return services;
         }
     }

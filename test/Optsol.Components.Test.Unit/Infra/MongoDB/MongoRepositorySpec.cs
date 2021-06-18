@@ -17,7 +17,11 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
     public class MongoRepositorySpec
     {
         [Trait("Repository", "Log de Ocorrências")]
-        [Fact(DisplayName = "Deve registrar logs no repositório do MongoDB", Skip = "mongo local docker test")]
+#if DEBUG
+        [Fact(DisplayName = "Deve registrar logs no repositorio do MongoDB")]
+#elif RELEASE
+        [Fact(DisplayName = "Deve registrar logs no repositorio do MongoDB", Skip = "mongo local docker test")]
+#endif
         public async Task Deve_Registrar_Logs_No_Repositorio_MongoDB()
         {
             //Given
@@ -27,11 +31,15 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
             var mongoSettings = new MongoSettings
             {
                 DatabaseName = dataBaseName,
-                ConnectionString = "mongodb://127.0.0.1:27017"
+                ConnectionString = "mongodb://127.0.0.1:30001"
             };
 
+            var loggerContextFactoryMock = new Mock<ILoggerFactory>();
+            var loggerContext = new XunitLogger<MongoContext>();
+            loggerContextFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(loggerContext);
+
             var setMock = new Mock<IMongoCollection<AggregateRoot>>();
-            var mongoContextMock = new Mock<MongoContext>(mongoSettings);
+            var mongoContextMock = new Mock<MongoContext>(mongoSettings, loggerContextFactoryMock.Object);
             
             var logger = new XunitLogger<MongoRepository<AggregateRoot, Guid>>();
             var loggerFactoryMock = new Mock<ILoggerFactory>();

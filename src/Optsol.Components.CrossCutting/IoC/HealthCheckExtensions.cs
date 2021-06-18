@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
 using RabbitMQ.Client;
-using System;
-using System.Linq;
-using System.Net.Mime;
-using System.Text.Json;
+using System.Net.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -19,12 +17,13 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services
                 .AddHealthChecks()
-                .configureStorage(configuration)
+                .ConfigureStorage(configuration)
                 .ConfigureRedis(configuration)
                 .ConfigureElasticSearch(configuration)
                 .ConfigureSqlServer(configuration)
                 .ConfigureMongoDB(configuration)
-                .ConfigureRabbitMQ(configuration);
+                .ConfigureRabbitMQ(configuration)
+                .CongigureSecurity(configuration);
 
             services
                 .AddHealthChecksUI(options =>
@@ -36,7 +35,44 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static IHealthChecksBuilder configureStorage(this IHealthChecksBuilder builder, IConfiguration configuration)
+        private static IHealthChecksBuilder CongigureSecurity(this IHealthChecksBuilder builder, IConfiguration configuration)
+        {
+            var securitySettings = configuration.GetSection(nameof(SecuritySettings)).Get<SecuritySettings>();
+
+            var hasSecurity = securitySettings is not null;
+            if (hasSecurity)
+            {
+                securitySettings.Validate();
+
+                if (securitySettings.Development.Not())
+                {
+                    builder
+                        .AddCheck("authority", () =>
+                        {
+                            try
+                            {
+                                HttpClient client = new HttpClient();
+                                var result = client.GetAsync($"{securitySettings.Authority.Endpoint}/health/ping");
+
+                                if (result.IsCompletedSuccessfully)
+                                {
+                                    return HealthCheckResult.Healthy("Ping is healthy");
+                                }
+
+                                return HealthCheckResult.Unhealthy("Ping is unhealthy");
+                            }
+                            catch
+                            {
+                                return HealthCheckResult.Unhealthy("Ping is unhealthy");
+                            }
+                        }, tags: new string[] { "security" });
+                }
+            }
+
+            return builder;
+        }
+
+        private static IHealthChecksBuilder ConfigureStorage(this IHealthChecksBuilder builder, IConfiguration configuration)
         {
             var storageSettings = configuration.GetSection(nameof(StorageSettings)).Get<StorageSettings>();
 
@@ -150,6 +186,11 @@ namespace Microsoft.Extensions.DependencyInjection
                         setup.UIPath = "/health-ui";
                         setup.ApiPath = "/health-json";
                     });
+
+                config.MapGet("/health/ping", async context =>
+                {
+                    await context.Response.WriteAsync("pong");
+                });
             });
 
             return app;
@@ -164,12 +205,12 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 securitySettings.Validate();
 
-                if (securitySettings.IsDevelopment)
+                if (securitySettings.Development)
                 {
                     return endpoint;
                 }
 
-                endpoint.RequireAuthorization();
+                endpoint.AllowAnonymous();
             }
 
 

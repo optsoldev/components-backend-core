@@ -23,5 +23,10 @@ namespace System
         {
             return Encoding.UTF8.GetBytes(source);
         }
+
+        public static bool IsEmpty(this string source)
+        {
+            return string.IsNullOrEmpty(source);
+        }
     }
 }

@@ -3,12 +3,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Optsol.Components.Infra.Security.Models;
+using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Shared.Exceptions;
+using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
+using Refit;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -29,13 +35,15 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddSingleton(securitySettings);
 
-            if (securitySettings.IsDevelopment)
+            if (securitySettings.Development)
             {
-                ConfigureLocalSecurity(services);
+                services.ConfigureLocalSecurity();
             }
             else
             {
-                ConfigureRemoteSecurity(services, configuration);
+                services.AddRemoteSecurity(securitySettings);
+                var configInMemory = services.GetRemoteConfiguration(securitySettings);
+                services.ConfigureRemoteSecurity(configInMemory);
             }
 
             return services;
@@ -53,30 +61,11 @@ namespace Microsoft.Extensions.DependencyInjection
             app.UseAuthentication();
             app.UseAuthorization();
 
-            if (securitySettings.IsDevelopment)
+            if (securitySettings.Development)
             {
-                IdentityModelEventSource.ShowPII = true;
-
                 logger?.LogInformation("Configurando Segurança Local (IsDevelopment: true)");
 
-                app.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapGet("/token", async (context) =>
-                    {
-                        var symmetricSecurityKey = LocalSecuritySettings.GetSymmetricSecurityKey();
-                        var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-                        var token = new JwtSecurityToken(
-                            LocalSecuritySettings.Issuer,
-                            LocalSecuritySettings.Audience,
-                            GetLocalClaims(),
-                            DateTime.Now,
-                            DateTime.UtcNow.AddYears(1),
-                            signingCredentials);
-
-                        await context.Response.WriteAsync($"Token: { new JwtSecurityTokenHandler().WriteToken(token) }");
-                    });
-                });
-
+                app.UseRemoteEndpoint();
             }
             else
             {
@@ -85,24 +74,80 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return app;
         }
+    }
 
-        internal static void ConfigureRemoteSecurity(IServiceCollection services, IConfiguration configuration)
+    public static class ConfigurationBuilderExtensions
+    {
+        public static void AddInMemoryObject(this ConfigurationBuilder configurationBuilder, object settings, string settingsRoot)
         {
-            var azureB2CSecuritySettings = $"{nameof(SecuritySettings)}:{nameof(SecuritySettings.AzureB2C)}";
+            configurationBuilder.AddInMemoryCollection(settings.ToKeyValuePairs(settingsRoot));
+        }       
+    }
+
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
+        {
+            services
+                .AddRefitClient<AuthorityClient>()
+                .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Endpoint));
+
+            services.AddTransient<IAuthorityService, AuthorityService>();
+
+            return services;
+        }
+
+        public static IConfiguration GetRemoteConfiguration(this IServiceCollection services, SecuritySettings securitySettings)
+        {
+            var provider = services.BuildServiceProvider();
+
+            var clientOauth = provider.GetRequiredService<IAuthorityService>()
+                .GetClient(securitySettings.Authority.ClientId)
+                .GetAwaiter()
+                .GetResult();
+
+            if (clientOauth == null)
+            {
+                return null;
+            }
+
+            var config = new ConfigurationBuilder();
+            config.AddInMemoryObject(clientOauth, "AzureAdB2C");
+
+            services.Configure<OauthClient>("AzureAdB2C", configure =>
+            {
+                configure = clientOauth;
+            });
+
+            var configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryObject(clientOauth, "AzureAdB2C");
+            return configBuilder.Build();
+        }
+
+        public static IServiceCollection ConfigureRemoteSecurity(this IServiceCollection services, IConfiguration configuration)
+        {
+            var configurationIsNull = configuration == null;
+            if (configurationIsNull)
+            {
+                return services;
+            }
 
             services
                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddMicrosoftIdentityWebApi(options =>
                {
-                   configuration.GetSection(azureB2CSecuritySettings).Bind(options);
+                   configuration.GetSection("AzureAdB2C").Bind(options);
                    options.TokenValidationParameters.NameClaimType = "name";
                }, options =>
                {
-                   configuration.GetSection(azureB2CSecuritySettings).Bind(options);
+                   configuration.GetSection("AzureAdB2C").Bind(options);
                });
+
+
+            return services;
         }
 
-        internal static IServiceCollection ConfigureLocalSecurity(this IServiceCollection services)
+        public static IServiceCollection ConfigureLocalSecurity(this IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer("Bearer", options =>
@@ -145,20 +190,11 @@ namespace Microsoft.Extensions.DependencyInjection
 
             return services;
         }
+    }
 
-        internal static class LocalSecuritySettings
-        {
-            public readonly static string Issuer = "issuer";
-            public readonly static string Audience = "audience";
-            public readonly static string Key = "optsol-security-key";
-
-            public static SymmetricSecurityKey GetSymmetricSecurityKey()
-            {
-                return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
-            }
-        }
-
-        public static Claim[] GetLocalClaims()
+    public static class ApplicationBuilderExtensions
+    {
+        private static Claim[] GetLocalClaims()
         {
             return new[]
             {
@@ -172,8 +208,44 @@ namespace Microsoft.Extensions.DependencyInjection
                 new Claim("auth_time", "1449516934"),
                 new Claim("http://schemas.microsoft.com/identity/claims/identityprovider", "devtest"),
                 new Claim("optsol", "cliente.buscar"),
+                new Claim("optsol", "cliente.buscar.todos"),
                 new Claim("optsol", "cliente.inserir")
             };
+        }
+
+        public static IApplicationBuilder UseRemoteEndpoint(this IApplicationBuilder app)
+        {
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGet("/token", async (context) =>
+                {
+                    var symmetricSecurityKey = LocalSecuritySettings.GetSymmetricSecurityKey();
+                    var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+                    var token = new JwtSecurityToken(
+                        LocalSecuritySettings.Issuer,
+                        LocalSecuritySettings.Audience,
+                        GetLocalClaims(),
+                        DateTime.Now,
+                        DateTime.UtcNow.AddYears(1),
+                        signingCredentials);
+
+                    await context.Response.WriteAsync($"Token: { new JwtSecurityTokenHandler().WriteToken(token) }");
+                });
+            });
+
+            return app;
+        }
+    }
+
+    public static class LocalSecuritySettings
+    {
+        public readonly static string Issuer = "issuer";
+        public readonly static string Audience = "audience";
+        public readonly static string Key = "optsol-security-key";
+
+        public static SymmetricSecurityKey GetSymmetricSecurityKey()
+        {
+            return new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
         }
     }
 }

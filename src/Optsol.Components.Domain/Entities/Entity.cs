@@ -1,6 +1,8 @@
 using Flunt.Notifications;
 using Optsol.Components.Domain.Notifications.Contracts;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Optsol.Components.Domain.Entities
 {
@@ -9,6 +11,11 @@ namespace Optsol.Components.Domain.Entities
         public DateTime CreatedDate { get; protected set; }
 
         public abstract void Validate();
+
+        public void AddNotifications(IList<Entity> entities)
+        {
+            base.AddNotifications(entities.SelectMany(s => s.Notifications) as IReadOnlyList<Notification>);
+        }
     }
 
     public class Entity<TKey> : Entity, IEntity<TKey>

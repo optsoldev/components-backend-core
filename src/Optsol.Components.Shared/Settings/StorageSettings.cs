@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Optsol.Components.Shared.Settings
 {
@@ -9,10 +8,9 @@ namespace Optsol.Components.Shared.Settings
 
         public override void Validate()
         {
-            var connectionIsNull = string.IsNullOrEmpty(ConnectionString);
-            if (connectionIsNull)
+            if (ConnectionString.IsEmpty())
             {
-                throw new ApplicationException(nameof(ConnectionString));
+                ShowingException(nameof(ConnectionString));
             }
         }
     }

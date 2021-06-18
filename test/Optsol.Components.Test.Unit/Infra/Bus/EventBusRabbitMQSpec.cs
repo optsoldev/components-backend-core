@@ -14,8 +14,9 @@ namespace Optsol.Components.Test.Unit.Infra.Bus
 {
     public class EventBusRabbitMQSpec
     {
-        [Trait("Bus", "RabbitMQ")]
-        [Fact(DisplayName = "Deve Testar", Skip = "Teste")]
+        //TODO: Criar teste para EventBusRabbitMQSpec
+        //[Trait("Bus", "RabbitMQ")]
+        //[Fact(DisplayName = "Deve Testar", Skip = "Teste")]
         public void DeveTestar()
         {
             //Given
@@ -47,9 +48,6 @@ namespace Optsol.Components.Test.Unit.Infra.Bus
 
             //Then
             logger.Logs.Should().NotBeEmpty();
-
-
-
         }
 
         private void EventBusRabbitMQ_OnReceivedMessage(ReceivedMessageEventArgs e)
