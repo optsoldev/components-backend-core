@@ -31,7 +31,7 @@ namespace Optsol.Components.Test.Unit.Infra.MongoDB
             var mongoSettings = new MongoSettings
             {
                 DatabaseName = dataBaseName,
-                ConnectionString = "mongodb://127.0.0.1:27017"
+                ConnectionString = "mongodb://127.0.0.1:30001"
             };
 
             var loggerContextFactoryMock = new Mock<ILoggerFactory>();

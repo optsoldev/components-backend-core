@@ -18,7 +18,7 @@ namespace Optsol.Components.Shared.Exceptions
     ""Development"": true|false,
     ""Authority"": {{
         ""ClientId"": ""f008b483-7a32-413d-..."",
-        ""Url"": ""http://ssodomain""
+        ""Endpoint"": ""http://ssodomain""
     }}
 }}
 "
