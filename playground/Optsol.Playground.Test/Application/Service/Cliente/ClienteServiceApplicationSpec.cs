@@ -40,7 +40,7 @@ namespace Optsol.Playground.Test
                     .EnabledLogging();
 
                 options
-                    .ConfigureRepositories<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
+                    .ConfigureRepositories<IClientePessoaFisicaReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
             });
             services.AddDomainNotifications();
             services.AddApplications(options =>
@@ -71,7 +71,7 @@ namespace Optsol.Playground.Test
             await clienteServiceApplication.InsertAsync<InsertClienteViewModel, InsertClienteViewModel>(insertClienteViewModel);
 
             //Then
-            var clienteReadRepository = _serviceProvider.GetRequiredService<IClienteReadRepository>();
+            var clienteReadRepository = _serviceProvider.GetRequiredService<IClientePessoaFisicaReadRepository>();
             var clientes = await clienteReadRepository.GetAllAsync();
 
             clientes.Should().HaveCount(1);
@@ -89,15 +89,15 @@ namespace Optsol.Playground.Test
         public async Task Deve_Inserir_Cartao_No_Cliente()
         {
             //Given
-            var clienteWriteRepository = _serviceProvider.GetRequiredService<IClienteWriteRepository>();
+            var clienteWriteRepository = _serviceProvider.GetRequiredService<IClientePessoaFisicaWriteRepository>();
             var clienteServiceApplication = _serviceProvider.GetRequiredService<IClienteServiceApplication>();
             var uow = _serviceProvider.GetRequiredService<IUnitOfWork>();
 
-            var clienteEntity = new ClienteEntity(new NomeValueObject("Weslley", "Bruno"), new EmailValueObject("weslley@outlook.com.br"));
+            var ClientePessoaFisicaEntity = new ClientePessoaFisicaEntity(new NomeValueObject("Weslley", "Bruno"), new EmailValueObject("weslley@outlook.com.br"), "000.000.000-00");
 
             InsertCartaoCreditoViewModel insertCartaoCreditoViewModel = new()
             {
-                ClienteId = clienteEntity.Id,
+                ClienteId = ClientePessoaFisicaEntity.Id,
                 NomeCliente = "Weslley B. Carneiro",
                 Numero = "12345687415241548",
                 CodigoVerificacao = "854",
@@ -105,13 +105,13 @@ namespace Optsol.Playground.Test
             };
 
             //When
-            await clienteWriteRepository.InsertAsync(clienteEntity);
+            await clienteWriteRepository.InsertAsync(ClientePessoaFisicaEntity);
             await uow.CommitAsync();
 
             await clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
 
             //Then
-            var clienteReadRepository = _serviceProvider.GetRequiredService<IClienteReadRepository>();
+            var clienteReadRepository = _serviceProvider.GetRequiredService<IClientePessoaFisicaReadRepository>();
             var clientes = await clienteReadRepository.BuscarClientesComCartaoCreditoAsync().AsyncEnumerableToEnumerable();
 
             clientes.Should().HaveCount(1);

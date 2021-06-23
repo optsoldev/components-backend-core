@@ -39,7 +39,7 @@ namespace Optsol.Playground.Api
                     .EnabledLogging();
 
                 options
-                    .ConfigureRepositories<IClienteReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
+                    .ConfigureRepositories<IClientePessoaFisicaReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
 
             });
             services.AddApplications(options =>

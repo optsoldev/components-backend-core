@@ -15,8 +15,8 @@ namespace Optsol.Playground.Api.Controllers
 {
     [ApiController]
     [Route("api/[Controller]")]
-    public partial class ClienteController : ApiControllerBase<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel, ClienteSearchDto>,
-        IApiControllerBase<ClienteEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel, ClienteSearchDto>
+    public partial class ClienteController : ApiControllerBase<ClientePessoaFisicaEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel, ClienteSearchDto>,
+        IApiControllerBase<ClientePessoaFisicaEntity, ClienteViewModel, ClienteViewModel, InsertClienteViewModel, UpdateClienteViewModel, ClienteSearchDto>
     {
         public readonly IClienteServiceApplication _clienteServiceApplication;
 

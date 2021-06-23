@@ -4,7 +4,7 @@ using System;
 
 namespace Optsol.Playground.Domain.Repositories.Cliente
 {
-    public interface IClienteWriteRepository : IWriteRepository<ClienteEntity, Guid>
+    public interface IClientePessoaFisicaWriteRepository : IWriteRepository<ClientePessoaFisicaEntity, Guid>
     {
     }
 }

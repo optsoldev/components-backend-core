@@ -50,7 +50,7 @@ namespace Optsol.Playground.Domain.Entities
             AddNotifications(new ClienteEntityContract(this));
 
             AddNotifications(Nome, Email);
-            
+
             base.Validate();
         }
 
@@ -68,6 +68,50 @@ namespace Optsol.Playground.Domain.Entities
         private bool ExisteCartoesValidos()
         {
             return Cartoes.Any(a => a.Valido);
+        }
+    }
+
+    public class ClientePessoaFisicaEntity : ClienteEntity
+    {
+        public string Documento { get; private set; }
+
+        public ClientePessoaFisicaEntity()
+        {
+
+        }
+
+        public ClientePessoaFisicaEntity(Guid id, NomeValueObject nome, EmailValueObject email, string documento) 
+            : base(id, nome, email)
+        {
+            Documento = documento;
+        }
+
+        public ClientePessoaFisicaEntity(NomeValueObject nome, EmailValueObject email, string documento) 
+            : base(nome, email)
+        {
+            Documento = documento;
+        }
+    }
+
+    public class ClientePessoaJuridicaEntity : ClienteEntity
+    {
+        public string NumeroCnpj { get; private set; }
+
+        public ClientePessoaJuridicaEntity()
+        {
+
+        }
+
+        public ClientePessoaJuridicaEntity(Guid id, NomeValueObject nome, EmailValueObject email, string numeroCnpj) 
+            : base(id, nome, email)
+        {
+            NumeroCnpj = numeroCnpj;
+        }
+
+        public ClientePessoaJuridicaEntity(NomeValueObject nome, EmailValueObject email, string numeroCnpj) 
+            : base(nome, email)
+        {
+            NumeroCnpj = numeroCnpj;
         }
     }
 }

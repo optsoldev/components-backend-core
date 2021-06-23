@@ -12,6 +12,8 @@ namespace Optsol.Playground.Infra.Data.EntityConfig
         {
             builder.ToTable("Cliente");
 
+            builder.Property(entity => entity.Id).HasColumnName("ClienteId");
+
             builder.OwnsOne(entity => entity.Email, entity =>
             {
                 entity.Property(a => a.Email)
@@ -48,6 +50,30 @@ namespace Optsol.Playground.Infra.Data.EntityConfig
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.Configure(builder);
+        }
+    }
+
+    public class ClientePessoaFisicaConfiguration : EntityConfigurationBase<ClientePessoaFisicaEntity, Guid>
+    {
+        public override void Configure(EntityTypeBuilder<ClientePessoaFisicaEntity> builder)
+        {
+            builder.ToTable("ClientePessoaFisica");
+
+            builder.Property(entity => entity.Documento);
+
+            //base.Configure(builder);
+        }
+    }
+
+    public class ClientePessoaJuridicaConfiguration : EntityConfigurationBase<ClientePessoaJuridicaEntity, Guid>
+    {
+        public override void Configure(EntityTypeBuilder<ClientePessoaJuridicaEntity> builder)
+        {
+            builder.ToTable("ClientePessoaJuridica");
+
+            builder.Property(entity => entity.NumeroCnpj);
+
+            //base.Configure(builder);
         }
     }
 }

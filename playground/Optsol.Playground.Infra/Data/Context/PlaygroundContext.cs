@@ -17,6 +17,9 @@ namespace Optsol.Playground.Infra.Data.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ClienteConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientePessoaFisicaConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientePessoaJuridicaConfiguration());
+
             modelBuilder.ApplyConfiguration(new CartaoCreditoConfiguration());
         }
     }
