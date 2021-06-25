@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>1.16.0</Version>
+    <Version>1.16.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Polly" Version="7.2.2" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.2.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />

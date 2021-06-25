@@ -11,6 +11,8 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
 
         public string Email { get; set; }
 
+        public string Documento { get; set; }
+
         public override void Validate()
         {
             AddNotifications(new InsertClienteViewModelContract(this));

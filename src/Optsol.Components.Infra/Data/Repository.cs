@@ -75,16 +75,16 @@ namespace Optsol.Components.Infra.Data
             return Set.Where(a => ids.Contains(a.Id)).AsAsyncEnumerable().AsyncEnumerableToEnumerable();
         }
 
-        public virtual Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids, Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes)
+        public virtual Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes)
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ ids:[{ string.Join(",", ids) }]}} ) Retorno: type { typeof(TEntity).Name }");
 
             var querable = Set.AsQueryable();
 
-            var hasInclude = Includes != null;
+            var hasInclude = includes != null;
             if (hasInclude)
             {
-                querable = Includes.Invoke(querable);
+                querable = includes.Invoke(querable);
             }
 
             return querable.Where(a => ids.Contains(a.Id)).AsAsyncEnumerable().AsyncEnumerableToEnumerable();

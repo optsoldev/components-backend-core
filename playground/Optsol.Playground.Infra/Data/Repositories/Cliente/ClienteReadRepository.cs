@@ -9,20 +9,20 @@ using Optsol.Playground.Domain.Repositories.Cliente;
 
 namespace Optsol.Playground.Infra.Data.Repositories.Cliente
 {
-    public class ClienteReadRepository : Repository<ClienteEntity, Guid>, IClienteReadRepository
+    public class ClienteReadRepository : Repository<ClientePessoaFisicaEntity, Guid>, IClientePessoaFisicaReadRepository
     {
         public ClienteReadRepository(CoreContext context, ILoggerFactory logger) 
             : base(context, logger)
         {
         }
 
-        public async Task<ClienteEntity> BuscarClienteComCartaoCreditoAsync(Guid id)
+        public async Task<ClientePessoaFisicaEntity> BuscarClienteComCartaoCreditoAsync(Guid id)
         {
             var entity = await Set.Include(x => x.Cartoes).FirstAsync(x => x.Id == id);
             return entity;
         }
 
-        public IAsyncEnumerable<ClienteEntity> BuscarClientesComCartaoCreditoAsync()
+        public IAsyncEnumerable<ClientePessoaFisicaEntity> BuscarClientesComCartaoCreditoAsync()
         {
             return Set.Include(x => x.Cartoes).AsAsyncEnumerable();
         }

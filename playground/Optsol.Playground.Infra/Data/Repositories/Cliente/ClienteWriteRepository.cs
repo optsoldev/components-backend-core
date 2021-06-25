@@ -6,7 +6,7 @@ using System;
 
 namespace Optsol.Playground.Infra.Data.Repositories.Cliente
 {
-    public class ClienteWriteRepository : Repository<ClienteEntity, Guid>, IClienteWriteRepository
+    public class ClienteWriteRepository : Repository<ClientePessoaFisicaEntity, Guid>, IClientePessoaFisicaWriteRepository
     {
         public ClienteWriteRepository(CoreContext context, ILoggerFactory logger) 
             : base(context, logger)

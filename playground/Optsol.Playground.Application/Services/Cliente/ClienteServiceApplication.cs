@@ -12,17 +12,17 @@ using System.Threading.Tasks;
 
 namespace Optsol.Playground.Application.Services.Cliente
 {
-    public class ClienteServiceApplication : BaseServiceApplication<ClienteEntity>, IClienteServiceApplication
+    public class ClienteServiceApplication : BaseServiceApplication<ClientePessoaFisicaEntity>, IClienteServiceApplication
     {
-        protected readonly IClienteReadRepository _clienteReadRepository;
-        protected readonly IClienteWriteRepository _clienteWriteRepository;
+        protected readonly IClientePessoaFisicaReadRepository _clienteReadRepository;
+        protected readonly IClientePessoaFisicaWriteRepository _clienteWriteRepository;
 
         public ClienteServiceApplication(
             IMapper mapper,
             ILoggerFactory logger,
             IUnitOfWork unitOfWork,
-            IClienteWriteRepository clienteWriteRepository,
-            IClienteReadRepository clienteReadRepository,
+            IClientePessoaFisicaWriteRepository clienteWriteRepository,
+            IClientePessoaFisicaReadRepository clienteReadRepository,
             NotificationContext notificationContext)
             : base(mapper, logger, unitOfWork, clienteReadRepository, clienteWriteRepository, notificationContext)
         {

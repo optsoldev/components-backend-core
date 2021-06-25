@@ -13,9 +13,10 @@ namespace Optsol.Playground.Test.Domain.Entities
         public void Deve_Inserir_Cartao_No_Cliente()
         {
             //Given
-            var clienteEntity = new ClienteEntity(
+            var clienteEntity = new ClientePessoaFisicaEntity(
                 new NomeValueObject("Weslley", "Carneiro"),
-                new EmailValueObject("weslley@outlook.com")
+                new EmailValueObject("weslley@outlook.com"),
+                "000.000.000-00"
             );
             var cartaoCreditoEntity = new CartaoCreditoEntity(
                 "Weslley B. Carneiro",
@@ -37,10 +38,11 @@ namespace Optsol.Playground.Test.Domain.Entities
         {
             //Given
             var clienteId = Guid.NewGuid();
-            var clienteEntity = new ClienteEntity(
+            var clienteEntity = new ClientePessoaFisicaEntity(
                 clienteId,
                 new NomeValueObject("Weslley", "Carneiro"),
-                new EmailValueObject("weslley@outlook.com")
+                new EmailValueObject("weslley@outlook.com"),
+                "000.000.000-00"
             );
             var cartaoCreditoEntity = new CartaoCreditoEntity(
                 Guid.NewGuid(),
