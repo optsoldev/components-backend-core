@@ -211,8 +211,9 @@ namespace Optsol.Components.Test.Integration.Service
             ((OkObjectResult)actionResult).StatusCode.Should().NotBeNull();
             ((OkObjectResult)actionResult).StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var resultObj = JsonConvert.DeserializeObject<Response>(((OkObjectResult)actionResult).Value.ToJson());
+            var resultObj = JsonConvert.DeserializeObject<Response<InsertTestViewModel>>(((OkObjectResult)actionResult).Value.ToJson());
             resultObj.Should().NotBeNull();
+            resultObj.Data.Should().NotBeNull();
             resultObj.Success.Should().BeTrue();
             resultObj.Failure.Should().BeFalse();
             resultObj.Messages.Should().BeEmpty();
@@ -271,8 +272,9 @@ namespace Optsol.Components.Test.Integration.Service
             ((OkObjectResult)actionResult).StatusCode.Should().NotBeNull();
             ((OkObjectResult)actionResult).StatusCode.Should().Be((int)HttpStatusCode.OK);
 
-            var resultObj = JsonConvert.DeserializeObject<Response>(((OkObjectResult)actionResult).Value.ToJson());
+            var resultObj = JsonConvert.DeserializeObject<Response<UpdateTestViewModel>>(((OkObjectResult)actionResult).Value.ToJson());
             resultObj.Should().NotBeNull();
+            resultObj.Data.Should().NotBeNull();
             resultObj.Success.Should().BeTrue();
             resultObj.Failure.Should().BeFalse();
             resultObj.Messages.Should().BeEmpty();
