@@ -7,6 +7,6 @@
     <ProjectReference Include="..\..\src\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="2.0.3" />
+    <PackageReference Include="Flunt" Version="2.0.4" />
   </ItemGroup>
 </Project>

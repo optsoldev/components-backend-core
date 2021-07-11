@@ -4,6 +4,6 @@
     <Version>1.16.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="2.0.3" />
+    <PackageReference Include="Flunt" Version="2.0.4" />
   </ItemGroup>
 </Project>

@@ -31,11 +31,9 @@ namespace Optsol.Components.Service.Filters
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-
             var existsArgumets = context.ActionArguments.Any();
             if (existsArgumets)
             {
-
                 var listOfBaseDataTransferObject = ResolverBaseDataTransferObject(context.ActionArguments);
 
                 var responseFromBaseDataTransferObject = GetResponseFromBaseDataTransferObject(listOfBaseDataTransferObject);
@@ -45,7 +43,6 @@ namespace Optsol.Components.Service.Filters
                 {
                     context.Result = new BadRequestObjectResult(responseFromBaseDataTransferObject);
                 }
-
             }
             base.OnActionExecuting(context);
         }
