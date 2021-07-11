@@ -24,7 +24,6 @@ namespace Microsoft.Extensions.DependencyInjection
                 .AddControllers(option => option.Conventions.Add(new RouteTokenTransformerConvention(new SlugifyParameterTransformer())))
                 .ConfigureNewtonsoftJson();
 
-            services.AddScoped<ValidationModelAttribute>();
             services.AddTransient<IResponseFactory, ResponseFactory>();
 
             services.AddTransient<GlobalExceptionHandlerMiddleware>();

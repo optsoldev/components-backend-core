@@ -9,7 +9,7 @@
     <ProjectReference Include="..\Optsol.Playground.Infra\Optsol.Playground.Infra.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="2.0.3" />
+    <PackageReference Include="Flunt" Version="2.0.4" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
   </ItemGroup>
 </Project>
