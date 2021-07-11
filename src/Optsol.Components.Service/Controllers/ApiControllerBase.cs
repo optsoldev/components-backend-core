@@ -212,37 +212,13 @@ namespace Optsol.Components.Service.Controllers
         [HttpPost("paginated")]
         [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetAllAsync(ISearchRequest<TSearch> search)
+        public virtual async Task<IActionResult> GetAllAsync(ISearchRequest<TSearch> search)
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }({ search.ToJson() }) Retorno: IActionResult");
 
             var viewModelsOfResultService = await _serviceApplication.GetAllAsync<TGetAllDto, TSearch>(search);
 
             return CreateResult(viewModelsOfResultService);
-        }
-
-        public override async Task<IActionResult> InsertAsync([FromBody] TInsertData data)
-        {
-            if (data == null)
-                return NoContent();
-
-            _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
-
-            await _serviceApplication.InsertAsync<TInsertData, TResponseInsertData>(data);
-
-            return CreateResult();
-        }
-
-        public override async Task<IActionResult> UpdateAsync([FromBody] TUpdateData data)
-        {
-            if (data == null)
-                return NoContent();
-
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) }({{ viewModel:{ data.ToJson() } }})");
-
-            await _serviceApplication.UpdateAsync<TUpdateData, TResponseUpdateData>(data);
-
-            return CreateResult();
         }
     }
 }
