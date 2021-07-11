@@ -70,7 +70,6 @@ namespace Optsol.Components.Service.Controllers
         }
     }
 
-    [ValidationModel]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> : ApiControllerBase,
         IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
         where TEntity : AggregateRoot
@@ -159,7 +158,6 @@ namespace Optsol.Components.Service.Controllers
         }
     }
 
-    [ValidationModel]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> :
         ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>,
         IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch>
@@ -191,7 +189,6 @@ namespace Optsol.Components.Service.Controllers
         }
     }
 
-    [ValidationModel]
     public class ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TResponseInsertData, TUpdateData, TResponseUpdateData, TSearch> :
         ApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>,
         IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
