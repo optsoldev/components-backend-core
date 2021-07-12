@@ -12,7 +12,7 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
         public string Sobrenome { get; set; }
         public string Email { get; set; }
         public bool Ativo { get; set; }
-        public ICollection<CartaoCreditoViewModel> Cartoes { get; set; }
+        public ICollection<CartaoCreditoResponse> Cartoes { get; set; }
 
         public override void Validate()
         {

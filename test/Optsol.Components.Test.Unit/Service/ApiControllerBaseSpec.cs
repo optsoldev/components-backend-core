@@ -26,9 +26,9 @@ namespace Optsol.Components.Test.Unit.Service
         public async Task Deve_Registrar_Logs_No_ApiController()
         {
             //Given
-            var model = new TestViewModel();
-            var insertViewModel = new InsertTestViewModel();
-            var updateViewModel = new UpdateTestViewModel();
+            var model = new TestResponseDto();
+            var insertViewModel = new TestRequestDto();
+            var updateViewModel = new TestRequestDto();
 
             var testSearchDto = new TestSearchDto
             {
@@ -44,33 +44,28 @@ namespace Optsol.Components.Test.Unit.Service
                 new NomeValueObject("Weslley", "Carneiro"),
                 new EmailValueObject("weslley.carneiro@outlook.com"));
 
-            model.Id = entity.Id;
+            var entityId = entity.Id;
 
             var logger = new XunitLogger<
-                ApiControllerBase<TestEntity
-                , TestViewModel
-                , TestViewModel
-                , InsertTestViewModel
-                , UpdateTestViewModel
-                , TestSearchDto>>();
+                ApiControllerBase<TestEntity, TestRequestDto, TestResponseDto, TestSearchDto>>();
             var loggerFactoryMock = new Mock<ILoggerFactory>();
             loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
             var mapperMock = new Mock<IMapper>();
-            mapperMock.Setup(mapper => mapper.Map<TestViewModel>(It.IsAny<TestEntity>())).Returns(model);
-            mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestViewModel>())).Returns(entity);
+            mapperMock.Setup(mapper => mapper.Map<TestResponseDto>(It.IsAny<TestEntity>())).Returns(model);
+            mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestResponseDto>())).Returns(entity);
 
             var mockApplicationService = new Mock<ITestServiceApplication>();
-            mockApplicationService.Setup(setup => setup.InsertAsync<InsertTestViewModel, InsertTestViewModel>(It.IsAny<InsertTestViewModel>())).ReturnsAsync(insertViewModel);
-            mockApplicationService.Setup(setup => setup.UpdateAsync<UpdateTestViewModel, UpdateTestViewModel>(It.IsAny<UpdateTestViewModel>())).ReturnsAsync(updateViewModel);
+            mockApplicationService.Setup(setup => setup.InsertAsync<TestRequestDto, TestResponseDto>(It.IsAny<TestRequestDto>())).ReturnsAsync(model);
+            mockApplicationService.Setup(setup => setup.UpdateAsync<TestRequestDto, TestResponseDto>(It.IsAny<Guid>(), It.IsAny<TestRequestDto>())).ReturnsAsync(model);
 
             var mockResponseFactory = new Mock<IResponseFactory>();
             mockResponseFactory.Setup(setup => setup.Create()).Returns(new Response());
-            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<TestViewModel>())).Returns(new Response<TestViewModel>(model, true));
-            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<IEnumerable<TestViewModel>>())).Returns(new ResponseList<TestViewModel>(new[] { model }, true));
-            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<SearchResult<TestViewModel>>())).Returns(new ResponseSearch<TestViewModel>(new SearchResult<TestViewModel>(1, 10) { Items = new[] { model } }, true));
-            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<InsertTestViewModel>())).Returns(new Response<InsertTestViewModel>(insertViewModel, true));
-            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<UpdateTestViewModel>())).Returns(new Response<UpdateTestViewModel>(updateViewModel, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<TestResponseDto>())).Returns(new Response<TestResponseDto>(model, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<IEnumerable<TestResponseDto>>())).Returns(new ResponseList<TestResponseDto>(new[] { model }, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<SearchResult<TestResponseDto>>())).Returns(new ResponseSearch<TestResponseDto>(new SearchResult<TestResponseDto>(1, 10) { Items = new[] { model } }, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<TestRequestDto>())).Returns(new Response<TestRequestDto>(insertViewModel, true));
+            mockResponseFactory.Setup(setup => setup.Create(It.IsAny<TestRequestDto>())).Returns(new Response<TestRequestDto>(updateViewModel, true));
 
 
             var controller = new TestController(loggerFactoryMock.Object, mockApplicationService.Object, mockResponseFactory.Object);
@@ -78,10 +73,10 @@ namespace Optsol.Components.Test.Unit.Service
             //When
             await controller.GetAllAsync();
             await controller.GetAllAsync(searchDto);
-            await controller.GetByIdAsync(model.Id);
+            await controller.GetByIdAsync(entityId);
             await controller.InsertAsync(insertViewModel);
-            await controller.UpdateAsync(updateViewModel);
-            await controller.DeleteAsync(model.Id);
+            await controller.UpdateAsync(entityId, updateViewModel);
+            await controller.DeleteAsync(entityId);
 
             //Then
             var msgContructor = "Inicializando Controller Base<TestEntity, Guid>";

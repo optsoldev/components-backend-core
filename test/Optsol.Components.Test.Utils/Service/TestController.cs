@@ -10,11 +10,11 @@ namespace Optsol.Components.Test.Utils.Service
 {
     [ApiController]
     [Route("api/Test")]
-    public class TestController : ApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>, 
-        IApiControllerBase<TestEntity, TestViewModel, TestViewModel, InsertTestViewModel, UpdateTestViewModel, TestSearchDto>
+    public class TestController : ApiControllerBase<TestEntity, TestRequestDto, TestResponseDto, TestSearchDto>,
+        IApiControllerBase<TestEntity, TestRequestDto, TestResponseDto, TestSearchDto>
     {
         public TestController(
-            ILoggerFactory logger, 
+            ILoggerFactory logger,
             IBaseServiceApplication<TestEntity> serviceApplication,
             IResponseFactory responseFactory) : base(logger, serviceApplication, responseFactory)
         {

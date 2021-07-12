@@ -3,7 +3,7 @@ using Optsol.Components.Test.Utils.Contracts;
 
 namespace Optsol.Components.Test.Utils.ViewModels
 {
-    public class InsertTestViewModel: BaseDataTransferObject
+    public class TestRequestDto: BaseDataTransferObject
     {
         public string Nome { get; set; }
         
@@ -11,7 +11,7 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public override void Validate()
         {
-            AddNotifications(new InsertTestViewModelContract(this));
+            AddNotifications(new TestRequestDtoContract(this));
         }
     }
 }

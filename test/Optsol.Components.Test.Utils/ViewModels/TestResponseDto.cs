@@ -4,7 +4,7 @@ using System;
 
 namespace Optsol.Components.Test.Utils.ViewModels
 {
-    public class UpdateTestViewModel : BaseDataTransferObject
+    public class TestResponseDto : BaseDataTransferObject
     {
         public Guid Id { get; set; }
 
@@ -12,9 +12,21 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public string Contato { get; set; }
 
+        public string Ativo { get; set; }
+
         public override void Validate()
         {
-            AddNotifications(new UpdateTestViewModelContract(this));
+            AddNotifications(new TestResponseDtoContract(this));
         }
+    }
+
+    public class EnviarWhatsDto
+    {
+        public EnviarWhatsDto()
+        {
+
+        }
+
+        public string Mensagem { get; set; }
     }
 }

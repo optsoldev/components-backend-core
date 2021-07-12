@@ -3,7 +3,7 @@ using Optsol.Playground.Application.Validators;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
 {
-    public class InsertClienteViewModel : BaseDataTransferObject
+    public class ClienteRequest : BaseDataTransferObject
     {
         public string Nome { get; set; }
 
@@ -15,7 +15,7 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
 
         public override void Validate()
         {
-            AddNotifications(new InsertClienteViewModelContract(this));
+            AddNotifications(new ClienteRequestContract(this));
         }
     }
 }

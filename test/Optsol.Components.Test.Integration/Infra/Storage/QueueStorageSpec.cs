@@ -67,7 +67,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
                 options.ConfigureQueue<IQueueStorageTest, QueueStorageTest>("Optsol.Components.Test.Utils");
             });
 
-            var viewModel = new TestViewModel();
+            var viewModel = new TestResponseDto();
             viewModel.Id = Guid.NewGuid();
             viewModel.Nome = "Weslley Carneiro";
             viewModel.Contato = "weslley.carneiro@optsol.com.br";
@@ -80,7 +80,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             var mensagemGerada = string.Format("Olá {0}. Sua consulta foi agendada para o dia {1:dd/MM/yyyy 'às' HH:mm:ss}, quando chegar o dia acesse o portal através deste link: {2}", "Weslley Carneiro", DateTime.Now, "https://wwww.optsol.com.br");
             viewModel.Nome = mensagemGerada;
 
-            var messageModel = new SendMessageModel<TestViewModel>(viewModel);
+            var messageModel = new SendMessageModel<TestResponseDto>(viewModel);
 
             //When 
             var containerExiteNoAzureStorage = await queueStorage.SendMessageBase64Async(messageModel);

@@ -11,6 +11,6 @@ namespace Optsol.Playground.Application.Services.Cliente
     {
         Task<ClienteComCartoesViewModel> GetClienteComCartaoCreditoAsync(Guid id);
 
-        Task InserirCartaoNoClienteAsync(InsertCartaoCreditoViewModel insertCartaoCreditoViewModel);
+        Task InserirCartaoNoClienteAsync(CartaoCreditoRequest insertCartaoCreditoViewModel);
     }
 }

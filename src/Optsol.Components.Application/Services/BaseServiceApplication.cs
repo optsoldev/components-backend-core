@@ -62,50 +62,50 @@ namespace Optsol.Components.Application.Services
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
         }
 
-        public virtual async Task<TGetByIdDto> GetByIdAsync<TGetByIdDto>(Guid id)
-            where TGetByIdDto : BaseDataTransferObject
+        public virtual async Task<TResponse> GetByIdAsync<TResponse>(Guid id)
+            where TResponse : BaseDataTransferObject
         {
-            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TGetByIdDto).Name }");
+            _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TResponse).Name }");
 
             var entity = await _readRepository.GetByIdAsync(id, Includes);
 
-            return _mapper.Map<TGetByIdDto>(entity);
+            return _mapper.Map<TResponse>(entity);
         }
 
-        public virtual async Task<IEnumerable<TGetByIdDto>> GetByIdsAsync<TGetByIdDto>(IEnumerable<Guid> ids)
-            where TGetByIdDto : BaseDataTransferObject
+        public virtual async Task<IEnumerable<TResponse>> GetByIdsAsync<TResponse>(IEnumerable<Guid> ids)
+            where TResponse : BaseDataTransferObject
         {
-            _logger?.LogInformation($"Método: { nameof(GetByIdsAsync) }({{ id:{ ids } }}) Retorno: type { typeof(TGetByIdDto).Name }");
+            _logger?.LogInformation($"Método: { nameof(GetByIdsAsync) }({{ id:{ ids } }}) Retorno: type { typeof(TResponse).Name }");
 
             var entity = await _readRepository.GetByIdsAsync(ids, Includes);
 
-            return _mapper.Map<IEnumerable<TGetByIdDto>>(entity);
+            return _mapper.Map<IEnumerable<TResponse>>(entity);
         }
 
-        public virtual async Task<IEnumerable<TGetAllDto>> GetAllAsync<TGetAllDto>()
-            where TGetAllDto : BaseDataTransferObject
+        public virtual async Task<IEnumerable<TResponse>> GetAllAsync<TResponse>()
+            where TResponse : BaseDataTransferObject
         {
-            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
+            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TResponse).Name }>");
 
             var entities = await _readRepository.GetAllAsync(Includes);
 
-            return _mapper.Map<IEnumerable<TGetAllDto>>(entities);
+            return _mapper.Map<IEnumerable<TResponse>>(entities);
         }
 
-        public virtual async Task<ISearchResult<TGetAllDto>> GetAllAsync<TGetAllDto, TSearch>(ISearchRequest<TSearch> requestSearch)
+        public virtual async Task<ISearchResult<TResponse>> GetAllAsync<TResponse, TSearch>(ISearchRequest<TSearch> requestSearch)
             where TSearch : class
-            where TGetAllDto : BaseDataTransferObject
+            where TResponse : BaseDataTransferObject
         {
-            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TGetAllDto).Name }>");
+            _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TResponse).Name }>");
 
             var entities = await _readRepository.GetAllAsync(requestSearch);
 
-            return _mapper.Map<SearchResult<TGetAllDto>>(entities);
+            return _mapper.Map<SearchResult<TResponse>>(entities);
         }
 
-        public async virtual Task<TResponseInsertData> InsertAsync<TInsertData, TResponseInsertData>(TInsertData data)
-            where TInsertData : BaseDataTransferObject
-            where TResponseInsertData : class
+        public async virtual Task<TResponse> InsertAsync<TRequest, TResponse>(TRequest data)
+            where TRequest : BaseDataTransferObject
+            where TResponse : BaseDataTransferObject
         {
             data.Validate();
             if (CheckInvalidFromNotifiable(data))
@@ -116,7 +116,7 @@ namespace Optsol.Components.Application.Services
             _logger?.LogInformation($"Método: { nameof(InsertAsync) }({{ viewModel:{ data.ToJson() } }})");
 
             var entity = _mapper.Map<TEntity>(data);
-            _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TInsertData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+            _logger?.LogInformation($"Método: { nameof(InsertAsync) } Mapper: { typeof(TRequest).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
             entity.Validate();
             if (CheckInvalidFromNotifiable(entity))
@@ -127,12 +127,12 @@ namespace Optsol.Components.Application.Services
             await _writeRepository.InsertAsync(entity);
             await CommitAsync();
 
-            return _mapper.Map<TResponseInsertData>(entity);
+            return _mapper.Map<TResponse>(entity);
         }
 
-        public async virtual Task<TResponseUpdateData> UpdateAsync<TUpdateData, TResponseUpdateData>(TUpdateData data)
-            where TUpdateData : BaseDataTransferObject
-            where TResponseUpdateData : class
+        public async virtual Task<TResponse> UpdateAsync<TRequest, TResponse>(Guid id, TRequest data)
+            where TRequest : BaseDataTransferObject
+            where TResponse : BaseDataTransferObject
         {
             data.Validate();
             if (CheckInvalidFromNotifiable(data))
@@ -144,15 +144,18 @@ namespace Optsol.Components.Application.Services
 
             var entity = _mapper.Map<TEntity>(data);
 
-            _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TUpdateData).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
+            _logger?.LogInformation($"Método: { nameof(UpdateAsync) } Mapper: { typeof(TRequest).Name } To: { typeof(TEntity).Name } Result: { entity.ToJson() }");
 
-            var entityNotFound = (await _readRepository.GetByIdAsync(entity.Id)) == null;
-            if (entityNotFound)
+            var updateEntity = await _readRepository.GetByIdAsync(id);
+            var dataForUpdateNotFound = updateEntity == null;
+            if (dataForUpdateNotFound)
             {
-                _notificationContext.AddNotification(entity.Id.ToString(), "Registro não foi encontrado.");
+                _notificationContext.AddNotification(id.ToString(), "Registro não foi encontrado.");
             }
 
+            ForceId(entity, id);
             entity.Validate();
+
             if (CheckInvalidFromNotifiable(entity))
             {
                 return default;
@@ -161,7 +164,12 @@ namespace Optsol.Components.Application.Services
             await _writeRepository.UpdateAsync(entity);
             await CommitAsync();
 
-            return _mapper.Map<TResponseUpdateData>(entity);
+            return _mapper.Map<TResponse>(entity);
+        }
+
+        private static void ForceId(AggregateRoot aggregateRoot, Guid idDatabase)
+        {
+            aggregateRoot.GetType().GetProperty(nameof(aggregateRoot.Id)).SetValue(aggregateRoot, idDatabase, null);
         }
 
         public virtual async Task DeleteAsync(Guid id)

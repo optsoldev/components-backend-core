@@ -36,7 +36,7 @@ namespace Optsol.Playground.Application.Services.Cliente
             return _mapper.Map<ClienteComCartoesViewModel>(clienteEntity);
         }
 
-        public async Task InserirCartaoNoClienteAsync(InsertCartaoCreditoViewModel insertCartaoCreditoViewModel)
+        public async Task InserirCartaoNoClienteAsync(CartaoCreditoRequest insertCartaoCreditoViewModel)
         {
             var clienteEntity = await _clienteReadRepository.GetByIdAsync(insertCartaoCreditoViewModel.ClienteId);
 
