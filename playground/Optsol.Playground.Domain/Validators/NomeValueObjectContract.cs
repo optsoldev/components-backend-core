@@ -1,15 +1,21 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Playground.Domain.ValueObjects;
 
 namespace Optsol.Playground.Domain.Validators
 {
-    public class NomeValueObjectContract : Contract<NomeValueObject>
+    public class NomeValueObjectContract : AbstractValidator<NomeValueObject>
     {
-        public NomeValueObjectContract(NomeValueObject nomeValueObject)
+        public NomeValueObjectContract()
         {
-            Requires()
-                .IsBetween(nomeValueObject.Nome.Length, 3, 70, $"{nameof(NomeValueObject.Nome)}", "O nome deve conter de 3 a 70 caracteres")
-                .IsBetween(nomeValueObject.SobreNome.Length, 3, 70, $"{nameof(NomeValueObject.SobreNome)}", "O nome deve conter de 3 a 70 caracteres");
+            RuleFor(entity => entity.Nome)
+              .MinimumLength(3)
+              .MaximumLength(70)
+              .WithMessage("O nome deve conter de 3 a 70 caracteres");
+
+            RuleFor(entity => entity.Nome)
+              .MinimumLength(3)
+              .MaximumLength(70)
+              .WithMessage("O nome deve conter de 3 a 70 caracteres");
         }
     }
 }

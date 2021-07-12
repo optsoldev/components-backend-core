@@ -1,9 +1,7 @@
-using Flunt.Notifications;
 using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Domain.Pagination;
-using Optsol.Components.Infra.Data;
-using System;
+using Optsol.Components.Shared.Notifications;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Service.Responses

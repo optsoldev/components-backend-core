@@ -1,14 +1,13 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 
 namespace Optsol.Components.Test.Utils.Contracts
 {
-    public class EmailValueObjectContract : Contract<EmailValueObject>
+    public class EmailValueObjectContract : AbstractValidator<EmailValueObject>
     {
-        public EmailValueObjectContract(EmailValueObject emailValueObject)
+        public EmailValueObjectContract()
         {
-            Requires()
-               .IsEmail(emailValueObject.Email, "Email", "E-mail inválido");
+            RuleFor(entity => entity.Email).EmailAddress().WithMessage("E-mail inválido");
         }
     }
 }

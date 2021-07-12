@@ -11,7 +11,10 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public override void Validate()
         {
-            AddNotifications(new TestRequestDtoContract(this));
+            var validation = new TestRequestDtoContract();
+            var resultOfValidation = validation.Validate(this);
+
+            AddNotifications(resultOfValidation);
         }
     }
 }

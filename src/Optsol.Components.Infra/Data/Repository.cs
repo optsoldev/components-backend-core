@@ -155,7 +155,7 @@ namespace Optsol.Components.Infra.Data
                 _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em InsertAsync");
                 ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
             }
-
+                        
             return Set.AddAsync(entity).AsTask();
         }
 

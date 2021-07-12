@@ -1,4 +1,3 @@
-using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Bus.Events;
 using Optsol.Components.Test.Utils.Contracts;
@@ -12,7 +11,7 @@ namespace Optsol.Components.Test.Utils.Entity.Entities
         public NomeValueObject Nome { get; private set; }
 
         public EmailValueObject Email { get; private set; }
-        
+
         public bool Ativo { get; private set; }
 
         public TestEntity()
@@ -29,10 +28,9 @@ namespace Optsol.Components.Test.Utils.Entity.Entities
         {
             Nome = nome;
             Email = email;
-
-            AddNotifications(Nome, Email);
-
             Ativo = false;
+
+            Validate();
         }
 
         public void InserirNome(NomeValueObject nomeValueObject)
@@ -42,7 +40,10 @@ namespace Optsol.Components.Test.Utils.Entity.Entities
 
         public override void Validate()
         {
-            AddNotifications(new TestEntityContract(this));
+            var validator = new TestEntityContract();
+            var resultOfValidation = validator.Validate(this);
+
+            AddNotifications(resultOfValidation);
 
             base.Validate();
         }
