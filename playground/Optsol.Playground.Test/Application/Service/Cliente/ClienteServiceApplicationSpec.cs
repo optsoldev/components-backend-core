@@ -60,7 +60,7 @@ namespace Optsol.Playground.Test
             //Given
             var clienteServiceApplication = _serviceProvider.GetRequiredService<IClienteServiceApplication>();
 
-            InsertClienteViewModel insertClienteViewModel = new()
+            ClienteRequest insertClienteViewModel = new()
             {
                 Nome = "Weslley",
                 SobreNome = "Bruno",
@@ -68,7 +68,7 @@ namespace Optsol.Playground.Test
             };
 
             //When
-            await clienteServiceApplication.InsertAsync<InsertClienteViewModel, InsertClienteViewModel>(insertClienteViewModel);
+            await clienteServiceApplication.InsertAsync<ClienteRequest, ClienteRequest>(insertClienteViewModel);
 
             //Then
             var clienteReadRepository = _serviceProvider.GetRequiredService<IClientePessoaFisicaReadRepository>();
@@ -95,7 +95,7 @@ namespace Optsol.Playground.Test
 
             var ClientePessoaFisicaEntity = new ClientePessoaFisicaEntity(new NomeValueObject("Weslley", "Bruno"), new EmailValueObject("weslley@outlook.com.br"), "000.000.000-00");
 
-            InsertCartaoCreditoViewModel insertCartaoCreditoViewModel = new()
+            CartaoCreditoRequest insertCartaoCreditoViewModel = new()
             {
                 ClienteId = ClientePessoaFisicaEntity.Id,
                 NomeCliente = "Weslley B. Carneiro",

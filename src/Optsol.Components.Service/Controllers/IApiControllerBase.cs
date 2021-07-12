@@ -9,45 +9,29 @@ namespace Optsol.Components.Service.Controllers
 {
     public interface IApiControllerBase { }
 
-    public interface IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData> : IApiControllerBase
+    public interface IApiControllerBase<TEntity, TRequest, TResponse> : IApiControllerBase
         where TEntity : AggregateRoot
-        where TGetByIdDto : BaseDataTransferObject
-        where TGetAllDto : BaseDataTransferObject
-        where TInsertData : BaseDataTransferObject
-        where TUpdateData : BaseDataTransferObject
+        where TRequest : BaseDataTransferObject
+        where TResponse : BaseDataTransferObject
     {
         Task<IActionResult> GetAllAsync();
 
-        Task<IActionResult> GetByIdAsync(Guid id);
+        Task<IActionResult> GetByIdAsync([FromRoute] Guid id);
 
-        Task<IActionResult> InsertAsync(TInsertData data);
+        Task<IActionResult> InsertAsync([FromBody] TRequest data);
 
-        Task<IActionResult> UpdateAsync(TUpdateData data);
+        Task<IActionResult> UpdateAsync([FromRoute] Guid id, TRequest data);
 
-        Task<IActionResult> DeleteAsync(Guid id);
+        Task<IActionResult> DeleteAsync([FromRoute] Guid id);
     }
 
-    public interface IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData, TSearch> :
-        IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
+    public interface IApiControllerBase<TEntity, TRequest, TResponse, TSearch> :
+        IApiControllerBase<TEntity, TRequest, TResponse>
         where TEntity : AggregateRoot
-        where TGetByIdDto : BaseDataTransferObject
-        where TGetAllDto : BaseDataTransferObject
-        where TInsertData : BaseDataTransferObject
-        where TUpdateData : BaseDataTransferObject
+        where TRequest : BaseDataTransferObject
+        where TResponse : BaseDataTransferObject
         where TSearch : class
     {
         Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search);
-    }
-
-    public interface IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TResponseInsertData, TUpdateData, TResponseUpdateData> :
-        IApiControllerBase<TEntity, TGetByIdDto, TGetAllDto, TInsertData, TUpdateData>
-        where TEntity : AggregateRoot
-        where TGetByIdDto : BaseDataTransferObject
-        where TGetAllDto : BaseDataTransferObject
-        where TInsertData : BaseDataTransferObject
-        where TResponseInsertData : BaseDataTransferObject
-        where TUpdateData : BaseDataTransferObject
-        where TResponseUpdateData : BaseDataTransferObject
-    {
     }
 }

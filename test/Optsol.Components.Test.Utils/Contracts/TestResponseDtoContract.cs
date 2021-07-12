@@ -3,9 +3,9 @@ using Optsol.Components.Test.Utils.ViewModels;
 
 namespace Optsol.Components.Test.Utils.Contracts
 {
-    public class TestViewModelContract : Contract<TestViewModel>
+    public class TestResponseDtoContract : Contract<TestResponseDto>
     {
-        public TestViewModelContract(TestViewModel testViewModel)
+        public TestResponseDtoContract(TestResponseDto testViewModel)
         {
             Requires()
                 .IsEmail(testViewModel.Contato, nameof(testViewModel.Contato), "O contato não é um email válido")

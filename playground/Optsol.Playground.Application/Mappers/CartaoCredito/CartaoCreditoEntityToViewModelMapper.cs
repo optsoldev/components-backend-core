@@ -8,7 +8,7 @@ namespace Optsol.Playground.Application.Mappers.CartaoCredito
     {
         public CartaoCreditoEntityToViewModelMapper()
         {
-            CreateMap<CartaoCreditoEntity, CartaoCreditoViewModel>()
+            CreateMap<CartaoCreditoEntity, CartaoCreditoResponse>()
                 .ForMember(item => item.Validade, item => item.MapFrom(src => src.Validade.ToString("MM/yy")));
 
         }

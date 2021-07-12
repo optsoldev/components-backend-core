@@ -9,19 +9,19 @@ namespace Optsol.Playground.Application.Mappers.Cliente
     {
         public ClienteEntityToViewModelMapper()
         {
-            CreateMap<ClientePessoaFisicaEntity, ClienteViewModel>()
+            CreateMap<ClientePessoaFisicaEntity, ClienteResponse>()
                 .ForMember(item => item.DataCriacao, item => item.MapFrom(src => src.CreatedDate));
 
             CreateMap<ClientePessoaFisicaEntity, ClienteComCartoesViewModel>()
                 .ForMember(item => item.Sobrenome, item => item.MapFrom(src => src.Nome.SobreNome));
 
-            CreateMap<ClientePessoaFisicaEntity, InsertClienteViewModel>()
+            CreateMap<ClientePessoaFisicaEntity, ClienteRequest>()
                 .ForMember(item => item.Nome, item => item.MapFrom(src => src.Nome.Nome))
                 .ForMember(item => item.SobreNome, item => item.MapFrom(src => src.Nome.SobreNome))
                 .ForMember(item => item.Documento, item => item.MapFrom(src => src.Documento))
                 .ForMember(item => item.Email, item => item.MapFrom(src => src.Email.ToString()));
 
-            CreateMap<SearchResult<ClientePessoaFisicaEntity>, SearchResult<ClienteViewModel>>();
+            CreateMap<SearchResult<ClientePessoaFisicaEntity>, SearchResult<ClienteResponse>>();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Optsol.Playground.Api.Controllers
         }
 
         [HttpPost("cartao-credito")]
-        public async Task<IActionResult> InserirCartaoNoCliente([FromBody] InsertCartaoCreditoViewModel insertCartaoCreditoViewModel)
+        public async Task<IActionResult> InserirCartaoNoCliente([FromBody] CartaoCreditoRequest insertCartaoCreditoViewModel)
         {
             await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
 
