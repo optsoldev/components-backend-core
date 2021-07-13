@@ -1,5 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Optsol.Components.Domain.Services.Push;
+using Optsol.Components.Infra.Firebase.Clients;
+using Optsol.Components.Infra.Firebase.Services;
+using Optsol.Components.Shared.Settings;
+using Refit;
+using System;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.CrossCutting.IoC
 {
@@ -7,23 +14,25 @@ namespace Optsol.Components.Infra.CrossCutting.IoC
     {
         public static IServiceCollection AddFirebase(this IServiceCollection services, IConfiguration configuration)
         {
-            //var firebaseSettings = configuration.GetSection(nameof(FirebaseSettings)).Get<FirebaseSettings>();
-            //firebaseSettings.Validate();
 
-            //services.AddSingleton(firebaseSettings);
-            //services.AddScoped<IPushService, FirebaseCloudMessaging>();
+            var firebaseSettings = new FirebaseSettings();
+            configuration.GetSection(nameof(FirebaseSettings)).Bind(firebaseSettings);
+            firebaseSettings.Validate();
 
-            //var auth = GetAccessToken(firebaseSettings.Key);
+            services.AddSingleton(firebaseSettings);
+            services.AddScoped<IPushService, FirebaseCloudMessagingServices>();
 
-            //services
-            //    .AddRefitClient<FirebaseClient>(
-            //        new RefitSettings
-            //        {
-            //            AuthorizationHeaderValueGetter = () => Task.FromResult(auth)
-            //        })
-            //    .ConfigureHttpClient(client => client.BaseAddress = new Uri($"{firebaseSettings.Url}"));
+            var secretKeyFirebase = $"={firebaseSettings.Key}";
 
-            //return services;
+            services
+                .AddRefitClient<FirebaseClient>(
+                    new RefitSettings
+                    {
+                        AuthorizationHeaderValueGetter = () => Task.FromResult(secretKeyFirebase)
+                    })
+                .ConfigureHttpClient(client => client.BaseAddress = new Uri($"{firebaseSettings.Url}"));
+
+            return services;
         }
     }
 }
