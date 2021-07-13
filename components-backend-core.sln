@@ -60,7 +60,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Rab
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.ElasticSearch", "src\Optsol.Components.Infra.ElasticSearch\Optsol.Components.Infra.ElasticSearch.csproj", "{6CAD1B20-0750-4BCB-9F8C-C4F998ACD14B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.Redis", "src\Optsol.Components.Infra.Redis\Optsol.Components.Infra.Redis.csproj", "{5AEF1FE6-8182-4506-8A27-965863E382DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Redis", "src\Optsol.Components.Infra.Redis\Optsol.Components.Infra.Redis.csproj", "{5AEF1FE6-8182-4506-8A27-965863E382DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.Firebase", "src\Optsol.Components.Infra.Firebase\Optsol.Components.Infra.Firebase.csproj", "{094EEE1C-8D87-42B5-BC39-363AEA701306}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -300,6 +302,18 @@ Global
 		{5AEF1FE6-8182-4506-8A27-965863E382DE}.Release|x64.Build.0 = Release|Any CPU
 		{5AEF1FE6-8182-4506-8A27-965863E382DE}.Release|x86.ActiveCfg = Release|Any CPU
 		{5AEF1FE6-8182-4506-8A27-965863E382DE}.Release|x86.Build.0 = Release|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Debug|x64.Build.0 = Debug|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Debug|x86.Build.0 = Debug|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x64.ActiveCfg = Release|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x64.Build.0 = Release|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x86.ActiveCfg = Release|Any CPU
+		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -330,6 +344,7 @@ Global
 		{38CF824B-8A26-494E-91CD-5AA4FFC838B5} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
 		{6CAD1B20-0750-4BCB-9F8C-C4F998ACD14B} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
 		{5AEF1FE6-8182-4506-8A27-965863E382DE} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
+		{094EEE1C-8D87-42B5-BC39-363AEA701306} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {66165739-5FCB-4C53-AC8B-7BC212D5FEFC}
