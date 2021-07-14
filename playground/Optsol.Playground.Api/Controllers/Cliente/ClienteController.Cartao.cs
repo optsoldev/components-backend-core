@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using System;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ namespace Optsol.Playground.Api.Controllers
 {
     public partial class ClienteController
     {
+        [OptsolAuthorize("cliente.buscar")]
         [HttpGet("{id}/cartao-credito")]
         public async Task<IActionResult> GetClienteComCartaoCredito(Guid id)
         {

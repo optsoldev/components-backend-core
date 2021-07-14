@@ -36,5 +36,23 @@ namespace Optsol.Components.Infra.Security.Services
 
             return clientOauth;
         }
+
+        public async Task<UserInfo> GetUserInfo(string token)
+        {
+            _logger?.LogInformation($"Executanto GetUserInfo");
+
+            UserInfo userInfo = null;
+
+            try
+            {
+                userInfo = await _authorityClient.GetUserInfo(token);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
+
+            return userInfo;
+        }
     }
 }
