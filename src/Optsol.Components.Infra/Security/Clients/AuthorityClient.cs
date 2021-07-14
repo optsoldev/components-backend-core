@@ -6,7 +6,10 @@ namespace Optsol.Components.Infra.Security.Services
 {
     public interface AuthorityClient
     {
-        [Get("/api/client")]
+        [Get("/api/aplicacao/client")]
         Task<OauthClient> GetClient(string clientId);
+
+        [Get("/api/usuario/token/info")]
+        Task<UserInfo> GetUserInfo([Header("Authorization")] string authorization);
     }
 }
