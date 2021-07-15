@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Playground.Application.Searchs;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace Optsol.Playground.Api.Controllers
 {
@@ -25,6 +28,12 @@ namespace Optsol.Playground.Api.Controllers
         {
             _clienteServiceApplication = clienteServiceApplication;
             _clienteServiceApplication.Includes = clientes => clientes.Include(x => x.Cartoes);
+        }
+
+        [OptsolAuthorize("cliente.vizualisar")]
+        public override Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            return base.GetByIdAsync(id);
         }
     }
 }

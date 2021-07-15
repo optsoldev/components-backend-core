@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Playground.Api.Controllers
 {
+    [Authorize]
     public partial class ClienteController
     {
         [OptsolAuthorize("cliente.buscar")]
