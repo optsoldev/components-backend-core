@@ -174,6 +174,7 @@ namespace Optsol.Components.Service.Controllers
 
         [HttpPost("paginated")]
         [Authorize(AuthenticationSchemes = "Bearer")]
+
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search)
         {
