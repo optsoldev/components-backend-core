@@ -4,7 +4,7 @@
     <Version>1.17.1</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.13.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
