@@ -1,5 +1,7 @@
-using Flunt.Notifications;
+using FluentValidation;
+using FluentValidation.Results;
 using Optsol.Components.Domain.Notifications.Contracts;
+using Optsol.Components.Shared.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,15 @@ namespace Optsol.Components.Domain.Entities
 
         public abstract void Validate();
 
-        public void AddNotifications(IList<Entity> entities)
+        public void AddNotifications(ValidationResult validationResult)
         {
-            base.AddNotifications(entities.SelectMany(s => s.Notifications) as IReadOnlyList<Notification>);
+            if (!validationResult.IsValid)
+            {
+                foreach (var failure in validationResult.Errors)
+                {
+                    AddNotification(failure.PropertyName, failure.ErrorMessage);
+                }
+            }
         }
     }
 
@@ -24,7 +32,10 @@ namespace Optsol.Components.Domain.Entities
 
         public override void Validate()
         {
-            AddNotifications(new EntityContract(this));
+            var validator = new EntityContract();
+            var resultOfValidation = validator.Validate(this);
+
+            AddNotifications(resultOfValidation);
         }
     }
 

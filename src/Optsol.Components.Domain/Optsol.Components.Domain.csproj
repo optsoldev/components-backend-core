@@ -4,6 +4,9 @@
     <Version>1.17.2</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Flunt" Version="2.0.4" />
+    <PackageReference Include="FluentValidation" Version="10.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using Flunt.Notifications;
+﻿using Optsol.Components.Shared.Notifications;
 using System.Collections.Generic;
 using System.Linq;
 

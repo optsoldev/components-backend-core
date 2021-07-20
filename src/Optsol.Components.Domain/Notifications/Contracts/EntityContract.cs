@@ -1,15 +1,16 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Components.Domain.Entities;
 using System;
 
 namespace Optsol.Components.Domain.Notifications.Contracts
 {
-    public class EntityContract : Contract<Entity>
+    public class EntityContract : AbstractValidator<Entity>
     {
-        public EntityContract(Entity entity)
+        public EntityContract()
         {
-            Requires()
-                .IsLowerThan(entity.CreatedDate, DateTime.Now, "CreationDate", "A Data de criação não pode ser maior que a data atual");
+            RuleFor(entity => entity.CreatedDate)
+                .LessThanOrEqualTo(DateTime.Now)
+                .WithMessage("A Data de criação não pode ser maior que a data atual");
         }
     }
 }

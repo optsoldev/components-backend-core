@@ -1,17 +1,27 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Domain.Validators
 {
-    public class CartaoCreditoEntityContract : Contract<CartaoCreditoEntity>
+    public class CartaoCreditoEntityContract : AbstractValidator<CartaoCreditoEntity>
     {
-        public CartaoCreditoEntityContract(CartaoCreditoEntity cartaoCreditoEntity)
+        public CartaoCreditoEntityContract()
         {
-            Requires()
-                .IsNotNullOrEmpty(cartaoCreditoEntity.NomeCliente, "NomeCliente", "O Nome do cliente não pode ser nulo")
-                .IsNotNullOrEmpty(cartaoCreditoEntity.Numero, "Numero", "O Numero não pode ser nulo")
-                .IsNotNullOrEmpty(cartaoCreditoEntity.CodigoVerificacao, "CodigoVerificacao", "O Codigo Verificacao do cliente não pode ser nulo")
-                .IsNotEmpty(cartaoCreditoEntity.ClienteId, "ClienteId", "O Nome do cliente não pode ser nulo");
+            RuleFor(entity => entity.NomeCliente)
+                .NotNull()
+                .NotEmpty()
+                .WithMessage("O Nome do cliente não pode ser nulo");
+
+            RuleFor(entity => entity.Numero).NotNull()
+                .WithMessage("O Numero não pode ser nulo");
+
+            RuleFor(entity => entity.CodigoVerificacao)
+                .NotNull()
+                .WithMessage("O Codigo Verificacao do cliente não pode ser nulo");
+            
+            RuleFor(entity => entity.ClienteId)
+                .NotNull()
+                .WithMessage("O Nome do cliente não pode ser nulo");
         }
     }
 }

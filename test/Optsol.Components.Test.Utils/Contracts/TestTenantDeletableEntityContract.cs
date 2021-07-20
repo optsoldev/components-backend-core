@@ -1,17 +1,17 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Components.Test.Utils.Data.Entities;
-using System;
 
 namespace Optsol.Components.Test.Utils.Contracts
 {
-    public class TestTenantDeletableEntityContract : Contract<TestTenantDeletableEntity>
+    public class TestTenantDeletableEntityContract : AbstractValidator<TestTenantDeletableEntity>
     {
-        public TestTenantDeletableEntityContract(TestTenantDeletableEntity testTenantDeletableEntity)
+        public TestTenantDeletableEntityContract()
         {
-            Requires()
-                .IsNotNull(testTenantDeletableEntity.Nome, "Nome", "O Nome não pode ser nulo")
-                .IsNotNull(testTenantDeletableEntity.Email, "Email", "O Email não pode ser nulo")
-                .IsEmpty(testTenantDeletableEntity.TenantId, "TenantId", "O Tenant Id não pode estar vazio");
+            //TODO: REVER
+            //Requires()
+            //    .IsNotNull(testTenantDeletableEntity.Nome, "Nome", "O Nome não pode ser nulo")
+            //    .IsNotNull(testTenantDeletableEntity.Email, "Email", "O Email não pode ser nulo")
+            //    .IsEmpty(testTenantDeletableEntity.TenantId, "TenantId", "O Tenant Id não pode estar vazio");
         }
     }
 }

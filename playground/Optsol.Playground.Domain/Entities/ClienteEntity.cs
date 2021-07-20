@@ -47,18 +47,17 @@ namespace Optsol.Playground.Domain.Entities
 
         public override void Validate()
         {
-            AddNotifications(new ClienteEntityContract(this));
+            var validation = new ClienteEntityContract();
+            var resultOfValidation = validation.Validate(this);
 
-            AddNotifications(Nome, Email);
+            AddNotifications(resultOfValidation);
 
             base.Validate();
         }
 
         public ClienteEntity AdicionarCartao(CartaoCreditoEntity cartaoCreditoEntity)
         {
-            cartaoCreditoEntity.Validate();
-            if (cartaoCreditoEntity.IsValid)
-                Cartoes.Add(cartaoCreditoEntity);
+            Cartoes.Add(cartaoCreditoEntity);
 
             AddNotifications(cartaoCreditoEntity);
 
@@ -80,13 +79,13 @@ namespace Optsol.Playground.Domain.Entities
 
         }
 
-        public ClientePessoaFisicaEntity(Guid id, NomeValueObject nome, EmailValueObject email, string documento) 
+        public ClientePessoaFisicaEntity(Guid id, NomeValueObject nome, EmailValueObject email, string documento)
             : base(id, nome, email)
         {
             Documento = documento;
         }
 
-        public ClientePessoaFisicaEntity(NomeValueObject nome, EmailValueObject email, string documento) 
+        public ClientePessoaFisicaEntity(NomeValueObject nome, EmailValueObject email, string documento)
             : base(nome, email)
         {
             Documento = documento;
@@ -102,13 +101,13 @@ namespace Optsol.Playground.Domain.Entities
 
         }
 
-        public ClientePessoaJuridicaEntity(Guid id, NomeValueObject nome, EmailValueObject email, string numeroCnpj) 
+        public ClientePessoaJuridicaEntity(Guid id, NomeValueObject nome, EmailValueObject email, string numeroCnpj)
             : base(id, nome, email)
         {
             NumeroCnpj = numeroCnpj;
         }
 
-        public ClientePessoaJuridicaEntity(NomeValueObject nome, EmailValueObject email, string numeroCnpj) 
+        public ClientePessoaJuridicaEntity(NomeValueObject nome, EmailValueObject email, string numeroCnpj)
             : base(nome, email)
         {
             NumeroCnpj = numeroCnpj;
