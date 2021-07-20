@@ -54,7 +54,8 @@ namespace Optsol.Playground.Test
             _serviceProvider = services.BuildServiceProvider();
         }
 
-        [Fact]
+        [Trait("Playground", "Application")]
+        [Fact(DisplayName = "Deve inserir cliente sem o cartao")]
         public async Task Deve_Inserir_Cliente_Sem_Cartao()
         {
             //Given
@@ -85,7 +86,8 @@ namespace Optsol.Playground.Test
 
         }
 
-        [Fact]
+        [Trait("Playground", "Application")]
+        [Fact(DisplayName = "Deve inserir cartão no cliente")]
         public async Task Deve_Inserir_Cartao_No_Cliente()
         {
             //Given

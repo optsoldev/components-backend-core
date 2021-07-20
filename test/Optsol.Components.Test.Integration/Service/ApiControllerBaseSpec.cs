@@ -22,7 +22,8 @@ namespace Optsol.Components.Test.Integration.Service
 {
     public class ApiControllerBaseSpec
     {
-        [Fact]
+        [Trait("Services", "Controller")]
+        [Fact(DisplayName = "Deve buscar todos registros")]
         public async Task Deve_Buscar_Todos_Pela_Controller()
         {
             //Given
@@ -97,7 +98,8 @@ namespace Optsol.Components.Test.Integration.Service
             resultObj.Data.Any(a => a.Nome == entity3.Nome.ToString()).Should().BeTrue();
         }
 
-        [Fact]
+        [Trait("Services", "Controller")]
+        [Fact(DisplayName = "Deve buscar registro por id")]
         public async Task Deve_Buscar_Registro_Por_Id_Pela_Controller()
         {
             //Given
@@ -170,7 +172,8 @@ namespace Optsol.Components.Test.Integration.Service
             resultObj.Data.Ativo.Should().Be("Inativo");
         }
 
-        [Fact]
+        [Trait("Services", "Controller")]
+        [Fact(DisplayName = "Deve inserir um novo registro")]
         public async Task Deve_Inserir_Registro_Pelo_Servico()
         {
             //Given
@@ -219,7 +222,8 @@ namespace Optsol.Components.Test.Integration.Service
             resultObj.Messages.Should().BeEmpty();
         }
 
-        [Fact]
+        [Trait("Services", "Controller")]
+        [Fact(DisplayName = "Deve atualizar um novo registro")]
         public async Task Deve_Atualizar_Registro_Pelo_Servico()
         {
             //Given
@@ -287,7 +291,8 @@ namespace Optsol.Components.Test.Integration.Service
 
         }
 
-        [Fact]
+        [Trait("Services", "Controller")]
+        [Fact(DisplayName = "Deve remover um registro por id")]
         public async Task Deve_Remover_Registro_Pelo_Id_Pelo_Servico()
         {
             //Given
