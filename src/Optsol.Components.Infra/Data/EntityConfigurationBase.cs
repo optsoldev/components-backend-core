@@ -27,8 +27,6 @@ namespace Optsol.Components.Infra.Data
             builder.Ignore(entity => entity.Valid);
             builder.Ignore(entity => entity.Invalid);
 
-            builder.HasKey(entity => entity.Id);
-            builder.Property(entity => entity.Id).ValueGeneratedNever();
 
             builder
                 .Property(entity => entity.CreatedDate)
@@ -36,9 +34,63 @@ namespace Optsol.Components.Infra.Data
                 .HasColumnType("datetime")
                 .IsRequired();
 
+            BuildQueryKey(builder);
+
             LambdaExpression expression = null;
             var parametrer = Expression.Parameter(typeof(TEntity), "entity");
+            expression = ConfigureDeletableParams(builder, expression, parametrer);
+            expression = ConfigureTentantParams(builder, expression, parametrer);
 
+            BuildQueryFilter(builder, expression);
+        }
+
+        private static void BuildQueryKey(EntityTypeBuilder<TEntity> builder)
+        {
+            if (typeof(TEntity).GetInterfaces().Contains(typeof(ITenant<TKey>)))
+            {
+                builder.HasKey(entity => new { entity.Id, ((ITenant<TKey>)entity).TenantId });
+                builder.Property(entity => entity.Id).ValueGeneratedNever();
+            }
+            else
+            {
+                builder.HasKey(entity => entity.Id);
+                builder.Property(entity => entity.Id).ValueGeneratedNever();
+            }
+        }
+
+        private static void BuildQueryFilter(EntityTypeBuilder<TEntity> builder, LambdaExpression expression)
+        {
+            var hasExpressionFilter = expression != null;
+            if (hasExpressionFilter)
+            {
+                builder.HasQueryFilter(expression);
+            }
+        }
+
+        private LambdaExpression ConfigureTentantParams(EntityTypeBuilder<TEntity> builder, LambdaExpression expression, ParameterExpression parametrer)
+        {
+            if (typeof(TEntity).GetInterfaces().Contains(typeof(ITenant<TKey>)))
+            {
+                expression = CreateInitialFilter(expression);
+
+                builder
+                    .Property(entity => ((ITenant<TKey>)entity).TenantId)
+                    .IsRequired();
+
+                var tenantProviderNotIsNull = _tenantProvider != null;
+                if (tenantProviderNotIsNull)
+                {
+                    var tenantExpression = CreateExpression(parametrer, "TenantId", _tenantProvider.GetTenantId());
+
+                    expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
+                }
+            }
+
+            return expression;
+        }
+
+        private static LambdaExpression ConfigureDeletableParams(EntityTypeBuilder<TEntity> builder, LambdaExpression expression, ParameterExpression parametrer)
+        {
             if (typeof(TEntity).GetInterfaces().Contains(typeof(IDeletable)))
             {
                 expression = CreateInitialFilter(expression);
@@ -54,33 +106,7 @@ namespace Optsol.Components.Infra.Data
                 expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, deletableExpression.Body), deletableExpression.Parameters);
             }
 
-            if (typeof(TEntity).GetInterfaces().Contains(typeof(ITenant<TKey>)))
-            {
-                expression = CreateInitialFilter(expression);
-
-                builder
-                    .Property(entity => ((ITenant<TKey>)entity).TenantId)
-                    .IsRequired();
-
-                var indexName = $"IX_{typeof(TEntity).Name}_TenantId";
-                builder
-                    .HasIndex(nameof(ITenant<TKey>.TenantId))
-                    .HasDatabaseName(indexName);
-
-                var tenantProviderNotIsNull = _tenantProvider != null;
-                if (tenantProviderNotIsNull)
-                {
-                    var tenantExpression = CreateExpression(parametrer, "TenantId", _tenantProvider.GetTenantId());
-
-                    expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
-                }
-            }
-
-            var hasExpressionFilter = expression != null;
-            if (hasExpressionFilter)
-            {
-                builder.HasQueryFilter(expression);
-            }
+            return expression;
         }
 
         private static Expression<Func<TEntity, bool>> CreateExpression<T>(ParameterExpression parametrer, string propertyName, T value)

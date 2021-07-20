@@ -65,6 +65,13 @@ namespace Optsol.Components.Infra.Data
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }( {{ id:{ id } }} ) Retorno: type { typeof(TEntity).Name }");
 
+            var isTentantRepository = _tenantProvider != null;
+            if (isTentantRepository)
+            {
+                _logger?.LogInformation($"Executando FindAsync({id}, {_tenantProvider.GetTenantId()}) em GetByIdAsync");
+                return Set.FindAsync(id, _tenantProvider.GetTenantId()).AsTask();
+            }
+
             return Set.FindAsync(id).AsTask();
         }
 
