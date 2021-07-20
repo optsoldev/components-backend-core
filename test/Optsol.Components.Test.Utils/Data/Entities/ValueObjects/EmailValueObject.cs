@@ -21,7 +21,8 @@ namespace Optsol.Components.Test.Utils.Data.Entities.ValueObjecs
 
         public override void Validate()
         {
-            AddNotifications(new EmailValueObjectContract(this));
+            //TODO: REVER
+            //AddNotifications(new EmailValueObjectContract(this));
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Optsol.Playground.Domain.ValueObjects
 
         public override void Validate()
         {
-            AddNotifications(new EmailValueObjectContract(this));
+            //AddNotifications(new EmailValueObjectContract(this)); TODO: REVER
         }
     }
 }

@@ -1,4 +1,4 @@
-using Flunt.Notifications;
+using Optsol.Components.Shared.Notifications;
 
 namespace Optsol.Components.Domain.ValueObjects
 {

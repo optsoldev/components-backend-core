@@ -15,7 +15,8 @@ namespace Optsol.Playground.Application.ViewModels.Cliente
 
         public override void Validate()
         {
-            AddNotifications(new ClienteRequestContract(this));
+            //TODO: REVER
+            //AddNotifications(new ClienteRequestContract(this));
         }
     }
 }

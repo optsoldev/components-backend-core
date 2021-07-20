@@ -48,7 +48,8 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public override void Validate()
         {
-            AddNotifications(new TestSearchDtoContract(this));
+            //TODO: REVER
+            //AddNotifications(new TestSearchDtoContract(this));
         }
     }
 
@@ -79,7 +80,8 @@ namespace Optsol.Components.Test.Utils.ViewModels
 
         public override void Validate()
         {
-            AddNotifications(new TestSearchOnlyDtoContract(this));
+            //TODO: REVER
+            //AddNotifications(new TestSearchOnlyDtoContract(this));
         }
     }
 }

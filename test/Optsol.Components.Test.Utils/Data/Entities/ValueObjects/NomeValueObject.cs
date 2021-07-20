@@ -1,4 +1,3 @@
-using Flunt.Validations;
 using Optsol.Components.Domain.ValueObjects;
 using Optsol.Components.Test.Utils.Contracts;
 
@@ -24,7 +23,8 @@ namespace Optsol.Components.Test.Utils.Data.Entities.ValueObjecs
 
         public override void Validate()
         {
-            AddNotifications(new NomeValueObjectContract(this));
+            //TODO: REVER
+            //AddNotifications(new NomeValueObjectContract(this));
         }
     }
 }

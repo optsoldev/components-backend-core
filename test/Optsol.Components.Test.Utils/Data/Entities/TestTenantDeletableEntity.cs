@@ -1,5 +1,4 @@
-﻿using Flunt.Validations;
-using Optsol.Components.Domain.Entities;
+﻿using Optsol.Components.Domain.Entities;
 using Optsol.Components.Test.Utils.Contracts;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using System;
@@ -50,11 +49,12 @@ namespace Optsol.Components.Test.Utils.Data.Entities
 
         public override void Validate()
         {
-            AddNotifications(new TestTenantDeletableEntityContract(this));
+            //TODO: REVER
+            //AddNotifications(new TestTenantDeletableEntityContract(this));
 
-            AddNotifications(Nome, Email);
+            //AddNotifications(Nome, Email);
 
-            base.Validate();
+            //base.Validate();
         }
 
         public void SetTenantId(Guid tenantId)
