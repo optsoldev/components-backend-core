@@ -1,15 +1,15 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Components.Test.Utils.Data.Entities;
 
 namespace Optsol.Components.Test.Utils.Contracts
 {
-    public class TestDeletableEntityContract : Contract<TestDeletableEntity>
+    public class TestDeletableEntityContract : AbstractValidator<TestDeletableEntity>
     {
-        public TestDeletableEntityContract(TestDeletableEntity testDeletableEntity)
+        public TestDeletableEntityContract()
         {
-            Requires()
-                .IsNotNull(testDeletableEntity.Nome, "Nome", "O Nome não pode ser nulo")
-                .IsNotNull(testDeletableEntity.Email, "Email", "O Email não pode ser nulo");
+            RuleFor(entity => entity.Nome).NotNull().WithMessage("Não pode ser nulo");
+
+            RuleFor(entity => entity.Email).SetValidator(new EmailValueObjectContract());
         }
     }
 }

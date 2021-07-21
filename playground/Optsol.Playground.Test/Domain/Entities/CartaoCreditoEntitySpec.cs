@@ -9,7 +9,8 @@ namespace Optsol.Playground.Test.Domain.Entities
 {
     public class CartaoCreditoEntitySpec
     {
-        [Fact]
+        [Trait("Playground", "Domain")]
+        [Fact(DisplayName = "Deve inserir cartao no cliente")]
         public void Deve_Inserir_Cartao_No_Cliente()
         {
             //Given
@@ -33,8 +34,9 @@ namespace Optsol.Playground.Test.Domain.Entities
             clienteEntity.Cartoes.Any().Should().BeTrue();
         }
 
-        [Fact]
-        public void Deve_Inserir_Cartao_Vencido()
+        [Trait("Playground", "Domain")]
+        [Fact(DisplayName = "Não deve inserir cartao vencido")]
+        public void Nao_Deve_Inserir_Cartao_Vencido()
         {
             //Given
             var clienteId = Guid.NewGuid();

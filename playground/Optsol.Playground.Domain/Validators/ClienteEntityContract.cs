@@ -1,15 +1,19 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Domain.Validators
 {
-    public class ClienteEntityContract : Contract<ClienteEntity>
+    public class ClienteEntityContract : AbstractValidator<ClienteEntity>
     {
-        public ClienteEntityContract(ClienteEntity clienteEntity)
+        public ClienteEntityContract()
         {
-            Requires()
-                .IsNotNull(clienteEntity.Nome, "Nome", "O Nome não pode ser nulo")
-                .IsNotNull(clienteEntity.Email, "Email", "O Email não pode ser nulo");
+            RuleFor(entity => entity.Nome)
+                .NotNull()
+                .WithMessage("Não pode ser nulo");
+
+            RuleFor(entity => entity.Email)
+                .NotNull()
+                .WithMessage("Não pode ser nulo");
         }
     }
 }

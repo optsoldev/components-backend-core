@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Optsol.Components.Infra.Security.Models
+﻿namespace Optsol.Components.Infra.Security.Models
 {
     public class OauthClient
     {

@@ -6,5 +6,7 @@ namespace Optsol.Components.Infra.Security.Services
     public interface IAuthorityService
     {
         Task<OauthClient> GetClient(string clientId);
+
+        Task<UserInfo> GetUserInfo(string token);
     }
 }

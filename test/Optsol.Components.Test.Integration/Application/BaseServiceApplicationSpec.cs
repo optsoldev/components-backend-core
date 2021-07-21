@@ -55,7 +55,8 @@ namespace Optsol.Components.Test.Integration.Application
             //Then
             viewModels.Should().NotBeEmpty();
             viewModels.Should().HaveCount(numberItems);
-            viewModels.Any(w => w.IsValid).Should().BeTrue();
+            viewModels.All(w => w.Valid).Should().BeTrue();
+            viewModels.All(w => w.Invalid).Should().BeFalse();
         }
 
         [Trait("Serviço de Aplicação", "Execução dos Serviços")]
@@ -83,8 +84,8 @@ namespace Optsol.Components.Test.Integration.Application
             viewModel.Contato.Should().Be(entity.Email.ToString());
 
             viewModel.Validate();
-            //viewModel.Invalid.Should().BeFalse();
-            viewModel.IsValid.Should().BeTrue();
+            viewModel.Valid.Should().BeTrue();
+            viewModel.Invalid.Should().BeFalse();
             viewModel.Notifications.Should().BeEmpty();
         }
 
@@ -176,7 +177,8 @@ namespace Optsol.Components.Test.Integration.Application
             var viewModelResult = await serviceApplication.GetByIdAsync<TestResponseDto>(entity.Id);
             viewModelResult.Should().NotBeNull();
 
-            viewModelResult.IsValid.Should().BeTrue();
+            viewModelResult.Valid.Should().BeTrue();
+            viewModelResult.Invalid.Should().BeFalse();
             viewModelResult.Notifications.Should().BeEmpty();
 
             viewModelResult.Id.Should().Be(entity.Id);

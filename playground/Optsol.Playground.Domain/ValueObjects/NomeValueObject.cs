@@ -24,7 +24,7 @@ namespace Optsol.Playground.Domain.ValueObjects
 
         public override void Validate()
         {
-            AddNotifications(new NomeValueObjectContract(this));
+            //AddNotifications(new NomeValueObjectContract(this)); TODO: REVER
         }
 
         public bool Constains(string nome)

@@ -193,7 +193,6 @@ namespace Optsol.Components.Infra.Data
                 return;
             }
 
-
             await DeleteAsync(entity);
         }
 

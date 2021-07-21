@@ -54,7 +54,8 @@ namespace Optsol.Playground.Test
             _serviceProvider = services.BuildServiceProvider();
         }
 
-        [Fact]
+        [Trait("Playground", "Application")]
+        [Fact(DisplayName = "Deve inserir cliente sem o cartao")]
         public async Task Deve_Inserir_Cliente_Sem_Cartao()
         {
             //Given
@@ -81,11 +82,12 @@ namespace Optsol.Playground.Test
             cliente.Email.Email.Should().Be(insertClienteViewModel.Email);
             cliente.PossuiCartao.Should().BeFalse();
             cliente.Ativo.Should().BeFalse();
-            cliente.IsValid.Should().BeTrue();
-
+            cliente.Valid.Should().BeTrue();
+            cliente.Invalid.Should().BeFalse();
         }
 
-        [Fact]
+        [Trait("Playground", "Application")]
+        [Fact(DisplayName = "Deve inserir cartão no cliente")]
         public async Task Deve_Inserir_Cartao_No_Cliente()
         {
             //Given
@@ -126,7 +128,8 @@ namespace Optsol.Playground.Test
             cartao.CodigoVerificacao.Should().Be(insertCartaoCreditoViewModel.CodigoVerificacao);
             cartao.Validade.Should().Be(insertCartaoCreditoViewModel.Validade);
             cartao.Valido.Should().BeTrue();
-            cartao.IsValid.Should().BeTrue();
+            cartao.Valid.Should().BeTrue();
+            cartao.Invalid.Should().BeFalse();
         }
     }
 }
