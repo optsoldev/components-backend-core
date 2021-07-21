@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Data.Provider;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
@@ -27,7 +26,6 @@ namespace Optsol.Components.Infra.Data
             builder.Ignore(entity => entity.Valid);
             builder.Ignore(entity => entity.Invalid);
 
-
             builder
                 .Property(entity => entity.CreatedDate)
                 .HasColumnName(nameof(Entity<TKey>.CreatedDate))
@@ -46,15 +44,12 @@ namespace Optsol.Components.Infra.Data
 
         private static void BuildQueryKey(EntityTypeBuilder<TEntity> builder)
         {
+            builder.HasKey(entity => entity.Id);
+            builder.Property(entity => entity.Id).ValueGeneratedNever();
+
             if (typeof(TEntity).GetInterfaces().Contains(typeof(ITenant<TKey>)))
             {
-                builder.HasKey(entity => new { entity.Id, ((ITenant<TKey>)entity).TenantId });
-                builder.Property(entity => entity.Id).ValueGeneratedNever();
-            }
-            else
-            {
-                builder.HasKey(entity => entity.Id);
-                builder.Property(entity => entity.Id).ValueGeneratedNever();
+                builder.Property(entity => ((ITenant<TKey>)entity).TenantId).IsRequired();
             }
         }
 
