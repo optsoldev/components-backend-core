@@ -1,5 +1,4 @@
 using System;
-using Flunt.Validations;
 using Optsol.Components.Domain.Entities;
 using Optsol.Playground.Domain.Validators;
 
@@ -51,9 +50,12 @@ namespace Optsol.Playground.Domain.Entities
 
         public override void Validate()
         {
-            base.Validate();
+            var validation = new CartaoCreditoEntityContract();
+            var resultOfValidation = validation.Validate(this);
 
-            AddNotifications(new CartaoCreditoEntityContract(this));
+            AddNotifications(resultOfValidation);
+
+            base.Validate();
         }
 
         private bool ObterSituacaoValidade()

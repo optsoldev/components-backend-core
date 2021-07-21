@@ -1,5 +1,4 @@
-﻿using Flunt.Validations;
-using Optsol.Components.Domain.Entities;
+﻿using Optsol.Components.Domain.Entities;
 using Optsol.Components.Test.Utils.Contracts;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using System;
@@ -10,7 +9,7 @@ namespace Optsol.Components.Test.Utils.Data.Entities
     public class TestTenantEntity : AggregateRoot, ITenant
     {
         public NomeValueObject Nome { get; private set; }
-        
+
         public EmailValueObject Email { get; private set; }
 
         public bool Ativo { get; private set; }
@@ -31,11 +30,8 @@ namespace Optsol.Components.Test.Utils.Data.Entities
         {
             Nome = nome;
             Email = email;
-
-            Validate();
-
-            Ativo = false;
             TenantId = tenantId;
+            Ativo = false;
         }
 
         public void InserirNome(NomeValueObject nomeValueObject)
@@ -45,9 +41,10 @@ namespace Optsol.Components.Test.Utils.Data.Entities
 
         public override void Validate()
         {
-            AddNotifications(new TestTenantEntityContract(this));
-
-            AddNotifications(Nome, Email);
+            var validator = new TestTenantEntityContract();
+            var resultOfValidation = validator.Validate(this);
+            
+            AddNotifications(resultOfValidation);
 
             base.Validate();
         }

@@ -1,15 +1,16 @@
-﻿using Flunt.Validations;
+﻿using FluentValidation;
 using Optsol.Components.Test.Utils.ViewModels;
 
 namespace Optsol.Components.Test.Utils.Contracts
 {
-    public class TestSearchDtoContract : Contract<TestSearchDto>
+    public class TestSearchDtoContract : AbstractValidator<TestSearchDto>
     {
-        public TestSearchDtoContract(TestSearchDto testSearchDto)
+        public TestSearchDtoContract()
         {
-            Requires()
-                .IsNotNull(testSearchDto.Nome, nameof(testSearchDto.Nome), "O nome do cliente não pode ser nulo")
-                .IsNullOrEmpty(testSearchDto.SobreNome, nameof(testSearchDto.SobreNome), "O sobrenome do cliente não pode ser nulo");
+            //TODO: REVER
+            //Requires()
+            //    .IsNotNull(testSearchDto.Nome, nameof(testSearchDto.Nome), "O nome do cliente não pode ser nulo")
+            //    .IsNullOrEmpty(testSearchDto.SobreNome, nameof(testSearchDto.SobreNome), "O sobrenome do cliente não pode ser nulo");
         }
     }
 }
