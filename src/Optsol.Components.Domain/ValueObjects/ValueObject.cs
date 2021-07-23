@@ -1,9 +1,9 @@
-using Optsol.Components.Shared.Notifications;
+using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Domain.ValueObjects
 {
-    public abstract class ValueObject: Notifiable<Notification>
+    public abstract class ValueObject: Entity
     {
-        public abstract void Validate();
+        
     }
 }
