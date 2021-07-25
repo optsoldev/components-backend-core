@@ -22,6 +22,7 @@ namespace Optsol.Playground.Infra.Data.EntityConfig
                     .IsRequired();
 
                 entity.Ignore(a => a.Notifications);
+                entity.Ignore(a => a.CreatedDate);
 
             });
 
@@ -38,6 +39,7 @@ namespace Optsol.Playground.Infra.Data.EntityConfig
                    .IsRequired();
 
                 entity.Ignore(a => a.Notifications);
+                entity.Ignore(a => a.CreatedDate);
 
             });
 

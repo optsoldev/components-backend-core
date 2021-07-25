@@ -45,7 +45,7 @@ namespace Optsol.Components.Infra.Security.Services
 
             try
             {
-                userInfo = await _authorityClient.GetUserInfo(token);
+                userInfo = await _authorityClient.GetUserInfo($"Bearer {token}");
             }
             catch (Exception e)
             {
