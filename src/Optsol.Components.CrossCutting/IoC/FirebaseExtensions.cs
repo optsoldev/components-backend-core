@@ -2,11 +2,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Services.Push;
 using Optsol.Components.Infra.Firebase.Clients;
-using Optsol.Components.Infra.Firebase.Services;
+using Optsol.Components.Infra.Firebase;
 using Optsol.Components.Shared.Settings;
 using Refit;
 using System;
 using System.Threading.Tasks;
+using Optsol.Components.Infra.Firebase.Messaging;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using System.IO;
+using Optsol.Components.Infra.Firebase.Models;
 
 namespace Optsol.Components.Infra.CrossCutting.IoC
 {
@@ -14,23 +19,19 @@ namespace Optsol.Components.Infra.CrossCutting.IoC
     {
         public static IServiceCollection AddFirebase(this IServiceCollection services, IConfiguration configuration)
         {
-
             var firebaseSettings = new FirebaseSettings();
             configuration.GetSection(nameof(FirebaseSettings)).Bind(firebaseSettings);
             firebaseSettings.Validate();
 
             services.AddSingleton(firebaseSettings);
-            services.AddScoped<IPushService, FirebaseCloudMessagingServices>();
+            services.AddScoped<IPushService, FirebaseMessagingService>();
+            services.AddAutoMapper(typeof(MessageMapper));
 
-            var secretKeyFirebase = $"={firebaseSettings.Key}";
+            FirebaseApp.Create(new AppOptions
+            {
+                Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, firebaseSettings.FileKeyJson))
+            });
 
-            services
-                .AddRefitClient<FirebaseClient>(
-                    new RefitSettings
-                    {
-                        AuthorizationHeaderValueGetter = () => Task.FromResult(secretKeyFirebase)
-                    })
-                .ConfigureHttpClient(client => client.BaseAddress = new Uri($"{firebaseSettings.Url}"));
 
             return services;
         }
