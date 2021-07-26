@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>1.18.2</Version>
+    <Version>1.19.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.AzureStorage" Version="5.0.1" />
@@ -27,6 +27,7 @@
     <ProjectReference Include="..\Optsol.Components.Application\Optsol.Components.Application.csproj" />
     <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.ElasticSearch\Optsol.Components.Infra.ElasticSearch.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Infra.Firebase\Optsol.Components.Infra.Firebase.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.RabbitMQ\Optsol.Components.Infra.RabbitMQ.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.Redis\Optsol.Components.Infra.Redis.csproj" />
