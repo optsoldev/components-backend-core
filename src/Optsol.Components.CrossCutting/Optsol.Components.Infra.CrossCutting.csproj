@@ -27,6 +27,7 @@
     <ProjectReference Include="..\Optsol.Components.Application\Optsol.Components.Application.csproj" />
     <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.ElasticSearch\Optsol.Components.Infra.ElasticSearch.csproj" />
+    <ProjectReference Include="..\Optsol.Components.Infra.Firebase\Optsol.Components.Infra.Firebase.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.RabbitMQ\Optsol.Components.Infra.RabbitMQ.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra.Redis\Optsol.Components.Infra.Redis.csproj" />

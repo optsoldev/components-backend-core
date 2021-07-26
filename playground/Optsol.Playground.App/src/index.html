@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-messaging.js"></script>
+    <script src="/init.js"></script>
+    <script>
+      const messaging = firebase.messaging();
+
+      messaging.onMessage((payload) => {
+        console.log('Message received. ', payload);
+        // ...
+      });
+
+      messaging
+        .getToken({
+          vapidKey:
+            'BDOVD0RuCHssCs5FsOwsST-KKp4WfFfCpr8hfmNmPH-H7omFMm5reFXxjUMKrdm9SxOZl3G0-Ljnm0s5kAnLh8A',
+        })
+        .then((currentKey) => {
+          console.log('token', currentKey);
+        })
+        .catch((error) => {
+          console.log('error', error);
+        });
+
+      console.log('Firebase.Messaging inicializado!');
+    </script>
+  </head>
+  <body>
+    App Test Firebase.Messaging
+  </body>
+</html>
