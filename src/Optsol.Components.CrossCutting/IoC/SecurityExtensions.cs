@@ -86,7 +86,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
         {
             services
-                .AddRefitClient<AuthorityClient>()
+                .AddRefitClient<IAuthorityClient>()
                 .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Endpoint));
 
             services.AddTransient<IAuthorityService, AuthorityService>();

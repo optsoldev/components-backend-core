@@ -71,7 +71,7 @@ namespace Optsol.Components.Infra.Security.Attributes
             var accessToken = context.HttpContext.Request.Headers["Authorization"];
             var parse = AuthenticationHeaderValue.Parse(accessToken);
 
-            var response = _authorityService.GetUserInfo(parse.Parameter)
+            var response = _authorityService.GetValidateAccess(parse.Parameter, _claim)
                 .GetAwaiter()
                 .GetResult();
 
