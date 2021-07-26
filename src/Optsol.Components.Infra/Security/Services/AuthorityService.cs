@@ -1,16 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Security.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Security.Services
 {
     public class AuthorityService : IAuthorityService
     {
-        private readonly AuthorityClient _authorityClient;
+        private readonly IAuthorityClient _authorityClient;
         private readonly ILogger<AuthorityService> _logger;
 
-        public AuthorityService(AuthorityClient authorityClient, ILogger<AuthorityService> logger)
+        public AuthorityService(IAuthorityClient authorityClient, ILogger<AuthorityService> logger)
         {
             _logger = logger;
             _logger?.LogInformation($"Inicializando AuthorityService");
@@ -29,7 +30,7 @@ namespace Optsol.Components.Infra.Security.Services
             {
                 clientOauth = await _authorityClient.GetClient(clientId);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.LogError(e.Message);
             }
@@ -45,7 +46,25 @@ namespace Optsol.Components.Infra.Security.Services
 
             try
             {
-                userInfo = await _authorityClient.GetUserInfo(token);
+                userInfo = await _authorityClient.GetUserInfo($"Bearer {token}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
+
+            return userInfo;
+        }
+
+        public async Task<UserInfo> GetValidateAccess(string token, IList<string> claims)
+        {
+            _logger?.LogInformation($"Executanto GetValidateAccess");
+
+            UserInfo userInfo = null;
+
+            try
+            {
+                userInfo = await _authorityClient.GetValidateAccess($"Bearer {token}", string.Join(",", claims));
             }
             catch (Exception e)
             {

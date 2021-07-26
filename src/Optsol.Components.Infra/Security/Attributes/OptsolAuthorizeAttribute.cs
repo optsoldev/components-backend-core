@@ -1,6 +1,4 @@
-﻿using IdentityModel.Client;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
@@ -9,7 +7,6 @@ using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace Optsol.Components.Infra.Security.Attributes
@@ -74,7 +71,7 @@ namespace Optsol.Components.Infra.Security.Attributes
             var accessToken = context.HttpContext.Request.Headers["Authorization"];
             var parse = AuthenticationHeaderValue.Parse(accessToken);
 
-            var response = _authorityService.GetUserInfo(parse.Parameter)
+            var response = _authorityService.GetValidateAccess(parse.Parameter, _claim)
                 .GetAwaiter()
                 .GetResult();
 

@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Optsol.Components.Infra.Security.Models;
 using Optsol.Components.Infra.Security.Services;
@@ -14,7 +12,6 @@ using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
 using Refit;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -89,7 +86,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
         {
             services
-                .AddRefitClient<AuthorityClient>()
+                .AddRefitClient<IAuthorityClient>()
                 .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Endpoint));
 
             services.AddTransient<IAuthorityService, AuthorityService>();

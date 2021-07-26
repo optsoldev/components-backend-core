@@ -30,7 +30,7 @@ namespace Optsol.Playground.Api.Controllers
             _clienteServiceApplication.Includes = clientes => clientes.Include(x => x.Cartoes);
         }
 
-        [OptsolAuthorize("cliente.vizualisar")]
+        [OptsolAuthorize("aplicacao.visualizar")]
         public override Task<IActionResult> GetByIdAsync(Guid id)
         {
             return base.GetByIdAsync(id);
