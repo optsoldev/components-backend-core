@@ -64,8 +64,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Red
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Firebase", "src\Optsol.Components.Infra.Firebase\Optsol.Components.Infra.Firebase.csproj", "{094EEE1C-8D87-42B5-BC39-363AEA701306}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Playground.App", "playground\Optsol.Playground.App\Optsol.Playground.App.csproj", "{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -316,18 +314,6 @@ Global
 		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x64.Build.0 = Release|Any CPU
 		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x86.ActiveCfg = Release|Any CPU
 		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x86.Build.0 = Release|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Debug|x64.Build.0 = Debug|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Debug|x86.Build.0 = Debug|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Release|x64.ActiveCfg = Release|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Release|x64.Build.0 = Release|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Release|x86.ActiveCfg = Release|Any CPU
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -359,7 +345,6 @@ Global
 		{6CAD1B20-0750-4BCB-9F8C-C4F998ACD14B} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
 		{5AEF1FE6-8182-4506-8A27-965863E382DE} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
 		{094EEE1C-8D87-42B5-BC39-363AEA701306} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
-		{DA20077A-3E2D-4F1F-9D7C-01A1F7943233} = {10372380-13A6-11EB-B567-E5127B3188FE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {66165739-5FCB-4C53-AC8B-7BC212D5FEFC}

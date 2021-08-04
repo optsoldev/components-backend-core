@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using Optsol.Components.Domain.Entities;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Domain.Services.Push
 {
     public interface IPushService
     {
-        Task SendAsync(PushMessage pushMessage);
+        Task SendAsync(PushMessageAggregateRoot entity);
     }
 }

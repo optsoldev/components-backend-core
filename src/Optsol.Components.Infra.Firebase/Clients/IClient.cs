@@ -1,14 +1,9 @@
 ﻿using Optsol.Components.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Optsol.Components.Infra.Firebase.Clients
 {
     public interface IClient : IEntity
     {
-        public string Token { get; set; }
+        public string Token { get; }
     }
 }
