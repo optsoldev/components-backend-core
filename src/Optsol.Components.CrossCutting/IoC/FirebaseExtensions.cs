@@ -1,19 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Services.Push;
-using Optsol.Components.Infra.Firebase.Clients;
-using Optsol.Components.Infra.Firebase;
 using Optsol.Components.Shared.Settings;
-using Refit;
 using System;
-using System.Threading.Tasks;
 using Optsol.Components.Infra.Firebase.Messaging;
-using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
 using System.IO;
-using Optsol.Components.Infra.Firebase.Models;
+using Optsol.Components.Infra.Firebase.Mapper;
+using FirebaseAdmin;
 
-namespace Optsol.Components.Infra.CrossCutting.IoC
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class FirebaseExtensions
     {
@@ -31,7 +27,6 @@ namespace Optsol.Components.Infra.CrossCutting.IoC
             {
                 Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, firebaseSettings.FileKeyJson))
             });
-
 
             return services;
         }
