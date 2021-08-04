@@ -1,4 +1,5 @@
 ﻿using Optsol.Components.Infra.Firebase.Models;
+using System.Collections.Generic;
 
 namespace Optsol.Components.Test.Utils.Data.Entities.ValueObjects
 {
@@ -8,6 +9,16 @@ namespace Optsol.Components.Test.Utils.Data.Entities.ValueObjects
             : base(title, body)
         {
             
+        }
+    }
+
+    public class PushMessageDataValueObject : PushMessageData
+    {
+        public PushMessageDataValueObject(string title, string body, 
+            IDictionary<string, string> data)
+            : base(title, body, data)
+        {
+
         }
     }
 }

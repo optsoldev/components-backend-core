@@ -50,6 +50,10 @@ namespace Optsol.Components.Test.Utils.Entity.Entities
         public override IEnumerable<ValueObject> GetPushMessages()
         {
             yield return new PushMessageValueObject("Enviando um titulo", "Enviando a mensagem").SetTopic("mobem");
+            yield return new PushMessageDataValueObject("Enviando um titulo 2", "Enviando a mensagem 2 @s", new Dictionary<string, string>
+            {
+                {"Lutiano","Brabo" }
+            }).SetTopic("mobem");
         }
     }
 }

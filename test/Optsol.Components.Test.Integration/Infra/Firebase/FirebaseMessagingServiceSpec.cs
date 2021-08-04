@@ -27,11 +27,11 @@ namespace Optsol.Components.Test.Integration.Infra.Firebase
 
         [Trait("Infraestrutura", "Firebase")]
 #if DEBUG 
-        [Fact(DisplayName = "Deve testar")]
+        [Fact(DisplayName = "Deve enviar mensage para um topico")]
 #elif RELEASE
         [Fact(DisplayName = "Deve obter todos registros pelo repositório", Skip = "mongo local docker test")]
 #endif
-        public async Task Deve_Testar()
+        public async Task Deve_Enviar_Mensage_Para_Topico()
         {
             //Given
             var provider = GetProviderConfiguredServicesFromContext();
