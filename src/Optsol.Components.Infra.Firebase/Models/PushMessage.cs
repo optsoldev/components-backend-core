@@ -4,6 +4,7 @@ namespace Optsol.Components.Infra.Firebase.Models
 {
     public class PushMessage : PushMessageBase
     {
+
         public PushMessage(string title, string body)
         {
             Title = title;
