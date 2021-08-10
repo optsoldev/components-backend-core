@@ -5,6 +5,6 @@ namespace Optsol.Components.Domain.Services.Push
 {
     public interface IPushService
     {
-        Task SendAsync(PushMessageAggregateRoot entity);
+        Task SendAsync(AggregateRoot entity);
     }
 }
