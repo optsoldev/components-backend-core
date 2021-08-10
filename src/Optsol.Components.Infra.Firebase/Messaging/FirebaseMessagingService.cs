@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using FirebaseAdmin.Messaging;
 using System.Collections.Generic;
 using System.Linq;
+using Optsol.Components.Domain.Entities;
 
 namespace Optsol.Components.Infra.Firebase.Messaging
 {
@@ -25,9 +26,15 @@ namespace Optsol.Components.Infra.Firebase.Messaging
             _logger?.LogInformation($"Iniciando {nameof(FirebaseMessagingService)}");
         }
 
-        public async Task SendAsync(PushMessageAggregateRoot message)
+        public async Task SendAsync(AggregateRoot message)
         {
-            var pushMessagesInAggregate = message.GetPushMessages().Select(push => (PushMessageBase)push);
+            if(message is not IPushMessage)
+            {
+                _logger?.LogError($"O Aggregate root deve implementar: { nameof(IPushMessage)}");
+                throw new Exception($"O Aggregate root deve implementar: { nameof(IPushMessage)}");
+            }
+            
+            var pushMessagesInAggregate = (message as IPushMessage).GetPushMessages().Select(push => (PushMessageBase)push);
 
             ValidationPushMessages(pushMessagesInAggregate);
 
@@ -44,7 +51,7 @@ namespace Optsol.Components.Infra.Firebase.Messaging
             _logger?.LogInformation($"Resposta: {response.ToJson()}");
         }
 
-        private void ValidationPushMessages(IEnumerable<PushMessageBase> pushMessagesInAggregate)
+        private static void ValidationPushMessages(IEnumerable<PushMessageBase> pushMessagesInAggregate)
         {
             foreach (var push in pushMessagesInAggregate)
             {

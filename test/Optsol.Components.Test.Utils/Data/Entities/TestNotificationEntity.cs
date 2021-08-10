@@ -1,3 +1,4 @@
+using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Services.Push;
 using Optsol.Components.Domain.ValueObjects;
 using Optsol.Components.Infra.Bus.Events;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Optsol.Components.Test.Utils.Entity.Entities
 {
-    public class TestNotificationEntity : PushMessageAggregateRoot, IEvent
+    public class TestNotificationEntity : AggregateRoot, IEvent, IPushMessage
     {
         public NomeValueObject Nome { get; private set; }
 
@@ -47,7 +48,7 @@ namespace Optsol.Components.Test.Utils.Entity.Entities
             base.Validate();
         }
 
-        public override IEnumerable<ValueObject> GetPushMessages()
+        public IEnumerable<ValueObject> GetPushMessages()
         {
             yield return new PushMessageValueObject("Enviando um titulo", "Enviando a mensagem").SetTopic("mobem");
             yield return new PushMessageDataValueObject("Enviando um titulo 2", "Enviando a mensagem 2 @s", new Dictionary<string, string>
