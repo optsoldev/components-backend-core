@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Services.Push;
 using Optsol.Components.Test.Utils.Entity.Entities;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -31,21 +33,20 @@ namespace Optsol.Components.Test.Integration.Infra.Firebase
 #elif RELEASE
         [Fact(DisplayName = "Deve obter todos registros pelo repositório", Skip = "mongo local docker test")]
 #endif
-        public async Task Deve_Enviar_Mensage_Para_Topico()
+        public void Deve_Enviar_Mensage_Para_Topico()
         {
             //Given
             var provider = GetProviderConfiguredServicesFromContext();
             
             var testNotificationEntity = new TestNotificationEntity();
 
-
             var pushService = provider.GetRequiredService<IPushService>();
 
             //When
-            await pushService.SendAsync(testNotificationEntity);
+            Action action = () => pushService.SendAsync(testNotificationEntity);
 
             //Then
-
+            action.Should().NotThrow();
         }
     }
 }
