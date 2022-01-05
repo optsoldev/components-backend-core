@@ -166,7 +166,7 @@ namespace Optsol.Components.Infra.Data
             SetDetachedLocalEntity(entity);
 
             SetTenantIdFromTenantProvider(entity);
-            
+
             Set.Update(entity);
 
             return Task.CompletedTask;
