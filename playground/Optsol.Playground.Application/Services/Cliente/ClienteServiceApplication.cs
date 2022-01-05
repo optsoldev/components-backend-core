@@ -39,19 +39,13 @@ namespace Optsol.Playground.Application.Services.Cliente
         public async Task InserirCartaoNoClienteAsync(CartaoCreditoRequest insertCartaoCreditoViewModel)
         {
             insertCartaoCreditoViewModel.Validate();
-            if(CheckInvalidFromNotifiable(insertCartaoCreditoViewModel))
-            {
-                return;
-            }
+            if (CheckInvalidFromNotifiable(insertCartaoCreditoViewModel)) return;
 
             var clienteEntity = await _clienteReadRepository.GetByIdAsync(insertCartaoCreditoViewModel.ClienteId);
 
             var entity = _mapper.Map<CartaoCreditoEntity>(insertCartaoCreditoViewModel);
             entity.Validate();
-            if (CheckInvalidFromNotifiable(insertCartaoCreditoViewModel))
-            {
-                return;
-            }
+            if (CheckInvalidFromNotifiable(insertCartaoCreditoViewModel)) return;
 
             clienteEntity.AdicionarCartao(entity);
 

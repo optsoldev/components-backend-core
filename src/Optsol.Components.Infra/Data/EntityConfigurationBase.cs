@@ -9,8 +9,7 @@ using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
 
 namespace Optsol.Components.Infra.Data
 {
-    public class EntityConfigurationBase<TEntity, TKey> :
-        IEntityTypeConfiguration<TEntity>
+    public class EntityConfigurationBase<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
         where TEntity : Entity<TKey>
     {
         protected readonly ITenantProvider<TKey> _tenantProvider;

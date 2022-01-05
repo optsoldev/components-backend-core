@@ -164,14 +164,14 @@ namespace Optsol.Components.Infra.Data
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson() }}} )");
 
             var localEntity = Context.Set<TEntity>().Local?.FirstOrDefault(w => w.Id.Equals(entity.Id));
-            var inLocal = localEntity != null;
-            if (inLocal)
+            var localEntityNotFound = localEntity is null;
+            if (localEntityNotFound)
             {
                 Context.Entry(localEntity).State = EntityState.Detached;
             }
 
-            var entityIsITenant = entity is ITenant<TKey>;
-            if (entityIsITenant)
+            var entityIsTentant = entity is ITenant<TKey>;
+            if (entityIsTentant)
             {
                 _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em UpdateAsync");
                 ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
