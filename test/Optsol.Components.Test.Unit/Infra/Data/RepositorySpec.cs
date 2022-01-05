@@ -15,7 +15,7 @@ namespace Optsol.Components.Test.Unit.Infra.Data
     public class RepositorySpec
     {
         [Trait("Repository", "Log de Ocorrências")]
-        [Fact(DisplayName = "Deve registrar logs no repositório")]
+        [Fact(DisplayName = "Deve registrar logs no repositorio")]
         public void Deve_Registrar_Logs_No_Repositorio()
         {
             //Given

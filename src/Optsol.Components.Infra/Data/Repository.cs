@@ -163,23 +163,32 @@ namespace Optsol.Components.Infra.Data
         {
             _logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson() }}} )");
 
-            var localEntity = Context.Set<TEntity>().Local?.FirstOrDefault(w => w.Id.Equals(entity.Id));
-            var localEntityNotFound = localEntity is null;
-            if (localEntityNotFound)
-            {
-                Context.Entry(localEntity).State = EntityState.Detached;
-            }
+            SetDetachedLocalEntity(entity);
 
-            var entityIsTentant = entity is ITenant<TKey>;
-            if (entityIsTentant)
-            {
-                _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em UpdateAsync");
-                ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
-            }
+            SetTenantIdFromTenantProvider(entity);
 
             Set.Update(entity);
 
             return Task.CompletedTask;
+        }
+
+        private void SetDetachedLocalEntity(TEntity entity)
+        {
+            var localEntity = Set.Local?.FirstOrDefault(localEntity => localEntity.Id.Equals(entity.Id));
+            if (localEntity is null)
+                return;
+
+            Context.Entry(localEntity).State = EntityState.Detached;
+        }
+
+        private void SetTenantIdFromTenantProvider(TEntity entity)
+        {
+            if (entity is not ITenant<TKey>)
+                return;
+
+            _logger?.LogInformation($"Executando SetTenantId({_tenantProvider.GetTenantId()}) em UpdateAsync");
+            ((ITenant<TKey>)entity).SetTenantId(_tenantProvider.GetTenantId());
+
         }
 
         public virtual async Task DeleteAsync(TKey id)
