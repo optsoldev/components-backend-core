@@ -90,7 +90,7 @@ namespace Optsol.Components.Infra.Storage.Blob
             StartConnection();
 
             string path = $"{_blobContainerClient.Uri}/{name}";
-            
+
             var uri = new Uri(path);
 
             return Task.FromResult(uri);
