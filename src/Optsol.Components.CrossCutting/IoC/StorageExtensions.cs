@@ -47,6 +47,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 ?? throw new StorageSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
             storageSettings.Validate();
 
+            services.AddStorage(storageSettings, options);
+
+            return services;
+        }
+
+        public static IServiceCollection AddStorage(this IServiceCollection services, StorageSettings storageSettings, Action<StorageOptions> options)
+        {
             services.AddSingleton(storageSettings);
 
             var storageOptions = new StorageOptions(services);
