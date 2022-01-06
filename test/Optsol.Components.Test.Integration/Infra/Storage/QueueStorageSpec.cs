@@ -32,7 +32,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureQueue<IQueueStorageTest, QueueStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureQueue<IQueueStorageTest, QueueStorageTest>();
+                options.ConfigureQueue<IQueueStorageTestDois, QueueStorageTestDois>(new StorageSettings() { ConnectionString = "teste" });
             });
 
             var provider = services.BuildServiceProvider();
@@ -64,7 +65,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureQueue<IQueueStorageTest, QueueStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureQueue<IQueueStorageTest, QueueStorageTest>();
+                options.ConfigureQueue<IQueueStorageTestDois, QueueStorageTestDois>(new StorageSettings() { ConnectionString = "teste" });
             });
 
             var viewModel = new TestResponseDto();
