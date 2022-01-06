@@ -10,28 +10,51 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public class StorageOptions
     {
-        private readonly IServiceCollection _services;
+        private readonly IServiceCollection services;
 
         public StorageOptions(IServiceCollection services)
         {
-            _services = services;
+            this.services = services;
         }
 
-        public StorageOptions ConfigureBlob<TInterface, TImplementation>(params string[] namespaces)
+        public StorageOptions ConfigureBlob<TInterface, TImplementation>()
             where TInterface : IBlobStorage
-            where TImplementation : BlobStorageBase
+            where TImplementation : BlobStorageBase, TInterface
 
         {
-            _services.RegisterTransient<TInterface, TImplementation>(namespaces);
+            services.AddTransient(typeof(TInterface), typeof(TImplementation));
+            return this;
+        }
+
+        public StorageOptions ConfigureBlob<TInterface, TImplementation>(StorageSettings settings)
+            where TInterface : IBlobStorage
+            where TImplementation : BlobStorageBase, TInterface
+
+        {
+            services.AddTransient(typeof(TInterface), impl =>
+            {
+                return Activator.CreateInstance(typeof(TImplementation), new object[] { settings, impl.GetRequiredService<ILoggerFactory>() }) as TImplementation;
+            });
 
             return this;
         }
 
-        public StorageOptions ConfigureQueue<TInterface, TImplementation>(params string[] namespaces)
+        public StorageOptions ConfigureQueue<TInterface, TImplementation>()
             where TInterface : IQueueStorage
             where TImplementation : QueueStorageBase
         {
-            _services.RegisterTransient<TInterface, TImplementation>(namespaces);
+            services.AddTransient(typeof(TInterface), typeof(TImplementation));
+            return this;
+        }
+
+        public StorageOptions ConfigureQueue<TInterface, TImplementation>(StorageSettings settings)
+            where TInterface : IQueueStorage
+            where TImplementation : QueueStorageBase
+        {
+            services.AddTransient(typeof(TInterface), impl =>
+            {
+                return Activator.CreateInstance(typeof(TImplementation), new object[] { settings, impl.GetRequiredService<ILoggerFactory>() }) as TImplementation;
+            });
 
             return this;
         }

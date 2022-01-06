@@ -32,7 +32,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                options.ConfigureBlob<IBlobStorageTestDois, BlobStorageTestDois>();
             });
 
             var provider = services.BuildServiceProvider();
@@ -64,7 +65,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                options.ConfigureBlob<IBlobStorageTestDois, BlobStorageTestDois>();
             });
 
             var provider = services.BuildServiceProvider();
@@ -108,7 +110,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                options.ConfigureBlob<IBlobStorageTestDois, BlobStorageTestDois>();
             });
 
             var provider = services.BuildServiceProvider();
@@ -145,7 +148,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                options.ConfigureBlob<IBlobStorageTestDois, BlobStorageTestDois>();
             });
 
             var provider = services.BuildServiceProvider();
@@ -182,7 +186,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                options.ConfigureBlob<IBlobStorageTestDois, BlobStorageTestDois>();
             });
 
             var provider = services.BuildServiceProvider();
@@ -219,7 +224,8 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                options.ConfigureBlob<IBlobStorageTestDois, BlobStorageTestDois>();
             });
 
             var provider = services.BuildServiceProvider();
@@ -257,7 +263,9 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddLogging();
             services.AddStorage(configuration, options =>
             {
-                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>("Optsol.Components.Test.Utils");
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                options.ConfigureBlob<IBlobStorageTestDois
+                    , BlobStorageTestDois>();
             });
 
             var provider = services.BuildServiceProvider();
