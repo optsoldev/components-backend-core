@@ -66,7 +66,7 @@ namespace Optsol.Components.Test.Integration.Infra.Storage
             services.AddStorage(configuration, options =>
             {
                 options.ConfigureQueue<IQueueStorageTest, QueueStorageTest>();
-                options.ConfigureQueue<IQueueStorageTestDois, QueueStorageTestDois>(new StorageSettings() { ConnectionString = "teste" });
+                options.ConfigureQueue<IQueueStorageTestDois, QueueStorageTestDois>();
             });
 
             var viewModel = new TestResponseDto();
