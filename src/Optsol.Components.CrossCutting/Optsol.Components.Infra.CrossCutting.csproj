@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Identity.Web" Version="1.15.2" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.0.38" />
-    <PackageReference Include="StackExchange.Redis" Version="2.2.62" />
+    <PackageReference Include="StackExchange.Redis" Version="2.5.43" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Optsol.Components.Application\Optsol.Components.Application.csproj" />

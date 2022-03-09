@@ -30,3 +30,6 @@
 Optsol.Components.Infra.MongoDB
     -Minimum server version is now MongoDB 3.6+
 
+Optsol.Components.Infra
+
+- Breaking Changes do [Microsoft.EntityFrameworkCore](https://docs.microsoft.com/pt-br/ef/core/what-is-new/ef-core-6.0/breaking-changes)
