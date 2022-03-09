@@ -52,6 +52,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Solution Items", "0 - Solution Items", "{F93B663B-BABA-4F85-871A-47BFF993A0D7}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Storage", "src\Optsol.Components.Infra.Storage\Optsol.Components.Infra.Storage.csproj", "{D53E7A3B-92B0-434C-849B-14ADC111D601}"

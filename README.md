@@ -24,3 +24,9 @@
 [product-screenshot]: images/screenshot.png
 [build-shield]: https://dev.azure.com/optsoldev/OPTSOL%20Components%20Backend/_apis/build/status/optsoldev.components-backend-core?branchName=main
 [build-url]: https://dev.azure.com/optsoldev/OPTSOL%20Components%20Backend/_build/latest?definitionId=4&branchName=main
+
+## Changes
+
+Optsol.Components.Infra.MongoDB
+    -Minimum server version is now MongoDB 3.6+
+
