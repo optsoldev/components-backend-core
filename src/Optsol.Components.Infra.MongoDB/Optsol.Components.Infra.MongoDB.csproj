@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>1.20.1</Version>
+    <TargetFramework>net6.0</TargetFramework>
+    <Version>2.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.13.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.14.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
