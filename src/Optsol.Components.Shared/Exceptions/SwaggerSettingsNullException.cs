@@ -27,7 +27,7 @@ namespace Optsol.Components.Shared.Exceptions
         }}""
     }}""
   }}
-");
+", default);
         }
 
         protected SwaggerSettingsNullException(SerializationInfo info, StreamingContext context) : base(info, context)

@@ -360,3 +360,6 @@ MigrationBackup/
 #Node/React Project 
 node_modules
 dist
+
+# Rider
+.idea/
