@@ -19,7 +19,7 @@ namespace Optsol.Components.Shared.Exceptions
         ""ConnectionString"": ""{{UseDevelopmentStorage=true}}""
     }}
 }}
-"
+", default
             );
         }
 
