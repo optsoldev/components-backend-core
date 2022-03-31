@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Optsol.Components.Infra.Storage.Queue;
 using Optsol.Components.Infra.Storage.Queue.Messages;
 using Optsol.Components.Shared.Settings;
 using Optsol.Components.Test.Utils.Storage.Queue;
@@ -10,7 +9,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Optsol.Components.Test.Integration.Infra.Storage
+namespace Optsol.Components.Infra.Storage.Test.Integration
 {
     public class QueueStorageSpec
     {

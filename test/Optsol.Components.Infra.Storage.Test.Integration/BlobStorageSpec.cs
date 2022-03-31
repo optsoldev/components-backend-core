@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Optsol.Components.Infra.Storage.Blob;
 using Optsol.Components.Shared.Settings;
 using Optsol.Components.Test.Utils.Storage.Blob;
 using System;
@@ -9,7 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Optsol.Components.Test.Integration.Infra.Storage
+namespace Optsol.Components.Infra.Storage.Test.Integration
 {
     public class BlobStorageSpec
     {

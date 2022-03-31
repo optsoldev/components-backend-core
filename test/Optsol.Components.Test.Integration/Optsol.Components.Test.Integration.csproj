@@ -78,5 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Infra\Firebase\" />
+    <Folder Include="Infra\Storage" />
   </ItemGroup>
 </Project>
