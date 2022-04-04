@@ -7,6 +7,7 @@
     <Compile Remove="Table\**" />
     <EmbeddedResource Remove="Table\**" />
     <None Remove="Table\**" />
+    <Compile Remove="Blob\IBlobSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.10.0" />

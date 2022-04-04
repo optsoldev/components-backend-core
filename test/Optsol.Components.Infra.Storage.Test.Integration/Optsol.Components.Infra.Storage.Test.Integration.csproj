@@ -30,4 +30,14 @@
       <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
       <ProjectReference Include="..\Optsol.Components.Test.Utils\Optsol.Components.Test.Utils.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Settings\appsettings.storage.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Anexos\anexo.jpg" />
+      <Content Include="Anexos\anexo.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
 </Project>

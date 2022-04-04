@@ -6,12 +6,95 @@ using Optsol.Components.Test.Utils.Storage.Blob;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Optsol.Components.Infra.Storage.Blob;
 using Xunit;
 
 namespace Optsol.Components.Infra.Storage.Test.Integration
 {
     public class BlobStorageSpec
     {
+
+        [Trait("Table Storage", "Blob")]
+#if DEBUG
+        [Fact(DisplayName = "Deve fazer upload de arquivo no blob pelo path com content type para image/jpeg")]
+#elif RELEASE
+        [Fact(DisplayName = "Deve fazer upload de arquivo no blob pelo path com content type para image/jpeg", Skip ="Testes realizados localmente")]
+#endif
+        public async Task Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Path_Do_Tipo_Image_Jpeg()
+        {
+            //Given 
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(@"Settings/appsettings.storage.json")
+                .Build();
+
+            var services = new ServiceCollection();
+
+            services.AddLogging();
+            services.AddStorage(configuration, options =>
+            {
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+            });
+
+            var provider = services.BuildServiceProvider();
+            var blobStorage = (BlobStorageTest)provider.GetRequiredService<IBlobStorageTest>();
+            var contentType = "image/jpeg";
+            
+            var blobSettings = new BlobSettings()
+            {
+                ContentType = contentType
+            };
+
+            var name = $"{Guid.NewGuid()}.jpg";
+            
+            //When 
+            await blobStorage.UploadAsync(name, @"Anexos/anexo.jpg", blobSettings);
+            var result = await blobStorage.GetBlobInfoAsync(name);
+            
+            //Then
+            blobStorage.Should().NotBeNull();
+            result.ContentType.Should().Be("image/jpeg");
+        }
+        
+        [Trait("Table Storage", "Blob")]
+#if DEBUG
+        [Fact(DisplayName = "Deve fazer upload de arquivo no blob pelo stream com content type para image/jpeg")]
+#elif RELEASE
+        [Fact(DisplayName = "Deve fazer upload de arquivo no blob pelo stream com content type para image/jpeg", Skip = "Testes realizados localmente")]
+#endif
+        public async Task Deve_Fazer_Upload_De_Arquivo_No_Blob_Pelo_Stream_Do_Tipo_Image_Jpeg()
+        {
+            //Given 
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile(@"Settings/appsettings.storage.json")
+                .Build();
+
+            var services = new ServiceCollection();
+
+            services.AddLogging();
+            services.AddStorage(configuration, options =>
+            {
+                options.ConfigureBlob<IBlobStorageTest, BlobStorageTest>();
+                
+            });
+        
+            var provider = services.BuildServiceProvider();
+            var blobStorage = (BlobStorageTest) provider.GetRequiredService<IBlobStorageTest>();
+            var contentType = "image/jpeg";
+            
+            var blobSettings = new BlobSettings()
+            {
+                ContentType = contentType
+            };
+
+            var name = $"{Guid.NewGuid()}.jpg";
+            
+            //When 
+            await blobStorage.UploadAsync(name, File.OpenRead(@"Anexos/anexo.jpg"), blobSettings);
+            var result = await blobStorage.GetBlobInfoAsync(name);
+            
+            //Then
+            result.ContentType.Should().Be(contentType);
+        }
 
         [Trait("Table Storage", "Blob")]
 #if DEBUG
