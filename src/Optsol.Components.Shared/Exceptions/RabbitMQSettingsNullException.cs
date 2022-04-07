@@ -19,7 +19,7 @@ namespace Optsol.Components.Shared.Exceptions
     ""UserName"": ""{{username}}"",
     ""Password"": ""{{Password}}"",
     ""ExchangeName"": ""{{exchange-name}}""
-}}"
+}}", default
             );
         }
 

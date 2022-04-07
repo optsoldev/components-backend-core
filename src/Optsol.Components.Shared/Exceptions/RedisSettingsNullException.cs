@@ -15,7 +15,7 @@ namespace Optsol.Components.Shared.Exceptions
 @$"{nameof(RedisSettingsNullException)}:
 ""RedisSettings"": {{
     ""ConnectionString"": ""...redis.cache.windows.net,abortConnect=false,ssl=true...""
-}}"
+}}", default
             );
         }
 

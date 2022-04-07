@@ -22,7 +22,7 @@ namespace Optsol.Components.Shared.Exceptions
             ""FrontHttps"": ""https://domain...""
         }}
     }}]
-}}"
+}}", default
             );
         }
 
