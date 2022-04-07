@@ -21,7 +21,7 @@ namespace Optsol.Components.Shared.Exceptions
         ""Endpoint"": ""http://ssodomain""
     }}
 }}
-"
+", default
             );
         }
 
