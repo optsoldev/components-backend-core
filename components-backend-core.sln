@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Application", "src\Optsol.Components.Application\Optsol.Components.Application.csproj", "{5C4B004A-C641-4F6C-91BE-1CC647EB89A9}"
 EndProject
@@ -53,6 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - Solution Items", "0 - S
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		README.md = README.md
+		version-bump.ps1 = version-bump.ps1
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Storage", "src\Optsol.Components.Infra.Storage\Optsol.Components.Infra.Storage.csproj", "{D53E7A3B-92B0-434C-849B-14ADC111D601}"
@@ -64,8 +65,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Redis", "src\Optsol.Components.Infra.Redis\Optsol.Components.Infra.Redis.csproj", "{5AEF1FE6-8182-4506-8A27-965863E382DE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Firebase", "src\Optsol.Components.Infra.Firebase\Optsol.Components.Infra.Firebase.csproj", "{094EEE1C-8D87-42B5-BC39-363AEA701306}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.Storage.Test.Integration", "test\Optsol.Components.Infra.Storage.Test.Integration\Optsol.Components.Infra.Storage.Test.Integration.csproj", "{76C9C8BA-2256-40C6-8EA6-145426D8C995}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -317,18 +316,6 @@ Global
 		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x64.Build.0 = Release|Any CPU
 		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x86.ActiveCfg = Release|Any CPU
 		{094EEE1C-8D87-42B5-BC39-363AEA701306}.Release|x86.Build.0 = Release|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Debug|x64.Build.0 = Debug|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Debug|x86.Build.0 = Debug|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Release|x64.ActiveCfg = Release|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Release|x64.Build.0 = Release|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Release|x86.ActiveCfg = Release|Any CPU
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -360,7 +347,6 @@ Global
 		{6CAD1B20-0750-4BCB-9F8C-C4F998ACD14B} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
 		{5AEF1FE6-8182-4506-8A27-965863E382DE} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
 		{094EEE1C-8D87-42B5-BC39-363AEA701306} = {A8DC8550-099A-11EB-AD53-654EEF259C2F}
-		{76C9C8BA-2256-40C6-8EA6-145426D8C995} = {C0109D60-099A-11EB-AD53-654EEF259C2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {66165739-5FCB-4C53-AC8B-7BC212D5FEFC}
