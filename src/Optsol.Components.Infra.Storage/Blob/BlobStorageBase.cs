@@ -40,7 +40,16 @@ namespace Optsol.Components.Infra.Storage.Blob
             return await _blobContainerClient.GetBlobsAsync().AsPages().AsyncEnumerableToEnumerable();
         }
 
-        public virtual Task<Response<BlobContentInfo>> UploadAsync(string name, string path)
+        public virtual async Task<BlobProperties> GetBlobInfoAsync(string name)
+        {
+            StartConnection();
+            
+            _logger?.LogInformation($"Executando: {nameof(GetBlobInfoAsync)}");
+
+            return await _blobContainerClient.GetBlobClient(name).GetPropertiesAsync();
+        }
+
+        public virtual Task<Response<BlobContentInfo>> UploadAsync(string name, string path, BlobSettings blobSettings = null)
         {
             StartConnection();
 
@@ -48,18 +57,19 @@ namespace Optsol.Components.Infra.Storage.Blob
 
             var blob = _blobContainerClient.GetBlobClient(name);
 
-            return blob.UploadAsync(path, overwrite: true);
+            return blob.UploadAsync(path, blobSettings);
         }
 
-        public virtual Task<Response<BlobContentInfo>> UploadAsync(string name, Stream stream)
+        public virtual Task<Response<BlobContentInfo>> UploadAsync(string name, Stream stream, BlobSettings blobSettings = null)
         {
             StartConnection();
 
             _logger?.LogInformation($"Executando: {nameof(UploadAsync)}({name}, stream) Retorno: Task");
 
             var blob = _blobContainerClient.GetBlobClient(name);
-
-            return blob.UploadAsync(stream, overwrite: true);
+            
+            return blob.UploadAsync(stream, blobSettings);
+            
         }
 
         public virtual Task DeleteAsync(string name)

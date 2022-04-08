@@ -30,9 +30,6 @@
     <Content Include="Settings\appsettings.cors.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Settings\appsettings.storage.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Settings\appsettings.mongo.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
