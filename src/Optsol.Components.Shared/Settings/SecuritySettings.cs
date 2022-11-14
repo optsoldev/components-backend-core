@@ -32,13 +32,20 @@ namespace Optsol.Components.Shared.Settings
     {
         public string ClientId { get; set; }
 
-        public string Endpoint { get; set; }
+        public string Instance { get; set; }
+
+        public string Domain { get; set; }
 
         public override void Validate()
         {
-            if (Endpoint.IsValidEndpoint().Not())
+            if (Instance.IsValidEndpoint().Not())
             {
-                ShowingException(nameof(Endpoint));
+                ShowingException(nameof(Instance));
+            }
+
+            if (Domain.IsEmpty())
+            {
+                ShowingException(nameof(Domain));
             }
 
             if (ClientId.IsEmpty())
