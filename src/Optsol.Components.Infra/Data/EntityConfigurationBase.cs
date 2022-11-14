@@ -12,11 +12,9 @@ namespace Optsol.Components.Infra.Data
     public class EntityConfigurationBase<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
         where TEntity : Entity<TKey>
     {
-        protected readonly ITenantProvider<TKey> _tenantProvider;
 
-        public EntityConfigurationBase(ITenantProvider<TKey> tenantProvider = null)
+        public EntityConfigurationBase()
         {
-            _tenantProvider = tenantProvider;
         }
 
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
@@ -71,13 +69,9 @@ namespace Optsol.Components.Infra.Data
                     .Property(entity => ((ITenant<TKey>)entity).TenantId)
                     .IsRequired();
 
-                var tenantProviderNotIsNull = _tenantProvider != null;
-                if (tenantProviderNotIsNull)
-                {
-                    var tenantExpression = CreateExpression(parametrer, "TenantId", _tenantProvider.GetTenantId());
+                var tenantExpression = CreateExpression(parametrer, "TenantId", "<-#V1cxU2FXSXlVbXc9#->");
 
-                    expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
-                }
+                expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
             }
 
             return expression;

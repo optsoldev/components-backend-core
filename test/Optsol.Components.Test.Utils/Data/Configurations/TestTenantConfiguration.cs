@@ -9,8 +9,8 @@ namespace Optsol.Components.Test.Utils.Data.Configurations
 {
     public class TestTenantConfiguration : EntityConfigurationBase<TestTenantEntity, Guid>
     {
-        public TestTenantConfiguration(ITenantProvider tenantProvider)
-            : base(tenantProvider)
+        public TestTenantConfiguration()
+            : base()
         {
 
         }
@@ -58,8 +58,8 @@ namespace Optsol.Components.Test.Utils.Data.Configurations
 
     public class TestTenantDeletableConfiguration : EntityConfigurationBase<TestTenantDeletableEntity, Guid>
     {
-        public TestTenantDeletableConfiguration(ITenantProvider tenantProvider)
-            : base(tenantProvider)
+        public TestTenantDeletableConfiguration()
+            : base()
         {
 
         }

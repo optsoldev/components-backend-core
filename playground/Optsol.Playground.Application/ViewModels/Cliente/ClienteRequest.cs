@@ -3,7 +3,7 @@ using Optsol.Playground.Application.Validators;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
 {
-    public class ClienteRequest : BaseDataTransferObject
+    public class ClienteRequest : BaseDto
     {
         public string Nome { get; set; }
 

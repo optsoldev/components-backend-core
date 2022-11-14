@@ -3,7 +3,7 @@ using System;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
 {
-    public class ClienteResponse : BaseDataTransferObject
+    public class ClienteResponse : BaseDto
     {
         public string Id { get; set; }
         public string Nome { get; set; }

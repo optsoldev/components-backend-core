@@ -4,7 +4,7 @@ using System;
 
 namespace Optsol.Components.Test.Utils.ViewModels
 {
-    public class TestResponseDto : BaseDataTransferObject
+    public class TestResponseDto : BaseDto
     {
         public Guid Id { get; set; }
 
