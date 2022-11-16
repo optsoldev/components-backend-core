@@ -146,21 +146,6 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped(typeof(IWriteRepository<,>), typeof(Repository<,>));
 
             return services;
-        }
-
-        public static IServiceCollection AddTenantContext<TContext, TProvider>(this IServiceCollection services, Action<RepositoryOptions> options = null)
-            where TContext : CoreContext
-            where TProvider : class, ITenantProvider
-        {
-            var repositoryOptions = new RepositoryOptions(services);
-            options?.Invoke(repositoryOptions);
-
-            services.AddDbContext<TContext>(repositoryOptions.Builder());
-
-            services.AddHttpContextAccessor();
-            services.AddScoped<ITenantProvider, TProvider>();
-
-            return services;
-        }
+        }       
     }
 }

@@ -3,16 +3,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Optsol.Components.Infra.Security.Models;
 using Optsol.Components.Infra.Security.Services;
-using Optsol.Components.Service.Filters;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -67,39 +62,39 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void ConfigureRemoteSecurity(IAuthorityService authorityService, SwaggerSettings swaggerSettings, SwaggerGenOptions options)
         {
-            var clientOauth = authorityService
-                .GetClient(swaggerSettings.Security.ClientId)
-                .GetAwaiter()
-                .GetResult();
+            //var clientOauth = authorityService
+            //    .GetClient(swaggerSettings.Security.ClientId)
+            //    .GetAwaiter()
+            //    .GetResult();
 
-            if (clientOauth == null)
-            {
-                return;
-            }
+            //if (clientOauth == null)
+            //{
+            //    return;
+            //}
 
-            var scopes = swaggerSettings
-                .Security
-                .Scopes
-                .Select(scope => new KeyValuePair<string, string>($"https://{clientOauth.Domain}/{scope.Key}/{scope.Value}", $"{scope.Key}"));
+            //var scopes = swaggerSettings
+            //    .Security
+            //    .Scopes
+            //    .Select(scope => new KeyValuePair<string, string>($"https://{clientOauth.Domain}/{scope.Key}/{scope.Value}", $"{scope.Key}"));
 
-            var endpointB2C = $"{clientOauth.Instance}/{clientOauth.Domain}/{clientOauth.SignUpSignInPolicyId}/oauth2/v2.0";
+            //var endpointB2C = $"{clientOauth.Instance}/{clientOauth.Domain}/{clientOauth.SignUpSignInPolicyId}/oauth2/v2.0";
 
-            options.AddSecurityDefinition(swaggerSettings.Security.Name,
-                new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        Implicit = new OpenApiOAuthFlow()
-                        {
-                            AuthorizationUrl = new Uri($"{endpointB2C}/authorize"),
-                            TokenUrl = new Uri($"{endpointB2C}/token"),
-                            Scopes = new Dictionary<string, string>(scopes)
-                        },
-                    }
-                });
+            //options.AddSecurityDefinition(swaggerSettings.Security.Name,
+            //    new OpenApiSecurityScheme
+            //    {
+            //        Type = SecuritySchemeType.OAuth2,
+            //        Flows = new OpenApiOAuthFlows
+            //        {
+            //            Implicit = new OpenApiOAuthFlow()
+            //            {
+            //                AuthorizationUrl = new Uri($"{endpointB2C}/authorize"),
+            //                TokenUrl = new Uri($"{endpointB2C}/token"),
+            //                Scopes = new Dictionary<string, string>(scopes)
+            //            },
+            //        }
+            //    });
 
-            options.OperationFilter<AuthorizeCheckOperationFilter>();
+            //options.OperationFilter<AuthorizeCheckOperationFilter>();
         }
 
         private static void ConfigureDevelopmentSecurity(SwaggerGenOptions options)

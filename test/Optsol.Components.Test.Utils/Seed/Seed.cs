@@ -200,41 +200,5 @@ namespace Optsol.Components.Test.Utils.Seed
 
             return provider;
         }
-
-        public static ServiceProvider CreateTenantTestEntitySeedInContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestTenantEntity>, IEnumerable<TenantEntity>> afterInsert = null)
-        {
-            var tenants = TenantEntityList();
-            var entities = TestTenantEntityList(tenants).Take(take);
-
-            afterInsert?.Invoke(entities, tenants);
-
-            var tenantContext = provider.GetRequiredService<TenantDbContext>();
-            tenantContext.AddRange(tenants);
-            tenantContext.SaveChanges();
-
-            var context = provider.GetRequiredService<MultiTenantContext>();
-            context.AddRange(entities);
-            context.SaveChanges();
-
-            return provider;
-        }
-
-        public static ServiceProvider CreateTenantDeletableTestEntitySeedInContext(this ServiceProvider provider, int take = 1, Action<IEnumerable<TestTenantDeletableEntity>, IEnumerable<TenantEntity>> afterInsert = null)
-        {
-            var tenants = TenantEntityList();
-            var entities = TestTenantDeletableEntityList(tenants).Take(take);
-
-            afterInsert?.Invoke(entities, tenants);
-
-            var tenantContext = provider.GetRequiredService<TenantDbContext>();
-            tenantContext.AddRange(tenants);
-            tenantContext.SaveChanges();
-
-            var context = provider.GetRequiredService<MultiTenantContext>();
-            context.AddRange(entities);
-            context.SaveChanges();
-
-            return provider;
-        }
     }
 }

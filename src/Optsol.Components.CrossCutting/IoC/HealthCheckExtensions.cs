@@ -46,26 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 if (securitySettings.Development.Not())
                 {
-                    builder
-                        .AddCheck("authority", () =>
-                        {
-                            try
-                            {
-                                HttpClient client = new HttpClient();
-                                var result = client.GetAsync($"{securitySettings.Authority.Endpoint}/health/ping");
-
-                                if (result.IsCompletedSuccessfully)
-                                {
-                                    return HealthCheckResult.Healthy("Ping is healthy");
-                                }
-
-                                return HealthCheckResult.Unhealthy("Ping is unhealthy");
-                            }
-                            catch
-                            {
-                                return HealthCheckResult.Unhealthy("Ping is unhealthy");
-                            }
-                        }, tags: new string[] { "security" });
                 }
             }
 

@@ -11,8 +11,8 @@ namespace Optsol.Components.Service.Controllers
 
     public interface IApiControllerBase<TEntity, TRequest, TResponse> : IApiControllerBase
         where TEntity : AggregateRoot
-        where TRequest : BaseDataTransferObject
-        where TResponse : BaseDataTransferObject
+        where TRequest : BaseModel
+        where TResponse : BaseModel
     {
         Task<IActionResult> GetAllAsync();
 
@@ -28,8 +28,8 @@ namespace Optsol.Components.Service.Controllers
     public interface IApiControllerBase<TEntity, TRequest, TResponse, TSearch> :
         IApiControllerBase<TEntity, TRequest, TResponse>
         where TEntity : AggregateRoot
-        where TRequest : BaseDataTransferObject
-        where TResponse : BaseDataTransferObject
+        where TRequest : BaseModel
+        where TResponse : BaseModel
         where TSearch : class
     {
         Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search);

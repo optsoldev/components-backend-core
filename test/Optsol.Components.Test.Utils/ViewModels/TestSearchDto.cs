@@ -11,7 +11,7 @@ using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
 namespace Optsol.Components.Test.Utils.ViewModels
 {
 
-    public class TestSearchDto : BaseDataTransferObject, ISearch<TestEntity>, IOrderBy<TestEntity>, IInclude<TestEntity>
+    public class TestSearchDto : BaseModel, ISearch<TestEntity>, IOrderBy<TestEntity>, IInclude<TestEntity>
     {
         public string Nome { get; set; }
 
@@ -53,7 +53,7 @@ namespace Optsol.Components.Test.Utils.ViewModels
         }
     }
 
-    public class TestSearchOnlyDto : BaseDataTransferObject, ISearch<TestEntity>
+    public class TestSearchOnlyDto : BaseModel, ISearch<TestEntity>
     {
         public string Nome { get; set; }
 

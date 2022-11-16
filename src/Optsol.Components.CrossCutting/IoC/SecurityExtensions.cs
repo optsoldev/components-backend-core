@@ -85,9 +85,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
         {
-            services
-                .AddRefitClient<IAuthorityClient>()
-                .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Endpoint));
+            //services
+            //    .AddRefitClient<IAuthorityClient>()
+            //    .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Endpoint));
 
             services.AddTransient<IAuthorityService, AuthorityService>();
 
@@ -98,15 +98,17 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var provider = services.BuildServiceProvider();
 
-            var clientOauth = provider.GetRequiredService<IAuthorityService>()
-                .GetClient(securitySettings.Authority.ClientId)
-                .GetAwaiter()
-                .GetResult();
+            //var clientOauth = provider.GetRequiredService<IAuthorityService>()
+            //    .GetClient(securitySettings.Authority.ClientId)
+            //    .GetAwaiter()
+            //    .GetResult();
 
-            if (clientOauth == null)
-            {
-                return null;
-            }
+            //if (clientOauth == null)
+            //{
+            //    return null;
+            //}
+
+            OauthClient clientOauth = CreateOauthClient(securitySettings);
 
             var config = new ConfigurationBuilder();
             config.AddInMemoryObject(clientOauth, "AzureAdB2C");
@@ -186,6 +188,20 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
 
             return services;
+        }
+
+        public static OauthClient CreateOauthClient(SecuritySettings securitySettings)
+        {
+            return new OauthClient
+            {
+                Instance = securitySettings.Authority.Instance,
+                ClientId = securitySettings.Authority.ClientId,
+                Domain = securitySettings.Authority.Domain,
+                SignedOutCallbackPath = "/signout/B2C_1_login",
+                SignUpSignInPolicyId = "b2c_1_login",
+                ResetPasswordPolicyId = "b2c_1_reset",
+                EditProfilePolicyId = "b2c_1_edit",
+            };
         }
     }
 
