@@ -3,7 +3,7 @@ using Optsol.Components.Shared.Notifications;
 
 namespace Optsol.Components.Application.DataTransferObjects
 {
-    public abstract class BaseDto : Notifiable<Notification>
+    public abstract class BaseModel : Notifiable<Notification>
     {
         public virtual void Validate() { }
 

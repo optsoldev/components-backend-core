@@ -8,12 +8,12 @@ namespace Optsol.Components.Service.Responses
     {
         Response Create();
 
-        Response<TData> Create<TData>(TData data) where TData : BaseDto;
+        Response<TData> Create<TData>(TData data) where TData : BaseModel;
 
         ResponseList<TData> Create<TData>(IEnumerable<TData> dataList)
-            where TData : BaseDto;
+            where TData : BaseModel;
 
         ResponseSearch<TData> Create<TData>(ISearchResult<TData> searchResult)
-            where TData : BaseDto;
+            where TData : BaseModel;
     }
 }

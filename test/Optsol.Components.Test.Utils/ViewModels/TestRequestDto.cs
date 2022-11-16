@@ -3,7 +3,7 @@ using Optsol.Components.Test.Utils.Contracts;
 
 namespace Optsol.Components.Test.Utils.ViewModels
 {
-    public class TestRequestDto: BaseDto
+    public class TestRequestDto: BaseModel
     {
         public string Nome { get; set; }
         

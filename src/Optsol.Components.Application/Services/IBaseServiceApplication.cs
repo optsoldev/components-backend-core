@@ -16,25 +16,25 @@ namespace Optsol.Components.Application.Services
         Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes { get; set; }
 
         Task<TResponse> GetByIdAsync<TResponse>(Guid id)
-            where TResponse : BaseDto;
+            where TResponse : BaseModel;
 
         Task<IEnumerable<TResponse>> GetByIdsAsync<TResponse>(IEnumerable<Guid> ids)
-            where TResponse : BaseDto;
+            where TResponse : BaseModel;
 
         Task<IEnumerable<TResponse>> GetAllAsync<TResponse>()
-            where TResponse : BaseDto;
+            where TResponse : BaseModel;
 
         Task<ISearchResult<TResponse>> GetAllAsync<TResponse, TSearch>(ISearchRequest<TSearch> requestSearch)
             where TSearch : class
-            where TResponse : BaseDto;
+            where TResponse : BaseModel;
 
         Task<TResponse> InsertAsync<TRequest, TResponse>(TRequest data)
-            where TRequest : BaseDto
-            where TResponse : BaseDto;
+            where TRequest : BaseModel
+            where TResponse : BaseModel;
 
         Task<TResponse> UpdateAsync<TRequest, TResponse>(Guid id, TRequest data)
-            where TRequest : BaseDto
-            where TResponse : BaseDto;
+            where TRequest : BaseModel
+            where TResponse : BaseModel;
 
         Task DeleteAsync(Guid id);
     }

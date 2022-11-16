@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
 {
-    public class ClienteComCartoesViewModel : BaseDto
+    public class ClienteComCartoesViewModel : BaseModel
     {
         
         public string Id { get; set; }

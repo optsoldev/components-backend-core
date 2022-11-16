@@ -63,7 +63,7 @@ namespace Optsol.Components.Application.Services
         }
 
         public virtual async Task<TResponse> GetByIdAsync<TResponse>(Guid id)
-            where TResponse : BaseDto
+            where TResponse : BaseModel
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdAsync) }({{ id:{ id } }}) Retorno: type { typeof(TResponse).Name }");
 
@@ -73,7 +73,7 @@ namespace Optsol.Components.Application.Services
         }
 
         public virtual async Task<IEnumerable<TResponse>> GetByIdsAsync<TResponse>(IEnumerable<Guid> ids)
-            where TResponse : BaseDto
+            where TResponse : BaseModel
         {
             _logger?.LogInformation($"Método: { nameof(GetByIdsAsync) }({{ id:{ ids } }}) Retorno: type { typeof(TResponse).Name }");
 
@@ -83,7 +83,7 @@ namespace Optsol.Components.Application.Services
         }
 
         public virtual async Task<IEnumerable<TResponse>> GetAllAsync<TResponse>()
-            where TResponse : BaseDto
+            where TResponse : BaseModel
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TResponse).Name }>");
 
@@ -94,7 +94,7 @@ namespace Optsol.Components.Application.Services
 
         public virtual async Task<ISearchResult<TResponse>> GetAllAsync<TResponse, TSearch>(ISearchRequest<TSearch> requestSearch)
             where TSearch : class
-            where TResponse : BaseDto
+            where TResponse : BaseModel
         {
             _logger?.LogInformation($"Método: { nameof(GetAllAsync) }() Retorno: IEnumerable<{ typeof(TResponse).Name }>");
 
@@ -104,8 +104,8 @@ namespace Optsol.Components.Application.Services
         }
 
         public async virtual Task<TResponse> InsertAsync<TRequest, TResponse>(TRequest data)
-            where TRequest : BaseDto
-            where TResponse : BaseDto
+            where TRequest : BaseModel
+            where TResponse : BaseModel
         {
             data.Validate();
             if (CheckInvalidFromNotifiable(data))
@@ -131,8 +131,8 @@ namespace Optsol.Components.Application.Services
         }
 
         public async virtual Task<TResponse> UpdateAsync<TRequest, TResponse>(Guid id, TRequest data)
-            where TRequest : BaseDto
-            where TResponse : BaseDto
+            where TRequest : BaseModel
+            where TResponse : BaseModel
         {
             data.Validate();
             if (CheckInvalidFromNotifiable(data))

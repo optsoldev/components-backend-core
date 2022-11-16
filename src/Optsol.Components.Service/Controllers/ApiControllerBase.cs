@@ -36,7 +36,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         protected IActionResult CreateResult<TData>(TData viewModelOfResultService)
-            where TData : BaseDto
+            where TData : BaseModel
         {
             var response = _responseFactory.Create(viewModelOfResultService);
             if (response.Failure)
@@ -46,7 +46,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         protected IActionResult CreateResult<TData>(IEnumerable<TData> viewModelsOfResultService)
-            where TData : BaseDto
+            where TData : BaseModel
         {
             var response = _responseFactory.Create(viewModelsOfResultService);
 
@@ -57,7 +57,7 @@ namespace Optsol.Components.Service.Controllers
         }
 
         protected IActionResult CreateResult<TData>(ISearchResult<TData> viewModelsOfResultService)
-            where TData : BaseDto
+            where TData : BaseModel
         {
             var response = _responseFactory.Create(viewModelsOfResultService);
 
@@ -71,8 +71,8 @@ namespace Optsol.Components.Service.Controllers
     public class ApiControllerBase<TEntity, TRequest, TResponse> : ApiControllerBase,
         IApiControllerBase<TEntity, TRequest, TResponse>
         where TEntity : AggregateRoot
-        where TRequest : BaseDto
-        where TResponse : BaseDto
+        where TRequest : BaseModel
+        where TResponse : BaseModel
     {
         protected readonly ILogger _logger;
         protected readonly IBaseServiceApplication<TEntity> _serviceApplication;
@@ -158,8 +158,8 @@ namespace Optsol.Components.Service.Controllers
             ApiControllerBase<TEntity, TRequest, TResponse>,
             IApiControllerBase<TEntity, TRequest, TResponse, TSearch>
             where TEntity : AggregateRoot
-            where TRequest : BaseDto
-            where TResponse : BaseDto
+            where TRequest : BaseModel
+            where TResponse : BaseModel
             where TSearch : class
     {
         public ApiControllerBase(

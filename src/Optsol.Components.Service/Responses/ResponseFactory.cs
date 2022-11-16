@@ -21,18 +21,18 @@ namespace Optsol.Components.Service.Responses
         }
 
         public Response<TData> Create<TData>(TData data)
-            where TData : BaseDto
+            where TData : BaseModel
         {
             return new Response<TData>(data, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
-        public ResponseList<TData> Create<TData>(IEnumerable<TData> dataList) where TData : BaseDto
+        public ResponseList<TData> Create<TData>(IEnumerable<TData> dataList) where TData : BaseModel
         {
             return new ResponseList<TData>(dataList, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }
 
         public ResponseSearch<TData> Create<TData>(ISearchResult<TData> searchResult)
-            where TData : BaseDto
+            where TData : BaseModel
         {
             return new ResponseSearch<TData>(searchResult, ResponseSuccess(), MessageResolver(_notificationContext.Notifications));
         }

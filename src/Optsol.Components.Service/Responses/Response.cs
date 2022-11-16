@@ -32,7 +32,7 @@ namespace Optsol.Components.Service.Responses
     }
 
     public class Response<TData> : Response
-        where TData : BaseDto
+        where TData : BaseModel
     {
         public TData Data { get; set; }
 
@@ -57,7 +57,7 @@ namespace Optsol.Components.Service.Responses
     }
 
     public class ResponseList<TData> : Response
-        where TData : BaseDto
+        where TData : BaseModel
     {
         public IEnumerable<TData> Data { get; set; }
 
@@ -80,7 +80,7 @@ namespace Optsol.Components.Service.Responses
     }
 
     public class ResponseSearch<TData> : ResponseList<TData>
-        where TData : BaseDto
+        where TData : BaseModel
     {
         public int Page { get; set; }
 

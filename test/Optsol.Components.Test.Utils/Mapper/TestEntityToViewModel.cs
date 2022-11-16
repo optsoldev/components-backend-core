@@ -19,7 +19,7 @@ namespace Optsol.Components.Test.Utils.Mapper
                .ForMember(dest => dest.Nome, opt => opt.MapFrom(source => source.Nome.ToString()))
                .ForMember(dest => dest.Contato, opt => opt.MapFrom(source => source.Email.ToString()));
 
-            CreateMap<TestEntity, BaseDto>();
+            CreateMap<TestEntity, BaseModel>();
         }
     }
 }

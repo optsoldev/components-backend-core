@@ -3,7 +3,7 @@ using System;
 
 namespace Optsol.Playground.Application.ViewModels.CartaoCredito
 {
-    public class CartaoCreditoRequest : BaseDto
+    public class CartaoCreditoRequest : BaseModel
     {
         public string NomeCliente { get; set; }
 
