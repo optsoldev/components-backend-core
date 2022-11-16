@@ -2,17 +2,13 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.Data.Pagination;
-using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Utils.Data.Contexts;
 using Optsol.Components.Test.Utils.Data.Entities;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using Optsol.Components.Test.Utils.Entity.Entities;
-using Optsol.Components.Test.Utils.Provider;
 using Optsol.Components.Test.Utils.Repositories.Core;
 using Optsol.Components.Test.Utils.Repositories.Deletable;
-using Optsol.Components.Test.Utils.Repositories.Tenant;
 using Optsol.Components.Test.Utils.Seed;
 using Optsol.Components.Test.Utils.ViewModels;
 using System;
@@ -63,31 +59,7 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             return services.BuildServiceProvider();
         }
 
-        private static ServiceProvider GetProviderConfiguredServicesFromTenantContext(string tenantHost = "http://domain.tenant.one.com")
-        {
-            var services = new ServiceCollection();
-            var options = new RepositoryOptions(services);
-            options
-                .EnabledInMemory()
-                .EnabledLogging();
-
-            services.AddLogging();
-            services.AddDbContext<TenantDbContext>(options.Builder());
-            services.AddContext<MultiTenantContext>(options =>
-            {
-                options
-                    .EnabledInMemory()
-                    .EnabledLogging();
-
-                options
-                    .ConfigureRepositories<ITestTenantReadRepository, TestTenantReadRepository>("Optsol.Components.Test.Utils");
-            });
-
-            services.AddSingleton<IHttpContextAccessor>(x => new HttpContextAccessorTest(tenantHost));
-            services.AddSingleton<ITenantProvider, DataBaseTenantProvider>();
-
-            return services.BuildServiceProvider();
-        }
+       
 
         public class HttpContextAccessorTest : IHttpContextAccessor
         {
@@ -461,89 +433,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Infraestrutura", "Repositório Leitura MultiTenant")]
-        [Theory(DisplayName = "Deve obter os registros por tenant")]
-        [ClassData(typeof(InserirNovosRegistosMultTenantParams))]
-        public async Task Deve_Obter_Registro_Por_Tenant(string tenantHost, int expected)
-        {
-            //Given
-            var numberItems = 100;
-            var provider = GetProviderConfiguredServicesFromTenantContext(tenantHost)
-                .CreateTenantTestEntitySeedInContext(numberItems);
-
-            var testTenantReadRepository = provider.GetRequiredService<ITestTenantReadRepository>();
-
-            //When
-            var entitiesResult = await testTenantReadRepository.GetAllAsync();
-
-            //Then
-            entitiesResult.Should().HaveCount(expected);
-
-            var context = provider.GetRequiredService<MultiTenantContext>();
-            context.Dispose();
-        }
-
-        [Trait("Infraestrutura", "Repositório Leitura MultiTenant")]
-        [Fact(DisplayName = "Deve exluir logicamente os registros por tenant")]
-        public async Task Deve_Excluir_Logicamente_Registro_Por_Tenant()
-        {
-            //Given
-            var numberItems = 3;
-            var numberDeletable = 2;
-
-            var provider = GetProviderConfiguredServicesFromTenantContext()
-                .CreateTenantDeletableTestEntitySeedInContext(numberItems, (entityList, tenantList) =>
-                {
-                    foreach (var delete in entityList.Take(numberDeletable))
-                    {
-                        delete.Delete();
-                    }
-                });
-
-            var testTenantReadRepository = provider.GetRequiredService<ITestTenantDeletableReadRepository>();
-
-            //When
-            var entitiesResult = await testTenantReadRepository.GetAllAsync();
-
-            //Then
-            var totalNotDeletable = numberItems - numberDeletable;
-            entitiesResult.Should().HaveCount(totalNotDeletable);
-
-            var context = provider.GetRequiredService<MultiTenantContext>();
-            context.Dispose();
-        }
-
-        [Trait("Infraestrutura", "Repositório Leitura MultiTenant")]
-        [Fact(DisplayName = "Não deve inserir registro sem informar o id do tenant")]
-        public async Task Nao_Deve_Inserir_Registro_Sem_Tenant()
-        {
-            //Given
-            var tenantId = Guid.Empty;
-            var entity = new TestTenantEntity(tenantId, new NomeValueObject("Isaiah", "Sosa"), new EmailValueObject("justo.eu.arcu@Integervitaenibh.net"));
-
-            var provider = GetProviderConfiguredServicesFromTenantContext()
-                .CreateTenantTestEntitySeedInContext(0);
-
-            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-            var testWriteRepository = provider.GetRequiredService<ITestTenantWriteRepository>();
-            var testReadRepository = provider.GetRequiredService<ITestTenantReadRepository>();
-
-            //When
-            entity.Validate();
-
-            await testWriteRepository.InsertAsync(entity);
-            await unitOfWork.CommitAsync();
-
-            //Then
-            entity.Valid.Should().BeFalse();
-            entity.Invalid.Should().BeTrue();
-            entity.Notifications.Should().NotBeEmpty();
-            entity.Notifications.Should().HaveCount(1);
-
-            var result = await testReadRepository.GetByIdAsync(tenantId);
-            result.Should().BeNull();
-        }
-
         public class TestTenantInsertParameters : IEnumerable<object[]>
         {
             public IEnumerator<object[]> GetEnumerator()
@@ -583,33 +472,6 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             }
 
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-        }
-
-        [Trait("Infraestrutura", "Repositório Leitura MultiTenant")]
-        [Theory(DisplayName = "Deve inserir registro no tenant correto")]
-        [ClassData(typeof(TestTenantInsertParameters))]
-        public async Task Deve_Inserir_Registro_No_Tenant_Correto(TestTenantEntity[] entities, string tenantHost, int expectedEntityInTenant)
-        {
-            //Given
-            var provider = GetProviderConfiguredServicesFromTenantContext(tenantHost)
-                .CreateTenantTestEntitySeedInContext(0);
-
-            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
-            var testWriteRepository = provider.GetRequiredService<ITestTenantWriteRepository>();
-            var testReadRepository = provider.GetRequiredService<ITestTenantReadRepository>();
-
-            //When
-            var tasks = new List<Task>();
-            foreach (var entity in entities)
-            {
-                tasks.Add(testWriteRepository.InsertAsync(entity));
-            }
-            await Task.WhenAll(tasks);
-            await unitOfWork.CommitAsync();
-
-            //Then
-            var result = await testReadRepository.GetAllAsync();
-            result.Should().HaveCount(expectedEntityInTenant);
         }
     }
 }

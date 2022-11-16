@@ -3,9 +3,9 @@ using Optsol.Components.Shared.Notifications;
 
 namespace Optsol.Components.Application.DataTransferObjects
 {
-    public abstract class BaseDataTransferObject : Notifiable<Notification>
+    public abstract class BaseModel : Notifiable<Notification>
     {
-        public abstract void Validate();
+        public virtual void Validate() { }
 
         public void AddNotifications(ValidationResult validationResult)
         {
