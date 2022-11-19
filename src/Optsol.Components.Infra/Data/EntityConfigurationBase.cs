@@ -69,7 +69,7 @@ namespace Optsol.Components.Infra.Data
                     .Property(entity => ((ITenant<TKey>)entity).TenantId)
                     .IsRequired();
 
-                var tenantExpression = CreateExpression(parametrer, "TenantId", "<-#V1cxU2FXSXlVbXc9#->");
+                var tenantExpression = CreateExpression(parametrer, "TenantId", "6025384C-3CF7-4310-AFA9-244507D1FE9B");
 
                 expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
             }
