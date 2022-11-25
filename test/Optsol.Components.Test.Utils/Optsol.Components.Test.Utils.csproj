@@ -13,13 +13,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Optsol.Components.Application\Optsol.Components.Application.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra.ElasticSearch\Optsol.Components.Infra.ElasticSearch.csproj" />
-    <ProjectReference Include="..\..\src\Optsol.Components.Infra.Firebase\Optsol.Components.Infra.Firebase.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra.MongoDB\Optsol.Components.Infra.MongoDB.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra.Storage\Optsol.Components.Infra.Storage.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Service\Optsol.Components.Service.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Shared\Optsol.Components.Shared.csproj" />
+    <ProjectReference Include="..\..\src\Optsol.Components.Infra.PushNotification.Firebase\Optsol.Components.Infra.PushNotification.Firebase.csproj" />
   </ItemGroup>
 </Project>

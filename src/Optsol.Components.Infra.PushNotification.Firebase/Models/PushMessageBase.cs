@@ -1,9 +1,9 @@
 ﻿using Optsol.Components.Domain.Services.Push;
 using Optsol.Components.Domain.ValueObjects;
-using Optsol.Components.Infra.Firebase.Clients;
+using Optsol.Components.Infra.PushNotification.Firebase.Clients;
 using System;
 
-namespace Optsol.Components.Infra.Firebase.Models
+namespace Optsol.Components.Infra.PushNotification.Firebase.Models
 {
     public abstract class PushMessageBase : ValueObject, IClient
     {

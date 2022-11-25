@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32228.430
@@ -64,7 +64,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Ela
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Redis", "src\Optsol.Components.Infra.Redis\Optsol.Components.Infra.Redis.csproj", "{5AEF1FE6-8182-4506-8A27-965863E382DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Firebase", "src\Optsol.Components.Infra.Firebase\Optsol.Components.Infra.Firebase.csproj", "{094EEE1C-8D87-42B5-BC39-363AEA701306}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.PushNotification.Firebase", "src\Optsol.Components.Infra.PushNotification.Firebase\Optsol.Components.Infra.PushNotification.Firebase.csproj", "{094EEE1C-8D87-42B5-BC39-363AEA701306}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.Storage.Test.Integration", "test\Optsol.Components.Infra.Storage.Test.Integration\Optsol.Components.Infra.Storage.Test.Integration.csproj", "{96710F26-608D-4422-89CE-8EF46E12790C}"
 EndProject

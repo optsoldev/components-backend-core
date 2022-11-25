@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Optsol.Components.Domain.Services.Push;
-using Optsol.Components.Infra.Firebase.Models;
+using Optsol.Components.Infra.PushNotification.Firebase.Models;
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Optsol.Components.Domain.Entities;
 
-namespace Optsol.Components.Infra.Firebase.Messaging
+namespace Optsol.Components.Infra.PushNotification.Firebase.Messaging
 {
     public class FirebaseMessagingService : IPushService
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Optsol.Components.Infra.Firebase.Models
+namespace Optsol.Components.Infra.PushNotification.Firebase.Models
 {
     public class PushMessage : PushMessageBase
     {

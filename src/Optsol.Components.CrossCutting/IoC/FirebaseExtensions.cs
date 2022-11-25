@@ -3,10 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Services.Push;
 using Optsol.Components.Shared.Settings;
 using System;
-using Optsol.Components.Infra.Firebase.Messaging;
+using Optsol.Components.Infra.PushNotification.Firebase.Messaging;
 using Google.Apis.Auth.OAuth2;
 using System.IO;
-using Optsol.Components.Infra.Firebase.Mapper;
+using Optsol.Components.Infra.PushNotification.Firebase.Mapper;
 using FirebaseAdmin;
 
 namespace Microsoft.Extensions.DependencyInjection
