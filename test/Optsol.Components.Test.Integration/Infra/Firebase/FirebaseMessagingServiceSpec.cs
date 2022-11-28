@@ -14,7 +14,7 @@ namespace Optsol.Components.Test.Integration.Infra.Firebase
         private static ServiceProvider GetProviderConfiguredServicesFromContext()
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile($@"Settings/appsettings.firebase.json")
+                .AddJsonFile($@"Settings/appsettings.firebase.admin.json")
                 .Build();
 
             var services = new ServiceCollection();

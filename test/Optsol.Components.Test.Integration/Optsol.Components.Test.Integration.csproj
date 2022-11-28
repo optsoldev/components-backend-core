@@ -6,7 +6,6 @@
   <ItemGroup>
     <None Remove="Settings\appsettings.cors.json" />
     <None Remove="Settings\appsettings.elastic.json" />
-    <None Remove="Settings\appsettings.firebase.json" />
     <None Remove="Settings\appsettings.mongo.json" />
     <None Remove="Settings\appsettings.rabbitmq.json" />
     <None Remove="Settings\appsettings.redis.json" />
@@ -15,9 +14,6 @@
     <None Remove="Settings\Firebase\firebase-mobem.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Settings\appsettings.firebase.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Settings\appsettings.rabbitmq.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -31,9 +27,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Settings\appsettings.mongo.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Settings\Firebase\firebase-mobem.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
