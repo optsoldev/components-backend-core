@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Services.Push;
-using Optsol.Components.Shared.Settings;
 using System;
 using Optsol.Components.Infra.PushNotification.Firebase.Messaging;
 using Google.Apis.Auth.OAuth2;
 using System.IO;
 using Optsol.Components.Infra.PushNotification.Firebase.Mapper;
 using FirebaseAdmin;
+using Newtonsoft.Json;
+using Optsol.Components.Infra.PushNotification.Firebase.Settings;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -25,7 +26,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             FirebaseApp.Create(new AppOptions
             {
-                Credential = GoogleCredential.FromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, firebaseSettings.FileKeyJson))
+                Credential = GoogleCredential.FromJson(JsonConvert.SerializeObject(firebaseSettings))
             });
 
             return services;
