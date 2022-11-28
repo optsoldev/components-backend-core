@@ -1,4 +1,4 @@
-﻿using Optsol.Components.Infra.Firebase.Models;
+﻿using Optsol.Components.Infra.PushNotification.Firebase.Models;
 using System.Collections.Generic;
 
 namespace Optsol.Components.Test.Utils.Data.Entities.ValueObjects

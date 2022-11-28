@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Optsol.Components.Infra.Firebase.Models
+namespace Optsol.Components.Infra.PushNotification.Firebase.Models
 {
     public class PushMessageData : PushMessage
     {

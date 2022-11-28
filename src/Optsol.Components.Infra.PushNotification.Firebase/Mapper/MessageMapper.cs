@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FirebaseAdmin.Messaging;
-using Optsol.Components.Infra.Firebase.Models;
+using Optsol.Components.Infra.PushNotification.Firebase.Models;
 
-namespace Optsol.Components.Infra.Firebase.Mapper
+namespace Optsol.Components.Infra.PushNotification.Firebase.Mapper
 {
     public class MessageMapper : Profile
     {
