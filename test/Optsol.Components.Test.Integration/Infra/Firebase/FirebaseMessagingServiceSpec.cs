@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Domain.Services.Push;
+using Optsol.Components.Infra.PushNotification.Firebase.Settings;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,7 +16,7 @@ namespace Optsol.Components.Test.Integration.Infra.Firebase
         private static ServiceProvider GetProviderConfiguredServicesFromContext()
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile($@"Settings/appsettings.firebase.admin.json")
+                .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
                 .Build();
 
             var services = new ServiceCollection();

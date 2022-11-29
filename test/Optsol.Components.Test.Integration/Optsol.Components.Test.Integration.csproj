@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
+    <UserSecretsId>da7b8690-ff5d-47ec-bdd5-c22790aba113</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Settings\appsettings.cors.json" />
