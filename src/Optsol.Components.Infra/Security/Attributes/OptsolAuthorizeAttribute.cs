@@ -81,7 +81,7 @@ namespace Optsol.Components.Infra.Security.Attributes
                 return;
             }
 
-            context.Result = new UnauthorizedResult();
+            //context.Result = new UnauthorizedResult();
         }
     }
 }

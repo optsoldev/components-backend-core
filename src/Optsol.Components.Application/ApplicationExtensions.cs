@@ -1,12 +1,6 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Optsol.Components.Application.Services;
-using Optsol.Components.Shared.Exceptions;
-using Optsol.Components.Shared.Settings;
 using System;
-using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

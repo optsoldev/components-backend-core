@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MongoDB.Bson.Serialization;
-using MongoDB.Bson.Serialization.Serializers;
 using Optsol.Components.Domain.Data;
 using Optsol.Components.Infra.MongoDB.Context;
 using Optsol.Components.Infra.MongoDB.Repositories;
 using Optsol.Components.Infra.MongoDB.UoW;
 using Optsol.Components.Shared.Settings;
-using System;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

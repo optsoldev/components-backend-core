@@ -10,12 +10,9 @@ using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
-using Refit;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -135,11 +132,11 @@ namespace Microsoft.Extensions.DependencyInjection
                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddMicrosoftIdentityWebApi(options =>
                {
-                   configuration.GetSection("AzureAdB2C").Bind(options);
+                   configuration?.GetSection("AzureAdB2C").Bind(options);
                    options.TokenValidationParameters.NameClaimType = "name";
                }, options =>
                {
-                   configuration.GetSection("AzureAdB2C").Bind(options);
+                   configuration?.GetSection("AzureAdB2C").Bind(options);
                });
 
 

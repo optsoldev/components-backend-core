@@ -25,17 +25,17 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var serviceTypes = Assembly
                 .GetAssembly(typeof(TInterface))
-                .GetTypes()
+                ?.GetTypes()
                 .Where(t => (t.IsInterface || t.IsAbstract) && (!namespaces.Any() || namespaces.Any(@namespace => t.Namespace.Contains(@namespace))));
 
-            foreach (var serviceType in serviceTypes)
+            foreach (var serviceType in serviceTypes!)
             {
                 var implementationTypes = Assembly
                     .GetAssembly(typeof(TImplementation))
-                    .GetTypes()
+                    ?.GetTypes()
                     .Where(t => t.IsClass && !t.IsAbstract && (t.IsSubclassOf(serviceType) || t.GetInterfaces().Contains(serviceType)));
 
-                foreach (var implementationType in implementationTypes)
+                foreach (var implementationType in implementationTypes!)
                 {
                     addService(serviceType, implementationType);
                 }

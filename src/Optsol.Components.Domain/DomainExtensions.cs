@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Optsol.Components.Domain.Notifications;
+﻿using Optsol.Components.Domain.Notifications;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
