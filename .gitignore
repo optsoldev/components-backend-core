@@ -363,3 +363,4 @@ dist
 
 # Rider
 .idea/
+.DS_Store

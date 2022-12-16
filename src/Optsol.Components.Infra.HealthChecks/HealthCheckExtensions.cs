@@ -74,9 +74,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var hasRedis = redisSettings is not null;
             if (hasRedis)
             {
-                redisSettings.Validate();
+                redisSettings?.Validate();
 
-                builder.AddRedis(redisSettings.ConnectionString, name: "redis", tags: new string[] { "cache", "log" });
+                builder.AddRedis(redisSettings!.ConnectionString, name: "redis", tags: new[] { "cache", "log" });
             }
 
             return builder;
