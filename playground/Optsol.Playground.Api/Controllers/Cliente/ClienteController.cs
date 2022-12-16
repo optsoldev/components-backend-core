@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Components.Service.Controllers;
 using Optsol.Components.Service.Responses;
 using Optsol.Playground.Application.Searchs;
@@ -10,6 +9,7 @@ using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
 using System;
 using System.Threading.Tasks;
+using Optsol.Components.Infra.Security.AzureB2C.Security.Attributes;
 
 namespace Optsol.Playground.Api.Controllers
 {

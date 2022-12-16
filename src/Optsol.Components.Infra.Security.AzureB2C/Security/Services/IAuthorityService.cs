@@ -1,8 +1,7 @@
-﻿using Optsol.Components.Infra.Security.Models;
+﻿using Optsol.Components.Infra.Security.AzureB2C.Security.Models;
 using Optsol.Components.Shared.Settings;
-using System.Threading.Tasks;
 
-namespace Optsol.Components.Infra.Security.Services
+namespace Optsol.Components.Infra.Security.AzureB2C.Security.Services
 {
     public interface IAuthorityService
     {

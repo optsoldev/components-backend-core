@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
 using RabbitMQ.Client;
-using System.Net.Http;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

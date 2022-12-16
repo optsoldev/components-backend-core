@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Optsol.Components.Infra.Bus.Delegates;
-using Optsol.Components.Infra.Bus.Events;
-using Optsol.Components.Infra.Bus.Services;
 using Optsol.Components.Infra.RabbitMQ.Connections;
 using Optsol.Components.Shared.Settings;
 using Polly;
@@ -10,6 +7,9 @@ using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using System;
 using System.Net.Sockets;
+using Optsol.Components.Infra.Bus.Delegates;
+using Optsol.Components.Infra.Bus.Events;
+using Optsol.Components.Infra.Bus.Services;
 
 namespace Optsol.Components.Infra.RabbitMQ.Services
 {

@@ -18,7 +18,6 @@
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
     <ProjectReference Include="..\Optsol.Playground.Application\Optsol.Playground.Application.csproj" />
   </ItemGroup>
 </Project>

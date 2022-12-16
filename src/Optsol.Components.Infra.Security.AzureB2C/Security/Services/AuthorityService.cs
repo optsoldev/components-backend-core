@@ -1,11 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using Optsol.Components.Infra.Security.Models;
+using Optsol.Components.Infra.Security.AzureB2C.Security.Models;
 using Optsol.Components.Shared.Settings;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace Optsol.Components.Infra.Security.Services
+namespace Optsol.Components.Infra.Security.AzureB2C.Security.Services
 {
     public class AuthorityService : IAuthorityService
     {

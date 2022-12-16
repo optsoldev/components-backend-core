@@ -8,6 +8,7 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Optsol.Components.Infra.Bus\Optsol.Components.Infra.Bus.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
   </ItemGroup>
 </Project>
