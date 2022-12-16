@@ -40,9 +40,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var hasSecurity = securitySettings is not null;
             if (hasSecurity)
             {
-                securitySettings.Validate();
+                securitySettings?.Validate();
 
-                if (securitySettings.Development.Not())
+                if (securitySettings!.Development.Not())
                 {
                 }
             }
@@ -57,11 +57,11 @@ namespace Microsoft.Extensions.DependencyInjection
             var hasAzureStorage = storageSettings is not null;
             if (hasAzureStorage)
             {
-                storageSettings.Validate();
+                storageSettings?.Validate();
 
                 builder
-                    .AddAzureBlobStorage(storageSettings.ConnectionString, name: "azure-storage-blob", tags: new string[] { "blob", "file" })
-                    .AddAzureQueueStorage(storageSettings.ConnectionString, name: "azure-storage-queue", tags: new string[] { "queue", "event" });
+                    .AddAzureBlobStorage(storageSettings?.ConnectionString!, name: "azure-storage-blob", tags: new string[] { "blob", "file" })
+                    .AddAzureQueueStorage(storageSettings?.ConnectionString!, name: "azure-storage-queue", tags: new string[] { "queue", "event" });
             }
 
             return builder;
@@ -89,9 +89,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var hasElastic = elasticSettings is not null;
             if (hasElastic)
             {
-                elasticSettings.Validate();
+                elasticSettings?.Validate();
 
-                builder.AddElasticsearch(elasticSettings.Uri, name: "elasticsearch", tags: new string[] { "db", "nosql", "log" });
+                builder.AddElasticsearch(elasticSettings?.Uri!, name: "elasticsearch", tags: new string[] { "db", "nosql", "log" });
             }
 
             return builder;
@@ -114,12 +114,12 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var mongoSettings = configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
 
-            var hasMongoDB = mongoSettings is not null;
-            if (hasMongoDB)
+            var hasMongoDb = mongoSettings is not null;
+            if (hasMongoDb)
             {
-                mongoSettings.Validate();
+                mongoSettings?.Validate();
 
-                builder.AddMongoDb(mongoSettings.ConnectionString, name: "mongodb", tags: new string[] { "db", "database", "nosql", "data" });
+                builder.AddMongoDb(mongoSettings?.ConnectionString!, name: "mongodb", tags: new string[] { "db", "database", "nosql", "data" });
             }
 
             return builder;
@@ -129,18 +129,18 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var rabbitSettings = configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
 
-            var hasRabbitMQ = rabbitSettings is not null;
-            if (hasRabbitMQ)
+            var hasRabbitMq = rabbitSettings is not null;
+            if (hasRabbitMq)
             {
-                rabbitSettings.Validate();
+                rabbitSettings?.Validate();
 
-                var connectionFactory = new ConnectionFactory()
+                var connectionFactory = new ConnectionFactory
                 {
-                    HostName = rabbitSettings.HostName,
-                    Port = rabbitSettings.Port
+                    HostName = rabbitSettings!.HostName,
+                    Port = rabbitSettings!.Port
                 };
 
-                builder.AddRabbitMQ(fac => connectionFactory, name: "rabbitmq", tags: new string[] { "queue", "exchage", "event" });
+                builder.AddRabbitMQ(fac => connectionFactory, name: "rabbitmq", tags: new[] { "queue", "exchage", "event" });
             }
 
             return builder;
@@ -181,9 +181,9 @@ namespace Microsoft.Extensions.DependencyInjection
 
             if (hasSecurity)
             {
-                securitySettings.Validate();
+                securitySettings?.Validate();
 
-                if (securitySettings.Development)
+                if (securitySettings!.Development)
                 {
                     return endpoint;
                 }
