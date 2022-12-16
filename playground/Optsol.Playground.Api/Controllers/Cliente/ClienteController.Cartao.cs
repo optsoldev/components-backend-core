@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Optsol.Components.Infra.Security.Attributes;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using System;
 using System.Threading.Tasks;
+using Optsol.Components.Infra.Security.AzureB2C.Security.Attributes;
 
 namespace Optsol.Playground.Api.Controllers
 {

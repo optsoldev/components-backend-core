@@ -5,17 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
-using Optsol.Components.Infra.Security.Models;
-using Optsol.Components.Infra.Security.Services;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Shared.Settings;
-using Refit;
-using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using Optsol.Components.Infra.Security.AzureB2C.Security.Models;
+using Optsol.Components.Infra.Security.AzureB2C.Security.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -135,11 +132,11 @@ namespace Microsoft.Extensions.DependencyInjection
                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                .AddMicrosoftIdentityWebApi(options =>
                {
-                   configuration.GetSection("AzureAdB2C").Bind(options);
+                   configuration?.GetSection("AzureAdB2C").Bind(options);
                    options.TokenValidationParameters.NameClaimType = "name";
                }, options =>
                {
-                   configuration.GetSection("AzureAdB2C").Bind(options);
+                   configuration?.GetSection("AzureAdB2C").Bind(options);
                });
 
 

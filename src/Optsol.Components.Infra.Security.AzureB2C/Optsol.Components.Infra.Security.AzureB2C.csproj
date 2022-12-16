@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Version>2.2.0</Version>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
+    </ItemGroup>
+
+</Project>

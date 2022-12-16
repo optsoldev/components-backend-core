@@ -54,7 +54,6 @@ namespace Optsol.Playground.Api
 
             services.AddCors(Configuration);
             services.AddSecurity(Configuration);
-            services.AddSwagger(Configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -68,9 +67,7 @@ namespace Optsol.Playground.Api
             app.UseSecurity(Configuration);
 
             app.UseCors(Configuration);
-
-            app.UseSwagger(Configuration, env.IsDevelopment());
-
+            
             app.UseHealthChecks(Configuration);
 
             app.UseEndpoints(endpoints =>

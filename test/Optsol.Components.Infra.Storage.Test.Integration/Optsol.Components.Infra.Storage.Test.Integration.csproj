@@ -27,7 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Optsol.Components.CrossCutting\Optsol.Components.Infra.CrossCutting.csproj" />
       <ProjectReference Include="..\Optsol.Components.Test.Utils\Optsol.Components.Test.Utils.csproj" />
     </ItemGroup>
 

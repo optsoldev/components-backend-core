@@ -1,18 +1,13 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Optsol.Components.Service.Filters;
 using Optsol.Components.Service.Middlewares;
 using Optsol.Components.Service.Responses;
 using Optsol.Components.Service.Transformers;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 using System.Linq;
-using System.Net;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

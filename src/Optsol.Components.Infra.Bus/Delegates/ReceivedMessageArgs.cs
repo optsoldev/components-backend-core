@@ -1,5 +1,4 @@
 ﻿using Optsol.Components.Infra.Bus.Events;
-using System;
 
 namespace Optsol.Components.Infra.Bus.Delegates
 {

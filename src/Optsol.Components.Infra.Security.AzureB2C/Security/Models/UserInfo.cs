@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
-namespace Optsol.Components.Infra.Security.Models
+namespace Optsol.Components.Infra.Security.AzureB2C.Security.Models
 {
     public class UserInfo
     {

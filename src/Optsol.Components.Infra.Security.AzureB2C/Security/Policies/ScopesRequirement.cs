@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
-namespace Optsol.Components.Infra.Security.Policies
+namespace Optsol.Components.Infra.Security.AzureB2C.Security.Policies
 {
     public class ScopesRequirement : AuthorizationHandler<ScopesRequirement>, IAuthorizationRequirement
     {
@@ -23,10 +20,10 @@ namespace Optsol.Components.Infra.Security.Policies
                 return Task.CompletedTask;
             }
 
-            Claim scopeClaim = context?.User?.FindFirst(ClaimConstants.Scp);
+            var scopeClaim = context.User.FindFirst(ClaimConstants.Scp);
 
             if (scopeClaim == null)
-                scopeClaim = context?.User?.FindFirst(ClaimConstants.Scope);
+                scopeClaim = context.User.FindFirst(ClaimConstants.Scope);
 
             if (scopeClaim != null && scopeClaim.Value.Split(' ').Intersect(requirement._acceptedScopes).Any())
             {
