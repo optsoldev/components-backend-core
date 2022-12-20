@@ -27,9 +27,9 @@
 
 ## Changes
 
-Optsol.Components.Infra.MongoDB
-    -Minimum server version is now MongoDB 3.6+
+### 2.2.1
 
-Optsol.Components.Infra
+- ApiControllerBase: Removido os atributos de Authorize. Fica como responsabilidade do desenvolvedor adicionar na controller que herda. Seguir o exmeplo do Playground.
+- AddSwagger: Removido a extension.
 
-- Breaking Changes do [Microsoft.EntityFrameworkCore](https://docs.microsoft.com/pt-br/ef/core/what-is-new/ef-core-6.0/breaking-changes)
+
