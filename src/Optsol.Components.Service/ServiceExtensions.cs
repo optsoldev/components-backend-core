@@ -63,7 +63,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return app;
         }
 
-        public static IApplicationBuilder UseException(this IApplicationBuilder app, ILoggerFactory loggerFactory, bool isDevelopment)
+        public static IApplicationBuilder UseException(this IApplicationBuilder app, bool isDevelopment)
         {
             if (isDevelopment)
             {
