@@ -89,7 +89,6 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetByIdAsync(Guid id)
         {
@@ -101,7 +100,6 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetAllAsync()
         {
@@ -113,7 +111,6 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public virtual async Task<IActionResult> InsertAsync([FromBody] TRequest data)
@@ -127,7 +124,6 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         public virtual async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] TRequest data)
@@ -142,7 +138,6 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         {
@@ -171,8 +166,6 @@ namespace Optsol.Components.Service.Controllers
         }
 
         [HttpPost("paginated")]
-        [Authorize(AuthenticationSchemes = "Bearer")]
-
         [ProducesResponseType(200)]
         public virtual async Task<IActionResult> GetAllAsync(SearchRequest<TSearch> search)
         {
