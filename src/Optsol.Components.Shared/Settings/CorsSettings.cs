@@ -5,16 +5,12 @@ namespace Optsol.Components.Shared.Settings
 {
     public class CorsSettings : BaseSettings
     {
-        public string DefaultPolicy { get; set; }
-
+        public CorsPolicy DefaultPolicy { get; set; }
         public IEnumerable<CorsPolicy> Policies { get; set; }
 
         public override void Validate()
         {
-            if (DefaultPolicy.IsEmpty())
-            {
-                ShowingException(nameof(DefaultPolicy));
-            }
+            DefaultPolicy.Validate();
         }
     }
 
@@ -22,7 +18,7 @@ namespace Optsol.Components.Shared.Settings
     {
         public string Name { get; set; }
 
-        public Dictionary<string, string> Origins { get; set; } = new Dictionary<string, string>();
+        public string[] Origins { get; set; } = Array.Empty<string>();
 
         public override void Validate()
         {

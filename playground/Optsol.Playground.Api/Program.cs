@@ -63,10 +63,10 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseCors(configuration);
+
 app.UseSecurity(configuration);
 
-app.UseCors(configuration);
-            
 app.UseHealthChecks(configuration);
 
 app.UseEndpoints(endpoints =>
