@@ -35,7 +35,6 @@ namespace Optsol.Components.Infra.Security.AzureB2C.Security.Attributes
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            
             var contextUser = context.HttpContext.User;
 
             if (!contextUser.IsAuthenticated()) context.Result = new UnauthorizedResult();

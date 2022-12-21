@@ -7,7 +7,7 @@ using Optsol.Playground.Application.ViewModels.CartaoCredito;
 
 namespace Optsol.Playground.Api.Controllers.Clientes;
 
-//[Authorize]
+[Authorize]
 public partial class ClientesController
 {
     [OptsolAuthorize("cliente.buscar")]

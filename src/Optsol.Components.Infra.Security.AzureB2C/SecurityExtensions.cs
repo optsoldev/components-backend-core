@@ -59,7 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 logger?.LogInformation("Configurando Segurança Local (IsDevelopment: true)");
 
-                app.UseRemoteEndpoint();
+                app.UseRemoteEndpoint(securitySettings);
             }
             else
             {
@@ -188,7 +188,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
     public static class ApplicationBuilderExtensions
     {
-        private static Claim[] GetLocalClaims()
+        private static Claim[] GetLocalClaims(SecuritySettings settings)
         {
             return new[]
             {
@@ -201,11 +201,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 new Claim("http://schemas.microsoft.com/claims/authnmethodsreferences", "password"),
                 new Claim("auth_time", "1449516934"),
                 new Claim("http://schemas.microsoft.com/identity/claims/identityprovider", "devtest"),
-                new Claim( "extension_SecurityClaim", "ClaimTeste;ClaimTeste2")
+                new Claim(  settings.SecurityClaim, string.Join(';',settings.DevelopmentClaims))
             };
         }
 
-        public static IApplicationBuilder UseRemoteEndpoint(this IApplicationBuilder app)
+        public static IApplicationBuilder UseRemoteEndpoint(this IApplicationBuilder app, SecuritySettings settings)
         {
             app.UseEndpoints(endpoints =>
             {
@@ -216,7 +216,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     var token = new JwtSecurityToken(
                         LocalSecuritySettings.Issuer,
                         LocalSecuritySettings.Audience,
-                        GetLocalClaims(),
+                        GetLocalClaims(settings),
                         DateTime.Now,
                         DateTime.UtcNow.AddYears(1),
                         signingCredentials);
