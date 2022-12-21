@@ -82,28 +82,13 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
         {
-            //services
-            //    .AddRefitClient<IAuthorityClient>()
-            //    .ConfigureHttpClient(config => config.BaseAddress = new Uri(securitySettings.Authority.Endpoint));
-
             services.AddTransient<IAuthorityService, AuthorityService>();
-
             return services;
         }
 
         public static IConfiguration GetRemoteConfiguration(this IServiceCollection services, SecuritySettings securitySettings)
         {
             var provider = services.BuildServiceProvider();
-
-            //var clientOauth = provider.GetRequiredService<IAuthorityService>()
-            //    .GetClient(securitySettings.Authority.ClientId)
-            //    .GetAwaiter()
-            //    .GetResult();
-
-            //if (clientOauth == null)
-            //{
-            //    return null;
-            //}
 
             OauthClient clientOauth = CreateOauthClient(securitySettings);
 
@@ -145,6 +130,8 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection ConfigureLocalSecurity(this IServiceCollection services)
         {
+            services.AddTransient<IAuthorityService, AuthorityService>();
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer("Bearer", options =>
                 {
@@ -177,10 +164,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             return Task.CompletedTask;
                         },
 
-                        OnMessageReceived = (context) =>
-                        {
-                            return Task.FromResult(0);
-                        }
+                        OnMessageReceived = _ => Task.FromResult(0)
                     };
                 });
 
@@ -217,9 +201,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 new Claim("http://schemas.microsoft.com/claims/authnmethodsreferences", "password"),
                 new Claim("auth_time", "1449516934"),
                 new Claim("http://schemas.microsoft.com/identity/claims/identityprovider", "devtest"),
-                new Claim("optsol", "cliente.buscar"),
-                new Claim("optsol", "cliente.buscar.todos"),
-                new Claim("optsol", "cliente.inserir")
+                new Claim( "extension_SecurityClaim", "ClaimTeste;ClaimTeste2")
             };
         }
 

@@ -14,8 +14,8 @@ using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Api.Controllers.Clientes
 {
+    [Authorize]
     [ApiController]
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[Controller]")]
     public partial class ClientesController : ApiControllerBase<ClientePessoaFisicaEntity, ClienteRequest, ClienteResponse, ClienteSearchDto>
     {
@@ -30,8 +30,8 @@ namespace Optsol.Playground.Api.Controllers.Clientes
             _clienteServiceApplication = clienteServiceApplication;
             _clienteServiceApplication.Includes = clientes => clientes.Include(x => x.Cartoes);
         }
-
-        [OptsolAuthorize("aplicacao.visualizar")]
+        
+        [OptsolAuthorize("ClaimTeste", "ClaimTeste2")]
         public override Task<IActionResult> GetByIdAsync(Guid id)
         {
             return base.GetByIdAsync(id);
