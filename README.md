@@ -32,4 +32,15 @@
 - ApiControllerBase: Removido os atributos de Authorize. Fica como responsabilidade do desenvolvedor adicionar na controller que herda. Seguir o exmeplo do Playground.
 - AddSwagger: Removido a extension.
 
+### 2.3.0
+
+#### Optsol.Components.Infra.Security.AzureB2C 
+
+- Ajustes no OptsolAuthorize para receber claims corretamente.
+- Adicionado propriedade no SecuritySettings para o nome da claim de segurança **SecurityClaim**.
+- Adicionado propriedade no SecuritySettings para desenvolvimento **DevelopmentClaims**, um array de claims para testes.
+
+#### Optsol.Components.Service
+
+- Simplificação na extension AddCors e UseCors para utilização de uma DefaultPolicy e outras Policies. 
 
