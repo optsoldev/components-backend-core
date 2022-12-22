@@ -6,8 +6,10 @@ namespace Optsol.Components.Shared.Settings
     public class SecuritySettings : BaseSettings
     {
         public bool Development { get; set; }
-
+        
+        public string[] DevelopmentClaims { get; set; }
         public string ApiName { get; set; }
+        public string SecurityClaim { get; set; }
 
         public Authority Authority { get; set; }
 
