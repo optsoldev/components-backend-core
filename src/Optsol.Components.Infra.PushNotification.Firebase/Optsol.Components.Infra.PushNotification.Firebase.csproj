@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-         <Version>2.3.0</Version>
+         <Version>2.3.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FirebaseAdmin" Version="2.2.0" />

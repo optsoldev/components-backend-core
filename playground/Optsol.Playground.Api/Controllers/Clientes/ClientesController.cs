@@ -16,6 +16,7 @@ namespace Optsol.Playground.Api.Controllers.Clientes
 {
     [Authorize]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/[Controller]")]
     public partial class ClientesController : ApiControllerBase<ClientePessoaFisicaEntity, ClienteRequest, ClienteResponse, ClienteSearchDto>
     {
