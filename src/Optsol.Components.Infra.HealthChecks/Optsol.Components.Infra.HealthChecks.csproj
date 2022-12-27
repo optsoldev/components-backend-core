@@ -4,18 +4,18 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>2.3.0</Version>
+        <Version>2.3.2</Version>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.AzureStorage" Version="6.0.4" />
+        <PackageReference Include="AspNetCore.HealthChecks.AzureStorage" Version="6.1.2" />
         <PackageReference Include="AspNetCore.HealthChecks.Elasticsearch" Version="6.0.2" />
         <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="6.0.2" />
         <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.2" />
+        <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="6.0.4" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.4" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
-        <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.4" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.5" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+        <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.5" />
      
     </ItemGroup>
     <ItemGroup>

@@ -35,17 +35,19 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddCors(options =>
             {
-                options.AddPolicy(corsSettings.DefaultPolicy.Name, policy =>
+                options.AddPolicy(corsSettings!.DefaultPolicy!.Name!, policy =>
                 {
                     policy.WithOrigins(corsSettings.DefaultPolicy.Origins)
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
+
+                if (corsSettings.Policies is null) return;
                 
                 foreach (var cors in corsSettings.Policies)
                 {
-                    options.AddPolicy(cors.Name, policy =>
+                    options.AddPolicy(cors.Name!, policy =>
                     {
                         policy.WithOrigins(cors.Origins)
                             .AllowAnyHeader()
@@ -53,7 +55,7 @@ namespace Microsoft.Extensions.DependencyInjection
                             .AllowCredentials();
                     });
                     cors.Validate();
-                }   
+                }
                 
             });
 
@@ -67,11 +69,13 @@ namespace Microsoft.Extensions.DependencyInjection
             var corsSettings = configuration.GetSection(nameof(CorsSettings)).Get<CorsSettings>()
                 ?? throw new CorsSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
 
-            app.UseCors(corsSettings.DefaultPolicy.Name);
+            app.UseCors(corsSettings!.DefaultPolicy!.Name!);
+
+            if (corsSettings.Policies is null) return app;
             
             foreach (var cors in corsSettings.Policies)
             {
-                app.UseCors(cors.Name);
+                app.UseCors(cors.Name!);
             }
             
             return app;

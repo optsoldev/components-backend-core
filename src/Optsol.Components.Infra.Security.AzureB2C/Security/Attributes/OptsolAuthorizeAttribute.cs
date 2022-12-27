@@ -1,7 +1,7 @@
-﻿using IdentityServer4.Extensions;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
@@ -42,7 +42,7 @@ namespace Optsol.Components.Infra.Security.AzureB2C.Security.Attributes
             if (claims.Length == 0) return;
 
             var securityClaim = contextUser.Claims
-                .FirstOrDefault(c => c.Type.Equals(securitySettings.SecurityClaim));
+                .FirstOrDefault(c => c.Type.Equals("extension_SecurityClaim"));
 
             var userClaims = securityClaim?.Value.Split(";");
 
