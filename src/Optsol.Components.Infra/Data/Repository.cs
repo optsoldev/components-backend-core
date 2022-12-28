@@ -37,10 +37,10 @@ namespace Optsol.Components.Infra.Data
             this.Set = context.Set<TEntity>();
 
             _tenantProvider = tenantProvider;
-            ValidateTentatProvider();
+            ValidateTenantProvider();
         }
 
-        private void ValidateTentatProvider()
+        private void ValidateTenantProvider()
         {
             TypeFilter filter = new(InterfaceFilter);
 

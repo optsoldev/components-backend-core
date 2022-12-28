@@ -29,8 +29,9 @@ builder.Services.AddContext<PlaygroundContext>(options =>
     options
         .ConfigureConnectionString(connectionString.Value)
         .ConfigureMigrationsAssemblyName("Optsol.Playground.Infra")
-        .EnabledLogging();
-
+        .EnabledLogging()
+        .WithTenant();
+x
     options
         .ConfigureRepositories<IClientePessoaFisicaReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
 

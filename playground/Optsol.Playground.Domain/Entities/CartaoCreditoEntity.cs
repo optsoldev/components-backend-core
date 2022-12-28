@@ -4,7 +4,7 @@ using Optsol.Playground.Domain.Validators;
 
 namespace Optsol.Playground.Domain.Entities
 {
-    public class CartaoCreditoEntity : Entity<Guid>
+    public class CartaoCreditoEntity : Entity<Guid>, ITenant<Guid>
     {
         public string NomeCliente { get; private set; }
 
@@ -61,6 +61,12 @@ namespace Optsol.Playground.Domain.Entities
         private bool ObterSituacaoValidade()
         {
             return DateTime.Now.Subtract(Validade).TotalDays < 0;
+        }
+
+        public Guid TenantId { get; private set; }
+        public void SetTenantId(Guid tenantId)
+        {
+            TenantId = tenantId;
         }
     }
 }

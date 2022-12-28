@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Infra.Data.Provider;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -34,7 +33,7 @@ namespace Optsol.Components.Infra.Data
             LambdaExpression expression = null;
             var parametrer = Expression.Parameter(typeof(TEntity), "entity");
             expression = ConfigureDeletableParams(builder, expression, parametrer);
-            expression = ConfigureTentantParams(builder, expression, parametrer);
+            expression = ConfigureTenantParams(builder, expression, parametrer);
 
             BuildQueryFilter(builder, expression);
         }
@@ -59,7 +58,7 @@ namespace Optsol.Components.Infra.Data
             }
         }
 
-        private LambdaExpression ConfigureTentantParams(EntityTypeBuilder<TEntity> builder, LambdaExpression expression, ParameterExpression parametrer)
+        private LambdaExpression ConfigureTenantParams(EntityTypeBuilder<TEntity> builder, LambdaExpression expression, ParameterExpression parametrer)
         {
             if (typeof(TEntity).GetInterfaces().Contains(typeof(ITenant<TKey>)))
             {
