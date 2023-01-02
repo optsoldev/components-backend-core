@@ -24,12 +24,16 @@ public class RepositoryOptions
         _services = services;
     }
 
+    /// <summary>
+    /// Add TenantCommandInterceptor to EF Interceptors.
+    /// </summary>
+    /// <returns>Instance of <see cref="RepositoryOptions"/></returns>
     public RepositoryOptions WithTenant()
     {
         var provider = _services.BuildServiceProvider();
-        var loggedUser = provider.GetService<ILoggedUser>();
+        var loggedUser = provider.GetService<ILoggedUser<Guid>>();
         
-        Interceptors.Add(new TenantCommandInterceptor(loggedUser));
+        Interceptors.Add(new TenantCommandInterceptor<Guid>(loggedUser));
 
         return this;
     }

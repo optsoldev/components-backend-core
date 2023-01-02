@@ -4,6 +4,7 @@ using Optsol.Components.Domain.Entities;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.Extensions.DependencyInjection;
 using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
 
 namespace Optsol.Components.Infra.Data
@@ -68,7 +69,7 @@ namespace Optsol.Components.Infra.Data
                     .Property(entity => ((ITenant<TKey>)entity).TenantId)
                     .IsRequired();
 
-                var tenantExpression = CreateExpression(parametrer, "TenantId", "6025384C-3CF7-4310-AFA9-244507D1FE9B");
+                var tenantExpression = CreateExpression(parametrer, "TenantId", new Guid(InfraConstants.TenantId));
 
                 expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
             }

@@ -2,14 +2,12 @@ using System;
 
 namespace Microsoft.Extensions.DependencyInjection.Securities;
 
-public interface ILoggedUser
+public interface ILoggedUser<out TKey>
 {
-    Guid GetApplicationId();
+    TKey GetApplicationId();
     string GetUsername();
-    Guid GetUserExternalId();
-    Guid GetTenantId();
+    TKey GetUserExternalId();
+    TKey GetTenantId();
     string[] GetClaims();
     string GetClaim(string key);
-    void SetToken(string jwtToken);
-    string GetToken();
 }

@@ -13,8 +13,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
     {
-        services.AddTransient<IAuthorityService, AuthorityService>();
-        return services;
+       return services;
     }
 
     public static IConfiguration GetRemoteConfiguration(this IServiceCollection services, SecuritySettings securitySettings)
@@ -61,8 +60,6 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection ConfigureLocalSecurity(this IServiceCollection services)
     {
-        services.AddTransient<IAuthorityService, AuthorityService>();
-            
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer("Bearer", options =>
             {

@@ -55,10 +55,7 @@ namespace Optsol.Components.Infra.Data
 
         private static bool InterfaceFilter(Type typeObj, Object criteriaObj)
         {
-            if (typeObj.ToString() == criteriaObj.ToString())
-                return true;
-            else
-                return false;
+            return typeObj.ToString() == criteriaObj.ToString();
         }
 
         public virtual Task<TEntity> GetByIdAsync(TKey id)
@@ -262,7 +259,7 @@ namespace Optsol.Components.Infra.Data
             return searchResult;
         }
 
-        private static IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize)
+        protected static IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, uint page, uint? pageSize = 10)
         {
             var skip = --page * (pageSize ?? 0);
 
