@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Securities;
+using Optsol.Components.Infra.Data.Provider;
 
 namespace Optsol.Components.Infra.Security.AzureB2C.Security.Services;
 
-public class LoggedUser : ILoggedUser<Guid>
+public class LoggedUser : ILoggedUser<Guid>, ITenantProvider
 {
     private readonly IHttpContextAccessor httpContextAccessor;
 
@@ -11,23 +12,21 @@ public class LoggedUser : ILoggedUser<Guid>
     {
         this.httpContextAccessor = httpContextAccessor;
     }
-    public Guid GetApplicationId()
+    public Guid ApplicationId
         => new Guid(GetClaimValue("azp"));
-    
-    public string GetUsername()
+    public string Username
         => GetClaimValue("name");
-    
-    public Guid GetUserExternalId()
+    public Guid UserExternalId
         => new Guid(GetClaimValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"));
-
-    public Guid GetTenantId()
+    public Guid TenantId
     {
-        var claimValue = GetClaimValue("extension_TenantClaim");
-        return string.IsNullOrWhiteSpace(claimValue) ? default : new Guid(claimValue);
+        get
+        {
+            var claimValue = GetClaimValue("extension_TenantClaim");
+            return string.IsNullOrWhiteSpace(claimValue) ? default : new Guid(claimValue);
+        }
     }
-
-    public string[] GetClaims() => GetClaimValue("extension_SecurityClaim").Split(";");
-
+    public string[] Claims => GetClaimValue("extension_SecurityClaim").Split(";");
     public string GetClaim(string key) => GetClaimValue(key);
     private string GetClaimValue(string key)
     {

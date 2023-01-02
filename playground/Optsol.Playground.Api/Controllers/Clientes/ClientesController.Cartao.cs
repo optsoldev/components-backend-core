@@ -13,7 +13,7 @@ public partial class ClientesController
     [HttpGet("{id}/cartao-credito")]
     public async Task<IActionResult> GetClienteComCartaoCredito(Guid id)
     {
-        var cliente = await _clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
+        var cliente = await clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
      
         return CreateResult(cliente);
     }
@@ -21,7 +21,7 @@ public partial class ClientesController
     [HttpPost("cartao-credito")]
     public async Task<IActionResult> InserirCartaoNoCliente([FromBody] CartaoCreditoRequest insertCartaoCreditoViewModel)
     {
-        await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
+        await clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
      
         return CreateResult();
     }

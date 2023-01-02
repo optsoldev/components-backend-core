@@ -4,10 +4,14 @@ namespace Microsoft.Extensions.DependencyInjection.Securities;
 
 public interface ILoggedUser<out TKey>
 {
-    TKey GetApplicationId();
-    string GetUsername();
-    TKey GetUserExternalId();
-    TKey GetTenantId();
-    string[] GetClaims();
+    TKey ApplicationId { get; }
+    string Username { get; }
+    TKey UserExternalId { get; }
+    string[] Claims { get; }
     string GetClaim(string key);
+}
+
+public interface ILoggedUser : ILoggedUser<Guid>
+{
+    
 }

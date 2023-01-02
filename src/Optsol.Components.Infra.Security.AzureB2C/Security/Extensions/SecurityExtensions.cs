@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Securities;
 using Microsoft.Extensions.Logging;
+using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Infra.Security.AzureB2C.Security.Services;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
@@ -17,6 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddHttpContextAccessor();
             
             services.AddScoped<ILoggedUser<Guid>, LoggedUser>();
+            services.AddScoped<ITenantProvider, LoggedUser>();
 
             return services;
         }

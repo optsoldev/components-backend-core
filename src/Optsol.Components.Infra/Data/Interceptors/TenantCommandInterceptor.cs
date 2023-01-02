@@ -1,21 +1,20 @@
-using System;
 using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Securities;
+using Optsol.Components.Infra.Data.Provider;
 
-namespace Optsol.Components.Infra.Data;
+namespace Optsol.Components.Infra.Data.Interceptors;
 
 public class TenantCommandInterceptor<TKey> : DbCommandInterceptor
 {
-    private readonly ILoggedUser<TKey> loggedUser;
+    private readonly ITenantProvider<TKey> tenantProvider;
     
-    public TenantCommandInterceptor(ILoggedUser<TKey> loggedUser)
+    public TenantCommandInterceptor(ITenantProvider<TKey> tenantProvider)
     {
-        this.loggedUser = loggedUser;
+        this.tenantProvider = tenantProvider;
     }
 
     public override InterceptionResult<DbDataReader> ReaderExecuting(DbCommand command, CommandEventData eventData, InterceptionResult<DbDataReader> result)
@@ -33,7 +32,8 @@ public class TenantCommandInterceptor<TKey> : DbCommandInterceptor
 
     private void ModifyCommand(IDbCommand command)
     {
-        var tenantId = loggedUser.GetTenantId();
+        var tenantId = tenantProvider.TenantId;
+        
         if(tenantId is not null)
             command.CommandText = command.CommandText.Replace(InfraConstants.TenantId.ToLower(), tenantId.ToString());
     }

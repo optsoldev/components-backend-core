@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Securities;
 using Optsol.Components.Infra.Data;
+using Optsol.Components.Infra.Data.Interceptors;
+using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Shared.Exceptions;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -31,7 +33,7 @@ public class RepositoryOptions
     public RepositoryOptions WithTenant()
     {
         var provider = _services.BuildServiceProvider();
-        var loggedUser = provider.GetService<ILoggedUser<Guid>>();
+        var loggedUser = provider.GetService<ITenantProvider>();
         
         Interceptors.Add(new TenantCommandInterceptor<Guid>(loggedUser));
 

@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Test.Utils.Data.Entities;
-using System;
 
-namespace Optsol.Components.Test.Utils.Repositories.Tenant
+namespace Optsol.Components.Test.Utils.Data.Repositories.Tenants
 {
     public class TestTenantWriteRepository : Repository<TestTenantEntity, Guid>, ITestTenantWriteRepository
     {
