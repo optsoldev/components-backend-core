@@ -24,12 +24,15 @@ var connectionString = configuration.GetSection("ConnectionStrings:DefaultConnec
 
 builder.Services.AddHealthChecks(configuration);
 
+builder.Services.AddLoggedUser();
+
 builder.Services.AddContext<PlaygroundContext>(options =>
 {
     options
         .ConfigureConnectionString(connectionString.Value)
         .ConfigureMigrationsAssemblyName("Optsol.Playground.Infra")
-        .EnabledLogging();
+        .EnabledLogging()
+        .WithTenant();
 
     options
         .ConfigureRepositories<IClientePessoaFisicaReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");

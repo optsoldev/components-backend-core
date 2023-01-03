@@ -1,14 +1,28 @@
 ﻿using System.Security.Principal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Securities;
 using Microsoft.Extensions.Logging;
+using Optsol.Components.Infra.Data.Provider;
+using Optsol.Components.Infra.Security.AzureB2C.Security.Services;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class SecurityStoreExtensions
     {
+        public static IServiceCollection AddLoggedUser(this IServiceCollection services)
+        {
+            services.AddHttpContextAccessor();
+            
+            services.AddScoped<ILoggedUser<Guid>, LoggedUser>();
+            services.AddScoped<ITenantProvider, LoggedUser>();
+
+            return services;
+        }
+        
         public static IServiceCollection AddSecurity(this IServiceCollection services, IConfiguration configuration)
         {
             var provider = services.BuildServiceProvider();
@@ -19,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
             securitySettings.Validate();
 
             services.AddSingleton(securitySettings);
-
+ 
             if (securitySettings.Development)
             {
                 services.ConfigureLocalSecurity();

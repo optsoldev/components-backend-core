@@ -7,14 +7,13 @@ using Optsol.Playground.Application.ViewModels.CartaoCredito;
 
 namespace Optsol.Playground.Api.Controllers.Clientes;
 
-[Authorize]
 public partial class ClientesController
 {
     [OptsolAuthorize("cliente.buscar")]
     [HttpGet("{id}/cartao-credito")]
     public async Task<IActionResult> GetClienteComCartaoCredito(Guid id)
     {
-        var cliente = await _clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
+        var cliente = await clienteServiceApplication.GetClienteComCartaoCreditoAsync(id);
      
         return CreateResult(cliente);
     }
@@ -22,7 +21,7 @@ public partial class ClientesController
     [HttpPost("cartao-credito")]
     public async Task<IActionResult> InserirCartaoNoCliente([FromBody] CartaoCreditoRequest insertCartaoCreditoViewModel)
     {
-        await _clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
+        await clienteServiceApplication.InserirCartaoNoClienteAsync(insertCartaoCreditoViewModel);
      
         return CreateResult();
     }
