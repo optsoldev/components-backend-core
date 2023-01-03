@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Domain.Entities;
-using Optsol.Components.Infra.Data.Provider;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.Extensions.DependencyInjection;
 using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
 
 namespace Optsol.Components.Infra.Data
@@ -34,7 +34,7 @@ namespace Optsol.Components.Infra.Data
             LambdaExpression expression = null;
             var parametrer = Expression.Parameter(typeof(TEntity), "entity");
             expression = ConfigureDeletableParams(builder, expression, parametrer);
-            expression = ConfigureTentantParams(builder, expression, parametrer);
+            expression = ConfigureTenantParams(builder, expression, parametrer);
 
             BuildQueryFilter(builder, expression);
         }
@@ -59,7 +59,7 @@ namespace Optsol.Components.Infra.Data
             }
         }
 
-        private LambdaExpression ConfigureTentantParams(EntityTypeBuilder<TEntity> builder, LambdaExpression expression, ParameterExpression parametrer)
+        private LambdaExpression ConfigureTenantParams(EntityTypeBuilder<TEntity> builder, LambdaExpression expression, ParameterExpression parametrer)
         {
             if (typeof(TEntity).GetInterfaces().Contains(typeof(ITenant<TKey>)))
             {
@@ -69,7 +69,7 @@ namespace Optsol.Components.Infra.Data
                     .Property(entity => ((ITenant<TKey>)entity).TenantId)
                     .IsRequired();
 
-                var tenantExpression = CreateExpression(parametrer, "TenantId", "6025384C-3CF7-4310-AFA9-244507D1FE9B");
+                var tenantExpression = CreateExpression(parametrer, "TenantId", new Guid(InfraConstants.TenantId));
 
                 expression = Expression.Lambda<Func<TEntity, bool>>(Expression.AndAlso(expression.Body, tenantExpression.Body), tenantExpression.Parameters);
             }

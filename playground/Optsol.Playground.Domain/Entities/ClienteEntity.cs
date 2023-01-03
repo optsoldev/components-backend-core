@@ -7,8 +7,9 @@ using System.Linq;
 
 namespace Optsol.Playground.Domain.Entities
 {
-    public class ClienteEntity : AggregateRoot
+    public class ClienteEntity : AggregateRoot, ITenant<Guid>
     {
+        public Guid TenantId { get; private set; }
         public NomeValueObject Nome { get; private set; }
 
         public EmailValueObject Email { get; private set; }
@@ -67,6 +68,12 @@ namespace Optsol.Playground.Domain.Entities
         private bool ExisteCartoesValidos()
         {
             return Cartoes.Any(a => a.Valido);
+        }
+
+
+        public void SetTenantId(Guid tenantId)
+        {
+            TenantId = tenantId;
         }
     }
 

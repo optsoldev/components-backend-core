@@ -25,6 +25,21 @@
 [build-shield]: https://dev.azure.com/optsoldev/OPTSOL%20Components%20Backend/_apis/build/status/optsoldev.components-backend-core?branchName=main
 [build-url]: https://dev.azure.com/optsoldev/OPTSOL%20Components%20Backend/_build/latest?definitionId=4&branchName=main
 
+## Sample
+
+Requisitos para rodar a sample: 
+
+Um banco SQL. Você pode rodar o comando abaixo com o docker instalado para rodar uma instancia do azure-sql-edge. 
+```
+docker run --cap-add SYS_PTRACE -e 'ACCEPT_EULA=1' -e 'MSSQL_SA_PASSWORD=OPTSOL@dev' -p 1433:1433 --name azuresqledge -d mcr.microsoft.com/azure-sql-edge
+```
+
+Rodar a migration
+
+``dotnet ef database update --context PlaygroundContext``
+
+Lembre-se de rodar o Optsol.Playground.Api com ``"ASPNETCORE_ENVIRONMENT": "Development"``.
+
 ## Changes
 
 ### 2.2.1
@@ -44,3 +59,8 @@
 
 - Simplificação na extension AddCors e UseCors para utilização de uma DefaultPolicy e outras Policies. 
 
+### 2.3.3
+
+- Criação do Interceptor para o uso de Tenant na SDK.
+- Melhoria do RepositoryOptions para injetar esse interceptor e permitir outros serem adicionados.
+- Criação do LoggedUser para leitura dos tokens. 

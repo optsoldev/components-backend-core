@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Optsol.Playground.Infra.Data.Context;
 
@@ -11,9 +12,10 @@ using Optsol.Playground.Infra.Data.Context;
 namespace Optsol.Playground.Infra.Migrations
 {
     [DbContext(typeof(PlaygroundContext))]
-    partial class PlaygroundContextModelSnapshot : ModelSnapshot
+    [Migration("20230102144740_AddTenantIdToCliente")]
+    partial class AddTenantIdToCliente
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

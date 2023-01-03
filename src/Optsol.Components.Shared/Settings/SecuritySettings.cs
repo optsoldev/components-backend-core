@@ -9,8 +9,6 @@ namespace Optsol.Components.Shared.Settings
         
         public string[] DevelopmentClaims { get; set; }
         public string ApiName { get; set; }
-        public string SecurityClaim { get; set; }
-
         public Authority Authority { get; set; }
 
         public override void Validate()
