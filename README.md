@@ -59,7 +59,7 @@ Lembre-se de rodar o Optsol.Playground.Api com ``"ASPNETCORE_ENVIRONMENT": "Deve
 
 - Simplificação na extension AddCors e UseCors para utilização de uma DefaultPolicy e outras Policies. 
 
-### 2.3.1
+### 2.3.3
 
 - Criação do Interceptor para o uso de Tenant na SDK.
 - Melhoria do RepositoryOptions para injetar esse interceptor e permitir outros serem adicionados.
