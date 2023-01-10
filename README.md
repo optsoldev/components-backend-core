@@ -65,4 +65,7 @@ Lembre-se de rodar o Optsol.Playground.Api com ``"ASPNETCORE_ENVIRONMENT": "Deve
 - Melhoria do RepositoryOptions para injetar esse interceptor e permitir outros serem adicionados.
 - Criação do LoggedUser para leitura dos tokens. 
 
+<<<<<<< HEAD
 Teste 9
+=======
+>>>>>>> main
