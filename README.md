@@ -63,4 +63,6 @@ Lembre-se de rodar o Optsol.Playground.Api com ``"ASPNETCORE_ENVIRONMENT": "Deve
 
 - Criação do Interceptor para o uso de Tenant na SDK.
 - Melhoria do RepositoryOptions para injetar esse interceptor e permitir outros serem adicionados.
-- Criação do LoggedUser para leitura dos tokens. 
+- Criação do LoggedUser para leitura dos tokens.
+
+Testando
