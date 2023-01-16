@@ -1,5 +1,4 @@
 using Optsol.Components.Domain.ValueObjects;
-using Optsol.Playground.Domain.Validators;
 
 namespace Optsol.Playground.Domain.ValueObjects
 {

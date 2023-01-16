@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Optsol.Components.Infra.Data.Provider;
 
 namespace Optsol.Components.Infra.Data.Interceptors;
 

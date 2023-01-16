@@ -8,13 +8,13 @@ using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
-using Optsol.Playground.Domain.Repositories.Cliente;
 using Optsol.Playground.Domain.ValueObjects;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Optsol.Playground.Domain.Clientes.Repositories;
 using Xunit;
 
 namespace Optsol.Playground.Test
@@ -87,7 +87,7 @@ namespace Optsol.Playground.Test
         }
 
         [Trait("Playground", "Application")]
-        [Fact(DisplayName = "Deve inserir cartão no cliente")]
+        [Fact(DisplayName = "Deve inserir cartï¿½o no cliente")]
         public async Task Deve_Inserir_Cartao_No_Cliente()
         {
             //Given
@@ -95,7 +95,7 @@ namespace Optsol.Playground.Test
             var clienteServiceApplication = _serviceProvider.GetRequiredService<IClienteServiceApplication>();
             var uow = _serviceProvider.GetRequiredService<IUnitOfWork>();
 
-            var ClientePessoaFisicaEntity = new ClientePessoaFisicaEntity(new NomeValueObject("Weslley", "Bruno"), new EmailValueObject("weslley@outlook.com.br"), "000.000.000-00");
+            var ClientePessoaFisicaEntity = new ClientePessoaFisica(new NomeValueObject("Weslley", "Bruno"), new EmailValueObject("weslley@outlook.com.br"), "000.000.000-00");
 
             CartaoCreditoRequest insertCartaoCreditoViewModel = new()
             {

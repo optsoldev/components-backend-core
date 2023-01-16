@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Optsol.Components.Infra.Security.AzureB2C.Security.Attributes;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;

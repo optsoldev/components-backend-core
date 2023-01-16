@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Optsol.Components.Shared.Settings
 {
@@ -33,6 +34,11 @@ namespace Optsol.Components.Shared.Settings
             if (Name.IsEmpty())
             {
                 ShowingException(nameof(Name));
+            }
+
+            if (Origins.Any(origin => origin.Last() == '/'))
+            {
+                throw new ArgumentException("Url origin shouldn`t end with /", paramName:$"Origin");
             }
         }
     }

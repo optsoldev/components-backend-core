@@ -1,11 +1,10 @@
- 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Optsol.Playground.Application.Mappers.CartaoCredito;
 using Optsol.Playground.Application.Services.Cliente;
-using Optsol.Playground.Domain.Repositories.Cliente;
+using Optsol.Playground.Domain.Clientes.Repositories;
 using Optsol.Playground.Infra.Data.Context;
 using Optsol.Playground.Infra.Data.Repositories.Cliente;
 

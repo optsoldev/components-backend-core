@@ -1,10 +1,11 @@
 using System;
 using Optsol.Components.Domain.Entities;
-using Optsol.Playground.Domain.Validators;
+using Optsol.Playground.Domain.Clientes;
+using Optsol.Playground.Domain.Clientes.Validators;
 
 namespace Optsol.Playground.Domain.Entities
 {
-    public class CartaoCreditoEntity : Entity<Guid>, ITenant<Guid>
+    public class CartaoCredito : Entity<Guid>
     {
         public string NomeCliente { get; private set; }
 
@@ -14,29 +15,23 @@ namespace Optsol.Playground.Domain.Entities
 
         public DateTime Validade { get; private set; }
 
-        public bool Valido
-        {
-            get
-            {
-                return ObterSituacaoValidade();
-            }
-        }
+        public bool Valido => ObterSituacaoValidade();
 
         public Guid ClienteId { get; private set; }
 
-        public ClienteEntity Cliente { get; private set; }
+        public Cliente Cliente { get; private set; }
 
-        public CartaoCreditoEntity()
+        public CartaoCredito()
         {
         }
 
-        public CartaoCreditoEntity(Guid id, string nomeCliente, string numero, string codigoVerificacao, DateTime validade, Guid clienteId)
+        public CartaoCredito(Guid id, string nomeCliente, string numero, string codigoVerificacao, DateTime validade, Guid clienteId)
             : this(nomeCliente, numero, codigoVerificacao, validade, clienteId)
         {
             Id = id;
         }
 
-        public CartaoCreditoEntity(string nomeCliente, string numero, string codigoVerificacao, DateTime validade, Guid clienteId)
+        public CartaoCredito(string nomeCliente, string numero, string codigoVerificacao, DateTime validade, Guid clienteId)
         {
             NomeCliente = nomeCliente;
             Numero = numero;
@@ -48,7 +43,7 @@ namespace Optsol.Playground.Domain.Entities
             Validate();
         }
 
-        public override void Validate()
+        public sealed override void Validate()
         {
             var validation = new CartaoCreditoEntityContract();
             var resultOfValidation = validation.Validate(this);
@@ -58,15 +53,7 @@ namespace Optsol.Playground.Domain.Entities
             base.Validate();
         }
 
-        private bool ObterSituacaoValidade()
-        {
-            return DateTime.Now.Subtract(Validade).TotalDays < 0;
-        }
-
-        public Guid TenantId { get; private set; }
-        public void SetTenantId(Guid tenantId)
-        {
-            TenantId = tenantId;
-        }
+        private bool ObterSituacaoValidade() => DateTime.Now.Subtract(Validade).TotalDays < 0;
+        
     }
 }
