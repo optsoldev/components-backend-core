@@ -8,7 +8,7 @@ namespace Optsol.Playground.Application.Mappers.CartaoCredito
     {
         public CartaoCreditoViewModelToEntityMapper()
         {
-            CreateMap<CartaoCreditoRequest, CartaoCreditoEntity>();
+            CreateMap<CartaoCreditoRequest, Domain.Entities.CartaoCredito>();
         }
     }
 }

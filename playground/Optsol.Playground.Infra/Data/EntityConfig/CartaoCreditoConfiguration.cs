@@ -6,9 +6,9 @@ using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Infra.Data.EntityConfig
 {
-    public class CartaoCreditoConfiguration : EntityConfigurationBase<CartaoCreditoEntity, Guid>
+    public class CartaoCreditoConfiguration : EntityConfigurationBase<CartaoCredito, Guid>
     {
-        public override void Configure(EntityTypeBuilder<CartaoCreditoEntity> builder)
+        public override void Configure(EntityTypeBuilder<CartaoCredito> builder)
         {
             builder.ToTable("CartaoCredito");
 

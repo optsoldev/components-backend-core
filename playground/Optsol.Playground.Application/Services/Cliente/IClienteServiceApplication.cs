@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Optsol.Playground.Application.Services.Cliente
 {
-    public interface IClienteServiceApplication : IBaseServiceApplication<ClientePessoaFisicaEntity>
+    public interface IClienteServiceApplication : IBaseServiceApplication<ClientePessoaFisica>
     {
         Task<ClienteComCartoesViewModel> GetClienteComCartaoCreditoAsync(Guid id);
 

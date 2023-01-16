@@ -2,13 +2,14 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Infra.Data;
+using Optsol.Playground.Domain.Clientes;
 using Optsol.Playground.Domain.Entities;
 
 namespace Optsol.Playground.Infra.Data.EntityConfig
 {
-    public class ClienteConfiguration : EntityConfigurationBase<ClienteEntity, Guid>
+    public class ClienteConfiguration : EntityConfigurationBase<Cliente, Guid>
     {
-        public override void Configure(EntityTypeBuilder<ClienteEntity> builder)
+        public override void Configure(EntityTypeBuilder<Cliente> builder)
         {
             builder.ToTable("Cliente");
 
@@ -55,9 +56,9 @@ namespace Optsol.Playground.Infra.Data.EntityConfig
         }
     }
 
-    public class ClientePessoaFisicaConfiguration : EntityConfigurationBase<ClientePessoaFisicaEntity, Guid>
+    public class ClientePessoaFisicaConfiguration : EntityConfigurationBase<ClientePessoaFisica, Guid>
     {
-        public override void Configure(EntityTypeBuilder<ClientePessoaFisicaEntity> builder)
+        public override void Configure(EntityTypeBuilder<ClientePessoaFisica> builder)
         {
             builder.ToTable("ClientePessoaFisica");
 
@@ -67,9 +68,9 @@ namespace Optsol.Playground.Infra.Data.EntityConfig
         }
     }
 
-    public class ClientePessoaJuridicaConfiguration : EntityConfigurationBase<ClientePessoaJuridicaEntity, Guid>
+    public class ClientePessoaJuridicaConfiguration : EntityConfigurationBase<ClientePessoaJuridica, Guid>
     {
-        public override void Configure(EntityTypeBuilder<ClientePessoaJuridicaEntity> builder)
+        public override void Configure(EntityTypeBuilder<ClientePessoaJuridica> builder)
         {
             builder.ToTable("ClientePessoaJuridica");
 

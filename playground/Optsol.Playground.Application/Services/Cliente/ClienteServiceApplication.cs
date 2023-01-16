@@ -6,13 +6,13 @@ using Optsol.Components.Infra.UoW;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using Optsol.Playground.Application.ViewModels.Cliente;
 using Optsol.Playground.Domain.Entities;
-using Optsol.Playground.Domain.Repositories.Cliente;
 using System;
 using System.Threading.Tasks;
+using Optsol.Playground.Domain.Clientes.Repositories;
 
 namespace Optsol.Playground.Application.Services.Cliente
 {
-    public class ClienteServiceApplication : BaseServiceApplication<ClientePessoaFisicaEntity>, IClienteServiceApplication
+    public class ClienteServiceApplication : BaseServiceApplication<ClientePessoaFisica>, IClienteServiceApplication
     {
         protected readonly IClientePessoaFisicaReadRepository _clienteReadRepository;
         protected readonly IClientePessoaFisicaWriteRepository _clienteWriteRepository;
@@ -43,7 +43,7 @@ namespace Optsol.Playground.Application.Services.Cliente
 
             var clienteEntity = await _clienteReadRepository.GetByIdAsync(insertCartaoCreditoViewModel.ClienteId);
 
-            var entity = _mapper.Map<CartaoCreditoEntity>(insertCartaoCreditoViewModel);
+            var entity = _mapper.Map<CartaoCredito>(insertCartaoCreditoViewModel);
             entity.Validate();
             if (CheckInvalidFromNotifiable(insertCartaoCreditoViewModel)) return;
 
