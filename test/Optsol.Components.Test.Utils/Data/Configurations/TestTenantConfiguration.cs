@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Optsol.Components.Infra.Data;
-using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Test.Utils.Data.Entities;
 using System;
 

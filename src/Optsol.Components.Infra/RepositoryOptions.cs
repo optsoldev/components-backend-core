@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.DependencyInjection.Securities;
-using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.Data.Interceptors;
-using Optsol.Components.Infra.Data.Provider;
 using Optsol.Components.Shared.Exceptions;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public class RepositoryOptions
 {
-    private readonly IServiceCollection _services;
+    private readonly IServiceCollection services;
 
     internal bool InMemoryEnabled { get; private set; }
 
@@ -23,7 +20,7 @@ public class RepositoryOptions
 
     public RepositoryOptions(IServiceCollection services)
     {
-        _services = services;
+        this.services = services;
     }
 
     /// <summary>
@@ -32,7 +29,7 @@ public class RepositoryOptions
     /// <returns>Instance of <see cref="RepositoryOptions"/></returns>
     public RepositoryOptions WithTenant()
     {
-        var provider = _services.BuildServiceProvider();
+        var provider = services.BuildServiceProvider();
         var loggedUser = provider.GetService<ITenantProvider>();
         
         Interceptors.Add(new TenantCommandInterceptor<Guid>(loggedUser));
@@ -96,7 +93,7 @@ public class RepositoryOptions
 
     public RepositoryOptions ConfigureRepositories<TInterface, TImplementation>(params string[] namespaces)
     {
-        _services.RegisterScoped<TInterface, TImplementation>(namespaces);
+        services.RegisterScoped<TInterface, TImplementation>(namespaces);
 
         return this;
     }

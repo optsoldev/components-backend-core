@@ -11,11 +11,6 @@ namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddRemoteSecurity(this IServiceCollection services, SecuritySettings securitySettings)
-    {
-       return services;
-    }
-
     public static IConfiguration GetRemoteConfiguration(this IServiceCollection services, SecuritySettings securitySettings)
     {
         var provider = services.BuildServiceProvider();
@@ -37,12 +32,6 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection ConfigureRemoteSecurity(this IServiceCollection services, IConfiguration configuration)
     {
-        var configurationIsNull = configuration == null;
-        if (configurationIsNull)
-        {
-            return services;
-        }
-
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(options =>

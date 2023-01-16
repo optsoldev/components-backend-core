@@ -9,9 +9,9 @@ namespace Optsol.Playground.Application.Mappers.Cliente
     {
         public ClienteViewModelToEntityMapper()
         {
-            CreateMap<ClienteRequest, ClientePessoaFisicaEntity>()
+            CreateMap<ClienteRequest, ClientePessoaFisica>()
                 .IgnoreAllPropertiesWithAnInaccessibleSetter()
-                .ConstructUsing(source => new ClientePessoaFisicaEntity(
+                .ConstructUsing(source => new ClientePessoaFisica(
                     new NomeValueObject(source.Nome, source.SobreNome),
                     new EmailValueObject(source.Email),
                     source.Documento));

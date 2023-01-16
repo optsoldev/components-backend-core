@@ -14,12 +14,12 @@ namespace Optsol.Playground.Test.Domain.Entities
         public void Deve_Inserir_Cartao_No_Cliente()
         {
             //Given
-            var clienteEntity = new ClientePessoaFisicaEntity(
+            var clienteEntity = new ClientePessoaFisica(
                 new NomeValueObject("Weslley", "Carneiro"),
                 new EmailValueObject("weslley@outlook.com"),
                 "000.000.000-00"
             );
-            var cartaoCreditoEntity = new CartaoCreditoEntity(
+            var cartaoCreditoEntity = new CartaoCredito(
                 "Weslley B. Carneiro",
                 "1326554545455",
                 "985",
@@ -35,18 +35,18 @@ namespace Optsol.Playground.Test.Domain.Entities
         }
 
         [Trait("Playground", "Domain")]
-        [Fact(DisplayName = "Não deve inserir cartao vencido")]
+        [Fact(DisplayName = "Nï¿½o deve inserir cartao vencido")]
         public void Nao_Deve_Inserir_Cartao_Vencido()
         {
             //Given
             var clienteId = Guid.NewGuid();
-            var clienteEntity = new ClientePessoaFisicaEntity(
+            var clienteEntity = new ClientePessoaFisica(
                 clienteId,
                 new NomeValueObject("Weslley", "Carneiro"),
                 new EmailValueObject("weslley@outlook.com"),
                 "000.000.000-00"
             );
-            var cartaoCreditoEntity = new CartaoCreditoEntity(
+            var cartaoCreditoEntity = new CartaoCredito(
                 Guid.NewGuid(),
                 "Weslley B. Carneiro",
                 "1326554545455",
