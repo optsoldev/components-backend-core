@@ -9,7 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Optsol.Components.Infra.Data
 {
@@ -20,22 +22,38 @@ namespace Optsol.Components.Infra.Data
 
         private readonly ILogger logger;
 
+        private readonly ITenantProvider<TKey> tenantProvider;
+
         // ReSharper disable once MemberCanBePrivate.Global
         public CoreContext Context { get; protected set; }
 
         // ReSharper disable once MemberCanBeProtected.Global
         public DbSet<TEntity> Set { get; protected set; }
 
-        public Repository(CoreContext context, ILoggerFactory logger)
+        public Repository(CoreContext context, ILoggerFactory logger, ITenantProvider<TKey> tenantProvider = null)
         {
             this.logger = logger.CreateLogger(nameof(Repository<TEntity, TKey>));
             this.logger?.LogInformation($"Inicializando Repository<{ typeof(TEntity).Name }, { typeof(TKey).Name }>");
 
             Context = context ?? throw new DbContextNullException();
             Set = context.Set<TEntity>();
-            
+
+            this.tenantProvider = tenantProvider;
+            ValidateTenantProvider();
         }
-        
+
+        private void ValidateTenantProvider()
+        {
+            TypeFilter filter = new(InterfaceFilter);
+
+            var @interface = $"{typeof(ITenant<TKey>).Namespace}.{typeof(ITenant<TKey>).Name.Replace("`1", "")}";
+            var repositoryInvalid = typeof(TEntity).FindInterfaces(filter, @interface).Any() && tenantProvider == null;
+            if (!repositoryInvalid) return;
+            
+            logger?.LogError($"Essa entidade implementa ITenant, o ITenantProvider deve ser injetado.");
+            throw new InvalidRepositoryException();
+        }
+
         private static bool InterfaceFilter(Type typeObj, Object criteriaObj)
         {
             if (typeObj.ToString() == criteriaObj.ToString())
@@ -132,6 +150,13 @@ namespace Optsol.Components.Infra.Data
         {
             logger?.LogInformation($"Método: { nameof(InsertAsync) }( {{entity:{ entity.ToJson() }}} )");
 
+            var entityIsITenant = entity is ITenant<TKey>;
+            if (entityIsITenant)
+            {
+                logger?.LogInformation($"Executando SetTenantId({tenantProvider.TenantId}) em InsertAsync");
+                ((ITenant<TKey>)entity).SetTenantId(tenantProvider.TenantId);
+            }
+
             return Set.AddAsync(entity).AsTask();
         }
 
@@ -140,6 +165,8 @@ namespace Optsol.Components.Infra.Data
             logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson() }}} )");
 
             SetDetachedLocalEntity(entity);
+
+            SetTenantIdFromTenantProvider(entity);
 
             Set.Update(entity);
 
@@ -153,6 +180,16 @@ namespace Optsol.Components.Infra.Data
                 return;
 
             Context.Entry(localEntity).State = EntityState.Detached;
+        }
+
+        private void SetTenantIdFromTenantProvider(TEntity entity)
+        {
+            if (entity is not ITenant<TKey> tenant)
+                return;
+
+            logger?.LogInformation($"Executando SetTenantId({tenantProvider.TenantId}) em UpdateAsync");
+            tenant.SetTenantId(tenantProvider.TenantId);
+
         }
 
         public virtual async Task DeleteAsync(TKey id)
