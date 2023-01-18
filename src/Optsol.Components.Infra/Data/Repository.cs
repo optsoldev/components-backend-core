@@ -163,9 +163,7 @@ namespace Optsol.Components.Infra.Data
         public virtual Task UpdateAsync(TEntity entity)
         {
             logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson() }}} )");
-
-            SetDetachedLocalEntity(entity);
-
+            
             SetTenantIdFromTenantProvider(entity);
 
             Set.Update(entity);
