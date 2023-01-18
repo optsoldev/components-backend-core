@@ -348,9 +348,11 @@ namespace Optsol.Components.Test.Integration.Infra.Data
 
             //When
             var updateResult = await testReadRepository.GetByIdAsync(entity.Id);
-            var updateEntity = new TestEntity(updateResult.Id, new NomeValueObject(updateResult.Nome.Nome, "Atualizado"), updateResult.Email);
+            var novoNome = new NomeValueObject(updateResult.Nome.Nome, "Atualizado");
+            
+            updateResult.InserirNome(novoNome);
 
-            await testWriteRepository.UpdateAsync(updateEntity);
+            await testWriteRepository.UpdateAsync(updateResult);
             await unitOfWork.CommitAsync();
 
             //Then
@@ -361,8 +363,8 @@ namespace Optsol.Components.Test.Integration.Infra.Data
             entityResult.Invalid.Should().BeFalse();
             entityResult.Notifications.Should().BeEmpty();
 
-            entityResult.Nome.ToString().Should().Be(updateEntity.Nome.ToString());
-            entityResult.Email.ToString().Should().Be(updateEntity.Email.ToString());
+            entityResult.Nome.ToString().Should().Be(updateResult.Nome.ToString());
+            entityResult.Email.ToString().Should().Be(updateResult.Email.ToString());
             entityResult.Ativo.Should().BeFalse();
         }
 
