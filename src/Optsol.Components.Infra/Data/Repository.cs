@@ -163,7 +163,9 @@ namespace Optsol.Components.Infra.Data
         public virtual Task UpdateAsync(TEntity entity)
         {
             logger?.LogInformation($"Método: { nameof(UpdateAsync) }( {{entity:{ entity.ToJson() }}} )");
-            
+
+            SetDetachedLocalEntity(entity);
+
             SetTenantIdFromTenantProvider(entity);
 
             Set.Update(entity);
@@ -171,7 +173,7 @@ namespace Optsol.Components.Infra.Data
             return Task.CompletedTask;
         }
 
-        private void SetDetachedLocalEntity(TEntity entity)
+        protected void SetDetachedLocalEntity(TEntity entity)
         {
             var localEntity = Set.Local?.FirstOrDefault(localEntity => localEntity.Id.Equals(entity.Id));
             if (localEntity is null)
@@ -180,7 +182,7 @@ namespace Optsol.Components.Infra.Data
             Context.Entry(localEntity).State = EntityState.Detached;
         }
 
-        private void SetTenantIdFromTenantProvider(TEntity entity)
+        protected void SetTenantIdFromTenantProvider(TEntity entity)
         {
             if (entity is not ITenant<TKey> tenant)
                 return;
