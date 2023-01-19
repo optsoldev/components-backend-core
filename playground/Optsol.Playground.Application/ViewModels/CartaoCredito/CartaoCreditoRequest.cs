@@ -1,5 +1,5 @@
-using Optsol.Components.Application.DataTransferObjects;
 using System;
+using Optsol.Components.Application;
 
 namespace Optsol.Playground.Application.ViewModels.CartaoCredito
 {

@@ -1,8 +1,8 @@
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Shared.Notifications;
 using System.Collections.Generic;
+using Optsol.Components.Application;
 
 namespace Optsol.Components.Service.Responses
 {

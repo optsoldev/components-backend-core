@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Notifications;
@@ -22,7 +21,10 @@ namespace Optsol.Components.Application.Services
         protected readonly ILogger _logger;
         protected readonly NotificationContext _notificationContext;
 
-        protected BaseServiceApplication(IMapper mapper, ILoggerFactory logger, NotificationContext notificationContext)
+        protected BaseServiceApplication(
+            IMapper mapper, 
+            ILoggerFactory logger, 
+            NotificationContext notificationContext)
         {
             _logger = logger.CreateLogger(nameof(BaseServiceApplication));
             _logger?.LogInformation($"Inicializando Application Service");
@@ -36,12 +38,12 @@ namespace Optsol.Components.Application.Services
     public class BaseServiceApplication<TEntity> : BaseServiceApplication, IDisposable, IBaseServiceApplication<TEntity>
         where TEntity : AggregateRoot
     {
-        private bool _disposed = false;
+        private bool disposed = false;
 
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly IReadRepository<TEntity, Guid> _readRepository;
         protected readonly IWriteRepository<TEntity, Guid> _writeRepository;
-
+        protected readonly IValidationService _validationService;
         public Func<IQueryable<TEntity>, IQueryable<TEntity>> Includes { get; set; }
 
         public BaseServiceApplication(
@@ -50,7 +52,8 @@ namespace Optsol.Components.Application.Services
             IUnitOfWork unitOfWork,
             IReadRepository<TEntity, Guid> readRepository,
             IWriteRepository<TEntity, Guid> writeRepository,
-            NotificationContext notificationContext) :
+            NotificationContext notificationContext,
+            IValidationService validationService = null) :
             base(mapper, logger, notificationContext)
         {
             _logger?.LogInformation($"Inicializando Application Service<{ typeof(TEntity).Name }, Guid>");
@@ -60,6 +63,8 @@ namespace Optsol.Components.Application.Services
             _writeRepository = writeRepository;
 
             _unitOfWork = unitOfWork ?? throw new UnitOfWorkNullException();
+
+            _validationService = validationService;
         }
 
         public virtual async Task<TResponse> GetByIdAsync<TResponse>(Guid id)
@@ -124,6 +129,18 @@ namespace Optsol.Components.Application.Services
                 return default;
             }
 
+            if (_validationService is not null)
+            {
+                _validationService.SetEntity(entity);
+                _validationService.SetRequestModel(data);
+                _validationService.UpdateValidation();
+            
+                if (CheckInvalidFromNotifiable(entity))
+                {
+                    return default;
+                }
+            }
+            
             await _writeRepository.InsertAsync(entity);
             await CommitAsync();
 
@@ -159,6 +176,18 @@ namespace Optsol.Components.Application.Services
             if (CheckInvalidFromNotifiable(entity))
             {
                 return default;
+            }
+
+            if (_validationService is not null)
+            {
+                _validationService.SetEntity(entity);
+                _validationService.SetRequestModel(data);
+                _validationService.UpdateValidation();
+            
+                if (CheckInvalidFromNotifiable(entity))
+                {
+                    return default;
+                }
             }
 
             await _writeRepository.UpdateAsync(entity);
@@ -228,12 +257,12 @@ namespace Optsol.Components.Application.Services
         {
             _logger?.LogInformation($"Método: { nameof(Dispose) }()");
 
-            if (!_disposed && disposing)
+            if (!disposed && disposing)
             {
                 _unitOfWork.Dispose();
             }
 
-            _disposed = true;
+            disposed = true;
         }
     }
 }

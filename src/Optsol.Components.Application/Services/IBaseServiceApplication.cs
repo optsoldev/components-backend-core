@@ -1,4 +1,3 @@
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Pagination;
 using System;

@@ -1,6 +1,6 @@
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
 using System.Collections.Generic;
+using Optsol.Components.Application;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
 {

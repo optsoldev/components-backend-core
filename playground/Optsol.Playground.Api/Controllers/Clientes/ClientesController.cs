@@ -15,7 +15,7 @@ using Optsol.Playground.Domain.Entities;
 namespace Optsol.Playground.Api.Controllers.Clientes;
 
 [ApiController]
-[Authorize(AuthenticationSchemes = "Bearer")]
+//[Authorize(AuthenticationSchemes = "Bearer")]
 [Route("api/[Controller]")]
 public partial class ClientesController : ApiControllerBase<ClientePessoaFisica, ClienteRequest, ClienteResponse, ClienteSearchDto>
 {

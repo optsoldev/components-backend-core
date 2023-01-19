@@ -1,5 +1,5 @@
 using AutoMapper;
-using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using Optsol.Components.Test.Utils.ViewModels;
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Pagination;
@@ -11,6 +10,7 @@ using Optsol.Components.Shared.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Optsol.Components.Application;
 
 namespace Optsol.Components.Service.Controllers
 {

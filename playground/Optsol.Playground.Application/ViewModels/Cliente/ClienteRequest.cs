@@ -1,4 +1,4 @@
-using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application;
 using Optsol.Playground.Application.Validators;
 
 namespace Optsol.Playground.Application.ViewModels.Cliente
