@@ -18,6 +18,11 @@ namespace Optsol.Components.Test.Utils.Entity.Entities
         {
         }
 
+        public TestEntity(Guid id)
+        {
+            Id = id;
+        }
+
         public TestEntity(Guid id, NomeValueObject nome, EmailValueObject email)
             : this(nome, email)
         {

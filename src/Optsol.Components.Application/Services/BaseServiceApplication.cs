@@ -133,9 +133,9 @@ namespace Optsol.Components.Application.Services
             {
                 _validationService.SetEntity(entity);
                 _validationService.SetRequestModel(data);
-                _validationService.UpdateValidation();
+                _validationService.InsertValidation();
             
-                if (CheckInvalidFromNotifiable(entity))
+                if (_notificationContext.HasNotifications)
                 {
                     return default;
                 }
@@ -184,7 +184,7 @@ namespace Optsol.Components.Application.Services
                 _validationService.SetRequestModel(data);
                 _validationService.UpdateValidation();
             
-                if (CheckInvalidFromNotifiable(entity))
+                if (_notificationContext.HasNotifications)
                 {
                     return default;
                 }
