@@ -11,4 +11,7 @@
     <ProjectReference Include="..\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
     <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DataTransferObjects" />
+  </ItemGroup>
 </Project>

@@ -23,8 +23,11 @@ namespace Optsol.Playground.Application.Services.Cliente
             IUnitOfWork unitOfWork,
             IClientePessoaFisicaWriteRepository clienteWriteRepository,
             IClientePessoaFisicaReadRepository clienteReadRepository,
-            NotificationContext notificationContext)
-            : base(mapper, logger, unitOfWork, clienteReadRepository, clienteWriteRepository, notificationContext)
+            NotificationContext notificationContext,
+            IClientValidationService validationService)
+            : base(mapper, logger, unitOfWork, clienteReadRepository, clienteWriteRepository, 
+                notificationContext,
+                validationService)
         {
             _clienteReadRepository = clienteReadRepository;
             _clienteWriteRepository = clienteWriteRepository;

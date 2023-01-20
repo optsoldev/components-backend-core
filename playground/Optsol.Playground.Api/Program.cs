@@ -37,12 +37,20 @@ builder.Services.AddContext<PlaygroundContext>(options =>
         .ConfigureRepositories<IClientePessoaFisicaReadRepository, ClienteReadRepository>("Optsol.Playground.Domain", "Optsol.Playground.Infra");
 
 });
+
+builder.Services.AddValidations(options =>
+{
+    options.ConfigureServices<IClientValidationService, ClientValidationService>("Optsol.Playground.Application");
+});
+
 builder.Services.AddApplications(options =>
 {
     options
         .ConfigureAutoMapper<CartaoCreditoEntityToViewModelMapper>()
         .ConfigureServices<IClienteServiceApplication, ClienteServiceApplication>("Optsol.Playground.Application");
 });
+
+
 builder.Services.AddDomainNotifications();
 builder.Services.AddServices();
 

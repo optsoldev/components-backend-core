@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Optsol.Components.Application.DataTransferObjects;
+using Optsol.Components.Application;
 using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data;
 
