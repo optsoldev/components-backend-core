@@ -1,6 +1,6 @@
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Pagination;
 using System.Collections.Generic;
+using Optsol.Components.Application;
 
 namespace Optsol.Components.Service.Responses
 {

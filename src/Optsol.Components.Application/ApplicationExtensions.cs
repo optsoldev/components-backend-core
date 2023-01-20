@@ -35,9 +35,16 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             var applicationOptions = new ApplicationOptions(services);
             options?.Invoke(applicationOptions);
-
+            
             services.AddScoped(typeof(IBaseServiceApplication<>), typeof(BaseServiceApplication<>));
-
+            return services;
+        }
+        
+        public static IServiceCollection AddValidations(this IServiceCollection services, Action<ApplicationOptions> options)
+        {
+            var applicationOptions = new ApplicationOptions(services);
+            options?.Invoke(applicationOptions);
+            
             return services;
         }
     }

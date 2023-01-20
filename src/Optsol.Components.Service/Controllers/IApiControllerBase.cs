@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.Data.Pagination;
 using System;
 using System.Threading.Tasks;
+using Optsol.Components.Application;
 
 namespace Optsol.Components.Service.Controllers
 {

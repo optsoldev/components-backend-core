@@ -1,7 +1,7 @@
 using FluentValidation.Results;
 using Optsol.Components.Shared.Notifications;
 
-namespace Optsol.Components.Application.DataTransferObjects
+namespace Optsol.Components.Application
 {
     public abstract class BaseModel : Notifiable<Notification>
     {

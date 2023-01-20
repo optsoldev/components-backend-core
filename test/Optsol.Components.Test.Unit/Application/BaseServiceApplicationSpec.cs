@@ -6,7 +6,6 @@ using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using Optsol.Components.Test.Utils.Entity.Entities;
@@ -20,8 +19,103 @@ using Xunit;
 
 namespace Optsol.Components.Test.Unit.Application
 {
-    public class BaseServiceApplicationSpec
+     public class BaseServiceApplicationSpec
     {
+        [Fact]
+public async Task DeveInvalidarInsertCasoValidationRetorneNotification()
+{
+    var request = new TestRequestDto();
+    var entity = new TestEntity();
+    
+    var mapperMock = new Mock<IMapper>();
+    mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
+
+    var loggerFactoryMock = GetLogger();
+    var notificationContext = new NotificationContext();
+    
+    var unitOfWork = new Mock<IUnitOfWork>();
+    var validationService = new TestValidationService(notificationContext);
+    
+    var application = new BaseServiceApplication<TestEntity>(
+        mapperMock.Object, 
+        loggerFactoryMock.Object, 
+        unitOfWork.Object, 
+        null, 
+        null, 
+        notificationContext, 
+        validationService);
+
+    
+    await application.InsertAsync<TestRequestDto, TestResponseDto>(request);
+
+    notificationContext.HasNotifications.Should().BeTrue();
+    notificationContext.Notifications.Count.Should().Be(1);
+    var hasNotification = notificationContext.Notifications.Any(n => n.Message == "Objeto Inválido - Insert");
+    hasNotification.Should().BeTrue();
+}
+
+[Fact]
+public async Task DeveInvalidarUpdateCasoValidationRetorneNotification()
+{
+    var request = new TestRequestDto();
+    var entity = new TestEntity(Guid.NewGuid());
+    
+    var mapperMock = new Mock<IMapper>();
+    mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
+
+    var loggerFactoryMock = GetLogger();
+    var notificationContext = new NotificationContext();
+    
+    var unitOfWork = new Mock<IUnitOfWork>();
+    var validationService = new TestValidationService(notificationContext);
+    
+    var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
+    readRepository.Setup(setup => setup.GetByIdAsync(entity.Id)).ReturnsAsync(entity);
+
+    var application = new BaseServiceApplication<TestEntity>(
+        mapperMock.Object,
+        loggerFactoryMock.Object,
+        unitOfWork.Object,
+        readRepository.Object,
+        null,
+        notificationContext,
+        validationService);
+    
+    await application.UpdateAsync<TestRequestDto, TestResponseDto>(entity.Id, request);
+
+    notificationContext.HasNotifications.Should().BeTrue();
+    notificationContext.Notifications.Count.Should().Be(1);
+    var hasNotification = notificationContext.Notifications.Any(n => n.Message == "Objeto Inválido - Update");
+    hasNotification.Should().BeTrue();
+}
+
+private Mock<ILoggerFactory> GetLogger()
+{
+    var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
+    var loggerFactoryMock = new Mock<ILoggerFactory>();
+    loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+    return loggerFactoryMock;
+}
+
+class TestValidationService : BaseValidationService, IValidationService
+{
+    public TestValidationService(NotificationContext notificationContext) : base(notificationContext)
+    {
+        
+    }
+    
+    public override void InsertValidation()
+    {
+        _notificationContext.AddNotification("Insert", "Objeto Inválido - Insert");
+    }
+
+    public override void UpdateValidation()
+    {
+        _notificationContext.AddNotification("Update", "Objeto Inválido - Update");
+    }
+}
+
         [Trait("Serviço de Aplicação", "Log de Ocorrências")]
         [Fact(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
         public async Task Deve_Registrar_Logs_No_Servico()

@@ -1,4 +1,3 @@
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Infra.Data.Pagination;
 using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Utils.Contracts;
@@ -6,6 +5,7 @@ using Optsol.Components.Test.Utils.Entity.Entities;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Optsol.Components.Application;
 using static Optsol.Components.Shared.Extensions.PredicateBuilderExtensions;
 
 namespace Optsol.Components.Test.Utils.ViewModels

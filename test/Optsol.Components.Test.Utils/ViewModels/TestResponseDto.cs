@@ -1,6 +1,6 @@
-using Optsol.Components.Application.DataTransferObjects;
 using Optsol.Components.Test.Utils.Contracts;
 using System;
+using Optsol.Components.Application;
 
 namespace Optsol.Components.Test.Utils.ViewModels
 {
