@@ -6,7 +6,6 @@ using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Components.Test.Shared.Logger;
 using Optsol.Components.Test.Utils.Data.Entities.ValueObjecs;
 using Optsol.Components.Test.Utils.Entity.Entities;
@@ -16,253 +15,253 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Optsol.Components.Application;
-using Optsol.Components.Domain.Entities;
 using Xunit;
 
-namespace Optsol.Components.Test.Unit.Application;
-
-public class BaseServiceApplicationSpec
+namespace Optsol.Components.Test.Unit.Application
 {
-    [Trait("Serviço de Aplicação", "Log de Ocorrências")]
-    [Fact(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
-    public async Task Deve_Registrar_Logs_No_Servico()
+     public class BaseServiceApplicationSpec
     {
-        //Given
-        var entity = new TestEntity();
-        entity.Validate();
+        [Fact]
+public async Task DeveInvalidarInsertCasoValidationRetorneNotification()
+{
+    var request = new TestRequestDto();
+    var entity = new TestEntity();
+    
+    var mapperMock = new Mock<IMapper>();
+    mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
 
-        var entity2 = new TestEntity();
-        entity2.Validate();
+    var loggerFactoryMock = GetLogger();
+    var notificationContext = new NotificationContext();
+    
+    var unitOfWork = new Mock<IUnitOfWork>();
+    var validationService = new TestValidationService(notificationContext);
+    
+    var application = new BaseServiceApplication<TestEntity>(
+        mapperMock.Object, 
+        loggerFactoryMock.Object, 
+        unitOfWork.Object, 
+        null, 
+        null, 
+        notificationContext, 
+        validationService);
 
-        var model = new TestResponseDto();
-        model.Nome = "Weslley Carneiro";
-        model.Contato = "weslley.carneiro@optsol.com.br";
+    
+    await application.InsertAsync<TestRequestDto, TestResponseDto>(request);
 
-        var insertModel = new TestRequestDto();
-        insertModel.Nome = "Weslley Carneiro";
-        insertModel.Contato = "weslley.carneiro@optsol.com.br";
+    notificationContext.HasNotifications.Should().BeTrue();
+    notificationContext.Notifications.Count.Should().Be(1);
+    var hasNotification = notificationContext.Notifications.Any(n => n.Message == "Objeto Inválido - Insert");
+    hasNotification.Should().BeTrue();
+}
 
-        var updateModel = new TestRequestDto();
-        updateModel.Nome = "Weslley Carneiro";
-        updateModel.Contato = "weslley.carneiro@optsol.com.br";
+[Fact]
+public async Task DeveInvalidarUpdateCasoValidationRetorneNotification()
+{
+    var request = new TestRequestDto();
+    var entity = new TestEntity(Guid.NewGuid());
+    
+    var mapperMock = new Mock<IMapper>();
+    mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
 
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(mapper => mapper.Map<TestResponseDto>(It.IsAny<TestEntity>())).Returns(model);
-        mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestResponseDto>())).Returns(entity);
-        mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
+    var loggerFactoryMock = GetLogger();
+    var notificationContext = new NotificationContext();
+    
+    var unitOfWork = new Mock<IUnitOfWork>();
+    var validationService = new TestValidationService(notificationContext);
+    
+    var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
+    readRepository.Setup(setup => setup.GetByIdAsync(entity.Id)).ReturnsAsync(entity);
 
-        var unitOfWork = new Mock<IUnitOfWork>();
-        unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(1);
+    var application = new BaseServiceApplication<TestEntity>(
+        mapperMock.Object,
+        loggerFactoryMock.Object,
+        unitOfWork.Object,
+        readRepository.Object,
+        null,
+        notificationContext,
+        validationService);
+    
+    await application.UpdateAsync<TestRequestDto, TestResponseDto>(entity.Id, request);
 
-        var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
-        readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
-        readRepository.Setup(repository => repository.GetAllAsync()).ReturnsAsync(new List<TestEntity> { entity, entity2 });
+    notificationContext.HasNotifications.Should().BeTrue();
+    notificationContext.Notifications.Count.Should().Be(1);
+    var hasNotification = notificationContext.Notifications.Any(n => n.Message == "Objeto Inválido - Update");
+    hasNotification.Should().BeTrue();
+}
 
-        var writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
+private Mock<ILoggerFactory> GetLogger()
+{
+    var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
+    var loggerFactoryMock = new Mock<ILoggerFactory>();
+    loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
 
-        var notificationContextMock = new Mock<NotificationContext>();
+    return loggerFactoryMock;
+}
 
-        var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
-        var loggerFactoryMock = new Mock<ILoggerFactory>();
-        loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
-
-        var service = new BaseServiceApplication<TestEntity>(
-            mapperMock.Object,
-            loggerFactoryMock.Object,
-            unitOfWork.Object,
-            readRepository.Object,
-            writeRepository.Object,
-            notificationContextMock.Object);
-
-        //When
-        await service.GetAllAsync<TestResponseDto>();
-        await service.GetByIdAsync<TestResponseDto>(entity.Id);
-        await service.InsertAsync<TestRequestDto, TestResponseDto>(insertModel);
-        await service.UpdateAsync<TestRequestDto, TestResponseDto>(entity.Id, updateModel);
-        await service.DeleteAsync(entity.Id);
-
-        //Then
-        var msgConstructor = $"Inicializando Application Service<{ entity.GetType().Name }, Guid>";
-        var msgGetByIdAsync = $"Método: GetByIdAsync({{ id:{ entity.Id } }}) Retorno: type { model.GetType().Name }";
-        var msgGetAllAsync = $"Método: GetAllAsync() Retorno: IEnumerable<{ model.GetType().Name }>";
-        var msgInsertAsync = $"Método: InsertAsync({{ viewModel:{ insertModel.ToJson() } }})";
-        var msgInsertAsyncMapper = $"Método: InsertAsync Mapper: { insertModel.GetType().Name } To: { entity.GetType().Name }";
-        var msgUpdateAsync = $"Método: UpdateAsync({{ viewModel:{ updateModel.ToJson() } }})";
-        var msgUpdateAsyncMapper = $"Método: UpdateAsync Mapper: { updateModel.GetType().Name } To: { entity.GetType().Name }";
-        var msgDeleteAsync = $"Método: DeleteAsync({{ id:{ entity.Id } }})";
-
-        logger.Logs.Should().HaveCount(9);
-        logger.Logs.Any(a => a.Equals(msgConstructor)).Should().BeTrue();
-        logger.Logs.Any(a => a.Equals(msgGetByIdAsync)).Should().BeTrue();
-        logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
-        logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
-        logger.Logs.Any(a => a.Contains(msgInsertAsyncMapper)).Should().BeTrue();
-        logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
-        logger.Logs.Any(a => a.Contains(msgUpdateAsyncMapper)).Should().BeTrue();
-        logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
-    }
-
-
-    private class ObterTodosParams : IEnumerable<object[]>
+class TestValidationService : BaseValidationService, IValidationService
+{
+    public TestValidationService(NotificationContext notificationContext) : base(notificationContext)
     {
-        public IEnumerator<object[]> GetEnumerator()
-        {
-            yield return new object[]
-            {
-                new []
-                {
-                    new TestEntity (new NomeValueObject("Isaiah", "Sosa"), new EmailValueObject("justo.eu.arcu@Integervitaenibh.net")),
-                    new TestEntity (new NomeValueObject("Hop", "Gross"), new EmailValueObject("Integer@magna.co.uk")),
-                    new TestEntity (new NomeValueObject("Armand", "Villarreal"), new EmailValueObject("lorem.tristique@posuerevulputatelacus.ca")),
-                },
-                new []
-                {
-                    new TestResponseDto() { Nome = "Isaiah Sosa", Contato = "justo.eu.arcu@Integervitaenibh.net" },
-                    new TestResponseDto() { Nome = "Hop Gross", Contato = "Integer@magna.co.uk" },
-                    new TestResponseDto() { Nome = "Armand Villarreal", Contato = "lorem.tristique@posuerevulputatelacus.ca" }
-                }
-            };
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-    }
-
-    [Trait("Serviço de Aplicação", "Log de Ocorrências")]
-    [Theory(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
-    [ClassData(typeof(ObterTodosParams))]
-    public async Task Deve_Registrar_Logs_No_Servico_Ao_Obter_Todos_Registros(IEnumerable<TestEntity> entities, IEnumerable<TestResponseDto> testResponseDtoList)
-    {
-        //Given
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(mapper => mapper.Map<IEnumerable<TestResponseDto>>(It.IsAny<TestEntity>())).Returns(testResponseDtoList);
-
-        var unitOfWork = new Mock<IUnitOfWork>();
-        unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(1);
-
-        var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
-        readRepository.Setup(setup => setup.GetAllAsync()).ReturnsAsync(entities);
-
-        var writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
-
-        var notificationContextMock = new Mock<NotificationContext>();
-
-        var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
-        var loggerFactoryMock = GetLogger();
         
-        var service = new BaseServiceApplication<TestEntity>(
-            mapperMock.Object,
-            loggerFactoryMock.Object,
-            unitOfWork.Object,
-            readRepository.Object,
-            writeRepository.Object,
-            notificationContextMock.Object);
-
-        //When
-        await service.GetAllAsync<TestResponseDto>();
-
-        //Then
-        var msgConstructor = $"Inicializando Application Service<{ nameof(TestEntity) }, Guid>";
-        var msgGetAllAsync = $"Método: GetAllAsync() Retorno: IEnumerable<{ nameof(TestResponseDto) }>";
-
-
-        logger.Logs.Should().HaveCount(3);
-        logger.Logs.Any(a => a.Equals(msgConstructor)).Should().BeTrue();
-        logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
-    }
-
-    [Fact]
-    public async Task DeveInvalidarInsertCasoValidationRetorneNotification()
-    {
-        var request = new TestRequestDto();
-        var entity = new TestEntity();
-        
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
-
-        var loggerFactoryMock = GetLogger();
-        var notificationContext = new NotificationContext();
-        
-        var unitOfWork = new Mock<IUnitOfWork>();
-        var validationService = new TestValidationService(notificationContext);
-        
-        var application = new BaseServiceApplication<TestEntity>(
-            mapperMock.Object, 
-            loggerFactoryMock.Object, 
-            unitOfWork.Object, 
-            null, 
-            null, 
-            notificationContext, 
-            validationService);
-
-        
-        await application.InsertAsync<TestRequestDto, TestResponseDto>(request);
-
-        notificationContext.HasNotifications.Should().BeTrue();
-        notificationContext.Notifications.Count.Should().Be(1);
-        var hasNotification = notificationContext.Notifications.Any(n => n.Message == "Objeto Inválido - Insert");
-        hasNotification.Should().BeTrue();
     }
     
-    [Fact]
-    public async Task DeveInvalidarUpdateCasoValidationRetorneNotification()
+    public override void InsertValidation()
     {
-        var request = new TestRequestDto();
-        var entity = new TestEntity(Guid.NewGuid());
-        
-        var mapperMock = new Mock<IMapper>();
-        mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
-
-        var loggerFactoryMock = GetLogger();
-        var notificationContext = new NotificationContext();
-        
-        var unitOfWork = new Mock<IUnitOfWork>();
-        var validationService = new TestValidationService(notificationContext);
-        
-        var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
-        readRepository.Setup(setup => setup.GetByIdAsync(entity.Id)).ReturnsAsync(entity);
-
-        var application = new BaseServiceApplication<TestEntity>(
-            mapperMock.Object,
-            loggerFactoryMock.Object,
-            unitOfWork.Object,
-            readRepository.Object,
-            null,
-            notificationContext,
-            validationService);
-        
-        await application.UpdateAsync<TestRequestDto, TestResponseDto>(entity.Id, request);
-
-        notificationContext.HasNotifications.Should().BeTrue();
-        notificationContext.Notifications.Count.Should().Be(1);
-        var hasNotification = notificationContext.Notifications.Any(n => n.Message == "Objeto Inválido - Update");
-        hasNotification.Should().BeTrue();
+        _notificationContext.AddNotification("Insert", "Objeto Inválido - Insert");
     }
 
-    private Mock<ILoggerFactory> GetLogger()
+    public override void UpdateValidation()
     {
-        var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
-        var loggerFactoryMock = new Mock<ILoggerFactory>();
-        loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
-
-        return loggerFactoryMock;
+        _notificationContext.AddNotification("Update", "Objeto Inválido - Update");
     }
+}
 
-    class TestValidationService : BaseValidationService, IValidationService
-    {
-        public TestValidationService(NotificationContext notificationContext) : base(notificationContext)
+        [Trait("Serviço de Aplicação", "Log de Ocorrências")]
+        [Fact(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
+        public async Task Deve_Registrar_Logs_No_Servico()
         {
-            
-        }
-        
-        public override void InsertValidation()
-        {
-            _notificationContext.AddNotification("Insert", "Objeto Inválido - Insert");
+            //Given
+            var entity = new TestEntity();
+            entity.Validate();
+
+            var entity2 = new TestEntity();
+            entity2.Validate();
+
+            var model = new TestResponseDto();
+            model.Nome = "Weslley Carneiro";
+            model.Contato = "weslley.carneiro@optsol.com.br";
+
+            var insertModel = new TestRequestDto();
+            insertModel.Nome = "Weslley Carneiro";
+            insertModel.Contato = "weslley.carneiro@optsol.com.br";
+
+            var updateModel = new TestRequestDto();
+            updateModel.Nome = "Weslley Carneiro";
+            updateModel.Contato = "weslley.carneiro@optsol.com.br";
+
+            var mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(mapper => mapper.Map<TestResponseDto>(It.IsAny<TestEntity>())).Returns(model);
+            mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestResponseDto>())).Returns(entity);
+            mapperMock.Setup(mapper => mapper.Map<TestEntity>(It.IsAny<TestRequestDto>())).Returns(entity);
+
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(1);
+
+            var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
+            readRepository.Setup(repository => repository.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(entity);
+            readRepository.Setup(repository => repository.GetAllAsync()).ReturnsAsync(new List<TestEntity> { entity, entity2 });
+
+            var writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
+
+            var notificationContextMock = new Mock<NotificationContext>();
+
+            var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var service = new BaseServiceApplication<TestEntity>(
+                mapperMock.Object,
+                loggerFactoryMock.Object,
+                unitOfWork.Object,
+                readRepository.Object,
+                writeRepository.Object,
+                notificationContextMock.Object);
+
+            //When
+            await service.GetAllAsync<TestResponseDto>();
+            await service.GetByIdAsync<TestResponseDto>(entity.Id);
+            await service.InsertAsync<TestRequestDto, TestResponseDto>(insertModel);
+            await service.UpdateAsync<TestRequestDto, TestResponseDto>(entity.Id, updateModel);
+            await service.DeleteAsync(entity.Id);
+
+            //Then
+            var msgConstructor = $"Inicializando Application Service<{ entity.GetType().Name }, Guid>";
+            var msgGetByIdAsync = $"Método: GetByIdAsync({{ id:{ entity.Id } }}) Retorno: type { model.GetType().Name }";
+            var msgGetAllAsync = $"Método: GetAllAsync() Retorno: IEnumerable<{ model.GetType().Name }>";
+            var msgInsertAsync = $"Método: InsertAsync({{ viewModel:{ insertModel.ToJson() } }})";
+            var msgInsertAsyncMapper = $"Método: InsertAsync Mapper: { insertModel.GetType().Name } To: { entity.GetType().Name }";
+            var msgUpdateAsync = $"Método: UpdateAsync({{ viewModel:{ updateModel.ToJson() } }})";
+            var msgUpdateAsyncMapper = $"Método: UpdateAsync Mapper: { updateModel.GetType().Name } To: { entity.GetType().Name }";
+            var msgDeleteAsync = $"Método: DeleteAsync({{ id:{ entity.Id } }})";
+
+            logger.Logs.Should().HaveCount(9);
+            logger.Logs.Any(a => a.Equals(msgConstructor)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetByIdAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(msgInsertAsyncMapper)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Contains(msgUpdateAsyncMapper)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
         }
 
-        public override void UpdateValidation()
+
+        public class ObterTodosParams : IEnumerable<object[]>
         {
-            _notificationContext.AddNotification("Update", "Objeto Inválido - Update");
+            public IEnumerator<object[]> GetEnumerator()
+            {
+                yield return new object[]
+                {
+                    new []
+                    {
+                        new TestEntity (new NomeValueObject("Isaiah", "Sosa"), new EmailValueObject("justo.eu.arcu@Integervitaenibh.net")),
+                        new TestEntity (new NomeValueObject("Hop", "Gross"), new EmailValueObject("Integer@magna.co.uk")),
+                        new TestEntity (new NomeValueObject("Armand", "Villarreal"), new EmailValueObject("lorem.tristique@posuerevulputatelacus.ca")),
+                    },
+                    new []
+                    {
+                         new TestResponseDto() { Nome = "Isaiah Sosa", Contato = "justo.eu.arcu@Integervitaenibh.net" },
+                         new TestResponseDto() { Nome = "Hop Gross", Contato = "Integer@magna.co.uk" },
+                         new TestResponseDto() { Nome = "Armand Villarreal", Contato = "lorem.tristique@posuerevulputatelacus.ca" }
+                    }
+                };
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        [Trait("Serviço de Aplicação", "Log de Ocorrências")]
+        [Theory(DisplayName = "Deve registrar os logs no serviço ao obter todos os registros")]
+        [ClassData(typeof(ObterTodosParams))]
+        public async Task Deve_Registrar_Logs_No_Servico_Ao_Obter_Todos_Registros(IEnumerable<TestEntity> entities, IEnumerable<TestResponseDto> testResponseDtoList)
+        {
+            //Given
+            var mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(mapper => mapper.Map<IEnumerable<TestResponseDto>>(It.IsAny<TestEntity>())).Returns(testResponseDtoList);
+
+            var unitOfWork = new Mock<IUnitOfWork>();
+            unitOfWork.Setup(uow => uow.CommitAsync()).ReturnsAsync(1);
+
+            var readRepository = new Mock<IReadRepository<TestEntity, Guid>>();
+            readRepository.Setup(setup => setup.GetAllAsync()).ReturnsAsync(entities);
+
+            var writeRepository = new Mock<IWriteRepository<TestEntity, Guid>>();
+
+            var notificationContextMock = new Mock<NotificationContext>();
+
+            var logger = new XunitLogger<BaseServiceApplication<TestEntity>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var service = new BaseServiceApplication<TestEntity>(
+                mapperMock.Object,
+                loggerFactoryMock.Object,
+                unitOfWork.Object,
+                readRepository.Object,
+                writeRepository.Object,
+                notificationContextMock.Object);
+
+            //When
+            await service.GetAllAsync<TestResponseDto>();
+
+            //Then
+            var msgConstructor = $"Inicializando Application Service<{ nameof(TestEntity) }, Guid>";
+            var msgGetAllAsync = $"Método: GetAllAsync() Retorno: IEnumerable<{ nameof(TestResponseDto) }>";
+
+
+            logger.Logs.Should().HaveCount(3);
+            logger.Logs.Any(a => a.Equals(msgConstructor)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
         }
     }
 }
