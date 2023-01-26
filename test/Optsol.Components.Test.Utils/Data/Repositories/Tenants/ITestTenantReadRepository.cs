@@ -1,5 +1,6 @@
 using System;
 using Optsol.Components.Domain.Data;
+using Optsol.Components.Domain.Repositories;
 using Optsol.Components.Test.Utils.Data.Entities;
 
 namespace Optsol.Components.Test.Utils.Data.Repositories.Tenants

@@ -1,9 +1,8 @@
 using Optsol.Components.Domain.Entities;
 
-namespace Optsol.Components.Domain.ValueObjects
+namespace Optsol.Components.Domain.ValueObjects;
+
+public abstract class ValueObject: Entity
 {
-    public abstract class ValueObject: Entity
-    {
         
-    }
 }

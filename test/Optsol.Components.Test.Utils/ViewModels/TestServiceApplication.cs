@@ -6,6 +6,7 @@ using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Utils.Entity.Entities;
 using System;
+using Optsol.Components.Domain.Repositories;
 
 namespace Optsol.Components.Test.Utils.ViewModels
 {
