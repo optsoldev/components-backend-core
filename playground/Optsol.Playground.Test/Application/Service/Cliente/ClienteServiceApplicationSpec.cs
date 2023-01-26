@@ -2,7 +2,6 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
-using Optsol.Components.Shared.Extensions;
 using Optsol.Playground.Application.Mappers.Cliente;
 using Optsol.Playground.Application.Services.Cliente;
 using Optsol.Playground.Application.ViewModels.CartaoCredito;
