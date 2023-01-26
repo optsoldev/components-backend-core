@@ -3,6 +3,7 @@ using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using System;
 using System.Collections;
+using Optsol.Components.Domain.Repositories;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

@@ -8,7 +8,7 @@ namespace Optsol.Components.Domain.Notifications.Contracts
     {
         public EntityContract()
         {
-            RuleFor(entity => entity.CreatedDate)
+            RuleFor(entity => entity.CreatedDate.Date)
                 .LessThanOrEqualTo(DateTime.Now)
                 .WithMessage("A Data de criação não pode ser maior que a data atual");
         }

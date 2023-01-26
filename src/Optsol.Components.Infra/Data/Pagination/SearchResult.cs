@@ -9,15 +9,9 @@ namespace Optsol.Components.Infra.Data.Pagination
 
         public uint Page
         {
-            get
-            {
-                return page;
-            }
+            get => page;
 
-            set
-            {
-                page = value <= 0 ? 1 : value;
-            }
+            set => page = value <= 0 ? 1 : value;
         }
 
         public uint? PageSize { get; set; }
@@ -28,10 +22,24 @@ namespace Optsol.Components.Infra.Data.Pagination
 
         public IEnumerable<TData> Items { get; set; }
 
+        public ISearchResult<TData> SetPaginatedItems(IEnumerable<TData> itens)
+        {
+            Items = itens;
+
+            return this;
+        }
+
+        public ISearchResult<TData> SetTotalCount(int total)
+        {
+            Total = total;
+
+            return this;
+        }
+        
         public SearchResult(uint page, uint? pageSize)
         {
-            this.Page = page;
-            this.PageSize = pageSize;
+            Page = page;
+            PageSize = pageSize;
         }
     }
 }

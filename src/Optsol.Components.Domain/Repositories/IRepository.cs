@@ -1,4 +1,5 @@
 using Optsol.Components.Domain.Entities;
+using Optsol.Components.Domain.Repositories;
 
 namespace Optsol.Components.Domain.Data
 {

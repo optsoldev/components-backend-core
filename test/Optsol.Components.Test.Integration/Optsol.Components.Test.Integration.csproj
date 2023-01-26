@@ -60,7 +60,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\playground\Optsol.Playground.Domain\Optsol.Playground.Domain.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Domain\Optsol.Components.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Optsol.Components.Infra.ElasticSearch\Optsol.Components.Infra.ElasticSearch.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra.RabbitMQ\Optsol.Components.Infra.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra.Redis\Optsol.Components.Infra.Redis.csproj" />
     <ProjectReference Include="..\..\src\Optsol.Components.Infra.Storage\Optsol.Components.Infra.Storage.csproj" />
