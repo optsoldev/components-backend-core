@@ -4,14 +4,18 @@ namespace Optsol.Components.Domain.Pagination
 {
     public interface ISearchResult<TData> where TData : class
     {
-        IEnumerable<TData> Items { get; set; }
+        IEnumerable<TData> Items { get; }
 
         uint Page { get; set; }
 
-        uint? PageSize { get; set; }
+        uint? PageSize { get; }
 
-        long Total { get; set; }
+        long Total { get; }
 
-        long TotalItems { get; set; }
+        long TotalItems { get; }
+
+        ISearchResult<TData> SetPaginatedItems(IEnumerable<TData> data);
+
+        ISearchResult<TData> SetTotalCount(int total);
     }
 }

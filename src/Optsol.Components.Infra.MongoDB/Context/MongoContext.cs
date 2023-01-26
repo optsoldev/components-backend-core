@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Optsol.Components.Shared.Settings;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
@@ -14,7 +12,7 @@ namespace Optsol.Components.Infra.MongoDB.Context
 {
     public class MongoContext : IDisposable
     {
-        private bool _disposed = false;
+        private bool _disposed;
 
         private readonly ILogger _logger;
 
@@ -23,8 +21,6 @@ namespace Optsol.Components.Infra.MongoDB.Context
         protected readonly List<Func<Task>> _commands;
 
         protected readonly MongoSettings _mongoSettings;
-
-        private static ConcurrentDictionary<Type, IBsonSerializer> _cache = new ConcurrentDictionary<Type, IBsonSerializer>();
 
         public IClientSessionHandle Session { get; set; }
 

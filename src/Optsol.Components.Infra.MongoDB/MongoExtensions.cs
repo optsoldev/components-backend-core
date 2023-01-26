@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Domain.Histories;
+using Microsoft.Extensions.Configuration;
+using MongoDB.Bson.Serialization;
 using Optsol.Components.Domain.Data;
+using Optsol.Components.Domain.Repositories;
 using Optsol.Components.Infra.MongoDB.Context;
 using Optsol.Components.Infra.MongoDB.Repositories;
 using Optsol.Components.Infra.MongoDB.UoW;
@@ -15,6 +18,9 @@ namespace Microsoft.Extensions.DependencyInjection
             var mongoSettings = configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
             mongoSettings.Validate();
 
+            
+
+            
             services.AddSingleton(mongoSettings);
             services.AddScoped<MongoContext>();
             services.AddScoped<TContext>();
@@ -23,6 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped(typeof(IReadRepository<,>), typeof(MongoRepository<,>));
             services.AddScoped(typeof(IWriteRepository<,>), typeof(MongoRepository<,>));
 
+            
             return services;
         }
 

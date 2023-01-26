@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Optsol.Components.Domain.Repositories;
 using Xunit;
 
 namespace Optsol.Components.Test.Unit.Application

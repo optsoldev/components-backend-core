@@ -277,8 +277,9 @@ namespace Optsol.Components.Infra.Data
 
             return query;
         }
-
-        private static IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> search = null)
+        
+        // ReSharper disable once MemberCanBePrivate.Global
+        protected static IQueryable<TEntity> ApplySearch(IQueryable<TEntity> query, Expression<Func<TEntity, bool>> search = null)
         {
             var searchIsNotNull = search != null;
             if (searchIsNotNull)
@@ -288,8 +289,9 @@ namespace Optsol.Components.Infra.Data
 
             return query;
         }
-
-        private static IQueryable<TEntity> ApplyInclude(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
+        
+        // ReSharper disable once MemberCanBePrivate.Global
+        protected static IQueryable<TEntity> ApplyInclude(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IQueryable<TEntity>> includes = null)
         {
             var includesIsNotNull = includes != null;
             if (includesIsNotNull)
@@ -299,8 +301,9 @@ namespace Optsol.Components.Infra.Data
 
             return query;
         }
-
-        private static IQueryable<TEntity> ApplyOrderBy(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
+        
+        // ReSharper disable once MemberCanBePrivate.Global
+        protected static IQueryable<TEntity> ApplyOrderBy(IQueryable<TEntity> query, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             var orderByIsNotNull = orderBy != null;
             if (orderByIsNotNull)
