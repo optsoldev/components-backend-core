@@ -46,7 +46,7 @@ namespace Optsol.Components.Infra.Security.AzureB2C.Security.Attributes
 
             var userClaims = securityClaim?.Value.Split(";");
 
-            var userAuthenticateHasClaim = userClaims is not null && claims.All(claim => userClaims.Contains(claim));
+            var userAuthenticateHasClaim = userClaims is not null && claims.Any(claim => userClaims.Contains(claim));
             
             if (userAuthenticateHasClaim)
             {
