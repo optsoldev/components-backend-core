@@ -5,26 +5,25 @@ using Optsol.Components.Infra.Redis.Services;
 using Optsol.Components.Shared.Exceptions;
 using Optsol.Components.Shared.Settings;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class RedisExtensions
 {
-    public static class RedisExtensions
+    public static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddRedisCache(this IServiceCollection services, IConfiguration configuration)
-        {
-            var servicesProvider = services.BuildServiceProvider();
+        var servicesProvider = services.BuildServiceProvider();
 
-            var redisSettings = configuration.GetSection(nameof(RedisSettings)).Get<RedisSettings>()
-                ?? throw new RedisSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
+        var redisSettings = configuration.GetSection(nameof(RedisSettings)).Get<RedisSettings>()
+                            ?? throw new RedisSettingsNullException(servicesProvider.GetRequiredService<ILoggerFactory>());
 
-            redisSettings.Validate();
+        redisSettings.Validate();
 
-            services.AddSingleton(redisSettings);
+        services.AddSingleton(redisSettings);
 
-            services.AddSingleton<RedisCacheConnection>();
+        services.AddSingleton<RedisCacheConnection>();
 
-            services.AddScoped<IRedisCacheService, RedisCacheService>();
+        services.AddScoped<IRedisCacheService, RedisCacheService>();
 
-            return services;
-        }
+        return services;
     }
 }
