@@ -3,52 +3,32 @@ using Optsol.Components.Shared.Settings;
 using StackExchange.Redis;
 using System;
 
-namespace Optsol.Components.Infra.Redis.Connections
+namespace Optsol.Components.Infra.Redis.Connections;
+
+public class RedisCacheConnection
 {
-    public class RedisCacheConnection: IDisposable
+    private readonly Lazy<ConnectionMultiplexer> connectionMultiplexer;
+
+    private readonly ILogger logger;
+
+    public RedisCacheConnection(RedisSettings redisSettings, ILoggerFactory logger)
     {
-        private bool _disposed = false;
+        this.logger = logger?.CreateLogger<RedisCacheConnection>();
+        this.logger?.LogInformation("Inicializando RedisCacheConnection");
 
-        private readonly ConnectionMultiplexer _connectionMultiplexer;
-
-        private readonly ILogger _logger;
-
-        public RedisCacheConnection(RedisSettings redisSettings, ILoggerFactory logger)
+        var settingsNotNull = redisSettings == null;
+        if (settingsNotNull)
         {
-            _logger = logger?.CreateLogger<RedisCacheConnection>();
-            _logger?.LogInformation("Inicializando RedisCacheConnection");
-
-            var settingsNotNull = redisSettings == null;
-            if (settingsNotNull)
-            {
-                throw new ArgumentNullException(nameof(redisSettings));
-            }
-
-            _connectionMultiplexer = ConnectionMultiplexer.Connect(redisSettings.ConnectionString);
+            throw new ArgumentNullException(nameof(redisSettings));
         }
 
-        public IDatabase GetDatabase()
-        {
-            _logger?.LogInformation($"Método: { nameof(GetDatabase) }() Retorno: IDatabase");
+        connectionMultiplexer = new Lazy<ConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisSettings.ConnectionString));
+    }
 
-            return _connectionMultiplexer.GetDatabase();
-        }
+    public IDatabase GetDatabase()
+    {
+        logger?.LogInformation($"Método: { nameof(GetDatabase) }() Retorno: IDatabase");
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            _logger?.LogInformation($"Método: { nameof(Dispose) }()");
-
-            if (!_disposed && disposing)
-            {
-                _connectionMultiplexer.Dispose();
-            }
-            _disposed = true;
-        }
+        return connectionMultiplexer.Value.GetDatabase();
     }
 }
