@@ -1,5 +1,6 @@
 using Optsol.Components.Application.Services;
 using Optsol.Components.Domain.Notifications;
+using System.Threading.Tasks;
 
 namespace Optsol.Playground.Application.Services.Cliente;
 
@@ -14,11 +15,13 @@ public class ClientValidationService : BaseValidationService, IClientValidationS
     {
     }
 
-    public override void InsertValidation()
+    public override Task InsertValidationAsync()
     {
+        return Task.CompletedTask;
     }
 
-    public override void UpdateValidation()
+    public override Task UpdateValidationAsync()
     {
+        return Task.CompletedTask;
     }
 }
