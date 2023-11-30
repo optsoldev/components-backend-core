@@ -1,5 +1,6 @@
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Notifications;
+using System.Threading.Tasks;
 
 namespace Optsol.Components.Application.Services;
 
@@ -8,8 +9,8 @@ namespace Optsol.Components.Application.Services;
 /// </summary>
 public interface IValidationService
 {
-    void InsertValidation();
-    void UpdateValidation();
+    Task InsertValidationAsync();
+    Task UpdateValidationAsync();
     void SetRequestModel<TRequest>(TRequest request) where TRequest : BaseModel;
     void SetEntity<TAggregateRoot>(TAggregateRoot entity) where TAggregateRoot : AggregateRoot;
 }
@@ -26,9 +27,9 @@ public abstract class BaseValidationService
         _notificationContext = notificationContext;
     }
 
-    public abstract void InsertValidation();
+    public abstract Task InsertValidationAsync();
 
-    public abstract void UpdateValidation();
+    public abstract Task UpdateValidationAsync();
 
     public void SetRequestModel<TRequest>(TRequest request) where TRequest : BaseModel
     {

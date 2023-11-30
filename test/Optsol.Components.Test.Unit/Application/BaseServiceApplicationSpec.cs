@@ -106,14 +106,16 @@ class TestValidationService : BaseValidationService, IValidationService
         
     }
     
-    public override void InsertValidation()
+    public override Task InsertValidationAsync()
     {
         _notificationContext.AddNotification("Insert", "Objeto Inválido - Insert");
+                return Task.CompletedTask;
     }
 
-    public override void UpdateValidation()
+    public override Task UpdateValidationAsync()
     {
         _notificationContext.AddNotification("Update", "Objeto Inválido - Update");
+                return Task.CompletedTask;
     }
 }
 
