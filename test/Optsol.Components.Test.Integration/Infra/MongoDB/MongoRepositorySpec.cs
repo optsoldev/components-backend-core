@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +13,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
+using Moq;
+using Optsol.Components.Domain.Entities;
+using Optsol.Components.Infra.MongoDB.Repositories;
+using Optsol.Components.Shared.Settings;
+using Optsol.Components.Test.Shared.Logger;
 using Xunit;
 using static Optsol.Components.Test.Utils.Seed.Seed;
 
@@ -30,7 +38,8 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             services.AddLogging();
             services.AddMongoContext<MongoContext>(configuration);
             services.AddAutoMapper(typeof(TestViewModelToEntity));
-            services.AddMongoRepository<ITestMongoReadRepository, TestMongoReadRepository>("Optsol.Components.Test.Utils");
+            services.AddMongoRepository<ITestMongoReadRepository, TestMongoReadRepository>(
+                "Optsol.Components.Test.Utils");
 
             var provider = services.BuildServiceProvider();
 
@@ -38,7 +47,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         }
 
         [Trait("Infraestrutura", "MongoDB Respositório de Leitura")]
-#if DEBUG 
+#if DEBUG
         [Fact(DisplayName = "Deve obter todos registros pelo repositório")]
 #elif RELEASE
         [Fact(DisplayName = "Deve obter todos registros pelo repositório", Skip = "mongo local docker test")]
@@ -60,7 +69,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         }
 
         [Trait("Infraestrutura", "MongoDB Respositório de Leitura")]
-#if DEBUG 
+#if DEBUG
         [Fact(DisplayName = "Deve obter o registro pelo id")]
 #elif RELEASE
         [Fact(DisplayName = "Deve obter o registro pelo id", Skip = "mongo local docker test")]
@@ -72,10 +81,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             var entity = default(TestEntity);
 
             var provider = GetProviderConfiguredServicesFromContext()
-                .CreateTestEntitySeedInMongoContext(numberItems, (entityList) =>
-                {
-                    entity = entityList.First();
-                });
+                .CreateTestEntitySeedInMongoContext(numberItems, (entityList) => { entity = entityList.First(); });
 
             var testReadRepository = provider.GetRequiredService<ITestMongoReadRepository>();
 
@@ -94,7 +100,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             {
                 foreach (var entity in TestEntityList().Take(3))
                 {
-                    yield return new object[] { entity };
+                    yield return new object[] {entity};
                 }
             }
 
@@ -156,7 +162,9 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             var updateResult = await testReadRepository.GetByIdAsync(entity.Id);
             updateResult = mapper.Map<TestEntity>(updateResult);
 
-            var updateEntity = new TestEntity(updateResult.Id, new NomeValueObject(updateResult.Nome.Nome, "Atualizado"), new EmailValueObject(updateResult.Email.Email));
+            var updateEntity = new TestEntity(updateResult.Id,
+                new NomeValueObject(updateResult.Nome.Nome, "Atualizado"),
+                new EmailValueObject(updateResult.Email.Email));
 
             await testWriteRepository.UpdateAsync(updateEntity);
             await unitOfWork.CommitAsync();
@@ -173,5 +181,72 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             entityResult.Email.ToString().Should().Be(updateEntity.Email.ToString());
             entityResult.Ativo.Should().BeFalse();
         }
+        
+        [Trait("Repository", "Log de Ocorrências")]
+#if DEBUG
+        [Fact(DisplayName = "Deve registrar logs no repositorio do MongoDB")]
+#elif RELEASE
+        [Fact(DisplayName = "Deve registrar logs no repositorio do MongoDB", Skip = "mongo local docker test")]
+#endif
+        public async Task Deve_Registrar_Logs_No_Repositorio_MongoDB()
+        {
+            //Given
+            var dataBaseName = "mongo-auto-create";
+            var entity = new AggregateRoot();
+
+            var mongoSettings = new MongoSettings
+            {
+                DatabaseName = dataBaseName,
+                ConnectionString = "mongodb://127.0.0.1:30001"
+            };
+
+            var loggerContextFactoryMock = new Mock<ILoggerFactory>();
+            var loggerContext = new XunitLogger<MongoContext>();
+            loggerContextFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(loggerContext);
+
+            var setMock = new Mock<IMongoCollection<AggregateRoot>>();
+            var mongoContextMock = new Mock<MongoContext>(mongoSettings, loggerContextFactoryMock.Object);
+            
+            var logger = new XunitLogger<MongoRepository<AggregateRoot, Guid>>();
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            loggerFactoryMock.Setup(setup => setup.CreateLogger(It.IsAny<string>())).Returns(logger);
+
+            var repositoryMock = new MongoRepository<AggregateRoot, Guid>(mongoContextMock.Object, loggerFactoryMock.Object);
+            
+            //When
+            await repositoryMock.GetByIdAsync(entity.Id);
+            await repositoryMock.GetAllAsync();
+            await repositoryMock.InsertAsync(entity);
+            await repositoryMock.UpdateAsync(entity);
+            await repositoryMock.DeleteAsync(entity);
+            await repositoryMock.DeleteAsync(entity.Id);
+            await repositoryMock.SaveChangesAsync();
+
+            //Then
+            var msgContructor = "Inicializando MongoRepository<AggregateRoot, Guid>";
+            var msgGetById = $"Método: GetByIdAsync( {{id:{ entity.Id }}} ) Retorno: type AggregateRoot";
+            var msgGetAllAsync = "Método: GetAllAsync() Retorno: IAsyncEnumerable<AggregateRoot>";
+            var msgInsertAsync = $"Método: InsertAsync( {{entity:{ entity.ToJson()}}} )";
+            var msgUpdateAsync = $"Método: UpdateAsync( {{entity:{ entity.ToJson()}}} )";
+            var msgDeleteAsync = $"Método: DeleteAsync( {{entity:{ entity.ToJson()}}} )";
+            var msgDeleteNotFoundAsync = $"Método: DeleteAsync( {{id:{ entity.Id }}} ) Registro não encontrado";
+            var msgSaveChanges = "Método: SaveChangesAsync()";
+
+            logger.Logs.Should().HaveCount(9);
+            logger.Logs.Any(a => a.Equals(msgGetById)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgContructor)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgGetAllAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgInsertAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgUpdateAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgDeleteAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgDeleteNotFoundAsync)).Should().BeTrue();
+            logger.Logs.Any(a => a.Equals(msgSaveChanges)).Should().BeTrue();
+
+            mongoContextMock.Object.MongoClient.DropDatabase(dataBaseName);
+            mongoContextMock.Object.Dispose();
+        }
     }
 }
+    
+     
+

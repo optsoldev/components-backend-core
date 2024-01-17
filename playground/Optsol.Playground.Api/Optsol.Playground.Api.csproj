@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <UserSecretsId>dc49c63a-2ff2-4c0c-bc45-75d20767851d</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
@@ -14,7 +14,7 @@
     <ProjectReference Include="..\Optsol.Playground.Infra\Optsol.Playground.Infra.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appsettings.Development.json">
