@@ -62,13 +62,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Red
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.PushNotification.Firebase", "src\Optsol.Components.Infra.PushNotification.Firebase\Optsol.Components.Infra.PushNotification.Firebase.csproj", "{094EEE1C-8D87-42B5-BC39-363AEA701306}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.Storage.Test.Integration", "test\Optsol.Components.Infra.Storage.Test.Integration\Optsol.Components.Infra.Storage.Test.Integration.csproj", "{96710F26-608D-4422-89CE-8EF46E12790C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Storage.Test.Integration", "test\Optsol.Components.Infra.Storage.Test.Integration\Optsol.Components.Infra.Storage.Test.Integration.csproj", "{96710F26-608D-4422-89CE-8EF46E12790C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.Security.AzureB2C", "src\Optsol.Components.Infra.Security.AzureB2C\Optsol.Components.Infra.Security.AzureB2C.csproj", "{D81696A3-4B51-42AD-857E-801A96B76B71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Security.AzureB2C", "src\Optsol.Components.Infra.Security.AzureB2C\Optsol.Components.Infra.Security.AzureB2C.csproj", "{D81696A3-4B51-42AD-857E-801A96B76B71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.Bus", "src\Optsol.Components.Infra.Bus\Optsol.Components.Infra.Bus.csproj", "{E1A85856-DD8B-4BF9-9F24-63EA2A488A93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.Bus", "src\Optsol.Components.Infra.Bus\Optsol.Components.Infra.Bus.csproj", "{E1A85856-DD8B-4BF9-9F24-63EA2A488A93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optsol.Components.Infra.HealthChecks", "src\Optsol.Components.Infra.HealthChecks\Optsol.Components.Infra.HealthChecks.csproj", "{D68DBE82-9B72-4B9F-A78E-2AB6A1438F00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optsol.Components.Infra.HealthChecks", "src\Optsol.Components.Infra.HealthChecks\Optsol.Components.Infra.HealthChecks.csproj", "{D68DBE82-9B72-4B9F-A78E-2AB6A1438F00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

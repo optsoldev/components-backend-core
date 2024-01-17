@@ -1,38 +1,88 @@
-version: '3.8'
+version: "3.9"
+
 services:
+  #Configurando Azure SQL Edge
+  mssql_server:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: azuresqledge1
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=OPTSOL@dev
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data_system:/var/opt/mssql
+      - mssql_data_user:/var/opt/sqlserver
+    networks:
+      - local_network
   redis:
     image: redis
     ports:
       - "6379:6379"
-  azurite:
-    image: mcr.microsoft.com/azure-storage/azurite
+  mongodb1:
+    image: mongo:latest
+    container_name: mongodb_cluster_1
+    restart: on-failure
+    entrypoint: ["/usr/bin/mongod", "--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mongodata:/data/db
+      - mongoconfig:/data/configdb
     ports:
-      - 10000:10000
-      - 10001:10001
-  mongo-express:
-    image: mongo-express
+      - 30001:27017
+    expose:
+      - 27017
+    networks:
+      - mongo_networks
+
+  mongodb2:
+    image: mongo:latest
+    container_name: mongodb_cluster_2
+    restart: on-failure
+    entrypoint: ["/usr/bin/mongod", "--replSet", "rs0", "--bind_ip_all"]
     ports:
-      - 8081:8081
-    restart: always
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: optsol
-      ME_CONFIG_BASICAUTH_PASSWORD: optsoldev
-      ME_CONFIG_MONGODB_PORT: 27017
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: optsoldev
-      ME_CONFIG_MONGODB_SERVER: host.docker.internal
-    links:
-      - mongo
-    depends_on: 
-      - mongo
-  mongo:
-      image: mongo
-      environment:
-        MONGO_INITDB_ROOT_USERNAME: root
-        MONGO_INITDB_ROOT_PASSWORD: optsoldev
-      ports:
-        - "27017:27017"
-      volumes:
-        - mongodata:/data/db
+      - 30002:27017
+    expose:
+      - 27017
+    networks:
+      - mongo_networks
+    depends_on:
+      - mongodb1
+
+  mongodb3:
+    image: mongo:latest
+    container_name: mongodb_cluster_3
+    restart: on-failure
+    entrypoint: ["/usr/bin/mongod", "--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - 30003:27017
+    expose:
+      - 27017
+    networks:
+      - mongo_networks
+    depends_on:
+      - mongodb1
+
+  mongodb_setup:
+    image: mongo:latest
+    container_name: "mongodb_setup"
+    restart: on-failure
+    networks:
+      - mongo_networks
+    depends_on:
+      - mongodb1
+      - mongodb2
+      - mongodb3
+    volumes:
+      - ./deployment_scripts:/deployment_scripts
+    entrypoint: ["sh", "deployment_scripts/iniciate_replica.sh"]
+
+
 volumes:
+  mssql_data_system:
+  mssql_data_user:
   mongodata:
+  mongoconfig:
+
+networks:
+  local_network:
+  mongo_networks:

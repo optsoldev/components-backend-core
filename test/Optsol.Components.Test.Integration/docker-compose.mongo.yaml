@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  mongo1:
+    image: mongo:7.0
+    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    ports:
+      - 27017:27017
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: echo "try { rs.status() } catch (err) { rs.initiate({_id:'rs0',members:[{_id:0,host:'host.docker.internal:27017'}]}) }" | mongosh --port 27017 --quiet
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      retries: 30
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: optsoldev
+    volumes:
+      - "mongo1_data:/data/db"
+      - "mongo1_config:/data/configdb"
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    restart: always
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: optsol
+      ME_CONFIG_BASICAUTH_PASSWORD: optsoldev
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: optsoldev
+      ME_CONFIG_MONGODB_SERVER: host.docker.internal
+    links:
+      - mongo
+    depends_on:
+      - mongo
+volumes:
+  mongo1_data:
+  mongo1_config:

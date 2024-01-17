@@ -1,14 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <Version>2.4.6</Version>
-    </PropertyGroup>
-    
-    <ItemGroup>
-      <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Version>3.0.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Optsol.Components.Infra\Optsol.Components.Infra.csproj" />
+  </ItemGroup>
 </Project>
