@@ -14,6 +14,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
         {
             services
+                .AddRabitMQConnection(configuration)
                 .AddHealthChecks()
                 .ConfigureStorage(configuration)
                 .ConfigureRedis(configuration)
@@ -134,16 +135,36 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 rabbitSettings?.Validate();
 
-                var connectionFactory = new ConnectionFactory
-                {
-                    HostName = rabbitSettings!.HostName,
-                    Port = rabbitSettings!.Port
-                };
-
-                builder.AddRabbitMQ(fac => connectionFactory, name: "rabbitmq", tags: new[] { "queue", "exchage", "event" });
+                builder.AddRabbitMQ(name: "rabbitmq", tags: new[] { "queue", "exchage", "event" });
             }
 
             return builder;
+        }
+
+        private static IServiceCollection AddRabitMQConnection(this IServiceCollection services, IConfiguration configuration)
+        {
+            var rabbitSettings = configuration.GetSection(nameof(RabbitMQSettings)).Get<RabbitMQSettings>();
+
+            var hasRabbitMq = rabbitSettings is not null;
+            if (hasRabbitMq)
+            {
+                rabbitSettings?.Validate();
+
+                services
+                    .AddSingleton<IConnection>(sp =>
+                    {
+                        var factory = new ConnectionFactory
+                        {
+                            HostName = rabbitSettings!.HostName,
+                            Port = rabbitSettings!.Port,
+                            AutomaticRecoveryEnabled = true
+                        };
+
+                        return factory.CreateConnection();
+                    });
+            }
+
+            return services;
         }
 
         public static IApplicationBuilder UseHealthChecks(this IApplicationBuilder app, IConfiguration configuration)
