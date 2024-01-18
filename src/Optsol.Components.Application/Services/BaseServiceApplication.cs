@@ -134,7 +134,7 @@ namespace Optsol.Components.Application.Services
             {
                 _validationService.SetEntity(entity);
                 _validationService.SetRequestModel(data);
-                _validationService.InsertValidation();
+                await _validationService.InsertValidationAsync();
             
                 if (_notificationContext.HasNotifications)
                 {
@@ -183,7 +183,7 @@ namespace Optsol.Components.Application.Services
             {
                 _validationService.SetEntity(entity);
                 _validationService.SetRequestModel(data);
-                _validationService.UpdateValidation();
+                await _validationService.UpdateValidationAsync();
             
                 if (_notificationContext.HasNotifications)
                 {
