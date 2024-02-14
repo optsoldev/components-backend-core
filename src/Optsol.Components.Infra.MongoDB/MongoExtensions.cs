@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Repositories;
 using Optsol.Components.Infra.MongoDB.Context;
 using Optsol.Components.Infra.MongoDB.Repositories;
@@ -15,15 +14,12 @@ public static class MongoExtensions
     {
         var mongoSettings = configuration.GetSection(nameof(MongoSettings)).Get<MongoSettings>();
         mongoSettings.Validate();
-
-            
-
-            
+        
         services.AddSingleton(mongoSettings);
         services.AddScoped<MongoContext>();
         services.AddScoped<TContext>();
         services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
-        services.AddScoped(typeof(IMongoRepository<,>), typeof(MongoRepository<,>));
+        services.AddScoped(typeof(IBaseRepository<,>), typeof(MongoRepository<,>));
         services.AddScoped(typeof(IReadRepository<,>), typeof(MongoRepository<,>));
         services.AddScoped(typeof(IWriteRepository<,>), typeof(MongoRepository<,>));
 

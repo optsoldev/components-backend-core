@@ -1,4 +1,3 @@
-using Optsol.Components.Domain.Data;
 using Optsol.Components.Infra.Data;
 using Optsol.Components.Infra.UoW;
 using System;

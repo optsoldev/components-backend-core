@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Pagination;
 using Optsol.Components.Infra.Data.Pagination;
@@ -12,6 +11,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Optsol.Components.Domain.Repositories;
 
 namespace Optsol.Components.Infra.Data;
 

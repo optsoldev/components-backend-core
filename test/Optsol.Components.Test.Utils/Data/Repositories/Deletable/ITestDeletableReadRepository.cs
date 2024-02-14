@@ -1,4 +1,3 @@
-using Optsol.Components.Domain.Data;
 using Optsol.Components.Test.Utils.Data.Entities;
 using System;
 using Optsol.Components.Domain.Repositories;
