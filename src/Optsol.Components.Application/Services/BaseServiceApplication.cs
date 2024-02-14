@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Domain.Pagination;

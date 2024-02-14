@@ -3,7 +3,6 @@ using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Optsol.Components.Application.Services;
-using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Notifications;
 using Optsol.Components.Infra.UoW;
 using Optsol.Components.Test.Shared.Logger;
