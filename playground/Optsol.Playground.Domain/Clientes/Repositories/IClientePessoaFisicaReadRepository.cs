@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Optsol.Components.Domain.Data;
 using Optsol.Components.Domain.Repositories;
 using Optsol.Playground.Domain.Entities;
 

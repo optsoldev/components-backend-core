@@ -11,11 +11,10 @@ public interface IReadBaseRepository<TEntity, in TKey> : IDisposable
     where TEntity : class, IAggregateRoot<TKey>
 {
     Task<TEntity> GetByIdAsync(TKey id);
-
-    Task<IEnumerable<TEntity>> GetAllAsync();
-        
     Task<IEnumerable<TEntity>> GetByIdsAsync(IEnumerable<TKey> ids);
+    Task<IEnumerable<TEntity>> GetAllAsync();
     Task<ISearchResult<TEntity>> GetAllAsync<TSearch>(ISearchRequest<TSearch> requestSearch) where TSearch : class;
+    
 }
 
 public interface IReadRepository<TEntity, TKey> : IReadBaseRepository<TEntity, TKey>
