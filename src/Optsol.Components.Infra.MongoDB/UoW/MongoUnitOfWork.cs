@@ -2,10 +2,11 @@
 using Optsol.Components.Infra.MongoDB.Context;
 using System;
 using System.Threading.Tasks;
+using Optsol.Components.Infra.UoW;
 
 namespace Optsol.Components.Infra.MongoDB.UoW
 {
-    public class MongoUnitOfWork : IMongoUnitOfWork
+    public class MongoUnitOfWork : IUnitOfWork
     {
         private bool _disposed = false;
 
