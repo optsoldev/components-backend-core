@@ -3,6 +3,7 @@ using Optsol.Components.Domain.Repositories;
 using Optsol.Components.Infra.MongoDB.Context;
 using Optsol.Components.Infra.MongoDB.Repositories;
 using Optsol.Components.Infra.MongoDB.UoW;
+using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Settings;
 
 namespace Microsoft.Extensions.DependencyInjection;
@@ -18,7 +19,7 @@ public static class MongoExtensions
         services.AddSingleton(mongoSettings);
         services.AddScoped<MongoContext>();
         services.AddScoped<TContext>();
-        services.AddScoped<IMongoUnitOfWork, MongoUnitOfWork>();
+        services.AddScoped<IUnitOfWork, MongoUnitOfWork>();
         services.AddScoped(typeof(IBaseRepository<,>), typeof(MongoRepository<,>));
         services.AddScoped(typeof(IReadRepository<,>), typeof(MongoRepository<,>));
         services.AddScoped(typeof(IWriteRepository<,>), typeof(MongoRepository<,>));

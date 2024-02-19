@@ -18,6 +18,7 @@ using MongoDB.Driver;
 using Moq;
 using Optsol.Components.Domain.Entities;
 using Optsol.Components.Infra.MongoDB.Repositories;
+using Optsol.Components.Infra.UoW;
 using Optsol.Components.Shared.Settings;
 using Optsol.Components.Test.Shared.Logger;
 using Xunit;
@@ -118,7 +119,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
         {
             //Given
             var provider = GetProviderConfiguredServicesFromContext();
-            var unitOfWork = provider.GetRequiredService<IMongoUnitOfWork>();
+            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
             var readRepository = provider.GetRequiredService<ITestMongoReadRepository>();
             var writeRepository = provider.GetRequiredService<ITestMongoWriteRepository>();
 
@@ -150,7 +151,7 @@ namespace Optsol.Components.Test.Integration.Infra.MongoDB
             var provider = GetProviderConfiguredServicesFromContext()
                 .CreateTestEntitySeedInMongoContext(1);
 
-            var unitOfWork = provider.GetRequiredService<IMongoUnitOfWork>();
+            var unitOfWork = provider.GetRequiredService<IUnitOfWork>();
             var testReadRepository = provider.GetRequiredService<ITestMongoReadRepository>();
             var testWriteRepository = provider.GetRequiredService<ITestMongoWriteRepository>();
             var mapper = provider.GetRequiredService<IMapper>();

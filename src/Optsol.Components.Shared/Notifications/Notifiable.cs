@@ -12,7 +12,7 @@ namespace Optsol.Components.Shared.Notifications
 
         private T GetNotificationInstance(string key, string message)
         {
-            return (T)Activator.CreateInstance(typeof(T), new object[] { key, message });
+            return (T)Activator.CreateInstance(typeof(T), [key, message]);
         }
 
         public IReadOnlyCollection<T> Notifications => _notifications;
@@ -59,8 +59,17 @@ namespace Optsol.Components.Shared.Notifications
             _notifications.Clear();
         }
 
-        public bool Valid => _notifications.Any() == false;
+        public bool Valid
+        {
+            get => !_notifications.Any();
 
-        public bool Invalid => !Valid;
+            private set {}
+        }
+
+        public bool Invalid
+        {
+            get => !Valid;
+            private set {}
+        }
     }
 }
