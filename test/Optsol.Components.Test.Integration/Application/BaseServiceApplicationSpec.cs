@@ -38,8 +38,8 @@ namespace Optsol.Components.Test.Integration.Application
             return services.BuildServiceProvider();
         }
 
-        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
-        [Fact(DisplayName = "Deve obter todos os registros pelo serviço da aplicação")]
+        [Trait("Serviï¿½o de Aplicaï¿½ï¿½o", "Execuï¿½ï¿½o dos Serviï¿½os")]
+        [Fact(DisplayName = "Deve obter todos os registros pelo serviï¿½o da aplicaï¿½ï¿½o")]
         public async Task Deve_Obter_Todos_Registro_Pelo_Servico()
         {
             //Given
@@ -59,8 +59,8 @@ namespace Optsol.Components.Test.Integration.Application
             viewModels.All(w => w.Invalid).Should().BeFalse();
         }
 
-        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
-        [Fact(DisplayName = "Deve obter todos os registros pelo serviço da aplicação")]
+        [Trait("Serviï¿½o de Aplicaï¿½ï¿½o", "Execuï¿½ï¿½o dos Serviï¿½os")]
+        [Fact(DisplayName = "Deve obter todos os registros pelo serviï¿½o da aplicaï¿½ï¿½o")]
         public async Task Deve_Obter_Registro_Por_Id_Pelo_Servico()
         {
             //Given
@@ -124,7 +124,7 @@ namespace Optsol.Components.Test.Integration.Application
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Trait("Serviï¿½o de Aplicaï¿½ï¿½o", "Execuï¿½ï¿½o dos Serviï¿½os")]
         [Theory(DisplayName = "Deve inserir registro na base de dados")]
         [ClassData(typeof(InserirNovosRegistrosParams))]
         public void Deve_Inserir_Registro_Pelo_Servico(TestRequestDto testRequestDto)
@@ -145,7 +145,7 @@ namespace Optsol.Components.Test.Integration.Application
             notificationContext.Notifications.Should().HaveCount(0);
         }
 
-        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Trait("Serviï¿½o de Aplicaï¿½ï¿½o", "Execuï¿½ï¿½o dos Serviï¿½os")]
         [Fact(DisplayName = "Deve atualizar registro obtido na base de dados")]
         public async Task Deve_Atualizar_Registro_Pelo_Servico()
         {
@@ -186,7 +186,7 @@ namespace Optsol.Components.Test.Integration.Application
             viewModelResult.Contato.Should().Be(updateModel.Contato);
         }
 
-        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
+        [Trait("Serviï¿½o de Aplicaï¿½ï¿½o", "Execuï¿½ï¿½o dos Serviï¿½os")]
         [Fact(DisplayName = "Deve remover registro obtido na base de dados")]
         public async Task Deve_Remover_Registro_Pelo_Id_Pelo_Servico()
         {
@@ -266,8 +266,12 @@ namespace Optsol.Components.Test.Integration.Application
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
-        [Theory(DisplayName = "Não deve inserir registro na base de dados")]
+        [Trait("Serviï¿½o de Aplicaï¿½ï¿½o", "Execuï¿½ï¿½o dos Serviï¿½os")]
+#if DEBUG
+        [Theory(DisplayName = "NÃ£o deve inserir registro na base de dados")]
+#elif RELEASE
+        [Theory(DisplayName = "NÃ£o deve inserir registro na base de dados", Skip = "mongo local docker test")]
+#endif
         [ClassData(typeof(InserirNovosRegistrosComFalhasParams))]
         public void Nao_Deve_Inserir_Registro_Pelo_Servico(TestRequestDto viewModel, string[] expectedErrorProperty, int expectedErrosCount)
         {
@@ -339,8 +343,8 @@ namespace Optsol.Components.Test.Integration.Application
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        [Trait("Serviço de Aplicação", "Execução dos Serviços")]
-        [Theory(DisplayName = "Não deve atualizar os registros obtidos na base de dados")]
+        [Trait("ServiÃ§o de AplicaÃ§Ã£o", "ExecuÃ§Ã£o dos ServiÃ§os")]
+        [Theory(DisplayName = "NÃ£o deve atualizar os registros obtidos na base de dados")]
         [ClassData(typeof(AtualizarRegistrosComFalhasParams))]
         public void Nao_Deve_Atualizar_Registro_Pelo_Servico(TestRequestDto viewModel, string[] expectedErrorProperty, int expectedErrosCount)
         {
