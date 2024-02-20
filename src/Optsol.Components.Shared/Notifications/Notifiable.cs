@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Optsol.Components.Shared.Notifications
 {
@@ -57,14 +56,8 @@ namespace Optsol.Components.Shared.Notifications
             _notifications.Clear();
         }
 
-        public bool Valid
-        {
-            get => !_notifications.Any();
-        }
+        public bool Valid => _notifications == null || _notifications.Count == 0;
 
-        public bool Invalid
-        {
-            get => !Valid;
-        }
+        public bool Invalid => !Valid;
     }
 }
