@@ -6,8 +6,7 @@ namespace Optsol.Components.Shared.Notifications
 {
     public abstract class Notifiable<T> where T : Notification
     {
-        //correcao paliativa por causa do MongoDB. 
-        private List<T> _notifications  => [];
+        private readonly List<T> _notifications  = [];
         
         private static T GetNotificationInstance(string key, string message)
         {
@@ -61,14 +60,11 @@ namespace Optsol.Components.Shared.Notifications
         public bool Valid
         {
             get => !_notifications.Any();
-
-            private set {}
         }
 
         public bool Invalid
         {
             get => !Valid;
-            private set {}
         }
     }
 }

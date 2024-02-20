@@ -9,24 +9,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Optsol.Components.Test.Integration.Infra.Redis
+namespace Optsol.Components.Test.Integration.Infra.Redis;
+
+public class RedisCacheServiceSpec
 {
-    public class RedisCacheServiceSpec
-    {
         private static ServiceProvider GetProviderConfiguredServicesFromContext()
         {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile($@"Settings/appsettings.redis.json")
-                .Build();
+                var configuration = new ConfigurationBuilder()
+                        .AddJsonFile($@"Settings/appsettings.redis.json")
+                        .Build();
 
-            var services = new ServiceCollection();
+                var services = new ServiceCollection();
 
-            services.AddLogging();
-            services.AddRedisCache(configuration);
+                services.AddLogging();
+                services.AddRedisCache(configuration);
 
-            var provider = services.BuildServiceProvider();
+                var provider = services.BuildServiceProvider();
 
-            return provider;
+                return provider;
         }
 
         [Trait("Infraestrutura", "Redis")]
@@ -37,18 +37,18 @@ namespace Optsol.Components.Test.Integration.Infra.Redis
 #endif
         public void Deve_Salvar_Registro_Cache()
         {
-            //given
-            var provider = GetProviderConfiguredServicesFromContext();
+                //given
+                var provider = GetProviderConfiguredServicesFromContext();
 
-            var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
+                var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
 
-            var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
+                var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
-            //when
-            Action execute = () => redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity));
+                //when
+                Action execute = () => redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity));
 
-            //then
-            execute.Should().NotThrow();
+                //then
+                execute.Should().NotThrow();
         }
 
         [Trait("Infraestrutura", "Redis")]
@@ -59,18 +59,18 @@ namespace Optsol.Components.Test.Integration.Infra.Redis
 #endif
         public void Deve_Salvar_Registro_Cache_Timeout()
         {
-            //given
-            var provider = GetProviderConfiguredServicesFromContext();
+                //given
+                var provider = GetProviderConfiguredServicesFromContext();
 
-            var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
+                var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
 
-            var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
+                var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
-            //when
-            Action execute = () => redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity), 1);
+                //when
+                Action execute = () => redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity), 1);
 
-            //then
-            execute.Should().NotThrow();
+                //then
+                execute.Should().NotThrow();
         }
 
         [Trait("Infraestrutura", "Redis")]
@@ -81,20 +81,20 @@ namespace Optsol.Components.Test.Integration.Infra.Redis
 #endif
         public async Task Deve_Buscar_Registro_Cache()
         {
-            //given
-            var provider = GetProviderConfiguredServicesFromContext();
+                //given
+                var provider = GetProviderConfiguredServicesFromContext();
 
-            var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
+                var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
 
-            var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
+                var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
-            await redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity));
+                await redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity));
 
-            //when
-            var entityCache = await redisCacheService.ReadAsync<TestEntity>(testEntity.Id.ToString());
+                //when
+                var entityCache = await redisCacheService.ReadAsync<TestEntity>(testEntity.Id.ToString());
 
-            //then
-            entityCache.Should().NotBeNull();
+                //then
+                entityCache.Should().NotBeNull();
         }
 
         [Trait("Infraestrutura", "Redis")]
@@ -105,21 +105,20 @@ namespace Optsol.Components.Test.Integration.Infra.Redis
 #endif
         public async Task Deve_Remover_Registro_Cache()
         {
-            //given
-            var provider = GetProviderConfiguredServicesFromContext();
+                //given
+                var provider = GetProviderConfiguredServicesFromContext();
 
-            var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
+                var redisCacheService = provider.GetRequiredService<IRedisCacheService>();
 
-            var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
+                var testEntity = new TestEntity(new NomeValueObject("Weslley", "Carneiro"), new EmailValueObject("weslley.carneiro@optsol.com.br"));
 
-            await redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity));
+                await redisCacheService.SaveAsync(new KeyValuePair<string, TestEntity>(testEntity.Id.ToString(), testEntity));
             
-            //when
-            await redisCacheService.DeleteAsync(testEntity.Id.ToString());
+                //when
+                await redisCacheService.DeleteAsync(testEntity.Id.ToString());
 
-            //then
-            var entityCache = await redisCacheService.ReadAsync<TestEntity>(testEntity.Id.ToString());
-            entityCache.Should().BeNull();
+                //then
+                var entityCache = await redisCacheService.ReadAsync<TestEntity>(testEntity.Id.ToString());
+                entityCache.Should().BeNull();
         }
-    }
 }

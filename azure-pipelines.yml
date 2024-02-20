@@ -39,7 +39,7 @@ steps:
   displayName: 'Rodando Testes Automatizados'
   inputs:
     command: 'test'
-    projects: '**/Optsol.Components.Test.*/*.csproj'
+    projects: '**/Optsol.Components.Test.Unit.*/*.csproj'
     arguments: '-c $(buildConfiguration) --no-restore --no-build --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
