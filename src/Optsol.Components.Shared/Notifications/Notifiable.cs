@@ -6,11 +6,10 @@ namespace Optsol.Components.Shared.Notifications
 {
     public abstract class Notifiable<T> where T : Notification
     {
-        private readonly List<T> _notifications;
-
-        protected Notifiable() => _notifications = new List<T>();
-
-        private T GetNotificationInstance(string key, string message)
+        //correcao paliativa por causa do MongoDB. 
+        private List<T> _notifications  => [];
+        
+        private static T GetNotificationInstance(string key, string message)
         {
             return (T)Activator.CreateInstance(typeof(T), [key, message]);
         }
